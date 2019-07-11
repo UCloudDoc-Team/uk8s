@@ -4,4 +4,3 @@
 
 {{indexmenu>:compute:uk8s:service#2 | nsort dsort msort}}
 
- 
