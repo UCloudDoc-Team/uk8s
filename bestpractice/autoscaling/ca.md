@@ -23,13 +23,12 @@ Cluster Autoscaler的工作原理很简单，其扩容触发条件为**存在因
 ### 在UK8S中使用集群伸缩
 
 #### 1、创建伸缩配置
-{{:compute:uk8s:bestpractice:autoscaling:wechatworkscreenshot_120eae74-0e91-463b-8c78-20c513f2c0a9.png?600|}}
+[](https://github.com/UCloudDocs/uk8s/blob/master/images/bestpractice/autoscaling/wechatworkscreenshot_120eae74-0e91-463b-8c78-20c513f2c0a9.png)
 
 #### 2、填写配置参数
 
 一般默认值即可
-{{:compute:uk8s:bestpractice:autoscaling:2.png?600|}}
-
+[](https://github.com/UCloudDocs/uk8s/blob/master/images/bestpractice/autoscaling/2.png)
 #### 3、创建伸缩组
 
 **重要**，即触发集群扩容时，Node节点的配置，伸缩区间主要用于防范因为DDos等导致的无限制扩容。
