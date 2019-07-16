@@ -6,6 +6,7 @@
 Kubernetes在多个维度、多个层次上提供不同的组件来满足不同场景下的伸缩需求，主要如下：
 
 | 类型    | Pod  | Node                |
+|:-:|:-:|:-:|
 | 横向伸缩  | HPA(Horizontal Pod Autoscaler)  | Cluster Autoscaler  |
 | 纵向伸缩  | VPA (Vertical Pod Autoscaler) |None        |
 
