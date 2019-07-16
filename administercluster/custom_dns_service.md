@@ -38,7 +38,6 @@ metadata:
   resourceVersion: "3082370"
 ```
 
-
 Corefile的配置信息包含以下CoreDNS的插件：
 
 * errors: 错误日志会以标准输出的方式打印到容器日志；
@@ -67,23 +66,24 @@ Corefile的配置信息包含以下CoreDNS的插件：
 
 假设我们有一个ucloudk8s的服务域，自建的私有DNS Server地址为10.9.10.8，则集群管理员可以执行kubectl edit configmap/coredns -n kube-system中添加如下所示的一段规则，这是个独立的**Server Block**,我们可以在Corefile里面为不同的域配置不同的**Server Block**。
 
-<code>
+```
 ucloudk8s.com:53 {
         errors
         cache 30
         proxy . 10.9.10.8
     }
-</code>
+```
 
 并且，我们不希望使用/etc/resolv.conf里配置的DNS服务器作为上游服务器，而是指向自建的DNS Server，只需要直接修改之前提到的upstream和proxy选项即可
 
-<code>upstream 10.9.10.8</code>
-
-<code>proxy .  172.16.0.1</code>
+```
+upstream 10.9.10.8
+proxy .  172.16.0.1
+```
 
 修改完毕后的configmap如下：
 
-<code>
+```
 apiVersion: v1
 kind: ConfigMap
 data:
@@ -109,7 +109,7 @@ metadata:
   name: coredns
   namespace: kube-system
   resourceVersion: "3082370"
-</code>
+```
 
 ### 验证
 
