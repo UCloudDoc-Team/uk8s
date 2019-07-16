@@ -1,7 +1,7 @@
-=====权限管理实践=====
+## 权限管理实践
 {{indexmenu_n>0}}
 
-###背景
+### 背景
 本文主要通过一个例子来介绍如何基于K8S的RBAC实现授权决策，允许集群管理员通过Kubernetes API动态配置策略，让非集群管理员具有某个namespace下的所有权限，并可通过Dashboard或者kubectl来管理该ns下的资源。
 
 ### 一、创建NS
@@ -9,6 +9,7 @@
 ```
 kubectl create ns pre
 ```
+
 上面的示例创建了一个名为"pre"的命名空间，用于部署预发布的服务。
 
 ### 二、创建Service Account
@@ -16,6 +17,7 @@ kubectl create ns pre
 ```
 kubectl create sa mingpianwang -n pre
 ```
+
 在pre的命名空间下创建一个名为"mingpianwang"的Service account，给到某个特定的用户使用。这里要说明下，K8S里面有两类用户，一个是Service Account，另一个是普通用户(user)。但K8S本身不并管理user，而是交由外部独立服务管理，因此我们不能通过K8S API来创建user，考虑到我们只是通过kubectl和Dashboard来管理集群，Service account已经足够满足要求，而且可以在Kubernetes中直接管理。因此这里不介绍如何使用user这个对象来管理集群。
 
 ### 三、赋予权限
@@ -152,6 +154,6 @@ kubectl config --kubeconfig=$KUBECONFIG \
 
 echo "kubeconfig written to file \"$KUBECONFIG\""
 ```
-直接在master节点执行sh kubeconfig.sh pre mingpianwang，即可自动生成一个kubeconfig文件，将这个kubeconfig文件分发给使用者，让其复制到~/.kube/config下即可，而且默认NS就是pre，get nodes等操作都是不被允许的。
+直接在master节点执行`sh kubeconfig.sh pre mingpianwang`，即可自动生成一个kubeconfig文件，将这个kubeconfig文件分发给使用者，让其复制到~/.kube/config下即可，而且默认NS就是pre，get nodes等操作都是不被允许的。
 
 自动生成kubeconfig的源代码在这里，[generator kubeconfig](https://gist.github.com/ericchiang/d2a838ddad3f44436ae001a342e1001e)，我们只是加了一个默认NS，这样不需要在执行kubectl命令的时候追加-n pre。
