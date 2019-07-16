@@ -1,6 +1,5 @@
-=====获取真实客户端IP======
 {{indexmenu_n>0}}
-
+## 获取真实客户端IP
 
 ### 网络编程中如何获得对端IP
 
@@ -92,7 +91,7 @@ func AppRouter(w http.ResponseWriter, r *http.Request) {
 ```
 在外网通过浏览器访问该服务，如下所示。
 
-{{:compute:uk8s:service:guestcome.png?600|}}
+![](/images/service/guestcome.png)
 
 结果显示用户的访问IP地址是一台云主机的内网IP地址，显然不正确。
 
@@ -100,7 +99,7 @@ func AppRouter(w http.ResponseWriter, r *http.Request) {
 
 Loadbalancer创建成功后，ULB4的VServer将UK8S集群中的每个Node云主机节点作为自身的RS节点，RS端口为Service申明的Port值（注意不是NodePort）。ULB4将访问流量转发到其中一个RS后，RS根据本机上kube-proxy生成的iptables规则将流量DNAT到后端Pod中，如下所示。
 
-{{:compute:uk8s:service:ulb4.jpg?600|}}
+![](/images/service:ulb4.jpg)
 
 图中ULB4先将流量转发到Node1中，Node1中根据iptables DNAT规则，将流量转发给Node2中的Pod。
 需要注意的是，Node1将IP包转发到Node2前，对这个包有一次SNAT操作。准确地说，是一次MASQUERADE操作，规则如下。
@@ -113,7 +112,7 @@ Loadbalancer创建成功后，ULB4的VServer将UK8S集群中的每个Node云主�
 
 由于IP请求包的源地址被修改，Pod内的程序网络库通过getpeername(2)调用获取到的对端地址是Node1的IP地址而不是客户端真实的地址。
 
-__为什么需要对流出的包做SNAT操作呢？__
+**为什么需要对流出的包做SNAT操作呢？**
 
 原因比较简单。参考下图，当Node1上的Pod处理完请求后，需要发送响应包，如果没有SNAT操作，Pod收到的请求包源地址就是client的IP地址，这时候Pod会直接将响应包发给client的IP地址，但对于client程序来说，它明明没有往PodIP发送请求包，却收到来自Pod的IP包，这个包很可能会被client丢弃。而有了SNAT，Pod会将响应包发给Node1，Node1再根据DNAT规则产生的conntrack记录，将响应包通过返回给client。
 
@@ -161,7 +160,7 @@ spec:
 ```
 重新部署服务后，再用浏览器访问，可以发现Pod正确获取了浏览器的访问IP。
 
-{{:compute:uk8s:service:realip.png?600|}}
+![](/images/service/realip.png)
 
 而这个机制的原理也很简单，当设置了externalTrafficPolicy为Local时，Node上的iptables规则会设置只将IP包转发到在本机上运行的Pod，如果本机上无对应Pod在运行，此包将被DROP。如下图，这样Pod可以直接使用client的源地址进行回包而不需要SNAT操作。
 
@@ -184,4 +183,4 @@ spec:
 
 对于其他未运行Service对应Pod的Node节点来说，ULB VServer对其健康检查探测会因为iptables的DROP规则而失败，这样来自用户的请求永远不会被发往这些节点上，可以确保这些请求都能被正确响应。
 
-{{:compute:uk8s:service:vserver.png?600|}}
+![](/images/service/vserver.png)

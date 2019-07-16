@@ -1,5 +1,5 @@
-=====通过内网ULB访问Service====
 {{indexmenu_n>10}}
+## 通过内网ULB访问Service
 
 > 注意：除外网EIP外，ULB相关参数目前均不支持Update，如不确认如何填写，请咨询UCloud 技术支持。
 
@@ -8,7 +8,7 @@
 
 暂不支持UDP类型的Service。
 
-<code yaml>
+```
 apiVersion: v1
 kind: Service
 metadata:
@@ -41,4 +41,4 @@ spec:
     image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
     ports:
     - containerPort: 80
-</code>
+```

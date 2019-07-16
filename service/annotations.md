@@ -1,5 +1,5 @@
-=====Service Annotations====
 {{indexmenu_n>0}}
+## Service Annotations
 
 本文主要描述用于创建LoadBalancer 类型的Service时，与ULB相关的Annotations说明。
 
@@ -8,7 +8,7 @@
 
 ### 内网ULB4
 
-<code>
+```
    "service.beta.kubernetes.io/ucloud-load-balancer-type" 
    # 负载均衡器类型，必须指定
    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol"  
@@ -22,7 +22,7 @@
    # 用户自定义String，会话保持方式为UserDefined有效
    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout"  
    # 空闲连接的回收时间
-</code>
+```
 
 **Annotations 详解**
 
@@ -57,7 +57,7 @@ ListenType为PacketsTransmit时表示连接保持的时间，单位为秒，取�
 
 
 ### 外网ULB4
-<code yaml>
+```
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: "TCP"  
     # TCP和UDP均代表ULB4，HTTPS和HTTP均代表ULB7；
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-method   
@@ -69,7 +69,7 @@ ListenType为PacketsTransmit时表示连接保持的时间，单位为秒，取�
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout  
     # 空闲连接的回收时间
 
-</code>
+```
 **Annotations 详解**
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol 
@@ -94,7 +94,7 @@ ListenType为PacketsTransmit时表示连接保持的时间，单位为秒，取�
 
 ### 外网ULB7
 
-<code yaml>
+```
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: "HTTPS" 
     # 协议类型，TCP和UDP均表示ULB4,HTTPS和HTTP均表示ULB7
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert: "ssl-b103etqy"
@@ -115,7 +115,7 @@ ListenType为PacketsTransmit时表示连接保持的时间，单位为秒，取�
     ## HTTP检查域名
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-path 
     ##HTTP检查路径
-</code>
+```
 
 **Annotations 详解**
 
@@ -157,7 +157,7 @@ ListenType为PacketsTransmit时表示连接保持的时间，单位为秒，取�
 
 ### 外网ULB绑定的EIP注释
 
-<code yaml>
+```
 "service.beta.kubernetes.io/ucloud-load-balancer-eip-paymode": "ShareBandwidth" 
  # 支持Traffic、Bandwidth、ShareBandwidth，默认为Bandwidth
 "service.beta.kubernetes.io/ucloud-load-balancer-eip-sharebandwidthid": "bwshare-d8dklw" 
@@ -168,4 +168,4 @@ ListenType为PacketsTransmit时表示连接保持的时间，单位为秒，取�
  # 付费模式，支持Month，Year，Dynamic
 "service.beta.kubernetes.io/ucloud-load-balancer-eip-quantity": "1" 
  # 付费时长，默认为1，chargetype为Dynimic时无效
-</code>
+```

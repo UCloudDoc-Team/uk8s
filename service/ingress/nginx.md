@@ -1,5 +1,5 @@
-======Nginx Ingress======
 {{indexmenu_n>0}}
+## Nginx Ingress
 
 ###什么是Ingress
 
@@ -14,10 +14,10 @@ Ingress 是从Kubernetes集群外部访问集群内部服务的入口，同时�
 ### 一、部署Ingress Controller
 
 为了使Ingress正常工作，集群内必须部署Ingress Controller。与其他类型的控制器不同，其他类型的控制器如Deployment通常作为kube-controller-manager二进制文件的一部分，在集群启动时自动运行。而Ingress Controller则需要自行部署，Kubernetes社区提供了以下Ingress Controller供选择，分别如下：
-1、Nginx
-2、HAProxy
-3、Envoy
-4、Traefik
+1. Nginx
+2. HAProxy
+3. Envoy
+4. Traefik
 
 这里我们选择Nginx作为Ingress Controller，部署Nginx Ingress Controller非常简单，执行以下指定即可。
 
@@ -31,7 +31,7 @@ kubectl apply -f http://uk8s.cn-bj.ufileos.com/yaml/ingress/nginx/mandatory.yaml
 
 另外，在这个yaml文件中，我们还看到定义了ConfigMap，nginx-ingress-controller可以通过ConfigMap对象来对Nginx配置文件进行定制，示例如下：
 
-<code yaml>
+```
 
  kind: ConfigMap
  apiVersion: v1
@@ -44,7 +44,7 @@ kubectl apply -f http://uk8s.cn-bj.ufileos.com/yaml/ingress/nginx/mandatory.yaml
 data:
   map-hash-bucket-size: "128"
   ssl-protocols: SSLv2
-</code>
+```
 
 需要注意的是，ConfigMap中的key和value只支持字符串，因此对于整数等类型，需要使用双引号，例如"100"，详细资料见[Nginx-Ingress-ConfigMap](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/)。
 

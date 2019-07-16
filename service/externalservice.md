@@ -1,5 +1,5 @@
-=====通过外网ULB访问Service====
 {{indexmenu_n>10}}
+## 通过外网ULB访问Service
 
 
 >  1.除EIP带宽外，ULB相关参数目前均不支持Update，如不确认如何填写，请咨询UCloud 技术支持。2.请勿修改ULB和Vserver的名称和备注，否则会导致Service无法正常更新。3.Kubernetes下LoadBalancer类型的Service，尚不支持多协议，比如TCP、UDP。
@@ -16,7 +16,7 @@
 
 当前LoadBalancer类型的Service暂不支持UDP，请知悉。
 
-<code yaml>
+```
 apiVersion: v1
 kind: Service
 metadata:
@@ -55,7 +55,7 @@ spec:
     image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
     ports:
     - containerPort: 80
-</code>
+```
 
 
 ### 重要说明
@@ -77,7 +77,7 @@ Git Commit ID:			2723d13b69a4d6f5b905a7f96bd7eed49617f439
 
 老版本的ULB7只支持单种协议，即HTTP或HTTPS。 下文示例中，对外暴露2个端口,都使用HTTP协议。
 
-<code yaml>
+```
 
 apiVersion: v1
 kind: Service
@@ -119,7 +119,7 @@ spec:
     image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
     ports:
     - containerPort: 80
-</code>
+```
 
 
 ### 通过外网ULB7暴露服务(cloudprovider-ucloud version>=19.05.3)
@@ -127,7 +127,7 @@ spec:
 
 19.05.3以后的插件，外网ULB7同时支持HTTP和HTTPS两种协议，下文示例中，对外暴露了三个端口，其中80端口使用HTTP协议，443和8443使用HTTPS协议。
 
-<code yaml>
+```
 
 apiVersion: v1
 kind: Service
@@ -225,7 +225,7 @@ spec:
     image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
     ports:
     - containerPort: 80
-</code>
+```
 
 
 ### HTTPS支持(cloudprovider-ucloud version>=19.05.3)
@@ -239,7 +239,7 @@ spec:
 使用ULB7的HTTPS协议模式时，Pod内的服务程序不需要实现HTTPS协议服务，只需要提供HTTP服务即可，ULB7发往后端的报文为解密后的HTTP协议报文。
 
 
-<code yaml>
+```
 
 apiVersion: v1
 kind: Service
@@ -277,7 +277,7 @@ spec:
     image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
     ports:
     - containerPort: 80
-</code>
+```
 
 ### 常见问题
 
