@@ -1,2 +1,3 @@
-======Kubernetes弹性伸缩=====
 {{indexmenu_n>0}}
+## Kubernetes弹性伸缩
+
