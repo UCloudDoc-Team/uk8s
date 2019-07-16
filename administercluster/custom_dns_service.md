@@ -11,7 +11,8 @@
 CoreDNS是一个模块化、插件式的DNS服务器，其配置文件信息保存在Corefile内。UK8S集群管理员可通过修改ConfigMap，来配置自定义DNS服务。
 
 在UK8S中，CoreDNS的默认Corefile配置信息如下:
-<code yaml>
+
+```
 apiVersion: v1
 kind: ConfigMap
 data:
@@ -35,7 +36,8 @@ metadata:
   name: coredns
   namespace: kube-system
   resourceVersion: "3082370"
-</code>
+```
+
 
 Corefile的配置信息包含以下CoreDNS的插件：
 
