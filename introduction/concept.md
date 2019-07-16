@@ -1,11 +1,11 @@
-=====名词解释=====
+## 名词解释
 {{indexmenu_n>0}}
 
 为了帮助你更好地使用UK8S，你需要对Kubernetes的相关组件有一个大致的了解，本文会对基础组件及概念做一个简要的介绍，如果你希望了解更多内容，请移步[Kubernetes官方文档](https://kubernetes.io/docs/concepts/)
 
-===Kubernetes基础架构===
+### Kubernetes基础架构
 
-{{ :compute:uk8s:introduction:kubernetes-whole-arch.png?nolink&800 |}}
+![](/images/introduction/kubernetes-whole-arch.png)
 备注：图片源自Kubernetes社区
 
 上图是一个概要性的Kubernetes架构，包含了ApiServer，Master、Node、Hub（镜像仓库）等概念，下面我们依次做个简要介绍。

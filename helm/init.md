@@ -54,7 +54,7 @@ Client: &version.Version{SemVer:"v2.14.1", GitCommit:"5270352a09c7e8b6e8c9593002
 Server: &version.Version{SemVer:"v2.14.1", GitCommit:"5270352a09c7e8b6e8c9593002a73535276507c0", GitTreeState:"clean"}
 ```
 
-这里我们针对Helm的安装进行了简化，可以研读一下第一步中的tiller.yaml，yaml中我们进行了Tiller的**serviceaccount**和**clusterrolebinding**创建，对Tiller设置了历史版本**200**的限制，设置了存储为**secret**等，如果您希望修改这些参数，可以在第二步中增加参数进行修改。\\
+这里我们针对Helm的安装进行了简化，可以研读一下第一步中的tiller.yaml，yaml中我们进行了Tiller的**serviceaccount**和**clusterrolebinding**创建，对Tiller设置了历史版本**200**的限制，设置了存储为**secret**等，如果您希望修改这些参数，可以在第二步中增加参数进行修改。
 
 ### 主要使用参数介绍(可以通过helm init --help进行查看)：
 1. --service-account设置ServiceAccount为tiller。
