@@ -1,15 +1,15 @@
-=====在UK8S中使用UDISK====
 {{indexmenu_n>1}}
+## 在UK8S中使用UDISK
 
 UK8S支持直接在集群中使用UDisk作为持久化存储卷。
 
 **备注:**
 
-1、支持SSD/SATA UDisk；
+1. 支持SSD/SATA UDisk；
 
-2、SSD UDisk的最小值为20GB，最大值为8000GB；
+2. SSD UDisk的最小值为20GB，最大值为8000GB；
 
-3、UDisk的步长为10GB，即你只能创建20GB、30GB、110GB的存储卷；
+3. UDisk的步长为10GB，即你只能创建20GB、30GB、110GB的存储卷；
 
 ###一、存储类 StorageClass
 
@@ -18,7 +18,7 @@ UK8S支持直接在集群中使用UDisk作为持久化存储卷。
 2019年1月22日之后的UK8S集群，有两个默认的StorageClass，名称分别为udisk-ssd和udisk-sata。
 
 你也可以创建一个新的StorageClass，示例及说明如下：
-<code>
+```
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
@@ -27,7 +27,7 @@ provisioner: ucloud/udisk
 parameters:
   type: ssd
 reclaimPolicy: Retain
-</code>
+```
 
 **provisioner: ** 存储供应方，此处必须为`ucloud/udisk`，否则创建出来的StorageClass可能无效。
 
@@ -37,17 +37,17 @@ reclaimPolicy: Retain
 
 
 2019年1月22日之前创建的UK8S集群，StorageClass示例如下，provisionner不同，不支持选择存储类型。
-<code>
+```
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
   name: cloud
 provisioner: archon.kubeup.com/ucloud
 reclaimPolicy: Retain
-</code>
+```
 
 ### 二、创建持久化存储卷声明（PVC）
-<code>
+```
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -59,11 +59,11 @@ spec:
   resources:
     requests:
       storage: 20Gi
-</code>
+```
 
 ###三、在pod中使用PVC
 
-<code>
+```
 apiVersion: v1
 kind: Pod
 metadata:
@@ -81,4 +81,4 @@ spec:
   - name: test
     persistentVolumeClaim:
       claimName: test-pvc-claim
-</code>
+```
