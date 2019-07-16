@@ -23,20 +23,20 @@ Cluster Autoscaler的工作原理很简单，其扩容触发条件为**存在因
 ### 在UK8S中使用集群伸缩
 
 #### 1、创建伸缩配置
-![](https://github.com/UCloudDocs/uk8s/blob/master/images/bestpractice/autoscaling/wechatworkscreenshot_120eae74-0e91-463b-8c78-20c513f2c0a9.png)
+![](/images/bestpractice/autoscaling/wechatworkscreenshot_120eae74-0e91-463b-8c78-20c513f2c0a9.png)
 
 #### 2、填写配置参数
 
 一般默认值即可
-![](https://github.com/UCloudDocs/uk8s/blob/master/images/bestpractice/autoscaling/2.png)
+![](/images/bestpractice/autoscaling/2.png)
 #### 3、创建伸缩组
 
 **重要**，即触发集群扩容时，Node节点的配置，伸缩区间主要用于防范因为DDos等导致的无限制扩容。
 
-{{:compute:uk8s:bestpractice:autoscaling:3.png?600|}}
+![](/images/bestpractice/autoscaling/3.png)
 
 #### 4、开启集群伸缩
 创建完伸缩组后，我们之后还需要开启伸缩组，点击开启操作后，你的UK8S集群会出现一个Cluster-Autoscaler的Deployment，如果手动删除该Deployment，会导致集群伸缩无法正常工作，您需要在集群伸缩页面先关闭，再开启以触发重新创建。
 
-{{:compute:uk8s:bestpractice:autoscaling:4.png?600|}}
+![](/images/bestpractice/autoscaling/4.png)
 
