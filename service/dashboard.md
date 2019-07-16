@@ -1,19 +1,19 @@
-## 通过ULB暴露Kubernetes Dashboard
-
+=====通过ULB暴露Kubernetes Dashboard=======
 {{indexmenu_n>0}}
 
 Dashboard是Kubernetes社区的一个Web开源项目，你可以通过Dashboard来部署更新应用、排查应用故障以及管理Kubernetes集群资源。另外，Dashboard还提供了集群的状态，以及错误日志等信息。下面我们介绍下如何在UK8S上部署、访问DashBoard。
 
-\#\#\# 部署Dashboard
+### 部署Dashboard
 
 UK8S集群没有默认安装Dashboard，如果你希望体验社区原生Dashboard，需要自行安装，下载yaml示例，在集群中输入如下命令即可：
 
-    kubectl apply -f dashboard-ui.yaml
+<code>
+kubectl apply -f dashboard-ui.yaml
+</code>
 
-具体的yaml示例如下，涉及的Kubernetes对象有Deployment、LoadBalancer
-Service、Role、RoleBinding、ServiceAccount等。需要注意的是，Service的访问类型为HTTP，如果您希望使用HTTPS，请先购买SSL证书。
+具体的yaml示例如下，涉及的Kubernetes对象有Deployment、LoadBalancer Service、Role、RoleBinding、ServiceAccount等。需要注意的是，Service的访问类型为HTTP，如果您希望使用HTTPS，请先购买SSL证书。
 
-``` yaml
+<code yaml dashboard-ui.yaml>
 # ------------------- Dashboard Deployment ------------------- #
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -177,19 +177,22 @@ spec:
     targetPort: 9090
     protocol: TCP
 
-```
+</code>
 
-\#\#\# 二、访问Dashboard
+### 二、访问Dashboard
 
-在上面的实例中，我们创建了一个名为kubernetes-dashboard-http的Service，service
-type为LoadBalancer，可直接通过Service 的外网IP（实际为ULB的外网IP）访问Dashboard。
+在上面的实例中，我们创建了一个名为kubernetes-dashboard-http的Service，service type为LoadBalancer，可直接通过Service 的外网IP（实际为ULB的外网IP）访问Dashboard。
 
-    kubectl get svc -n kube-system | grep kubernetes-dashboard-http 
+<code>kubectl get svc -n kube-system | grep kubernetes-dashboard-http </code>
+
 
 获取到外网IP后，我们直接在浏览器中输入IP，到达登录页面，Dashboard支持kubeconfig和token两种身份验证方式，此处我们选择Token验证方式。
 
+
 在之前的yaml里，我们创建了一个dashboard-ui的ServiceAccount，我们可通过以下命名获取该服务账号的Token，用来登录Dashboard。
 
-    kubectl describe secret dashboard-ui -n kube-system
+<code>
+kubectl describe secret dashboard-ui -n kube-system
+</code>
 
 将获取的token复制到输入框，点击登录，即可开始使用Dashboard。
