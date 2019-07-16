@@ -1,6 +1,5 @@
 {{indexmenu_n>30}}
-======安装应用======
-
+## 安装应用
 
 ### 安装商店应用
 
@@ -15,7 +14,7 @@ helm search tomcat
 helm install stable/tomcat
 ```
 
-==执行了安装商店应用的命令后，我们看到了系统返回给我们了安装的详细信息，由于没有在安装命令中定义 --name 所以Helm随机生成了一个名字 giggly-leopard (此处每次创建都会随机生成)，其中Pod正在启动，LoadBalancer类型的Service正在获取EIP。==
+执行了安装商店应用的命令后，我们看到了系统返回给我们了安装的详细信息，由于没有在安装命令中定义 --name 所以Helm随机生成了一个名字 giggly-leopard (此处每次创建都会随机生成)，其中Pod正在启动，LoadBalancer类型的Service正在获取EIP。
 ```
 NAME:   giggly-leopard
 ……
@@ -66,4 +65,4 @@ NOTES:
 ```
 
 可以在浏览器访问http://EIP/sample 查看到tomcat欢迎页面。
-{{ :compute:uk8s:helm:tomcat.png?nolink&800 |}}
+![](/images/helm/tomcat.png)

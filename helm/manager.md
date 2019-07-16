@@ -1,5 +1,5 @@
 {{indexmenu_n>40}}
-======管理应用======
+## 管理应用
 
 
 ### 更新应用
@@ -45,7 +45,8 @@ helm upgrade --set service.externalPort=8080 giggly-leopard stable/tomcat
 #### 方法三，升级新的版本
 
 获取新的版本号需要通过 **helm repo update** 更新本地查询文件信息。
-==通过 --version 命令可以指定更新到的版本，如果没有指定，则默认使用最新的版本。==
+
+通过 --version 命令可以指定更新到的版本，如果没有指定，则默认使用最新的版本。
 
 ```
 helm upgrade --version 0.2.0 giggly-leopard stable/tomcat
@@ -70,8 +71,10 @@ helm rollback giggly-leopard 1
 ```
 helm delete --purge giggly-leopard
 ```
-==helm的删除操作会将资源释放，但保留应用信息，并标记为 DELETE 状态，可通过 --deleted 查看已经删除的Release， DELETE 状态的应用历史纪录是会继续保存的，切命名不可再次使用。==
+helm的删除操作会将资源释放，但保留应用信息，并标记为 DELETE 状态，可通过 --deleted 查看已经删除的Release， DELETE 状态的应用历史纪录是会继续保存的，切命名不可再次使用。
+
 ```
 helm list --deleted
 ```
-==上面的删除命令中加入中 --purge，这个参数将会永久删除这个应用的所有信息，重新建立的时候还可以使用该命名。==
+
+上面的删除命令中加入中 --purge，这个参数将会永久删除这个应用的所有信息，重新建立的时候还可以使用该命名。

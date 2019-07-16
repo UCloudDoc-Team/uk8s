@@ -1,7 +1,8 @@
 {{indexmenu_n>10}}
-====== 关于应用商店 ======
+## 关于应用商店
+
 UK8S为方便用户快速部署常用的应用组件，提供了应用商店功能，用户可以通过进入UK8S集群查看到应用商店，使用Helm进行安装部署。
-{{ :compute:uk8s:helm:shop.png?nolink&800 |}}
+![](/images/helm/shop.png)
 ### 关于Helm
 Helm是Kubernetes的包管理工具，用于简化Kubernetes应用的部署和管理。初期学习理解时可以将Helm比作Linux下的yum/apt-get，这两款软件都是Linux系统下的包管理工具。本文通过安装Helm使用应用商店进行介绍。
 
@@ -19,9 +20,10 @@ Chart是用来封装 Kubernetes 原生应用程序的一系列 YAML 文件集合
 
 #### Helm工作原理
 
-{{ :compute:uk8s:helm:helm.jpg?nolink&800 |}}
+![](/images/helm/helm.jpg)
 
-Helm客户端负责管理已经添加的仓库，即应用商店，发送给Tiller进行具体命令执行 \\
-Tiller服务端负责转化Chart为一条Release，发送给k8s API Server进行部署安装 \\
+Helm客户端负责管理已经添加的仓库，即应用商店，发送给Tiller进行具体命令执行。
+
+Tiller服务端负责转化Chart为一条Release，发送给k8s API Server进行部署安装。
 
 
