@@ -1,5 +1,5 @@
-## 权限管理实践
 {{indexmenu_n>0}}
+## 权限管理实践
 
 ### 背景
 本文主要通过一个例子来介绍如何基于K8S的RBAC实现授权决策，允许集群管理员通过Kubernetes API动态配置策略，让非集群管理员具有某个namespace下的所有权限，并可通过Dashboard或者kubectl来管理该ns下的资源。

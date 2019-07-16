@@ -1,7 +1,8 @@
-======了解RBAC======
 {{indexmenu_n>0}}
+## 了解RBAC
 
-###简介
+
+### 简介
 RBAC是一种基于角色来管理对计算机或网络资源访问策略的方法。
 
 我们知道，对K8S内所有API对象的操作都是通过访问kube-apiserver来完成的，这是因为kube-apiserver需要校验访问者的是否具备操作这些API对象的权限。而K8S中负责授权和权限校验(Authorization&Authentication)的这套机制，则是RBAC：基于角色的访问控制（Role-Based Access Control ）
@@ -40,13 +41,13 @@ Namespace是Kubernetes中的一个逻辑管理单位，Kubernetes中大部分业
 
 然后是rules字段，一个Role对象所拥有的权限，其实就是通过rules字段来定义了。
 
-+ apiGroups：apiGroup代表API对象所属的组，可以通过kubectl api-resources来查看API对象属于哪个组，上文示例""代表Core API group。
+* apiGroups：apiGroup代表API对象所属的组，可以通过kubectl api-resources来查看API对象属于哪个组，上文示例""代表Core API group。
 
-+ resources： 用于声明该角色可访问的API对象。
+* resources： 用于声明该角色可访问的API对象。
 
-+ verbs：用于声明该角色可对API对象进行的操作，在Kubernetes中，verbs的全集为"get", "list", "watch", "create", "update", "patch", "delete"，如果我们要赋予某个role对某个API对象的所有权限，指定verbs的全部集合即可。
+* verbs：用于声明该角色可对API对象进行的操作，在Kubernetes中，verbs的全集为"get", "list", "watch", "create", "update", "patch", "delete"，如果我们要赋予某个role对某个API对象的所有权限，指定verbs的全部集合即可。
 
-+ resourceName：resourceName表示具体的K8S资源，需要注意的是，当声明了resourceName时，则verbs中不能再赋予list操作，该字段较少使用，一般用于较细粒度的权限管理。
+* resourceName：resourceName表示具体的K8S资源，需要注意的是，当声明了resourceName时，则verbs中不能再赋予list操作，该字段较少使用，一般用于较细粒度的权限管理。
 
 了解了Role每个字段的含义后，上文Role示例的意义其实就很清楚了：**一组可对default命名空间下所有的Pod，进行GET、WATCH、LIST操作的权限集合，名称为pod-reader。**
 
@@ -54,11 +55,11 @@ Namespace是Kubernetes中的一个逻辑管理单位，Kubernetes中大部分业
 
 ClusterRole的API定义与Role基本相同，你可以给一个ClusterRole赋予与Role一样的权限。但由于其cluster-wide的特性，ClusterRole可以被赋予一些不同的权限：
 
-+ 集群级别的API对象访问权限，如nodes、namespace、pv；
+* 集群级别的API对象访问权限，如nodes、namespace、pv；
 
-+ 非资源类型endpoints的访问权限，如"/healthz";
+* 非资源类型endpoints的访问权限，如"/healthz";
 
-+ 所有Namespace下资源的访问权限，如kubectl get pods --all-namespaces；
+* 所有Namespace下资源的访问权限，如kubectl get pods --all-namespaces；
 
 下文是一个ClusterRole的示例，与Role最大的区别就在于不需要声明namespace。
 
@@ -95,13 +96,13 @@ PolicyRule:
 
 除此以外，还有几个预先的定义的CluterRole值得留意下，后面给其他集群用户配置权限的时候，我们可能会用到：
 
-+  view
+* view
 
-+  edit
+* edit
 
-+  admin
+* admin
 
-+ cluster-admin
+* cluster-admin
 
 其所拥有的权限，通过其名称我们也能猜到大概，具体的权限规则可以通过kubectl describe clusterrole clusterrole-name来查看。
 
@@ -158,9 +159,9 @@ roleRef:
 下面我们来了解下ClusterRoleBinding，前面我们提到过，Role和RoleBinding都是Namespace级别的资源，也就是说他们所声明的权限规则都只在Namespace范围内有效。
 那如果我们
 
-1）想让某个Subject（用户）拥有所有Namespace的查看权限；
+1. 想让某个Subject（用户）拥有所有Namespace的查看权限；
 
-2）或者想让某个Pod拥有查看Node的权限；
+2. 或者想让某个Pod拥有查看Node的权限；
 
 应该怎么办呢？这就需要用到ClusterRole和ClusterRoleBinding这对组合了，和ClusterRole一样，ClusterRoleBinding与RoleBinding的最大不同其实就是不需要声明"namespace"这个字段了。
 
