@@ -1,5 +1,5 @@
-=====HPA======
 {{indexmenu_n>2}}
+## HPA
 
 ### 前言
 
@@ -8,7 +8,7 @@ HPA(Horizontal Pod Autoscaling)指Kubernetes Pod的横向自动伸缩，其本�
 需要注意的是，目前默认HPA只能支持根据CPU和内存的阀值检测扩缩容，但也可以通过custom metric api 调用prometheus实现自定义metric，根据更加灵活的监控指标实现弹性伸缩。但HPA不能用于伸缩一些无法进行缩放的控制器如DaemonSet。
 
 ### 工作原理
-{{:compute:uk8s:bestpractice:autoscaling:hpa.png?600|}}
+![](/images/bestpractice/autoscaling/hpa.png)
 
 HPA在K8S中被设计为一个Controller，可以简单的使用kubectl autoscale命令来创建。HPA Controller默认30秒轮询一次，查询指定的Resource中（Deployment,RC）的资源使用率，并且将其与创建时设定的值和指标做对比，从而实现自动伸缩的功能。
 
@@ -29,7 +29,7 @@ desiredReplicas = ceil[currentReplicas * ( currentMetricValue / desiredMetricVal
 
 ### HPA API对象详解
 
-<code yaml>
+```
 
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
@@ -48,7 +48,7 @@ status:
   currentCPUUtilizationPercentage: 48 #当前资源下pod的cpu使用率
   currentReplicas: 1 #当前的副本数
   desiredReplicas: 1 #期望的副本数
-</code>
+```
 
 ### 案例实践
 
@@ -71,6 +71,7 @@ kubectl apply -f  http://uk8s.cn-bj.ufileos.com/autoscailing/hpa/hpa-example.yam
   echo "OK!";
 ?>
 ```
+
 #### 2、为测试应用开启HPA
 
 ```
