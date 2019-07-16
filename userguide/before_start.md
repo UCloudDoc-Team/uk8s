@@ -1,5 +1,5 @@
-=====使用必读======
 {{indexmenu_n>1}}
+## 使用必读
 
 > 注意：通过UK8S创建的云主机、云盘、EIP等资源，删除资源请不要通过具体的产品列表页删除，否则可能导致UK8S运行不正常或数据丢失风险，可以通过UK8S将资源释放或解绑删除。
 
@@ -35,12 +35,12 @@ UK8S会使用到以下产品的全部操作权限，例如代替你创建、删�
 
 由UK8S创建的云资源名称，都遵循明确的命名规范，如
 
-1、	UHost名称：[cluster-id]-[nodetype]-[num]
+1. UHost名称：[cluster-id]-[nodetype]-[num]
 
-2、	ULB名称：[cluster-id]-[randomcode]
+2. ULB名称：[cluster-id]-[randomcode]
 
-3、	UDisk名称：[cluster-id]-pv-[num]
+3. UDisk名称：[cluster-id]-pv-[num]
 
-4、      EIP名称：[cluster-id]-[service_name]-[num]
+4. EIP名称：[cluster-id]-[service_name]-[num]
 
 
