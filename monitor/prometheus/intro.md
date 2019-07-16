@@ -1,5 +1,5 @@
-=====什么是Prometheus=====
 {{indexmenu_n>1}}
+## 什么是Prometheus
 
 ### 关于Prometheus
 
@@ -7,43 +7,43 @@ Prometheus 是一套开源的系统监控报警框架。它的设计灵感源于
 
 ### Prometheus的优势
 
-+ **强大的多维度数据模型：**
-  + 时间序列数据通过 metric 名和键值对来区分。
-  + 所有的 metrics 都可以设置任意的多维标签。
-  + 数据模型更随意，不需要刻意设置为以点分隔的字符串。
-  + 可以对数据模型进行聚合，切割和切片操作。
-  + 支持双精度浮点类型，标签可以设为全 unicode。 
-+ **灵活而强大的查询语句（PromQL）：**在同一个查询语句，可以对多个 metrics 进行乘法、加法、连接、取分数位等操作。
+* **强大的多维度数据模型：**
+  * 时间序列数据通过 metric 名和键值对来区分。
+  * 所有的 metrics 都可以设置任意的多维标签。
+  * 数据模型更随意，不需要刻意设置为以点分隔的字符串。
+  * 可以对数据模型进行聚合，切割和切片操作。
+  * 支持双精度浮点类型，标签可以设为全 unicode。 
+* **灵活而强大的查询语句（PromQL）：**在同一个查询语句，可以对多个 metrics 进行乘法、加法、连接、取分数位等操作。
 
-+ **易于管理：** Prometheus server 是一个单独的二进制文件，可直接在本地工作，不依赖于分布式存储。
+* **易于管理：** Prometheus server 是一个单独的二进制文件，可直接在本地工作，不依赖于分布式存储。
 
-+ **高效：**平均每个采样点仅占 3.5 bytes，且一个 Prometheus server 可以处理数百万的 metrics。
+* **高效：**平均每个采样点仅占 3.5 bytes，且一个 Prometheus server 可以处理数百万的 metrics。
 
-+ **动态获取：**可以通过服务发现或者静态配置去获取监控的 targets。
+* **动态获取：**可以通过服务发现或者静态配置去获取监控的 targets。
 
-+ 使用 pull 模式采集时间序列数据，可以避免有问题的服务器推送坏的 metrics。
+* 使用 pull 模式采集时间序列数据，可以避免有问题的服务器推送坏的 metrics。
 
-+ 支持 push gateway 的方式把时间序列数据推送至 Prometheus server 端。
+* 支持 push gateway 的方式把时间序列数据推送至 Prometheus server 端。
 
-+ 多种可视化图形界面。
+* 多种可视化图形界面。
 
 ### Prometheus架构及组件
 
 图片源于Prometheus官方文档
 
-{{:compute:uk8s:monitor:prometheus:architecture.png?600|}}
+![](/images/monitor/prometheus/architecture.png)
 
 上图为Prometheus的架构图，包含了Prometheus的核心模块及生态圈中的组件，简要介绍如下：
 
-+ **Prometheus Server:** 用于收集和存储时间序列数据。
+* **Prometheus Server:** 用于收集和存储时间序列数据。
 
-+ **Client Library: ** 客户端库，为需要监控的服务生成相应的 metrics 并暴露给 Prometheus server。当 Prometheus server 来 pull 时，直接返回实时状态的 metrics。
+* **Client Library: ** 客户端库，为需要监控的服务生成相应的 metrics 并暴露给 Prometheus server。当 Prometheus server 来 pull 时，直接返回实时状态的 metrics。
 
-+ **Push Gateway:** 主要用于短期的 jobs。由于这类 jobs 存在时间较短，可能在 Prometheus 来 pull 之前就消失了。为此 jobs 可以直接向 Prometheus server 端推送它们的 metrics。这种方式主要用于服务层面的 metrics，对于机器层面的 metrices，建议使用 node exporter。
+* **Push Gateway:** 主要用于短期的 jobs。由于这类 jobs 存在时间较短，可能在 Prometheus 来 pull 之前就消失了。为此 jobs 可以直接向 Prometheus server 端推送它们的 metrics。这种方式主要用于服务层面的 metrics，对于机器层面的 metrices，建议使用 node exporter。
 
-+ ** Exporters: ** 用于暴露已有的第三方服务的 metrics 给 Prometheus。
+* ** Exporters: ** 用于暴露已有的第三方服务的 metrics 给 Prometheus。
 
-+ ** Alertmanager:** 从 Prometheus server 端接收到 alerts 后，会去除重复数据，分组，并路由到对应的接受方式，发出报警。
+* ** Alertmanager:** 从 Prometheus server 端接收到 alerts 后，会去除重复数据，分组，并路由到对应的接受方式，发出报警。
 
 ### 工作原理
 

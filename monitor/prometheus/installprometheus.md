@@ -1,17 +1,17 @@
-=====部署Prometheus======
 {{indexmenu_n>0}}
+## 部署Prometheus
 
 ### 前言
 
 对于一套Kubernetes集群而言，需要监控的对象大致可以分为以下几类：
 
-+ **Kubernetes系统组件：**Kubernetes内置的系统组件一般有apiserver、controller-manager、etcd、kubelet等，为了保证集群正常运行，我们需要实时知晓其当前的运行状态。
+* **Kubernetes系统组件：**Kubernetes内置的系统组件一般有apiserver、controller-manager、etcd、kubelet等，为了保证集群正常运行，我们需要实时知晓其当前的运行状态。
 
-+ **底层基础设施：** Node节点(虚拟机或物理机)的资源状态、内核事件等。
+* **底层基础设施：** Node节点(虚拟机或物理机)的资源状态、内核事件等。
 
-+ **Kubernetes对象：** 主要是Kubernetes中的工作负载对象，如Deployment、DaemonSet、Pod等。
+* **Kubernetes对象：** 主要是Kubernetes中的工作负载对象，如Deployment、DaemonSet、Pod等。
 
-+ **应用指标：** 应用内部需要关心的数据指标，如httpRequest。
+* **应用指标：** 应用内部需要关心的数据指标，如httpRequest。
 
 ### 部署Prometheus
 
@@ -21,37 +21,37 @@
 kubectl create ns monitoring
 ```
 
-2、创建ConfigMap，为Prometheus server创建配置文件，配置监控源，可根据业务情况自行修改。
+2. 创建ConfigMap，为Prometheus server创建配置文件，配置监控源，可根据业务情况自行修改。
 
 ```
 kubectl apply -f http://uk8s.cn-bj.ufileos.com/yaml%2Fmonitor%2Fprometheus-server-conf.yaml
 ```
 
-3、创建ConfigMap，配置各种告警规则。
+3. 创建ConfigMap，配置各种告警规则。
 
 ```
 kubectl apply -f http://uk8s.cn-bj.ufileos.com/yaml%2Fmonitor%2Fprometheus-mointor-rules-conf.yaml
 ```
-4、声明一个PVC，用于Prometheus server的存储。
+4. 声明一个PVC，用于Prometheus server的存储。
 
 ```
 kubectl apply -f http://uk8s.cn-bj.ufileos.com/yaml%2Fmonitor%2Fprometheus-pvc-claim.ymal
 ```
 
-5、使用Deployment部署Prometheus，副本数为1。
+5. 使用Deployment部署Prometheus，副本数为1。
 
 ```
 kubectl apply -f http://uk8s.cn-bj.ufileos.com/yaml%2Fmonitor%2Fprometheus-deployment.yaml
 ```
 
-6、将Prometheus暴露到集群外部
+6. 将Prometheus暴露到集群外部
 
 ```
 kubectl apply -f http://uk8s.cn-bj.ufileos.com/yaml%2Fmonitor%2Fprometheus-service.yaml
 
 ```
 
-7、获取service外部访问地址，访问Prometheus管理页面
+7. 获取service外部访问地址，访问Prometheus管理页面
 
 ```
 kubectl get svc -n monitoring
@@ -60,13 +60,13 @@ prometheus-service   LoadBalancer   172.17.146.124   106.75.8.140   8080:39823/T
 ```
 
 选择targets，查看所有采集任务，状态为UP表示采集正常。
-{{:compute:uk8s:monitor:prometheus:pro_good.jpg?600|}}
+![](/images/monitor/prometheus/pro_good.jpg)
 
 ### 配置文件说明
 
 在前面部署Prometheus时，我们创建了两个ConfigMap，下面我们简要说明下两个ConfigMap的作用。
 
-**1、Prometheus-server 配置文件**
+1. Prometheus-server 配置文件
 
 该Yaml主要用于声明需要Scape的jobs，如kubernetes-apiservers、ETCD等，其中ETCD这个jobs采用了静态配置的方式，你可以通过kubectl edit 修改其内容，让Prometheus能正常pull到ETCD的监控指标。
 
@@ -127,7 +127,7 @@ data:
 
 ```
 
-** 2、prometheus-mointor-rules-conf配置文件**
+2. prometheus-mointor-rules-conf配置文件
 
 该配置文件主要用于配置一些告警规则，如示例中的node cpu告警等。
 
