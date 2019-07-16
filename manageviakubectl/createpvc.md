@@ -1,11 +1,11 @@
-=====创建PVC====
 {{indexmenu_n>3}}
+## 创建PVC
 
 当前存储卷的类型支持SSD、SATA UDISK，UFS即将支持，敬请期待。
 
-###创建StorageClass
+### 创建StorageClass
 
-<code  yaml storageclass.yml>
+```
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
@@ -14,12 +14,12 @@ provisioner: ucloud/udisk
 parameters:
   diskCategory: cloud_efficiency
   type: ssd
-</code>
+```
 
 
-###创建一个存储卷声明并Mount到Pod
+### 创建一个存储卷声明并Mount到Pod
 
-<code yaml ds.yml>
+```
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -50,6 +50,6 @@ spec:
   - name: test
     persistentVolumeClaim:
       claimName: test-pvc-claim
-</code>
+```
 
 备注：受UDisk产品限制，PVC最小为20GB，步长为10GB。

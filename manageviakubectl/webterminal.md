@@ -1,5 +1,5 @@
-=====使用web kubectl =====
 {{indexmenu_n>3}}
+## 使用web kubectl
 
 UK8S 在console中提供 web terminal，你可以通过web terminal 登录到集群内的Pod，并使用kubectl 操作和管理集群。
 
@@ -7,7 +7,7 @@ UK8S 在console中提供 web terminal，你可以通过web terminal 登录到集
 
 你可以使用下方的yaml文件重新启动一个Pod,yaml示例如下。
 
-<code>
+```
 # ------------------- kubectl Deployment ------------------- #
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -57,5 +57,5 @@ subjects:
 - kind: ServiceAccount
   name: uk8s-kubectl
   namespace: default
-</code>
+```
 

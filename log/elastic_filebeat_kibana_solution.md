@@ -6,11 +6,11 @@
 
 ### 一、部署Elasticsearch
 
-#### 1、关于Elasticsearch
+#### 1. 关于Elasticsearch
 
 Elasticsearch（ES）是一个基于Lucene构建的开源、分布式、RESTful接口的全文搜索引擎。Elasticsearch还是一个分布式文档数据库，其中每个字段均可被索引，而且每个字段的数据均可被搜索，ES能够横向扩展至数以百计的服务器存储以及处理PB级的数据。可以在极短的时间内存储、搜索和分析大量的数据。通常作为具有复杂搜索场景情况下的核心发动机
 
-#### 2、环境要求
+#### 2. 环境要求
 
 Elasticsearch运行时要求vm.max_map_count内核参数必须大于262144，因此开始之前需要确保这个参数正常调整过。
 ```
@@ -18,7 +18,7 @@ sysctl -w vm.max_map_count=262144
 ```
 也可以在ES的的编排文件中增加一个initContainer来修改内核参数，但这要求kublet启动的时候必须添加了--allow-privileged参数，uk8s默认开启了该参数，在后面的示例中采用initContainer的方式。
 
-#### 3、ES节点角色
+#### 3. ES节点角色
 
 ES的节点Node可以分为几种角色：
 
@@ -32,7 +32,7 @@ Trible node，为了做集群整合用的。
 
 对于单节点的Node，默认是master-eligible和data，对于多节点的集群，需要根据需求仔细规划每个节点的角色。
 
-#### 4、Elasticsearch部署
+#### 4. Elasticsearch部署
 
 为了方便演示，我们把本文所有的对象资源都放置在一个名为 elk 的 namespace 下面，所以我们需要添加创建一个 namespace：
 ```

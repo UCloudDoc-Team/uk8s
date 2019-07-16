@@ -1,9 +1,9 @@
-====创建Service====
 {{indexmenu_n>4}}
+## 创建Service
 
-###创建一个类型为LoadBalancer的Service，将MYSECRET换成自定义的SecretName即可。
+### 创建一个类型为LoadBalancer的Service，将MYSECRET换成自定义的SecretName即可。
 
-<code>
+```
 
 apiVersion: v1
 kind: Service
@@ -33,6 +33,6 @@ spec:
     - containerPort: 80
   imagePullSecrets:
     - name: MYSECRET
-</code>
+```
 
 系统会自动生成一个ULB，UK8S同时还支持配置ULB的各种参数，详见[service](../service/annotations)

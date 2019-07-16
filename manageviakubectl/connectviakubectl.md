@@ -1,6 +1,5 @@
-====安装及配置kubectl=====
-
 {{indexmenu_n>2}}
+## 安装及配置kubectl
 
 本文主要演示如何在UCloud云主机上安装配置kubectl并管理Kubernetes集群，集群Master节点已默认安装kubectl工具，如果你仅需在Master节点做一些简单测试，请跳过此环节；
 
@@ -14,7 +13,7 @@
 
 ###一、安装kubectl
 
-1.下载安装包，我们下载V1.13.5的kubectl安装包，其他版本请前往[官网下载](https://kubernetes.io/docs/setup/release/notes/)。
+1. 下载安装包，我们下载V1.13.5的kubectl安装包，其他版本请前往[官网下载](https://kubernetes.io/docs/setup/release/notes/)。
 
 ```
 curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.13.5/bin/linux/amd64/kubectl
@@ -27,12 +26,12 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s htt
 
 ```
 
-2.添加执行权限
+2. 添加执行权限
 ```
 chmod +x ./kubectl
 
 ```
-3.移至工作路径
+3. 移至工作路径
 
 ```
 sudo mv ./kubectl /usr/local/bin/kubectl
@@ -47,37 +46,37 @@ Client Version: version.Info{Major:"1", Minor:"11", GitVersion:"v1.11.0", GitCom
 **备注**：如果您需要在ubuntu或其他linux发行版安装kubectl，亦或使用yum安装，可以参见[官方文档](https://kubernetes.io/docs/tasks/tools/install-kubectl/)。
 
 
-###二、获取并配置集群凭证
+### 二、获取并配置集群凭证
 
 你可以通过UK8S Console、SCP、API三种途径获取您创建的集群凭证。
 
 备注：集群内访问无需凭证，可直接访问。
 
-**1、通过Console获取集群凭证**
+1. 通过Console获取集群凭证
 
 点击进入到<集群详情页>，点击“集群凭证”
-{{ :compute:uk8s:manageviakubectl:kubeconfig.png?nolink&600 |}}
+![](/images/manageviakubectl/kubeconfig.png)
 
 将集群信息复制保存到~/.kube/config文件下即可
-{{ :compute:uk8s:manageviakubectl:kubeconfig2.png?nolink&600 |}}
+![](/images/manageviakubectl/kubeconfig2.png)
 
 
-**2、通过SCP从Master节点下载集群凭证到本地**
+2. 通过SCP从Master节点下载集群凭证到本地
 
 首先点击进入集群详情页面，获取任意一台Master节点的IP，然后在本地机器执行以下命令：
 
-<code shell>
+```
 scp root@YOURMASTERIP:~/.kube/config ~/.kube/config
-</code>
+```
 
 
 
 ###三、访问集群
 你可以执行以下命令来验证kubectl是否可以成功访问集群信息；
 
-<code>
+```
 # kubectl cluster-info
-</code>
+```
 
 ###四、设置命令自动补全
 
