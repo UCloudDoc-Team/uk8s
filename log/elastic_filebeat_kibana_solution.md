@@ -1,5 +1,5 @@
-======使用ELK自建UK8S日志解决方案======
 {{indexmenu_n>0}}
+## 使用ELK自建UK8S日志解决方案
 
 下面我们介绍下如何使用Elasticsearch+Filebeat+Kibana来搭建UK8S日志解决方案。
 
@@ -13,9 +13,9 @@ Elasticsearch（ES）是一个基于Lucene构建的开源、分布式、RESTful�
 #### 2、环境要求
 
 Elasticsearch运行时要求vm.max_map_count内核参数必须大于262144，因此开始之前需要确保这个参数正常调整过。
-
-<code>sysctl -w vm.max_map_count=262144</code>
-
+```
+sysctl -w vm.max_map_count=262144
+```
 也可以在ES的的编排文件中增加一个initContainer来修改内核参数，但这要求kublet启动的时候必须添加了--allow-privileged参数，uk8s默认开启了该参数，在后面的示例中采用initContainer的方式。
 
 #### 3、ES节点角色
@@ -35,9 +35,9 @@ Trible node，为了做集群整合用的。
 #### 4、Elasticsearch部署
 
 为了方便演示，我们把本文所有的对象资源都放置在一个名为 elk 的 namespace 下面，所以我们需要添加创建一个 namespace：
-
-<code>kubectl create namespace elk</code>
-
+```
+kubectl create namespace elk
+```
 **不区分节点角色**
 
 这种模式下，集群中的节点不做角色的区分，配置文件请参考[elk-cluster.yaml](https://github.com/quchenyuan/uk8s-app/blob/master/elk/elk-cluster.yaml)
@@ -103,28 +103,28 @@ kb-single-svc         LoadBalancer   172.17.183.59   117.50.92.74   5601:32782/T
 在进行日志收集的过程中，我们首先想到的是使用Logstash，因为它是ELK stack中的重要成员，但是在测试过程中发现，Logstash是基于JDK的，在没有产生日志的情况单纯启动Logstash就大概要消耗500M内存，在每个Pod中都启动一个日志收集组件的情况下，使用logstash有点浪费系统资源，因此我们更推荐一个轻量级的日志采集工具Filebeat，经测试单独启动Filebeat容器大约只会消耗12M内存。
 具体的编排文件可以参考[filebeat.yaml](https://github.com/quchenyuan/uk8s-app/blob/master/elk/filebeat.yaml)，本例采用DaemonSet的方式编排。
 
-<code>
+```
 bash-4.4# kubectl apply -f filebeat.yaml
 configmap/filebeat-config created
 daemonset.extensions/filebeat created
 clusterrolebinding.rbac.authorization.k8s.io/filebeat created
 clusterrole.rbac.authorization.k8s.io/filebeat created
 serviceaccount/filebeat created
-</code>
+```
 
 编排文件中将filebeat使用到的配置ConfigMap挂载到/home/uk8s-filebeat/filebeat.yaml，实际启动filebeat时使用该自定义配置。有关filebeat的配置可以参见 [Configuring Filebeat](https://www.elastic.co/guide/en/beats/filebeat/current/configuring-howto-filebeat.html)中相应的说明。
 
 Filebeat命令行参数可以参考 [Filebeat Command Reference](https://www.elastic.co/guide/en/beats/filebeat/current/command-line-options.html)，本例中使用到的参数说明如下：
 
-+ -c, --c FILE
+* -c, --c FILE
 
 > 指定Filebeat使用的配置文件，如果不指定则使用默认的配置文件/usr/share/filebeat/filebeat.yaml
 
-+ -d, --d SELECTORS
+* -d, --d SELECTORS
 
 > 为指定的selectors打开调试模式， selectors是以逗号分隔的列表，-d "*" 表示对所有组件进行调试。在实际生产环境中请关闭该选项，初次配置时打开可以有效排错。
 
-+ -e, --e
+* -e, --e
 
 > 指定日志输出到标准错误输出，关闭默认的syslog/file输出
 
@@ -240,11 +240,11 @@ nginx-deployment-6c858858d5-9xzh8   1/1     Running   0          36m
 
 #### 3、通过公网访问nginx服务，产生访问日志
 
-{{:compute:uk8s:log:nginx.png?600|}}
+![](/images/log/nginx.png)
 
 #### 4、通过Kibana验证日志的采集情况
 
-{{:compute:uk8s:log:kibana.png?600|}}
+![](/images/log/kibana.png)
 
 
 

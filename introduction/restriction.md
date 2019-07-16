@@ -1,5 +1,5 @@
-## 使用须知
 {{indexmenu_n>0}}
+## 使用须知
 
 
 ### 集群
@@ -24,7 +24,7 @@
 
 ### 其他
 
-当你创建UK8S集群后，UK8S会以你的名义在当前项目下创建UHost、ULB、UDisk、EIP等资源，由UK8S创建的资源名称规范为[ClusterId-type-num]。如:
+当你创建UK8S集群后，UK8S会以你的名义在当前项目下创建UHost、ULB、UDisk、EIP等资源，由UK8S创建的资源名称规范为**ClusterId-type-num**。如:
 
 UK8S-trd3u-master-3为UHost名称，用作集群的Master节点；
 
