@@ -37,7 +37,7 @@ spec:
     server: 10.19.255.192
   mountOptions:
     - nolock
-    - nfsvers=3
+    - nfsvers=4.0
 ```
 
 yaml关键字段：
