@@ -3,7 +3,7 @@
 
 ### 单个集群最多能添加多少个节点？
 
-A：当前单个UK8S集群最多能添加50个节点。
+A：当前单个UK8S集群对应节点数量可查看[集群节点配置推荐](compute/uk8s/introduction/node_requirements)。
 
 ### UK8S完全兼容原生Kubernetes API吗？
 
