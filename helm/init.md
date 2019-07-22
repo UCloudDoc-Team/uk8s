@@ -1,5 +1,6 @@
 {{indexmenu_n>20}}
 ## 安装使用应用商店
+
 本文使用Helm的2.14.1版本进行讲解和演示使用。
 
 如果您已经安装了Helm的客户端和服务端，您可以直接添加应用商店进行使用，添加命令如下：
@@ -8,11 +9,13 @@ helm repo add ucloud http://helm.ucloud.cn
 ```
 
 ### 先决条件
+
 1. 已创建UK8S集群
 2. 已安装配置kubectl连接到kubernetes集群(UK8S master默认安装kubectl)
 3. 已配置集群网关 **(商店暂时只支持外网拉取)**
 
 ### 安装Helm客户端
+
 1. 下载Helm
 ```
 wget http://helm-releases.cn-bj.ufileos.com/helm-v2.14.1-linux-amd64.tar.gz
@@ -31,12 +34,14 @@ helm help
 ```
 
 ### 设置Helm命令的自动补全
+
 为了方便Helm命令的使用，Helm提供了自动补全功能，执行如下命令
 ```
 echo "source <(helm completion bash)" >> ~/.bashrc
 ```
 
 ### 安装Tiller服务端
+
 通过Helm客户端进行Tiller安装，Helm会将Tiller安装到kubectl默认情况下连接到的kubernetes集群(kubectl config view)。
 1. 安装Tiller服务端
 ```
