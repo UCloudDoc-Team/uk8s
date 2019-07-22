@@ -43,6 +43,7 @@ echo "source <(helm completion bash)" >> ~/.bashrc
 ### 安装Tiller服务端
 
 通过Helm客户端进行Tiller安装，Helm会将Tiller安装到kubectl默认情况下连接到的kubernetes集群(kubectl config view)。
+
 1. 安装Tiller服务端
 ```
 kubectl apply -f http://helm-releases.cn-bj.ufileos.com/tiller.yaml
