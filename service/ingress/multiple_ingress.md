@@ -35,7 +35,7 @@ ingress-nginx    LoadBalancer   172.17.23.246   xx.xx.xx.xx     80:32677/TCP,443
 ingress-nginx2   LoadBalancer   172.17.7.114    yy.yy.yy.yy     80:47962/TCP,443:45958/TCP   29m
 ```
  用户可以解析增加n1 xx.xx.xx.xx和n2 yy.yy.yy.yy进行区分流量入口，这个操作流程将使用同一套ingress controller，多个SVC的使用场景，逻辑如下图。
- 
+ ```
  ULB1            ULB2
   |               |
 ing_svc1       ing_svc2
@@ -49,7 +49,7 @@ ing_svc1       ing_svc2
 app_svc1       app_svc2
   |               |
 app_pod1       app_svc2   
-
+```
 
 ### 多个 Ingress Controller
 
