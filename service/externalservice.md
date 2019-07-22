@@ -301,4 +301,7 @@ spec:
 
 目前暂不支持，后续计划支持。
 
+#### 5. 如果Loadbalancer创建外网ULB后，用户在ULB控制台页面绑定了新的EIP，会会被删除吗？
+
+只有访问SVC的ExternalIP才能把流量导入后端Pod，访问其他EIP无效。删除SVC时，所有EIP都会被删除。
 
