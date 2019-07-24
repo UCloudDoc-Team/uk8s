@@ -36,15 +36,6 @@ reclaimPolicy: Retain
 **reclaimPolicy：** 回收策略，支持Delete和Retain，默认为Delete。
 
 
-2019年1月22日之前创建的UK8S集群，StorageClass示例如下，provisionner不同，不支持选择存储类型。
-```
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: cloud
-provisioner: archon.kubeup.com/ucloud
-reclaimPolicy: Retain
-```
 
 ### 二、创建持久化存储卷声明（PVC）
 ```
