@@ -1,4 +1,4 @@
-{{indexmenu_n>0}}
+{{indexmenu_n>1}}
 ## ingress 高级用法
 
 ### 多个Ingress Controller SVC

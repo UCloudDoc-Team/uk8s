@@ -1,4 +1,4 @@
-{{indexmenu_n>0}}
+{{indexmenu_n>2}}
 ## traefik 高级用法
 
 ### 通过路径的路由
