@@ -11,7 +11,7 @@ UK8S支持直接在集群中使用UDisk作为持久化存储卷。
 
 3. UDisk的步长为10GB，即你只能创建20GB、30GB、110GB的存储卷；
 
-###一、存储类 StorageClass
+### 一、存储类 StorageClass
 
 在创建持久化存储卷（persistentVolume）之前，你需要先创建StorageClass，然后在PVC中使用StorageClassName。
 
@@ -52,7 +52,7 @@ spec:
       storage: 20Gi
 ```
 
-###三、在pod中使用PVC
+### 三、在pod中使用PVC
 
 ```
 apiVersion: v1
