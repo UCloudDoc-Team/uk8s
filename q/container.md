@@ -44,7 +44,7 @@ spec:
 如果容器之前已经创建了，只需要在yaml文件中加上`volumeMounts`及`volumes`参数，再使用**kubectl apply **命令更新即可。
 
 ### 一个PVC可以挂载到多个pod吗？
-Udisk不支持多点读写，如需要多点读写请使用UFS。
+UDisk不支持多点读写，如需要多点读写请使用UFS。
 
 ### 我想在删除LoadBalancer类型的Service并保留EIP该怎么操作？
 

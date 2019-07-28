@@ -31,7 +31,7 @@ reclaimPolicy: Retain
 
 **provisioner：** 存储供应方，此处必须为`ucloud/udisk`，否则创建出来的StorageClass可能无效。
 
-**parameters.type：** Udisk的存储介质类型，支持ssd和sata，默认为ssd。
+**parameters.type：** UDisk的存储介质类型，支持ssd和sata，默认为ssd。
 
 **reclaimPolicy：** 回收策略，支持Delete和Retain，默认为Delete。
 
