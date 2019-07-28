@@ -167,5 +167,5 @@ ListenType为PacketsTransmit时表示连接保持的时间，单位为秒，取�
 "service.beta.kubernetes.io/ucloud-load-balancer-eip-chargetype": "month"
  # 付费模式，支持Month，Year，Dynamic
 "service.beta.kubernetes.io/ucloud-load-balancer-eip-quantity": "1" 
- # 付费时长，默认为1，chargetype为Dynimic时无效
+ # 付费时长，默认为1，chargetype为Dynamic时无效
 ```
