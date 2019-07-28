@@ -1,7 +1,7 @@
 {{indexmenu_n>3}}
 ## 创建PVC
 
-当前存储卷支持SSD、SATA类型的UDisk，UFS，详见：
+当前存储卷支持SSD、SATA类型的UDisk以及UFS，详见：
 
 * [在UK8S中使用UDisk](/volume/udisk)
 * [在UK8S中使用UFS](/volume/ufs)
