@@ -12,7 +12,6 @@ metadata:
   name: cloud
 provisioner: ucloud/udisk
 parameters:
-  diskCategory: cloud_efficiency
   type: ssd
 ```
 
