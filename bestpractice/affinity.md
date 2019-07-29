@@ -21,7 +21,7 @@ kubernetes提供了多种节点分配使用的方法，常用的有以下4种：
 kubectl label nodes 10.10.10.10 disktype=ssd
 ```
 
-2. 给pod增加`disktype=ssd`标签，同理可以针对deploy、svc等对象进行增加标签操作
+2. 给pod增加**disktype=ssd**标签，同理可以针对deploy、svc等对象进行增加标签操作
 
 ```
 kubectl label po unginx-7db67b8c69-zcxmm disktype=ssd
