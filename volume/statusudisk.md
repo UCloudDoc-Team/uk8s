@@ -20,7 +20,7 @@ parameters:
 reclaimPolicy: Retain
 ```
 
-创建pv对象使其对应使用已有UDisk硬盘。
+创建pv对象使其对应使用已有UDisk硬盘，其中**spec.flexVolume.options.diskId** 需要和用户已有云盘资源ID相对应。
 
 ```
 apiVersion: v1
