@@ -22,7 +22,7 @@ kubectl label nodes 10.10.10.10 disktype=ssd
 kubectl label po unginx-7db67b8c69-zcxmm disktype=ssd
 `
 
-###节点筛选器
+### 节点筛选器
 
 参考这个yaml文件，这是一个pod对象的yaml，在`spec.nodeSelector`下以map形式增加改容器部署的节点的限制条件，nodeSelector会筛选拥有`disktype: ssd`的node节点进行pod部署。
 
