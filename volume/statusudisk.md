@@ -5,7 +5,7 @@
 
 已创建UDisk云盘如图显示，其中资源ID、和类型，在集群中挂载时需要使用。
 
-![](\images\volume\have_udisk.png)
+![](/images/volume/have_udisk.png)
 
 在集群中创建StorageClass或修改已有的StorageClass，其中**provisioner**需要对应使用ucloud/udisk，**parameters.type**需要对应上图已创建的ssd磁盘类型，**reclaimPolicy**回收策略需要设置为Retain。
 
