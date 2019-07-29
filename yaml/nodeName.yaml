@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ucloud
+  name: ucloud
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      run: ucloud
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: ucloud
+    spec:
+      nodeName: 10.9.158.186
+      containers:
+      - image: nginx
+        name: ucloud
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}
