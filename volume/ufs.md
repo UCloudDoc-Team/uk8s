@@ -17,13 +17,15 @@
 ### 二、创建PV
 
 
-需要在集群内手动创建持久化存储卷，yaml示例如下：
+需要在集群内手动创建持久化存储卷，yaml示例如下两种：
+
+**UFS 容量型**
 
 ```
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: ufspv
+  name: ufspv3
 spec:
   capacity:
     storage: 10Gi
@@ -31,8 +33,29 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    path: /ufs-w4wmpkev
+    path: /ufs-hoj1utv1
     server: 10.19.255.192
+  mountOptions:
+    - nolock
+    - nfsvers=3
+```
+
+**UFS SSD性能型**
+
+```
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ufspv4.0
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    path: /
+    server: 10.9.136.151
   mountOptions:
     - nolock
     - nfsvers=4.0
