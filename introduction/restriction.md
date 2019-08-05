@@ -22,10 +22,11 @@
 
 1. 当前支持SATA、SSD UDisk以及UFS；
 
-    -   [在UK8S中使用UDisk](../uk8s/volume/udisk)
-    -   [在UK8S中使用UFS](../uk8s/volume/ufs)
+    [在UK8S中使用UDisk](../uk8s/volume/udisk)
 
-2. 当前支持云盘地域：
+    [在UK8S中使用UFS](../uk8s/volume/ufs)
+
+2. 当前支持的地域：
 
 |产品|地域|
 |:-:|:-|
@@ -33,7 +34,7 @@
 |UFS|北京、上海、广州|
 
 
-> 不支持云盘地域，可使用**emptyDir**和**hostPath**进行挂载。
+> 不支持云盘地域，可使用emptyDir和hostPath进行挂载。
 
 
 ### 其他
