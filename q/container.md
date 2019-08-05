@@ -10,10 +10,10 @@
 
 ```
 # ls -l /etc/localtime
-lrwxrwxrwx. 1 root root 32 Oct 15  2015 /etc/localtime -> ../usr/share/zoneinfo/Asia/Shanghai
+lrwxrwxrwx. 1 root root 32 Oct 15  2015 /etc/localtime -> ../usr/share/zoneinfo/Asia/ShangHai
 ```
 
-通过上面的信息，我们可以知道宿主机所在的时区为Asia/Shanghai，下面是一个Pod的yaml范例，说明如何将容器内的时区配置更改为Asia/Shanghai，和宿主机保持一致。
+通过上面的信息，我们可以知道宿主机所在的时区为Asia/ShangHai，下面是一个Pod的yaml范例，说明如何将容器内的时区配置更改为Asia/ShangHai，和宿主机保持一致。
 
 ```
 apiVersion: app/v1
@@ -39,7 +39,7 @@ spec:
     volumes:
       - name: timezone-config
         hostPath:
-           path: /usr/share/zoneinfo/Asia/Shanghai
+           path: /usr/share/zoneinfo/Asia/ShangHai
 ```
 如果容器之前已经创建了，只需要在yaml文件中加上`volumeMounts`及`volumes`参数，再使用**kubectl apply **命令更新即可。
 
