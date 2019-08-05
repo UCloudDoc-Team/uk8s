@@ -20,8 +20,21 @@
 
 ### 存储卷
 
-1. 当前支持SATA、SSD UDisk（云硬盘）；
-2. 受UDisk产品限制，存储卷最小规格为20GB；
+1. 当前支持SATA、SSD UDisk以及UFS；
+
+    * [在UK8S中使用UDisk](../uk8s/volume/udisk)
+    * [在UK8S中使用UFS](../uk8s/volume/ufs)
+
+2. 当前支持云盘区域：
+
+|产品|地域|
+|:-:|:-|
+|UDisk|北京、上海、广州、台北、东京、首尔、曼谷、新加坡、雅加达、胡志明、洛杉矶、华盛顿|
+|UFS|北京、上海、广州|
+
+
+> 不支持云盘地域，可使用**emptyDir**和**hostPath**进行挂载。
+
 
 ### 其他
 
