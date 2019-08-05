@@ -3,8 +3,8 @@
 
 当前存储卷支持SSD、SATA类型的UDisk以及UFS，详见：
 
-* [在UK8S中使用UDisk](/compute/uk8s/volume/udisk)
-* [在UK8S中使用UFS](/compute/uk8s/volume/ufs)
+* [在UK8S中使用UDisk](../uk8s/volume/udisk)
+* [在UK8S中使用UFS](../uk8s/volume/ufs)
 
 
 ### 创建StorageClass
