@@ -48,7 +48,7 @@ ing_svc1       ing_svc2
   |               |
 app_svc1       app_svc2
   |               |
-app_pod1       app_svc2   
+app_pod1       app_pod2   
 ```
 
 ### 多个 Ingress Controller
