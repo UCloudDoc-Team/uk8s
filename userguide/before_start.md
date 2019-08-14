@@ -17,11 +17,11 @@ UK8S为容器应用提供编排、调度的能力，应用本身是运行在UClo
 
 UK8S会使用到以下产品的全部操作权限，例如代替你创建、删除云主机，由此产生的费用由你负责，请知悉。
 
-1. 云主机的所有操作权限（action:*UhostInstance）
+1. 云主机的所有操作权限（action:*UHostInstance）
 
-2. 云硬盘的所有操作权限（action:*Udisk）
+2. 云硬盘的所有操作权限（action:*UDisk）
 
-3. 负载均衡的所有操作权限（action:*Ulb）
+3. 负载均衡的所有操作权限（action:*ULB）
 
 4. EIP的所有操作权限（action:*EIP）
 
