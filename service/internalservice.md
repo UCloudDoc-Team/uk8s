@@ -16,8 +16,8 @@ metadata:
   labels:
     app: ucloud-nginx-out-tcp-new
   annotations:
-    "service.beta.kubernetes.io/ucloud-load-balancer-type": "Inner"  
-     # ULB类型，默认为Outer，支持Outer、Inner
+    "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"  
+     # ULB类型，默认为outer，支持outer、inner
     "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "TCP"       
      # 用于声明ULB7还是ULB4，TCP与UDP等价，均表示为ULB4，HTTP和HTTPS等价，均标示为ULB7。
 spec:

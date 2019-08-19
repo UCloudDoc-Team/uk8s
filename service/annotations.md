@@ -30,7 +30,7 @@
 * service.beta.kubernetes.io/ucloud-load-balancer-type 
 
 
-负载均衡器的网络类型，枚举值为Inner或Outer，默认为Outer。对于需要被VPC内网访问的Service而言，此key必须指定，且value必须为Inner
+负载均衡器的网络类型，枚举值为inner或outer，默认为outer。对于需要被VPC内网访问的Service而言，此key必须指定，且value必须为inner
 
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol 
