@@ -22,9 +22,9 @@
 
 1. 当前支持SATA、SSD UDisk以及UFS；
 
-    [在UK8S中使用UDisk](../uk8s/volume/udisk)
+    [在UK8S中使用UDisk](../volume/udisk)
 
-    [在UK8S中使用UFS](../uk8s/volume/ufs)
+    [在UK8S中使用UFS](../volume/ufs)
 
 2. 当前支持共享存储的地域：
 
