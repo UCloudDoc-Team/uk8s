@@ -10,9 +10,9 @@
 
 ```
    "service.beta.kubernetes.io/ucloud-load-balancer-type" 
-   # 负载均衡器类型，必须指定
+   # 负载均衡器类型，必须指定，枚举值为inner或outer，此处应为inner;
    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol"  
-   # TCP和UDP均代表ULB4，HTTPS和HTTP均代表ULB7；
+   # tcp和udp均代表ULB4，https和http均代表ULB7；
     
    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-method"   
    # VServer负载均衡模式
@@ -35,23 +35,23 @@
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol 
 
-TCP和UDP均代表ULB4，HTTPS和HTTP均代表ULB7；vserver的实际protocol由该值和Service protocol共同决定。如果Service的protocol为tcp，且vserver-protocol为tcp或udp，则最终vserver为tcp；如果Service的protocol为tcp，而vserver-protocol为HTTPS或HTTP，则Vserver的协议为HTTP或HTTPS。
+tcp和udp均代表ULB4，https和http均代表ULB7；vserver的实际protocol由该值和Service protocol共同决定。如果Service的protocol为tcp，且vserver-protocol为tcp或udp，则最终vserver为tcp；如果Service的protocol为tcp，而vserver-protocol为https或https，则Vserver的协议为http或https。
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-method 
 
-VServer的负载均衡模式，枚举值为Roundrobin（轮询）、Source（源地址）、ConsistentHash（一致性哈希）、SourcePort（源地址计算端口）、ConsistentHashPort（端口一致性哈希），默认为Roundrobin。
+VServer的负载均衡模式，枚举值为roundrobin（轮询）、source（源地址）、consistenthash（一致性哈希）、sourceport（源地址计算端口）、consistenthashport（端口一致性哈希），默认为roundrobin。
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-type
 
-VServer会话保持方式,枚举值为None（关闭），ServerInsert（自动生成KEY），UserDefined（用户自定义KEY），默认为None。
+VServer会话保持方式,枚举值为none（关闭），serverinsert（自动生成KEY），userdefined（用户自定义KEY），默认为none。
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-info
 
-用户自定义KEY，会话保持方式为UserDefined时有效
+用户自定义KEY，会话保持方式为userdefined时有效
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout 
 
-ListenType为PacketsTransmit时表示连接保持的时间，单位为秒，取值范围：[60，900]，0表示禁用连接保持，默认为60。
+listentype为packetstransmit时表示连接保持的时间，单位为秒，取值范围：[60，900]，0表示禁用连接保持，默认为60。
 
 
 
@@ -59,13 +59,13 @@ ListenType为PacketsTransmit时表示连接保持的时间，单位为秒，取�
 ### 外网ULB4
 ```
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: "TCP"  
-    # TCP和UDP均代表ULB4，HTTPS和HTTP均代表ULB7；
+    # tcp和udp均代表ULB4，https和http均代表ULB7；
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-method   
     # VServer负载均衡模式
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-type 
     # VServer会话保持方式
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-info
-    # 用户自定义String，会话保持方式为UserDefined有效
+    # 用户自定义String，会话保持方式为userdefined有效
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout  
     # 空闲连接的回收时间
 
@@ -74,29 +74,29 @@ ListenType为PacketsTransmit时表示连接保持的时间，单位为秒，取�
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol 
 
-TCP和UDP均代表ULB4，HTTPS和HTTP均代表ULB7；
+tcp和udp均代表ULB4，https和http均代表ULB7；
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-method 
 
-VServer的负载均衡模式，枚举值为Roundrobin（轮询）、Source（源地址）、ConsistentHash（一致性哈希）、SourcePort（源地址计算端口）、ConsistentHashPort（端口一致性哈希），默认为Roundrobin。如Vserver实例的协议为UDP，则不需要指明。
+VServer的负载均衡模式，枚举值为roundrobin（轮询）、source（源地址）、consistenthash（一致性哈希）、sourceport（源地址计算端口）、consistenthashport（端口一致性哈希），默认为roundrobin。如Vserver实例的协议为udp，则不需要指明。
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-type
 
-VServer会话保持方式,枚举值为None（关闭），ServerInsert（自动生成KEY），UserDefined（用户自定义KEY），默认为None。
+VServer会话保持方式,枚举值为none（关闭），serverinsert（自动生成KEY），userdefined（用户自定义KEY），默认为none。
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-info
 
-用户自定义KEY，会话保持方式为UserDefined时有效
+用户自定义KEY，会话保持方式为userdefined时有效
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout 
 
-ListenType为PacketsTransmit时表示连接保持的时间，单位为秒，取值范围：[60，900]，0表示禁用连接保持，默认为60。
+ListenType为packetstransmit时表示连接保持的时间，单位为秒，取值范围：[60，900]，0表示禁用连接保持，默认为60。
 
 ### 外网ULB7
 
 ```
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: "HTTPS" 
-    # 协议类型，TCP和UDP均表示ULB4,HTTPS和HTTP均表示ULB7
+    # 协议类型，tcp和udp均表示ULB4,https和http均表示ULB7
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert: "ssl-b103etqy"
     # ssl证书id
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port: "443"
@@ -106,7 +106,7 @@ ListenType为PacketsTransmit时表示连接保持的时间，单位为秒，取�
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-type  
     ## VServer会话保持方式
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-info 
-    ## 用户自定义String，会话保持方式为UserDefined有效
+    ## 用户自定义String，会话保持方式为userdefined有效
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout   
     ## 空闲连接的回收时间
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type 
@@ -121,7 +121,7 @@ ListenType为PacketsTransmit时表示连接保持的时间，单位为秒，取�
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol 
 
-ULB类型，TCP和UDP均表示ULB4,HTTPS和HTTP均表示ULB7
+ULB类型，tcp和udp均表示ULB4,https和http均表示ULB7
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert
 
@@ -129,43 +129,43 @@ SSL证书Id
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-method 
 
-VServer的负载均衡模式，枚举值为Roundrobin（轮询）、Source（源地址），默认为Roundrobin。
+VServer的负载均衡模式，枚举值为roundrobin（轮询）、source（源地址），默认为roundrobin。
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-type
 
-VServer会话保持方式,枚举值为None（关闭），ServerInsert（自动生成KEY），UserDefined（用户自定义KEY），默认为None。
+VServer会话保持方式,枚举值为none（关闭），serverinsert（自动生成KEY），userdefined（用户自定义KEY），默认为none。
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-info
 
-用户自定义KEY，会话保持方式为UserDefined时有效
+用户自定义KEY，会话保持方式为userdefined时有效
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout 
 
-ListenType为PacketsTransmit时表示连接保持的时间，单位为秒，取值范围：[60，900]，0表示禁用连接保持，默认为60。
+ListenType为packetstransmit时表示连接保持的时间，单位为秒，取值范围：[60，900]，0表示禁用连接保持，默认为60。
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type 
 
-健康检查方式，枚举值为Port或Path,默认为Port。
+健康检查方式，枚举值为port或path,默认为port。
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-domain 
 
-健康检查方式为Path时有效，指http检查域名。
+健康检查方式为path时有效，指http检查域名。
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-path 
 
-健康检查方式为Path时有效，指http检查路径。
+健康检查方式为path时有效，指http检查路径。
 
 ### 外网ULB绑定的EIP注释
 
 ```
-"service.beta.kubernetes.io/ucloud-load-balancer-eip-paymode": "ShareBandwidth" 
- # 支持Traffic、Bandwidth、ShareBandwidth，默认为Bandwidth
+"service.beta.kubernetes.io/ucloud-load-balancer-eip-paymode": "sharebandwidth" 
+ # 支持traffic、bandwidth、sharebandwidth，默认为bandwidth
 "service.beta.kubernetes.io/ucloud-load-balancer-eip-sharebandwidthid": "bwshare-d8dklw" 
  # 共享带宽id
 "service.beta.kubernetes.io/ucloud-load-balancer-eip-bandwidth": "10" 
- # 共享带宽模式下无需指定，或者配置为0，Bandwidth下默认为10 
+ # 共享带宽模式下无需指定，或者配置为0，bandwidth下默认为10Mbps
 "service.beta.kubernetes.io/ucloud-load-balancer-eip-chargetype": "month"
- # 付费模式，支持Month，Year，Dynamic
+ # 付费模式，支持month，year，dynamic
 "service.beta.kubernetes.io/ucloud-load-balancer-eip-quantity": "1" 
- # 付费时长，默认为1，chargetype为Dynamic时无效
+ # 付费时长，默认为1，chargetype为dynamic时无需填写。
 ```
