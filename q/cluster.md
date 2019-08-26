@@ -18,9 +18,9 @@ A：UK8S在创建Pod、LoadBalancer Service、PVC等资源时，都需要扮演�
 ### UK8S对Node上发布的容器有限制吗？如何修改？
 
 A：UK8S为保障生产环境Pod的运行稳定，每个Node限制了Pod数量为110个，每Core限制了Pod数量为8个，用户可以通过登陆Node节点"vim /etc/kubernetes/kubelet.conf"
-修改"maxpods:110`,`podsPerCore: 8"的对应值，然后执行"systemctl restart kubelet"重启kubelet，用户可以通过UK8S页面查看到修改结果。
+修改"maxpods:110"和“podsPerCore: 8"两个值，然后执行"systemctl restart kubelet"重启kubele即可。
 
-注：Node节点可运行Pod数量，取每个节点kubelet.conf中的"maxpods:110`和`podsPerCore: 8"两个值中的**较小值**，例如2Core节点的Pod数上限为16个（2x8=16个），16Core节点的Pod数上限为110个（16x8=128个，大于110个）。
+注：Node节点可运行Pod数量，取每个节点kubelet.conf中的"maxpods:110"和"podsPerCore: 8"两个值中的**较小值**，例如2Core节点的Pod数上限为16个（2x8=16个），16Core节点的Pod数上限为110个（16x8=128个，大于110个）。
 
 ### 集群内可以解析DNS，但无法联通外网？wget拉取数据失败。
 
