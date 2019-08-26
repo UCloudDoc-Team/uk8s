@@ -76,7 +76,7 @@ kubectl logs jenkins-deployment-66b865dbd-xvmdz -n jenkins
 
 4、 接下来安装jenkins依赖插件清单——kubernets plugin，让他能够动态的生成 Slave 的 Pod。 点击 Manage Jenkins -> Manage Plugins -> Available -> Kubernetes plugin勾选安装即可。 
 
-![](/images/bestpractice:installplugin.png)
+![](/images/bestpractice/installplugin.png)
 
 安装插件相对较慢，请耐心等待，并且由于是在线安装，集群需要开通外网，请[开启natgw](https://console.ucloud.cn/vpc/natgw)来使node节点通外网
 
