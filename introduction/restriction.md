@@ -61,6 +61,6 @@
 2.1、 ULB名称为ingress-nginx.ingress.svc.uk8s-xy7udsa的，由UK8S的ULB插件创建，用于LoadBalancer类型的Service，且其备注为UID-xx-xxx，实为Service在UK8S中的uuid。其命名规范为<svc-name>.<namespace>.svc.<uk8s-id>。
 
 2.2、 Vserver名称为TCP_443_xxx-xxxxx的，由UK8S的ULB插件创建，对应LoadBalancer类型的Service中不同的端口。其命名规范为<service-protocol>_<service-port>_<service_uuid>。
-    
+
 2.3、 UDisk名称为pvc-9393f66f-c0b5-11e9-bd6d-5254001935f2的，由UK8S的存储插件创建，对应UK8S中的PVC。其命名规范为pvc-<pvc_uuid>。
 
