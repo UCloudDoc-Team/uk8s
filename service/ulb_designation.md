@@ -53,8 +53,8 @@ metadata:
     app: https
   annotations:
     service.beta.kubernetes.io/ucloud-load-balancer-id: "ulb-ofvmd1o4"
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: "HTTPS" 
-    # HTTP与HTTPS等价，均表示使用7层负载均衡
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: "https" 
+    # http与https等价，均表示使用7层负载均衡
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert: "ssl-b103etqy"
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port: "443"
     # 443端口启用SSL，80端口依然为HTTP
@@ -82,7 +82,7 @@ metadata:
     app: https
   annotations:
     service.beta.kubernetes.io/ucloud-load-balancer-id: "ulb-ofvmd1o4"
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: "TCP"
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: "tcp"
     # 表示使用4层负载均衡
 spec:
   type: LoadBalancer
