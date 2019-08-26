@@ -28,7 +28,7 @@ metadata:
     app: ucloud-nginx
   annotations:
     service.beta.kubernetes.io/ucloud-load-balancer-type: "outer"
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-method: "Source" 
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-method: "source" 
 spec:
   type: LoadBalancer
   ports:
@@ -146,7 +146,7 @@ metadata:
     app: ucloud-nginx
   annotations:
     service.beta.kubernetes.io/ucloud-load-balancer-type: "outer"
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-method: "Source"
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-method: "source"
 spec:
   type: LoadBalancer
   ports:
