@@ -88,7 +88,7 @@ kubectl logs jenkins-deployment-66b865dbd-xvmdz -n jenkins
 
 1、 输入UK8S Apiserver地址，以及服务证书key。
 
-以上两个参数信息，可以在[UK8S集群详情页](https://console.ucloud.cn/uk8s/manage)处，集群凭证中获取。"服务证书key"为集群凭证中的certificate-authority-data字段内容，进行base64解码，将解码后的内容复制到输入框即可。
+以上两个参数信息，可以在[UK8S集群详情页](https://console.ucloud.cn/uk8s/manage)的内网或外网集群凭证中获取。"服务证书key"为集群凭证中的certificate-authority-data字段内容，进行base64解码，将解码后的内容复制到输入框即可。
 
 ![](/images/bestpractice/certificate.png)
 
