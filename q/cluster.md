@@ -9,12 +9,18 @@ A：当前单个UK8S集群对应节点数量可查看[集群节点配置推荐](
 
 A：完全兼容。
 
+### UK8S创建Pod失败，使用kubectl describe pod pod-name发现报错为294，是啥原因？
+
+A：UK8S在创建Pod、LoadBalancer Service、PVC等资源时，都需要扮演云账户的身份调用UCloud API来完成相关操作。但如果您的云账户开启了[API白名单](https://console.ucloud.cn/uapi/apikey)，则贵司账户的API调用地址必须在“允许访问的IP/IP段”中，否则插件调用API报错（如申请PodIP），则Pod创建失败。
+
+您需要在API白名单中，将10.10.10.10这个IP地址加入到“允许访问的IP/IP段”中即可，该IP地址为UK8S插件调用API时的内网代理地址。
+
 ### UK8S对Node上发布的容器有限制吗？如何修改？
 
-A：UK8S为保障生产环境Pod的运行稳定，每个Node限制了Pod数量为110个，每Core限制了Pod数量为8个，用户可以通过登陆Node节点`vim /etc/kubernetes/kubelet.conf `
-修改`maxpods:110`,`podsPerCore: 8`的对应值，然后执行`systemctl restart kubelet`重启kubelet，用户可以通过UK8S页面查看到修改结果。
+A：UK8S为保障生产环境Pod的运行稳定，每个Node限制了Pod数量为110个，每Core限制了Pod数量为8个，用户可以通过登陆Node节点"vim /etc/kubernetes/kubelet.conf"
+修改"maxpods:110`,`podsPerCore: 8"的对应值，然后执行"systemctl restart kubelet"重启kubelet，用户可以通过UK8S页面查看到修改结果。
 
-注：Node节点运行Pod数量计算使用每个节点kubelet.conf中的`maxpods:110`和`podsPerCore: 8`两个规则取**最小值**，例如2Core节点的Pod数上限为16个（2x8=16个），16Core节点的Pod数上限为110个（16x8=128个，大于110个）。
+注：Node节点可运行Pod数量，取每个节点kubelet.conf中的"maxpods:110`和`podsPerCore: 8"两个值中的**较小值**，例如2Core节点的Pod数上限为16个（2x8=16个），16Core节点的Pod数上限为110个（16x8=128个，大于110个）。
 
 ### 集群内可以解析DNS，但无法联通外网？wget拉取数据失败。
 
