@@ -26,25 +26,25 @@ Jenkins Master 和 Jenkins Slave 以 Pod 形式运行在 Kubernetes 集群的 No
 
 ### 二、部署Jenkins
 
-1. 为了管理方便，我们把需要创建的资源都部署在一个名为 jenkins 的 namespace 下面，所以我们需要添加创建一个 namespace：
+1、 为了管理方便，我们把需要创建的资源都部署在一个名为 jenkins 的 namespace 下面，所以我们需要添加创建一个 namespace：
 
 ```
 kubectl create namespace jenkins 
 ```
 
-2. 声明一个PVC对象，后面我们要将Jenkins容器的 /var/jenkins_home 目录挂载到了这个名为PVC对象上面。
+2、 声明一个PVC对象，后面我们要将Jenkins容器的 /var/jenkins_home 目录挂载到了这个名为PVC对象上面。
 
 ```
 kubectl apply -f http://uk8s.cn-bj.ufileos.com/yaml%2Fjenkins%2Fjenkins-pvc.yaml
 ```
 
-3. 以Deployment方式部署Jenkins master,为了演示方便，我们还使用LoadBalancer类型的service将其暴露到外网。
+3、 以Deployment方式部署Jenkins master,为了演示方便，我们还使用LoadBalancer类型的service将其暴露到外网。
 
 ```
 kubectl apply -f http://uk8s.cn-bj.ufileos.com/yaml%2Fjenkins%2Fjenkins.yaml
 ```
 
-4. 等到服务启动成功后，我们就可以根据LoadBalancer的IP（即EXTERNAL-IP），访问 jenkins 服务了，并根据提示信息进行安装配置。
+4、 等到服务启动成功后，我们就可以根据LoadBalancer的IP（即EXTERNAL-IP），访问 jenkins 服务了，并根据提示信息进行安装配置。
 
 ```
 bash-4.4# kubectl get svc -n jenkins
@@ -52,7 +52,7 @@ NAME      TYPE           CLUSTER-IP       EXTERNAL-IP    PORT                   
 jenkins   LoadBalancer   172.17.201.210   106.75.98.80   8080:33651/TCP,50000:43748/TCP   4d21h
 ```
 
-5. 创建一个名为jenkins2的ServiceAccount，并且为其赋予特定的权限，后面配置Jenkins-Slave我们会用到。
+5、 创建一个名为jenkins2的ServiceAccount，并且为其赋予特定的权限，后面配置Jenkins-Slave我们会用到。
 
 ```
 kubectl apply -f http://uk8s.cn-bj.ufileos.com/yaml%2Fjenkins%2Fjenkins-rbac.yaml
@@ -60,11 +60,11 @@ kubectl apply -f http://uk8s.cn-bj.ufileos.com/yaml%2Fjenkins%2Fjenkins-rbac.yam
 
 ### 三、安装Kubernetes插件
 
-1. 前面我们已经获取到Jenkins的外网IP地址，我们直接在浏览器输入EXTERNAL-IP:8080，即可打开Jenkins页面，提示需要输入初始化密码：
+1、 前面我们已经获取到Jenkins的外网IP地址，我们直接在浏览器输入EXTERNAL-IP:8080，即可打开Jenkins页面，提示需要输入初始化密码：
 
 ![](/images/bestpractice/unlock.png)
 
-2. 我们通过kubectl log获取jenkins容器的日志来获取初始化密码
+2、 我们通过kubectl log获取jenkins容器的日志来获取初始化密码
 
 ```
 kubectl logs jenkins-deployment-66b865dbd-xvmdz -n jenkins
@@ -72,9 +72,9 @@ kubectl logs jenkins-deployment-66b865dbd-xvmdz -n jenkins
 
 ![](/images/bestpractice/passget.png)
 
-3. 选择推荐安装，添加完管理员帐号admin，即可进入到 jenkins 主界面。
+3、 选择推荐安装，添加完管理员帐号admin，即可进入到 jenkins 主界面。
 
-4. 接下来安装jenkins依赖插件清单——kubernets plugin，让他能够动态的生成 Slave 的 Pod。 点击 Manage Jenkins -> Manage Plugins -> Available -> Kubernetes plugin勾选安装即可。 
+4、 接下来安装jenkins依赖插件清单——kubernets plugin，让他能够动态的生成 Slave 的 Pod。 点击 Manage Jenkins -> Manage Plugins -> Available -> Kubernetes plugin勾选安装即可。 
 
 ![](/images/bestpractice:installplugin.png)
 
@@ -86,13 +86,13 @@ kubectl logs jenkins-deployment-66b865dbd-xvmdz -n jenkins
 
 首先点击 Manage Jenkins —> Configure System，进入到系统设置页面。滚动到页面最下方，然后点击Add a new cloud —> 选择 Kubernetes，开始填写 Kubernetes 和 Jenkins 配置信息。
 
-1. 输入UK8S Apiserver地址，以及服务证书key。
+1、 输入UK8S Apiserver地址，以及服务证书key。
 
 以上两个参数信息，可以在[UK8S集群详情页](https://console.ucloud.cn/uk8s/manage)处，集群凭证中获取。"服务证书key"为集群凭证中的certificate-authority-data字段内容，进行base64解码，将解码后的内容复制到输入框即可。
 
 ![](/images/bestpractice/certificate.png)
 
-2. 填写集群Namespace、上传凭据、Jenkins地址
+2、 填写集群Namespace、上传凭据、Jenkins地址
 
 Namespace此处填写之前创建Namespace即可，此处为jenkins。凭证处，点击”Add“，凭证类型选择"Secret file"，将[UK8S集群详情页](https://console.ucloud.cn/uk8s/manage)全部内容复制下来，保存为kubeconfig上传。
 
@@ -102,9 +102,9 @@ Namespace此处填写之前创建Namespace即可，此处为jenkins。凭证处�
 ![](/images/bestpractice/kubeconfig.jpeg)
 
 
-3. 点击”连接测试“，如果出现 Connection test successful 的提示信息证明 Jenkins 已经可以和 Kubernetes 系统正常通信了
+3、 点击”连接测试“，如果出现 Connection test successful 的提示信息证明 Jenkins 已经可以和 Kubernetes 系统正常通信了
 
-4. 接下来，我们点击”添加Pod模板“，这个Pod模板即Jenkins-slave pod的模板。
+4、 接下来，我们点击”添加Pod模板“，这个Pod模板即Jenkins-slave pod的模板。
 
 * namespace，我们这里填 ”jenkins“
 * 标签列表，这里我们填 ”jnlp-slave“，这个标签我们在后面创建Jobs会用到，非常重要。
@@ -131,19 +131,19 @@ Namespace此处填写之前创建Namespace即可，此处为jenkins。凭证处�
 Kubernetes 插件的配置工作完成了，接下来我们就来添加一个 Job 任务，看是否能够在 Slave Pod 中执行，任务执行完成后看 Pod 是否会被销毁。
 
 
-1. 在 Jenkins 首页点击create new jobs，创建一个测试的任务，输入任务名称，然后我们选择 Freestyle project 类型的任务，点击OK。
+1、 在 Jenkins 首页点击create new jobs，创建一个测试的任务，输入任务名称，然后我们选择 Freestyle project 类型的任务，点击OK。
 
 ![](/images/bestpractice/job1.png)
 
-2. 在任务配置页，最下面的 Label Expression 这里要填入jnlp-slave，就是前面我们配置的 Slave Pod 中的 Label，这两个地方必须保持一致
+2、 在任务配置页，最下面的 Label Expression 这里要填入jnlp-slave，就是前面我们配置的 Slave Pod 中的 Label，这两个地方必须保持一致
 
 ![](/images/bestpractice/job2.png)
 
-3. 在任务配置页的 Build 区域，选择Execute shell，输入一个简单的测试命令，并点击保存。
+3、 在任务配置页的 Build 区域，选择Execute shell，输入一个简单的测试命令，并点击保存。
 
 ![](/images/bestpractice/job3.png)
 
-4. 点击查看Console output，查看任务运行情况。
+4、 点击查看Console output，查看任务运行情况。
 
 ![](/images/bestpractice/job4.png)
 
@@ -165,11 +165,11 @@ Pipeline，简单来说，就是一套运行在 Jenkins 上的工作流（流水
 
 Pipeline 有两种创建方法，一是直接在 Jenkins 的 Web UI 界面中输入脚本，二是通过创建一个 Jenkinsfile 脚本文件放入项目源码库中，这里为了方便演示，我们使用在 Web UI 界面中输入脚本的方式来运行Pipeline。
 
-1. 点击”new item“，输入Job名称，选择Pipeline，点击"OK"。
+1、 点击”new item“，输入Job名称，选择Pipeline，点击"OK"。
 
 {{:compute:uk8s:bestpractice:pipeline1.png?600|}}
 
-2. 在最下方的pipeline 脚本部分，输入以下脚本内容，并点击保存
+2、 在最下方的pipeline 脚本部分，输入以下脚本内容，并点击保存
 
 
 ```
@@ -189,9 +189,12 @@ node('jnlp-slave') {
 }
 
 ```
+
+
 >> 上面的脚本内容中，我们给 node 添加了一个 jnlp-slave 标签，指定这个pipeline的4个stage，都运行在jenkins的slave节点中。
 
-3. 任务创建好之后，点击”立即构建“，我们可以通过kubectl命令发现UK8S集群中正启动一个新的pod用于构建任务。
+
+3、 任务创建好之后，点击”立即构建“，我们可以通过kubectl命令发现UK8S集群中正启动一个新的pod用于构建任务。
 
 ```
 bash-4.4# kubectl get po -n jenkins
@@ -201,7 +204,7 @@ jnlp-0qn7x                            0/1     ContainerCreating   0          1s
 
 ```
 
-4. 回到 Jenkins 的 Web UI 界面中查看 本次构建历史的 Console Output，也可以类似如下的信息，表明构建成功
+4、 回到 Jenkins 的 Web UI 界面中查看 本次构建历史的 Console Output，也可以类似如下的信息，表明构建成功
 
 ```
 Console Output
@@ -238,6 +241,7 @@ Finished: SUCCESS
 ```
 
 ### 七、在UK8S中部署应用
+
 
 上面我们已经知道了如何在 Jenkins Slave 中构建Pipeline任务，那么如何通过Jenkins来部署一个原生的 Kubernetes 应用呢？
 
