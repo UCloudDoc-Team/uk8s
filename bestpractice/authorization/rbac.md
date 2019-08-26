@@ -5,7 +5,7 @@
 ### 简介
 RBAC是一种基于角色来管理对计算机或网络资源访问策略的方法。
 
-我们知道，对K8S内所有API对象的操作都是通过访问kube-apiserver来完成的，这是因为kube-apiserver需要校验访问者的是否具备操作这些API对象的权限。而K8S中负责授权和权限校验(Authorization&Authentication)的这套机制，则是RBAC：基于角色的访问控制（Role-Based Access Control ）
+我们知道，对K8S内所有API对象的操作都是通过访问kube-apiserver来完成的，因此kube-apiserver需要校验访问者是否具备操作这些API对象的权限。而K8S中负责授权和权限校验(Authorization&Authentication)的这套机制，则是RBAC：基于角色的访问控制（Role-Based Access Control ）
 
 在Kubernetes的RBAC模型里面，有三个基本的概念：
 
