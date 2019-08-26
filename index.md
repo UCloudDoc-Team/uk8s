@@ -3,4 +3,4 @@
 
 **目录：**
 
-{{indexmenu>:compute:uk8s#1 | skipfile=/^(compute:uk8s:yaml)$/ nsort dsort msort}}
+{{indexmenu>:compute:uk8s#1 | skipns=/^(compute:uk8s:yaml)$/ nsort dsort msort}}
