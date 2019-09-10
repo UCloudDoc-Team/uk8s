@@ -5,6 +5,8 @@
 ### 通过控制台进行安装应用
 
 UK8S应用商店功能提供了一键安装功能，具体操作如下：
+
+
 1. 点击进入UK8S集群，选择应用商店，选择需要使用的应用点击进入
 
 ![](../images/helm/chart.png)
@@ -14,6 +16,7 @@ UK8S应用商店功能提供了一键安装功能，具体操作如下：
 例如nginx-ingress应用，这里默认的service.type为LoadBalancer，如不需要提供外网ingress服务可以修改为ClusterIP；defaultBackend.enabled需要设置为false。
 
 ![](../images/helm/values.png)
+
 
 3. 安装完成会提示跳转到工作负载中进行应用的查看。
 
@@ -25,7 +28,7 @@ UK8S应用商店功能提供了一键安装功能，具体操作如下：
 
 ### 测试安装的应用
 
-这里我们通过一个简单示例验证刚刚创建的nginx-ingress。nginx-ingress的详细用法可参考[]()
+这里我们通过一个简单示例验证刚刚创建的nginx-ingress。nginx-ingress的详细用法可参考[Nginx Ingress](../service/ingress/nginx)
 
 **添加解析**
 
