@@ -69,6 +69,8 @@ spec:
         path: /
 ```
 
+**查看链接**
+
 我们可以访问apache.test.uk8s.xyz进行查看，可以看到了nginx-ingress可以正常的提供服务了。
 
 ![](../images/helm/apache.png)
