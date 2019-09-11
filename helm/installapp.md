@@ -1,4 +1,4 @@
-{{indexmenu_n>35}}
+{{indexmenu_n>50}}
 ## 一键安装应用
 
 
@@ -8,22 +8,18 @@ UK8S应用商店功能提供了一键安装功能，具体操作如下：
 
 
 1. 点击进入UK8S集群，选择应用商店，选择需要使用的应用点击进入
-
 ![](../images/helm/chart.png)
 
 2. 点击一键安装，对应用提供的相关设置进行修改.
 
 例如nginx-ingress应用，这里默认的service.type为LoadBalancer，如不需要提供外网ingress服务可以修改为ClusterIP；defaultBackend.enabled需要设置为false。
-
 ![](../images/helm/values.png)
 
 
 3. 安装完成会提示跳转到工作负载中进行应用的查看。
-
 ![](../images/helm/applist.png)
 
-4. 点击应用进入详情可以查看到nginx-ingress的详细信息，
-
+4. 点击应用进入详情可以查看到nginx-ingress的详细信息。
 ![](../images/helm/application.png)
 
 ### 测试安装的应用
