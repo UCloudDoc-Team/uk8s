@@ -11,7 +11,7 @@ UK8S应用商店功能提供了一键安装功能，具体操作如下：
 ![](../images/helm/chart.png)
 
 2. 点击一键安装，对应用提供的相关设置进行修改。
-例如nginx-ingress应用，这里默认的service.type为LoadBalancer，如不需要提供外网ingress服务可以修改为ClusterIP；defaultBackend.enabled需要设置为false。
+例如nginx-ingress应用，这里默认的service.type为LoadBalancer，如不需要提供外网ingress服务可以修改为ClusterIP。
 ![](../images/helm/values.png)
 
 
