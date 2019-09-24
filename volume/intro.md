@@ -5,21 +5,34 @@
 ### 概念
 我们知道，容器中的磁盘文件是临时的，一旦容器运行结束，其文件也会丢失。如果数据需要长期存储，那就需要对容器数据做持久化支持，在就涉及到Kubernetes中的一个核心概念 Volume。
 Kubernetes 和 Docker 类似，也是通过 Volume 的方式提供对存储的支持。Kubernetes 中 的Volume  与Docker 中的 Volume 类似，主要的区别如下：
+
 1. Kubernetes中的Volume被定义到Pod层面，Volume可以被 Pod 中的多个容器挂载到相同或不同的路径。
+
 1. Kubernetes 中的 Volume 与 Pod 的生命周期相同，但与容器的生命周期不相关。当容器终止或重启时，Volume 中的数据不会丢失。
+
 1. 当 Pod 被删除时，Volume 才会被清理。并且数据是否丢失取决于 Volume 的具体类型，比如：emptyDir 类型的 Volume 数据会丢失，而 PV 类型的数据则不会丢失。
 
 Volume的本质是一个目录，其中可以包含数据，Pod中的容器可以访问该目录。该目录的形式，支持该目录的介质以及目录的内容取决于所使用的特定卷类型。
 Kubernetes 目前支持多种 Volume 类型，常用的类型如下：
+
 + cephfs
+
 + glusterfs
+
 + nfs
+
 + csi
+
 + FlexVolume
+
 + emptyDir
+
 + hostPath
+
 + local
+
 + persistentVolumeClaim
+
 + secret
 + configMap
 
@@ -81,13 +94,21 @@ Kubernetes 目前主要使用 PersistentVolume、PersistentVolumeClaim、Storage
 PV 的全称是PersistentVolume（持久化卷）。PersistentVolume 是 Volume 的一种类型，是对底层存储的一种抽象。PV 由集群管理员进行创建和配置，与Node一样，PV 也是属于集群级别的资源。PV 包含存储类型、存储大小和访问模式。PV 的生命周期独立于 Pod，即使用它的Pod被 销毁时，PV 可以依然存在。
 
 PersistentVolume 通过插件机制实现与共享存储的对接。Kubernetes 目前支持以下插件类型，其中FlexVolume和CSI是Kubernetes的标准插件，用于集成各云厂商的存储设备，UK8S便是基于CSI和flexVolume来集成UDisk、UFS、UFile等UCloud存储介质。
+
 + FlexVolume
+
 + CSI
+
 + NFS
+
 + RBD (Ceph Block Device)
+
 + CephFS
+
 + Glusterfs
+
 + HostPath
+
 + Local
 
 #### PVC
