@@ -19,6 +19,7 @@
 
 #### 1、关于Prometheus-Operator
 Prometheus-operator的本职就是一组用户自定义的CRD资源以及Controller的实现，Prometheus Operator这个controller有BRAC权限下去负责监听这些自定义资源的变化，并且根据这些资源的定义自动化的完成如Prometheus Server自身以及配置的自动化管理工作。
+
 在K8S中，监控metrics基本最小单位都是一个Service背后的一组pod，对应Prometheus中的target，所以prometheus-operator抽象了对应的CRD类型" ServiceMonitor "，这个ServiceMonitor通过 sepc.selector.labes来查找对应的Service及其背后的Pod或endpoints，通过sepc.endpoint来指明Metrics的url路径。
 以下面的CoreDNS举例，需要pull的Target对象Namespace为kube-system，kube-app是他们的labels，port为metrics。
 ```
@@ -46,9 +47,13 @@ spec:
 #### 2、准备工作
 
 ssh到任意一台Master节点，克隆kube-prometheus项目。该项目源自CoreOS开源的[kube-prometheus](https://github.com/coreos/kube-prometheus)，与原始项目相比，主要作为以下优化：
+
 + 将Prometheus和AlbertManager的数据存储介质由emptyDir改为UDisk，提升稳定性，避免数据丢失；
+
 + 将镜像源统一修改为UHub，避免镜像拉取失败的情况出现；
+
 + 新增UK8S专属文件目录，用于配置监控controller-manager、schduler、etcd；
+
 + 将执行文件按目录划分，便于修改及阅读。
 
 ```
@@ -192,4 +197,9 @@ spec:
 
 ```
 打开浏览器访问Prometheus Server，进入target发现已经监听起来了，对应的config里也有配置生成和导入。
+
+#### 8、说明
+
+该文档只适用于kubernetes 1.14以上的版本，如果你的kubernetes版本为1.14以下，可以使用[release-0.1](https://github.com/coreos/kube-prometheus/tree/release-0.1).
+
 

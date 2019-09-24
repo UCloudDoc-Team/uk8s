@@ -1,7 +1,6 @@
-{{indexmenu_n>0}}
+{{indexmenu_n>1}}
 ## Volume 介绍
 
-[TOC]
 ### 概念
 我们知道，容器中的磁盘文件是临时的，一旦容器运行结束，其文件也会丢失。如果数据需要长期存储，那就需要对容器数据做持久化支持，在就涉及到Kubernetes中的一个核心概念 Volume。
 Kubernetes 和 Docker 类似，也是通过 Volume 的方式提供对存储的支持。Kubernetes 中 的Volume  与Docker 中的 Volume 类似，主要的区别如下：
