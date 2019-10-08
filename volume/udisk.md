@@ -32,11 +32,11 @@ parameters:
 reclaimPolicy: Retain
 ```
 
-**provisioner：** 存储供应方，此处必须为`ucloud/udisk`，否则创建出来的StorageClass可能无效。
+**provisioner:** 存储供应方，此处必须为`ucloud/udisk`，否则创建出来的StorageClass可能无效。
 
-**parameters.type：** UDisk的存储介质类型，支持ssd和sata，默认为ssd。
+**parameters.type:** UDisk的存储介质类型，支持ssd和sata，默认为ssd。
 
-**reclaimPolicy：** 回收策略，支持Delete和Retain，默认为Delete。
+**reclaimPolicy:** 回收策略，支持Delete和Retain，默认为Delete。
 
 #### 2、CSI版本（2019年9月17日之后创建的UK8S集群）
 ```
@@ -47,7 +47,7 @@ metadata:
 provisioner: udisk.csi.ucloud.cn #存储供应方，此处不可更改。
 parameters:
   type: "ssd"   # 存储介质，支持sdd和sata，必填
-  fsType："ext4"    # 文件系统，必填
+  fsType: "ext4"    # 文件系统，必填
   udataArkMode: "no"   # 是否开启方舟模式，默认不开启，非必填
   chargeType: "month" # 付费类型，支持dynamic、month、year，默认为month，非必填
   quantity: "1" # 购买时长，dynamic无需填写，可购买1-9个月，或1-10年
