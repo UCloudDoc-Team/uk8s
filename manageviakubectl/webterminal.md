@@ -15,6 +15,7 @@ metadata:
   labels:
     k8s-app: uk8s-kubectl
   name: uk8s-kubectl
+  namespace: kube-system
 spec:
   replicas: 1
   selector:
@@ -27,9 +28,16 @@ spec:
     spec:
       serviceAccountName: uk8s-kubectl
       containers:
-        - image: uhub.service.ucloud.cn/ucloud/uk8s-kubectl:v1.13.5
+        - image: uhub.service.ucloud.cn/ucloud/uk8s-kubectl:v1.14.6
           imagePullPolicy: IfNotPresent
           name: uk8s-kubectl
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: "100m"
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
 
 ---
 # ------------------- Service Account ------------------- #
@@ -40,7 +48,7 @@ metadata:
   labels:
     k8s-app: uk8s-kubectl
   name: uk8s-kubectl
-  namespace: default
+  namespace: kube-system
 
 ---
 kind: ClusterRoleBinding
@@ -56,6 +64,6 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: uk8s-kubectl
-  namespace: default
+  namespace: kube-system
 ```
 

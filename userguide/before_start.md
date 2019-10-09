@@ -35,7 +35,7 @@ UK8S会使用到以下产品的全部操作权限，例如代替你创建、删�
 
 由UK8S创建的云资源名称，都遵循明确的命名规范，如
 
-1. UHost名称：[cluster-id]-[nodetype]-[num]
+1. UHost名称：[cluster-id]-[nodetype]-[randomcode]
 
 2. ULB名称：[cluster-id]-[randomcode]
 
