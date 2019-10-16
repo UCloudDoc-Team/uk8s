@@ -3,11 +3,7 @@
 
 ### 网络编程中如何获得对端IP
 
-1.  如果是HTTP1.1协议，一般的反向代理或者负载均衡设备（如ULB7）支持X-Forwarded-For头部字段，会在用户的请求报文中加入类似
-```
-X-Forwarded-For:114.248.238.236
-```
-的头部。Web应用程序只需要解析该头部即可获得用户真实IP。
+1.  如果是HTTP1.1协议，一般的反向代理或者负载均衡设备（如ULB7）支持X-Forwarded-For头部字段，会在用户的请求报文中加入类似**X-Forwarded-For:114.248.238.236**的头部。Web应用程序只需要解析该头部即可获得用户真实IP。
 
 2.  如果是TCP或UDP自定义协议，可以客户端在协议字段里定义一个大端unsigned字段来保存自身IP，服务端把该字段解析出来然后调用inet_ntoa(3)等函数获得ipv4点分字符串。
 
@@ -99,7 +95,7 @@ func AppRouter(w http.ResponseWriter, r *http.Request) {
 
 Loadbalancer创建成功后，ULB4的VServer将UK8S集群中的每个Node云主机节点作为自身的RS节点，RS端口为Service申明的Port值（注意不是NodePort）。ULB4将访问流量转发到其中一个RS后，RS根据本机上kube-proxy生成的iptables规则将流量DNAT到后端Pod中，如下所示。
 
-![](/images/service:ulb4.jpg)
+![](/images/service/ulb4.jpg)
 
 图中ULB4先将流量转发到Node1中，Node1中根据iptables DNAT规则，将流量转发给Node2中的Pod。
 需要注意的是，Node1将IP包转发到Node2前，对这个包有一次SNAT操作。准确地说，是一次MASQUERADE操作，规则如下。

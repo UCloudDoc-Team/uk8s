@@ -7,7 +7,7 @@ UK8S产品本身不收取服务费用，但你需要为使用UK8S服务而用到
 
 2. 云硬盘  [UDisk收费说明](/storage_cdn/udisk/price)
 
-3. 负载均衡   [ULB收费说明](/network/ulb/price)
+3. 负载均衡   [ULB收费说明](/network/ulb/fast/price)
 
 4. 弹性IP    [EIP收费说明](/network/unet/eip_price)
 
