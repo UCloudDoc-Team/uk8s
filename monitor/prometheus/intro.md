@@ -1,4 +1,4 @@
-{{indexmenu_n>1}}
+
 ## 什么是Prometheus
 
 ### 关于Prometheus

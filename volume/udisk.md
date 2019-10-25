@@ -1,4 +1,4 @@
-{{indexmenu_n>3}}
+
 ## 在UK8S中使用UDISK
 
 UK8S支持直接在集群中使用UDisk作为持久化存储卷。

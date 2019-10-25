@@ -1,4 +1,4 @@
-{{indexmenu_n>0}}
+
 ## 使用ELK自建UK8S日志解决方案
 
 下面我们介绍下如何使用Elasticsearch+Filebeat+Kibana来搭建UK8S日志解决方案。

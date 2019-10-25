@@ -1,4 +1,4 @@
-{{indexmenu_n>0}}
+
 ## 部署Prometheus
 
 ### 前言

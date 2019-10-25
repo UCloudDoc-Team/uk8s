@@ -1,4 +1,4 @@
-{{indexmenu_n>1}}
+
 ## 基于Jenkins的CI/CD实践
 
 ### 一、概要

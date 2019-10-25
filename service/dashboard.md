@@ -1,4 +1,4 @@
-{{indexmenu_n>0}}
+
 ## 通过ULB暴露Kubernetes Dashboard
 
 

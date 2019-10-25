@@ -1,4 +1,4 @@
-{{indexmenu_n>0}}
+
 ## Traefik Ingress
 
 ###什么是Ingress

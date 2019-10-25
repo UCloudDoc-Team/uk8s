@@ -1,4 +1,4 @@
-{{indexmenu_n>3}}
+
 ## 创建PVC
 
 当前存储卷支持SSD、SATA类型的UDisk以及UFS，详见：

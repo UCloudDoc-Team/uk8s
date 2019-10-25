@@ -1,4 +1,4 @@
-{{indexmenu_n>0}}
+
 ## Nginx Ingress
 
 ###什么是Ingress

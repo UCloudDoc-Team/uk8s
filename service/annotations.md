@@ -1,4 +1,4 @@
-{{indexmenu_n>0}}
+
 ## Service Annotations
 
 本文主要描述用于创建LoadBalancer 类型的Service时，与ULB相关的Annotations说明。

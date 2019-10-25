@@ -1,4 +1,4 @@
-{{indexmenu_n>0}}
+
 ## 了解RBAC
 
 

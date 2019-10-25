@@ -1,4 +1,4 @@
-{{indexmenu_n>1}}
+
 ## kubectl命令行简介
 
 

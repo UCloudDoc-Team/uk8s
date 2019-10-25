@@ -1,4 +1,4 @@
-{{indexmenu_n>3}}
+
 ## 使用web kubectl
 
 UK8S 在console中提供 web terminal，你可以通过web terminal 登录到集群内的Pod，并使用kubectl 操作和管理集群。

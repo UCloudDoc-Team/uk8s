@@ -1,4 +1,4 @@
-{{indexmenu_n>2}}
+
 ## 安装及配置kubectl
 
 本文主要演示如何在UCloud云主机上安装配置kubectl并管理Kubernetes集群，集群Master节点已默认安装kubectl工具，如果你仅需在Master节点做一些简单测试，请跳过此环节；
