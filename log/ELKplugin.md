@@ -28,13 +28,13 @@ UK8S推出了一个新的插件功能，旨在帮助用户快速部署UK8S集群
 
 ![](../images/log/install_ELK.png)
 
-    可选项：
+可选项：
 
-    * Elasticsearch
-    这里Elasticsearch我们选择新建，将在UK8S集群中进行Elasticsearch的部署，选择关联则是进行外挂ES（UES）进行关联，这里我们默认进行集群内安装。
+* Elasticsearch
+这里Elasticsearch我们选择新建，将在UK8S集群中进行Elasticsearch的部署，选择关联则是进行外挂ES（UES）进行关联，这里我们默认进行集群内安装。
 
-    * Kibana
-    用户可以根据自己的需要进行安装Kibana的安装，安装后将可以通过应用中查看对外暴露的Kibana进行日志查看，提供了EIP和Ingress两种方式对外暴露，如集群内部没有安装Ingress Controller服务的话Ingress方式将无法正常提供外部访问。用户可以不进行安装在UCloud控制台进行日志查看，这里我们默认选择安装。
+* Kibana
+用户可以根据自己的需要进行安装Kibana的安装，安装后将可以通过应用中查看对外暴露的Kibana进行日志查看，提供了EIP和Ingress两种方式对外暴露，如集群内部没有安装Ingress Controller服务的话Ingress方式将无法正常提供外部访问。用户可以不进行安装在UCloud控制台进行日志查看，这里我们默认选择安装。
 
 > 注意：请确保集群中Node节点大于3台，并有足够资源进行安装ELK服务。
 
