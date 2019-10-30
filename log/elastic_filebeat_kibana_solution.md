@@ -240,7 +240,7 @@ nginx-deployment-6c858858d5-9xzh8   1/1     Running   0          36m
 
 #### 3、通过公网访问nginx服务，产生访问日志
 
-![](/images/log/nginx.png)
+![](../images/log/nginx.png)
 
 #### 4、通过Kibana验证日志的采集情况
 
