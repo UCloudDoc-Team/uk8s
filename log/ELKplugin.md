@@ -2,17 +2,6 @@
 
 UK8S推出了一个新的插件功能，旨在帮助用户快速部署UK8S集群所需要的相关插件。
 
-![](../images/log/dashboard_plugin.png)
-
-### ELK日志插件
-
-**插件-日志ELK**是UK8S提供的一键部署ELK日志组件的功能，包括FileBeat、Logstash、Kibana(可选)、Elasticsearch(可选)等组件，实现日志的自动采集、存储、查询，安装过程可能持续10分钟左右。
-
-关于ELK组件介绍请参考[ELK日志解决方案](./elastic_filebeat_kibana_solution.md)
-
-用户进入集群后可以选择为集群安装完整的一套ELK组件或者安装Filebeat等组件关联用户所使用的UES，通过UK8S插件部署的完整ELK组件可以在UCloud页面进行统一化日志查询展示。
-
-![](../images/log/plugin_ELK.png)
 
 ### 使用须知
 
@@ -21,6 +10,17 @@ UK8S推出了一个新的插件功能，旨在帮助用户快速部署UK8S集群
 集群创建时间：2019年9月11日之后创建
 
 如您是9月11日之前创建的1.14版本集群，请升级集群CSI后，可以使用该功能。
+
+### ELK日志插件
+
+**插件-日志ELK**是UK8S基于ELK打造的一站式日志服务，包括Elasticsearch（可选）、Logstash、Filebeat 和 Kibana（可选）多个组件，实现了集群内日志的自动采集、过滤和存储，并内置了日志检索功能。
+
+关于ELK组件介绍请参考[ELK日志解决方案](./elastic_filebeat_kibana_solution.md)
+
+用户进入集群后可以选择为集群安装完整的一套ELK组件或者安装Filebeat等组件关联用户所使用的UES，通过UK8S插件部署的完整ELK组件可以在UCloud页面进行统一化日志查询展示。
+
+![](../images/log/plugin_ELK.png)
+
 
 ### 安装完整ELK日志组件
 
