@@ -20,13 +20,16 @@ data:
     .:53 {
         errors
         health
-        kubernetes cluster.local REVERSE_CIDRS {
+        kubernetes cluster.local in-addr.arpa ip6.arpa {
           pods insecure
           upstream 
-          fallthrough in-addr.arpa ip6.arpa
+          fallthrough in-addr.arpa ip6.arpai
+          ttl 30
         }
         prometheus :9153
-        proxy . /etc/resolv.conf
+        forward . /etc/resolv.conf {
+          policy sequential
+        }
         cache 30
         loop
         reload
@@ -35,7 +38,6 @@ data:
 metadata:
   name: coredns
   namespace: kube-system
-  resourceVersion: "3082370"
 ```
 
 Corefile的配置信息包含以下CoreDNS的插件：
@@ -54,7 +56,7 @@ Corefile的配置信息包含以下CoreDNS的插件：
 
 * prometheus: CoreDNS对外暴露的监控指标，默认为http://localhost:9153/metrics。
 
-* proxy [from to]: 任何不属于Kubernetes集群内部的域名，其DNS请求都将指向proxy指定的 DNS 服务器地址。**from**一般为"."，代表所有域名，**to**可以为多个，如111.114.114.114 8.8.8.8。需要注意的是，新版本的CoreDNS计划使用forward插件替代proxy插件，不过使用方法是一致的。
+* forward [from to]: 任何不属于Kubernetes集群内部的域名，其DNS请求都将指向forword指定的 DNS 服务器地址。**from**一般为"."，代表所有域名，**to**可以为多个，如111.114.114.114 8.8.8.8。需要注意的是，新版本的CoreDNS已forward插件替代proxy插件，不过使用方法是一致的，如果你的集群是proxy，建议改为forward插件，性能更好。
 
 * reload: 允许自动加载变化了的Corefile，建议配置，这样CoreDNS可以实现热更新。
 
@@ -70,7 +72,7 @@ Corefile的配置信息包含以下CoreDNS的插件：
 ucloudk8s.com:53 {
         errors
         cache 30
-        proxy . 10.9.10.8
+        forward . 10.9.10.8
     }
 ```
 
@@ -78,7 +80,7 @@ ucloudk8s.com:53 {
 
 ```
 upstream 10.9.10.8
-proxy .  172.16.0.1
+forward .  172.16.0.1
 ```
 
 修改完毕后的configmap如下：
@@ -91,29 +93,31 @@ data:
     .:53 {
         errors
         health
-        kubernetes cluster.local. REVERSE_CIDRS {
+        kubernetes cluster.local in-addr.arpa ip6.arpa {
           pods insecure
           upstream 10.9.10.8
           fallthrough in-addr.arpa ip6.arpa
         }
         prometheus :9153
-        proxy . 10.9.10.8
+        forward . 10.9.10.8
         cache 30
+        loop
+        reload
+        loadbalance
         }
     ucloudk8s.com:53 {
         errors
         cache 30
-        proxy . 10.9.10.8
-   }
+        forward . 10.9.10.8
+       }
 metadata:
   name: coredns
   namespace: kube-system
-  resourceVersion: "3082370"
 ```
 
 ### 验证
 
-我们在同VPC下的某台云主机中安装一个DNS服务器，来验证自定义DNS是否正常工作。
+我们在同VPC下的某台云主机中(请勿在UK8S Node节点中操作)安装一个DNS服务器，来验证自定义DNS是否正常工作。
 
 #### 通过Docker安装DNS服务器
 
@@ -164,7 +168,7 @@ docker restart dns-server
 baidu.com:53{
   errors
   cache 30
-  proxy . 10.9.10.8(测试时需修改成你的DNS地址)      
+  forward . 10.9.10.8(测试时需修改成你的DNS地址)      
 
  }
 
