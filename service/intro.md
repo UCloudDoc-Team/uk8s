@@ -3,7 +3,7 @@
 
 本章节主要为您简要介绍 Kubernetes 中的一个重要概念 Service（即服务，本文中两者等同），以及ULB的相关知识。
 
-###Service 介绍
+### Service 介绍
 
 Service 是 Kubernetes 集群中的一个资源对象，用于定义如何访问一组带有相同特征的Pods。通常情况下，Service 通过Label Selector 来确定目标Pods，ExternalName Services 类外，关于 Service 的详细介绍，请参阅官方文档中 [Services](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)章节
 
@@ -32,6 +32,7 @@ ClusterIp 是 Kubernetes 中默认的服务类型 （ServiceType），选择此�
 ULB 提供了4层（基于IP+端口）和7层（基于 URL 等应用层信息）两种负载均衡类型，下表为4层和7层 ULB 的区别：
 
 |类型|转发模式|网络|协议|
+|----|--------|----|----|
 |ULB4|报文转发|内网、外网|TCP、UDP|
 |ULB7|请求代理|外网|HTTP、HTTPS、TCP|
 

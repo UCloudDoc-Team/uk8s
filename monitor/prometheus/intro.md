@@ -37,13 +37,13 @@ Prometheus 是一套开源的系统监控报警框架。它的设计灵感源于
 
 * **Prometheus Server:** 用于收集和存储时间序列数据。
 
-* **Client Library: ** 客户端库，为需要监控的服务生成相应的 metrics 并暴露给 Prometheus server。当 Prometheus server 来 pull 时，直接返回实时状态的 metrics。
+* **Client Library:** 客户端库，为需要监控的服务生成相应的 metrics 并暴露给 Prometheus server。当 Prometheus server 来 pull 时，直接返回实时状态的 metrics。
 
 * **Push Gateway:** 主要用于短期的 jobs。由于这类 jobs 存在时间较短，可能在 Prometheus 来 pull 之前就消失了。为此 jobs 可以直接向 Prometheus server 端推送它们的 metrics。这种方式主要用于服务层面的 metrics，对于机器层面的 metrices，建议使用 node exporter。
 
-* ** Exporters: ** 用于暴露已有的第三方服务的 metrics 给 Prometheus。
+* **Exporters:** 用于暴露已有的第三方服务的 metrics 给 Prometheus。
 
-* ** Alertmanager:** 从 Prometheus server 端接收到 alerts 后，会去除重复数据，分组，并路由到对应的接受方式，发出报警。
+* **Alertmanager:** 从 Prometheus server 端接收到 alerts 后，会去除重复数据，分组，并路由到对应的接受方式，发出报警。
 
 ### 工作原理
 

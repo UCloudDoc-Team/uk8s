@@ -11,7 +11,7 @@
 
 开通外网：是
 
-###一、安装kubectl
+### 一、安装kubectl
 
 1. 下载安装包，我们下载V1.13.5的kubectl安装包，其他版本请前往[官网下载](https://kubernetes.io/docs/setup/release/notes/)。
 
@@ -20,29 +20,35 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.13.5/bin/l
 
 ```
 如果您要下载最新版本的安装包，使用如下命令即可：
-仅需将v1.13.5替换为$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)即可。
+将v1.13.5替换为$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)即可。
+
 ```
 curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 
 ```
 
 2. 添加执行权限
+
 ```
 chmod +x ./kubectl
 
 ```
+
 3. 移至工作路径
 
 ```
 sudo mv ./kubectl /usr/local/bin/kubectl
 
 ```
+
 4.输入kubectl version，发现已经安装成功。
+
 ```
 #kubectl version
 Client Version: version.Info{Major:"1", Minor:"11", GitVersion:"v1.11.0", GitCommit:"91e7b4fd31fcd3d5f436da26c980becec37ceefe", GitTreeState:"clean", BuildDate:"2018-06-27T20:17:28Z", GoVersion:"go1.10.2", Compiler:"gc", Platform:"linux/amd64"}
 
 ```
+
 **备注**：如果您需要在ubuntu或其他linux发行版安装kubectl，亦或使用yum安装，可以参见[官方文档](https://kubernetes.io/docs/tasks/tools/install-kubectl/)。
 
 
@@ -71,20 +77,23 @@ scp root@YOURMASTERIP:~/.kube/config ~/.kube/config
 
 
 
-###三、访问集群
+### 三、访问集群
+
 你可以执行以下命令来验证kubectl是否可以成功访问集群信息；
 
 ```
 # kubectl cluster-info
 ```
 
-###四、设置命令自动补全
+### 四、设置命令自动补全
 
 在kubectl所在节点执行安装
+
 ```
 yum install bash-completion -y
 ```
 kubectl支持命令自动补全，执行以下命令即可开启。
+
 ```
 echo "source <(kubectl completion bash)" >> ~/.bashrc
 
