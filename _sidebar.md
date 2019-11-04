@@ -29,17 +29,17 @@
         * [动态PV 使用UFS](compute/uk8s/volume/dynamic_ufs)
     * 服务发现
         * [Service 介绍](compute/uk8s/service/intro)
-        * Ingress支持
-            * [ingress 高级用法](compute/uk8s/service/ingress/multiple_ingress)
-            * [traefik 高级用法](compute/uk8s/service/ingress/traefik_annotation)
-            * [Nginx Ingress](compute/uk8s/service/ingress/nginx)
-            * [Traefik Ingress](compute/uk8s/service/ingress/traefik)
         * [通过内网ULB访问Service](compute/uk8s/service/internalservice)
         * [通过外网ULB访问Service](compute/uk8s/service/externalservice)
-        * [Service Annotations](compute/uk8s/service/annotations)
         * [使用已有的ULB](compute/uk8s/service/ulb_designation)
+        * [ULB参数说明](compute/uk8s/service/annotations)
         * [获取真实客户端IP](compute/uk8s/service/getresourceip)
-        * [通过ULB暴露Kubernetes Dashboard](compute/uk8s/service/dashboard)
+        * [通过ULB暴露Dashboard](compute/uk8s/service/dashboard)
+        * Ingress支持
+            * [Nginx Ingress](compute/uk8s/service/ingress/nginx)
+            * [Traefik Ingress](compute/uk8s/service/ingress/traefik)
+            * [ingress 高级用法](compute/uk8s/service/ingress/multiple_ingress)
+            * [traefik 高级用法](compute/uk8s/service/ingress/traefik_annotation)
     * [集群网络](compute/uk8s/network)  
     * 应用商店
         * [关于应用商店](compute/uk8s/helm/abouthelm)
@@ -63,7 +63,15 @@
         * [集群常见问题](compute/uk8s/q/cluster)  
         * [镜像库常见问题](compute/uk8s/q/registry) 
         * [容器常见问题](compute/uk8s/q/container) 
-    * [API文档](compute/uk8s/api) 
+    * API文档
+        * [创建集群](compute/uk8s/api/createuk8s)
+        * [获取集群列表](compute/uk8s/api/listuk8s)
+        * [获取集群信息](compute/uk8s/api/describeuk8s)
+        * [删除集群](compute/uk8s/api/deluk8s)
+        * [添加云主机节点](compute/uk8s/api/adduhostnode)
+        * [添加物理云主机节点](compute/uk8s/api/addphostnode)
+        * [删除节点](compute/uk8s/api/delnode)
+        * [获取集群kubeconfig](compute/uk8s/api/getconfig) 
     * 最佳实践
         * [基于Jenkins的CI/CD实践](compute/uk8s/bestpractice/cicd)
         * 权限管理

@@ -91,20 +91,20 @@ subjects:
 这里我们使用token方式来登录Dashboard，那我们就要获取到”mingpianwang“的token，其实就是secret了。这个secret在我们创建的时候，K8S就帮我们自动生成了。通过下面的方式来获取，最后的token复制下来就可以了。
 
 ```
-bash-4.4# kubectl describe sa/mingpianwnag -n pre
-Name:                mingpianwnag
+bash-4.4# kubectl describe sa/mingpianwang -n pre
+Name:                mingpianwang
 Namespace:           pre
 Labels:              <none>
 Annotations:         <none>
 Image pull secrets:  <none>
-Mountable secrets:   mingpianwnag-token-4l8xj
-Tokens:              mingpianwnag-token-4l8xj
+Mountable secrets:   mingpianwang-token-4l8xj
+Tokens:              mingpianwang-token-4l8xj
 Events:              <none>
 bash-4.4# kubectl describe secret/mingpianwang-token-4l8xj -n pre
 Name:         mingpianwang-token-4l8xj
 Namespace:    pre
 Labels:       <none>
-Annotations:  kubernetes.io/service-account.name: mingpianwnag
+Annotations:  kubernetes.io/service-account.name: mingpianwang
               kubernetes.io/service-account.uid: d7bb847d-7621-11e9-9679-5254007e7ba9
 
 Type:  kubernetes.io/service-account-token
