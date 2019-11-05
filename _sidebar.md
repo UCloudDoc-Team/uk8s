@@ -3,7 +3,7 @@
     * [产品简介](compute/uk8s/introduction/README)
         * [产品概念](compute/uk8s/introduction/whatisuk8s)
         * [使用须知11](/compute/uk8s/introduction/restriction)
-        * [名词解释](compute/uk8s/introduction/concept)
+        * [名词解释22](compute/uk8s/introduction/concept)
         * [漏洞修复记录](compute/uk8s/introduction/vulnerability/README)
         * [集群节点配置推荐](compute/uk8s/introduction/node_requirements)
     * [产品价格](compute/uk8s/price)
