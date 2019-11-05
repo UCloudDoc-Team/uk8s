@@ -1,13 +1,11 @@
 * 容器云  UK8S
     * [概览](compute/uk8s/overview)
     * 产品简介
-        * [产品概念22](compute/uk8s/introduction/whatisuk8s.md)
-        * [使用须知](../introduction/restriction)
-        * [名词解释](compute/uk8s/introduction/concept)
-        * 漏洞修复记录
-            * [HTTP/2漏洞升级说明](compute/uk8s/introduction/vulnerability/cve2019-9512-9514)
-            * [Runc容器逃逸漏洞修复说明](compute/uk8s/introduction/vulnerability/cve-2019-5736)
-        * [集群节点配置推荐](compute/uk8s/introduction/node_requirements)
+            * [产品概念](compute/uk8s/introduction/whatisuk8s)
+            * [使用须知](compute/uk8s//introduction/restriction)
+            * [名词解释](compute/uk8s/introduction/concept)
+            * [漏洞修复记录](compute/uk8s/introduction/vulnerability/README)
+            * [集群节点配置推荐](compute/uk8s/introduction/node_requirements)
     * [产品价格](compute/uk8s/price)
     * 操作指南
         * [使用必读](compute/uk8s/userguide/before_start)
