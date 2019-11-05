@@ -1,8 +1,8 @@
 * 容器云  UK8S
-    * [概览](compute/uk8s/overview)
+    * [概览](../overview)
     * 产品简介
-        * [产品概念](compute/uk8s/introduction/whatisuk8s)
-        * [使用须知](compute/uk8s/introduction/restriction)
+        * [产品概念](../introduction/whatisuk8s)
+        * [使用须知](../introduction/restriction)
         * [名词解释](compute/uk8s/introduction/concept)
         * 漏洞修复记录
             * [HTTP/2漏洞升级说明](compute/uk8s/introduction/vulnerability/cve2019-9512-9514)
