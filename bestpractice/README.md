@@ -1,0 +1,10 @@
+# 最佳实践
+* [基于Jenkins的CI/CD实践](compute/uk8s/bestpractice/cicd)
+* [权限管理](compute/uk8s/bestpractice/authorization/README)
+    * [了解RBAC](compute/uk8s/bestpractice/authorization/rbac)
+    * [权限管理实践](compute/uk8s/bestpractice/authorization/practice)
+* [亲和性实践](compute/uk8s/bestpractice/affinity)
+* [Kubernetes弹性伸缩](compute/uk8s/bestpractice/autoscaling/README)
+    * [概述](compute/uk8s/bestpractice/autoscaling/intro)
+    * [HPA](compute/uk8s/bestpractice/autoscaling/hpa)
+    * [Cluster Autoscaler](compute/uk8s/bestpractice/autoscaling/ca)
