@@ -86,13 +86,13 @@ yaml示例如下：
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-     name: ufsclaim
+  name: ufsclaim
 spec:
-     accessModes:
-       - ReadWriteMany
-     resources:
-       requests:
-         storage: 8Gi
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 8Gi
 ```
 
 创建完PVC后，可以发现PV与PVC已经绑定。
