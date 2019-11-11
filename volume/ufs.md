@@ -109,18 +109,18 @@ ufspv   8Gi        RWX            Retain           Bound    default/ufsclaim
 apiVersion: v1
 kind: Pod
 metadata:
-     name: myufspod
+  name: myufspod
 spec:
-     containers:
-       - name: myfrontend
-         image: uhub.service.ucloud.cn/wxyz/uk8s-helloworld:1.8
-         volumeMounts:
-         - mountPath: "/var/www/html"
-           name: mypd
-     volumes:
-       - name: mypd
-         persistentVolumeClaim:
-           claimName: ufsclaim
+  containers:
+    - name: myfrontend
+      image: uhub.service.ucloud.cn/wxyz/uk8s-helloworld:1.8
+      volumeMounts:
+      - mountPath: "/var/www/html"
+        name: mypd
+  volumes:
+  - name: mypd
+    persistentVolumeClaim:
+      claimName: ufsclaim
 
 ```
 
