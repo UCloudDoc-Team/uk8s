@@ -9,7 +9,7 @@ UK8S 在console中提供 web terminal，你可以通过web terminal 登录到集
 
 >> 备注：uk8s-kubectl的镜像tag与您的UK8S集群版本一致，如你的UK8S版本为1.14.5，则将镜像tag改为v1.14.5即可。
 
-```
+```yaml
 # ------------------- kubectl Deployment ------------------- #
 apiVersion: extensions/v1beta1
 kind: Deployment
