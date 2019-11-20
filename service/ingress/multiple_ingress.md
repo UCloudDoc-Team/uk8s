@@ -76,7 +76,7 @@ spec:
           servicePort: web
 ```
 
-> 如果您部署了不同类型的ingress controller（例如nginx和traefik），而不制定注释类型，将导致这两个或者所有的ingress controller都在努力满足ingress的需求，并且所有的ingress controller都在争抢更新ingress的状态。
+> 如果您部署了不同类型的ingress controller（例如nginx和traefik），而不指定注释类型，将导致这两个或者所有的ingress controller都在努力满足ingress的需求，并且所有的ingress controller都在争抢更新ingress的状态。
 
 ---
 
