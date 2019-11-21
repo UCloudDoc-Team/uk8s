@@ -111,7 +111,7 @@ Namespace此处填写之前创建Namespace即可，此处为jenkins。凭证处�
 * namespace，我们这里填 ”jenkins“
 * 标签列表，这里我们填 ”jnlp-slave“，这个标签我们在后面创建Jobs会用到，非常重要。
 * 用法，选择 ”尽可能使用这个节点“
-* Docker镜像，填写”uhub.ucloud.cn/library/jenkins:jnlp“，这个容器镜像是我们CI/CD的运行环境。
+* Docker镜像，填写”uhub.service.ucloud.cn/library/jenkins:jnlp“，这个容器镜像是我们CI/CD的运行环境。
 * 工作目录，填写”/home/jenkins“
 
 ![](/images/bestpractice/podtemplate.png)
@@ -290,7 +290,7 @@ stage('Test') {
 ```
 stage('Build') {
         echo "3.Build Docker Image Stage"
-        sh "docker build -t uhub.ucloud.cn/jenkins_k8s_cicd/jenkins_k8s_cicd:${build_tag} ."
+        sh "docker build -t uhub.service.ucloud.cn/jenkins_k8s_cicd/jenkins_k8s_cicd:${build_tag} ."
 }
 
 ```
@@ -303,8 +303,8 @@ stage('Build') {
         withCredentials([usernamePassword(credentialsId: 'uhub', passwordVariable: 'uhubPassword', usernameVariable: 'uhubUser')]) {
             echo "${uhubPassword}"
             echo "${uhubUser}"
-            sh "docker login -u ${uhubUser} -p ${uhubPassword} uhub.ucloud.cn"
-            sh "docker push uhub.ucloud.cn/jenkins_k8s_cicd/jenkins_k8s_cicd:${build_tag}"
+            sh "docker login -u ${uhubUser} -p ${uhubPassword} uhub.service.ucloud.cn"
+            sh "docker push uhub.service.ucloud.cn/jenkins_k8s_cicd/jenkins_k8s_cicd:${build_tag}"
         }
 }
 
@@ -353,7 +353,7 @@ node('jnlp-slave') {
     }
     stage('Build') {
       echo "3.Build Docker Image Stage"
-      sh "docker build -t uhub.ucloud.cn/jenkins_k8s_cicd/jenkins_k8s_cicd:${build_tag} ."
+      sh "docker build -t uhub.service.ucloud.cn/jenkins_k8s_cicd/jenkins_k8s_cicd:${build_tag} ."
 
     }
     stage('Push') {
@@ -361,8 +361,8 @@ node('jnlp-slave') {
       withCredentials([usernamePassword(credentialsId: 'uhub', passwordVariable: 'uhubPassword', usernameVariable: 'uhubUser')]) {
             echo "${uhubPassword}"
             echo "${uhubUser}"
-            sh "docker login -u ${uhubUser} -p ${uhubPassword} uhub.ucloud.cn"
-            sh "docker push uhub.ucloud.cn/jenkins_k8s_cicd/jenkins_k8s_cicd:${build_tag}"
+            sh "docker login -u ${uhubUser} -p ${uhubPassword} uhub.service.ucloud.cn"
+            sh "docker push uhub.service.ucloud.cn/jenkins_k8s_cicd/jenkins_k8s_cicd:${build_tag}"
         }
 
     }
