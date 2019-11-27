@@ -29,6 +29,7 @@
             * [在UK8S中使用已有UDISK](compute/uk8s/volume/statusudisk)
             * [在UK8S中使用UFS](compute/uk8s/volume/ufs)
             * [动态PV 使用UFS](compute/uk8s/volume/dynamic_ufs)
+            * [在UK8S中使用UFile](compute/uk8s/volume/ufile)
     * [服务发现](compute/uk8s/service/README)
         * 
             * [Service 介绍](compute/uk8s/service/intro)
