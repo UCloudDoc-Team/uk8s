@@ -1,0 +1,147 @@
+## 在UK8S中使用UFile
+
+UK8S支持在集群中使用UFile对象存储作为持久化存储卷
+
+
+### UFile使用必读
+
+UFile对象存储适合用户上传、下载静态数据文件，如视频，图片等文件。
+如果您的业务对于读写性能有很高的需求，如实时快速写入日志，推荐使用UDisk或者UFS作为UK8S集群的持久化存储，UFile不能提供像本地文件系统一样的功能。
+
+### 已支持UK8S挂载UFile的地域（持续更新）
+
+北京二:
+外网: s3-cn-bj.ufileos.com
+内网: internal.s3-cn-bj.ufileos.com
+上海:
+外网: s3-cn-sh2.ufileos.com
+内网: internal.s3-cn-sh2.ufileos.com
+尼日利亚
+外网: s3-afr-nigeria.ufileos.com
+内网: internal.s3-afr-nigeria.ufileos.com
+越南
+外网: s3-vn-sng.ufileos.com
+内网: internal.s3-vn-sng.ufileos.com
+
+
+
+### 一、创建UFile授权Secret
+
+由于UFile带有地域属性和操作权限控制，我们需要手动创建Secret和StorageCLass。
+首先我们事先在UFile的控制台创建好对象存储Bucket，并为这个Bucket生成一个授权令牌（Token），授予Bucket上传下载权限,如图：
+
+!
+
+Token创建管理教程可以[参考文档](storage_cdn/ufile/guide/token)。
+
+在Kubernetes中为此令牌创建Secret，如下所示：
+
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ufile-secret
+  namespace: kube-system
+stringData:
+  accessKeyID: TOKEN_9a6ec9fd-9cb7-4510-8ded-xxxxxxxx # 非账号公钥，为Ufile的令牌公钥。
+  secretAccessKey: c429c8e5-e4e6-4366-bf93-xxxxxx # 非账号私钥，为Ufile的令牌私钥。
+  endpoint: internal.s3-cn-bj.ufileos.com
+```
+
+字段说明：
+accessKeyID: UFile公钥
+secretAccessKey: UFile私钥
+endpoint: 对应地域接入S3服务URL
+
+> 对应地域服务URL参考已支持UK8S挂载UFile的地域（持续更新）章节，推荐使用内网地址
+
+
+### 二、创建存储类StorageClass
+
+接下来进行创建StorageClass操作，如下可以看到我们在这个StorageClass定义了UFile的backet并关联使用了前一步创建的Secret
+
+```
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: csi-ufile
+provisioner: ufile.csi.ucloud.cn
+parameters:
+  bucket: csis3-bucketname  # 事先申请好的UFile Bucket
+  csi.storage.k8s.io/provisioner-secret-name: csi-s3-secret # 关联前一步创建的Secret
+  csi.storage.k8s.io/provisioner-secret-namespace: kube-system
+  csi.storage.k8s.io/controller-publish-secret-name: csi-s3-secret
+  csi.storage.k8s.io/controller-publish-secret-namespace: kube-system
+  csi.storage.k8s.io/node-stage-secret-name: csi-s3-secret
+  csi.storage.k8s.io/node-stage-secret-namespace: kube-system
+  csi.storage.k8s.io/node-publish-secret-name: csi-s3-secret
+  csi.storage.k8s.io/node-publish-secret-namespace: kube-system
+```
+
+### 三、创建持久化存储卷声明（PVC）
+
+UFile单个Bucket的存储空间理论上是无上限的，所以PV和PVC中的容量参数没有实际意义，这里的requests信息不会真实生效。
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: logs3-claim
+spec:
+  storageClassName: csi-ufile
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+```
+
+### 四、在pod中使用PVC
+
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx 
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: test
+      mountPath: /data
+  volumes:
+  - name: test
+    persistentVolumeClaim:
+      claimName: logs3-claim
+```
+
+
+### 2、创建PV
+
+```
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ufile-csi-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  csi:
+    driver: ufile.csi.ucloud.cn  #等同于SC里面的provisoner，必须如此
+    volumeHandle: bucket-name
+    nodePublishSecretRef:
+      name: ufile-secret  #即前面定义的Secret，用于后续执行对Bucket的读写操作权限。
+      namespace: kube-system
+    readOnly: false #非必填，默认为false，可以设置为true
+    volumeAttributes:
+      region: "cn-bj" #必填，决定了内网挂载点。如果与UK8S不在一个地域，是否用外网挂载点？
+      endpoint: "internal.s3-cn-bj.ufileos.com" #ufile挂载点，不同数据中心不一，详见上文。
+      otherOpts: "" #这个绥哥看下s3fs支持哪些挂载选项，另外像大文件上传并发数这些，是否在这里设置？Ufile自身有这个功能。
+```
+
