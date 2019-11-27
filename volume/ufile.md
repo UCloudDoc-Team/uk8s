@@ -11,29 +11,12 @@ UFile对象存储适合用户上传、下载静态数据文件，如视频，图
 
 ### 已支持UK8S挂载UFile的地域（持续更新）
 
-北京二:
-
-外网: s3-cn-bj.ufileos.com
-
-内网: internal.s3-cn-bj.ufileos.com
-
-上海:
-
-外网: s3-cn-sh2.ufileos.com
-
-内网: internal.s3-cn-sh2.ufileos.com
-
-尼日利亚
-
-外网: s3-afr-nigeria.ufileos.com
-
-内网: internal.s3-afr-nigeria.ufileos.com
-
-越南
-
-外网: s3-vn-sng.ufileos.com
-
-内网: internal.s3-vn-sng.ufileos.com
+| 地域 | 外网 | 内网 |
+|:---|:---|:---|
+| 北京二 | s3-cn-bj.ufileos.com | internal.s3-cn-bj.ufileos.com |
+| 上海 | s3-cn-sh2.ufileos.com | internal.s3-cn-sh2.ufileos.com |
+| 尼日利亚 | s3-afr-nigeria.ufileos.com | internal.s3-afr-nigeria.ufileos.com |
+| 越南 | s3-vn-sng.ufileos.com | internal.s3-vn-sng.ufileos.com |
 
 
 
