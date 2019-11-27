@@ -28,9 +28,9 @@ UFile对象存储适合用户上传、下载静态数据文件，如视频，图
 ### 一、创建UFile授权Secret
 
 由于UFile带有地域属性和操作权限控制，我们需要手动创建Secret和StorageCLass。
-首先我们事先在UFile的控制台创建好对象存储Bucket，并为这个Bucket生成一个授权令牌（Token），授予Bucket上传下载权限,如图：
+首先我们事先在UFile的控制台创建好对象存储目录，并为这个目录生成一个授权令牌（Token），如图：
 
-!
+![](/images/volume/ufile.png)
 
 Token创建管理教程可以[参考文档](storage_cdn/ufile/guide/token)。
 
@@ -53,12 +53,12 @@ accessKeyID: UFile公钥
 secretAccessKey: UFile私钥
 endpoint: 对应地域接入S3服务URL
 
-> 对应地域服务URL参考已支持UK8S挂载UFile的地域（持续更新）章节，推荐使用内网地址
+> 对应地域服务URL参考已支持UK8S挂载UFile的地域（持续更新）章节，推荐使用内网地址。
 
 
 ### 二、创建存储类StorageClass
 
-接下来进行创建StorageClass操作，如下可以看到我们在这个StorageClass定义了UFile的backet并关联使用了前一步创建的Secret
+接下来进行创建StorageClass操作，如下可以看到我们在这个StorageClass定义了UFile的backet并关联使用了前一步创建的Secret。
 
 ```
 apiVersion: storage.k8s.io/v1
