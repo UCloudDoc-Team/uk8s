@@ -45,8 +45,11 @@ stringData:
 ```
 
 字段说明：
+
 accessKeyID: UFile公钥
+
 secretAccessKey: UFile私钥
+
 endpoint: 对应地域接入S3服务URL
 
 > 对应地域服务URL参考已支持UK8S挂载UFile的地域（持续更新）章节，推荐使用内网地址。
@@ -64,13 +67,7 @@ metadata:
 provisioner: ufile.csi.ucloud.cn
 parameters:
   bucket: csis3-bucketname  # 事先申请好的UFile Bucket
-  csi.storage.k8s.io/provisioner-secret-name: csi-s3-secret # 关联前一步创建的Secret
-  csi.storage.k8s.io/provisioner-secret-namespace: kube-system
-  csi.storage.k8s.io/controller-publish-secret-name: csi-s3-secret
-  csi.storage.k8s.io/controller-publish-secret-namespace: kube-system
-  csi.storage.k8s.io/node-stage-secret-name: csi-s3-secret
-  csi.storage.k8s.io/node-stage-secret-namespace: kube-system
-  csi.storage.k8s.io/node-publish-secret-name: csi-s3-secret
+  csi.storage.k8s.io/node-publish-secret-name: csi-s3-secret # 关联前一步创建的Secret
   csi.storage.k8s.io/node-publish-secret-namespace: kube-system
 ```
 
