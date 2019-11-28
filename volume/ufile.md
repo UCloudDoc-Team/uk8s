@@ -1,6 +1,7 @@
 ## 在UK8S中使用UFile
 
 UK8S支持在集群中使用UFile对象存储作为持久化存储卷
+
 支持UK8S版本：1.15.5、1.14.6（2019年9月17日之后创建）
 
 ### UFile使用必读
@@ -15,8 +16,8 @@ UFile对象存储适合用户上传、下载静态数据文件，如视频，图
 |:---|:---|:---|
 | 北京二 | s3-cn-bj.ufileos.com | internal.s3-cn-bj.ufileos.com |
 | 上海 | s3-cn-sh2.ufileos.com | internal.s3-cn-sh2.ufileos.com |
-| 尼日利亚 | s3-afr-nigeria.ufileos.com | internal.s3-afr-nigeria.ufileos.com |
-| 越南 | s3-vn-sng.ufileos.com | internal.s3-vn-sng.ufileos.com |
+| 拉各斯 | s3-afr-nigeria.ufileos.com | internal.s3-afr-nigeria.ufileos.com |
+| 胡志明市 | s3-vn-sng.ufileos.com | internal.s3-vn-sng.ufileos.com |
 
 
 
