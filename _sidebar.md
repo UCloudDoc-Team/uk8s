@@ -22,6 +22,7 @@
             * [使用web kubectl](compute/uk8s/manageviakubectl/webterminal)
             * [创建PVC](compute/uk8s/manageviakubectl/createpvc)
             * [创建Service](compute/uk8s/manageviakubectl/createservice)
+            * [定时伸缩](compute/uk8s/bestpractice/autoscaling/cronhpa)
     * [存储卷](compute/uk8s/volume/README)
         * 
             * [Volume 介绍](compute/uk8s/volume/intro)
