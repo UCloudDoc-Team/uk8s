@@ -121,6 +121,8 @@ PVC 的全称是PersistentVolumeClaim（持久化卷声明），PVC 是用户对
 
 ### UK8S支持云盘挂载的地域
 
+
+
 |国内|UDisk|UFS|UFile|
 |:-:|:-:|:-:|:-:|
 |北京|支持|支持|支持|
