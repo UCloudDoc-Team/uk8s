@@ -7,7 +7,7 @@ UK8S推出了一个新的插件功能，旨在帮助用户快速部署UK8S集群
 
 支持UK8S版本：1.15.5、1.14.6（2019年9月17日之后创建）
 
-ELK插件安装需要挂载云盘，UK8S支持挂载云盘的地域请查看[链接](compute/uk8s/volume/intro)
+ELK插件安装需要挂载UDisk，UK8S支持挂载UDisk的地域请查看[链接](compute/uk8s/volume/intro)
 
 ### ELK日志插件
 
