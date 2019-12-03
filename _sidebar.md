@@ -42,6 +42,7 @@
         * [通过ULB暴露Dashboard](compute/uk8s/service/dashboard)
         * [Ingress支持](compute/uk8s/service/ingress/README)
 * [集群网络](compute/uk8s/network)  
+* [NetworkPolicy支持](compute/uk8s/networkpolicy)
 * [应用商店](compute/uk8s/helm/README)
     * 
         * [关于应用商店](compute/uk8s/helm/abouthelm)
@@ -68,16 +69,6 @@
         * [集群常见问题](compute/uk8s/q/cluster)  
         * [镜像库常见问题](compute/uk8s/q/registry) 
         * [容器常见问题](compute/uk8s/q/container) 
-* [API文档](compute/uk8s/api/README)
-    * 
-        * [创建集群](compute/uk8s/api/createuk8s)
-        * [获取集群列表](compute/uk8s/api/listuk8s)
-        * [获取集群信息](compute/uk8s/api/describeuk8s)
-        * [删除集群](compute/uk8s/api/deluk8s)
-        * [添加云主机节点](compute/uk8s/api/adduhostnode)
-        * [添加物理云主机节点](compute/uk8s/api/addphostnode)
-        * [删除节点](compute/uk8s/api/delnode)
-        * [获取集群kubeconfig](compute/uk8s/api/getconfig) 
 * [最佳实践](compute/uk8s/bestpractice/README)
     * 
         * [基于Jenkins的CI/CD实践](compute/uk8s/bestpractice/cicd)
