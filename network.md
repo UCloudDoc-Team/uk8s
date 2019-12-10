@@ -29,7 +29,7 @@ Kubernetes自身只提供了网络规范和开放接口，Kubernetes用户可以
 综合以上几点，与第三方插件通常用的overlay方案不同，而我们结合公有云的特点，使用了underlay方案。
 
 Pod 与Node 同属一个子网，IP都由SDN网络分配，Service 的ClusterIP 只在集群内部使用，用户只需要分配一个与VCP 子网不重叠的网段即可，网段示意图如下:
-{{ :compute:uk8s:clusternetnew.png?nolink&600 |}}
+![](/images/clusternetnew.png)
 
 经测试，该网络方案下，Pod之间的网络通信性能与虚拟机之间相差无几。
 

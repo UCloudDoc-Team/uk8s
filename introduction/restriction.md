@@ -26,7 +26,7 @@
 
     [在UK8S中使用UFS](/compute/uk8s/volume/ufs)
 
-2. 当前支持共享存储的地域：
+2. UDisk及UFS支持情况：
 
 |产品|地域|
 |--|--|
@@ -42,17 +42,17 @@
 
 #### 1、由UK8S管理服务创建的资源，其命名规范如下：
 
-1.1、 uk8s-trd3u-master-3或uk8s-trd3u-m-xsdaf为UHost名称，作为集群的Master节点；
+1.1、 uk8s-xxxxx-master-3或uk8s-xxxxxx-m-xsdaf为UHost名称，作为集群的Master节点；
 
-1.2、 uk8s-trd3u-node-3或uk8s-trd3u-n-xsa2f为UHost名称，作为集群的Node节点；
+1.2、 uk8s-xxxxx-node-3或uk8s-xxxxxx-n-xsa2f为UHost名称，作为集群的Node节点；
 
-1.3、 uk8s-trd3u-master-ulb为ULB名称，作为ApiServer的内网入口；
+1.3、 uk8s-xxxxx-master-ulb为ULB名称，作为ApiServer的内网入口；
 
-1.4、 uk8s-trd3u-master-ulb-external为ULB名称，作为ApiServer的外网入口；
+1.4、 uk8s-xxxxx-master-ulb-external为ULB名称，作为ApiServer的外网入口；
 
-1.5、 数据盘_uk8s-sr0xsohz-node-6或数据盘_uk8s-sr0xsohz-n-xsa2f为UDisk名称，作为集群的Node节点数据盘；
+1.5、 数据盘_uk8s-xxxxx-node-6或数据盘_uk8s-xxxxx-n-xsa2f为UDisk名称，作为集群的Node节点数据盘；
 
-1.6、 系统盘_uk8s-sr0xsohz-node-6或系统盘_uk8s-sr0xsohz-n-xsa2f为UDisk名称，作为集群的Node节点系统盘；
+1.6、 系统盘_uk8s-xxxxx-node-6或系统盘_uk8s-xxxxx-n-xsa2f为UDisk名称，作为集群的Node节点系统盘；
 
 #### 2、由UK8S插件创建的资源，其命名规范如下：
 
