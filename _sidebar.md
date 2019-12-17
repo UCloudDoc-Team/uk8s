@@ -8,6 +8,7 @@
         * [名词解释](compute/uk8s/introduction/concept)
         * [漏洞修复记录](compute/uk8s/introduction/vulnerability/README)
         * [集群节点配置推荐](compute/uk8s/introduction/node_requirements)
+        * [kube-proxy模式选择](compute/uk8s/introduction/kubeproxy_mode)
 * [产品价格](compute/uk8s/price)
 * [操作指南](compute/uk8s/userguide/README)
     * 
