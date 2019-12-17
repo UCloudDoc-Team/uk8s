@@ -16,10 +16,6 @@
     
    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-method"   
    # VServer负载均衡模式
-   "service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-type"  
-   # VServer会话保持方式
-   "service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-info" 
-   # 用户自定义String，会话保持方式为UserDefined有效
    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout"  
    # 空闲连接的回收时间
 ```
@@ -41,13 +37,6 @@ tcp和udp均代表ULB4，https和http均代表ULB7；vserver的实际protocol由
 
 VServer的负载均衡模式，枚举值为roundrobin（轮询）、source（源地址）、consistenthash（一致性哈希）、sourceport（源地址计算端口）、consistenthashport（端口一致性哈希），默认为roundrobin。
 
-* service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-type
-
-VServer会话保持方式,枚举值为none（关闭），serverinsert（自动生成KEY），userdefined（用户自定义KEY），默认为none。
-
-* service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-info
-
-用户自定义KEY，会话保持方式为userdefined时有效
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout 
 
@@ -62,10 +51,6 @@ listentype为packetstransmit时表示连接保持的时间，单位为秒，取�
     # tcp和udp均代表ULB4，https和http均代表ULB7；
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-method   
     # VServer负载均衡模式
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-type 
-    # VServer会话保持方式
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-info
-    # 用户自定义String，会话保持方式为userdefined有效
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout  
     # 空闲连接的回收时间
 
@@ -80,13 +65,6 @@ tcp和udp均代表ULB4，https和http均代表ULB7；
 
 VServer的负载均衡模式，枚举值为roundrobin（轮询）、source（源地址）、consistenthash（一致性哈希）、sourceport（源地址计算端口）、consistenthashport（端口一致性哈希），默认为roundrobin。如Vserver实例的协议为udp，则不需要指明。
 
-* service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-type
-
-VServer会话保持方式,枚举值为none（关闭），serverinsert（自动生成KEY），userdefined（用户自定义KEY），默认为none。
-
-* service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-info
-
-用户自定义KEY，会话保持方式为userdefined时有效
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout 
 
@@ -141,7 +119,7 @@ VServer会话保持方式,枚举值为none（关闭），serverinsert（自动�
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout 
 
-ListenType为packetstransmit时表示连接保持的时间，单位为秒，取值范围：[60，900]，0表示禁用连接保持，默认为60。
+ListenType为RequestProxy时表示空闲连接的回收时间，单位为秒，取值范围：[60，900]，0表示禁用连接保持，默认为60。取值范围为60-900时，persistence-type不能为none。
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type 
 

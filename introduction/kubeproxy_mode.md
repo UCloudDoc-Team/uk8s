@@ -1,39 +1,40 @@
 ## kube-proxy模式选择
-kube-proxy是kubernetes中的关键组件。他的角色就是在服务Service和其后端Pod之间（Endpoint）进行负载均衡。kube-proxy 有三种运行模式，每种都有不同的实现技术：userspace、iptables或者IPVS。
+kube-proxy是kubernetes中的关键组件,其主要功能是在Service和其后端Pod之间（Endpoint）进行负载均衡。kube-proxy 有三种运行模式，每种都有不同的实现技术：userspace、iptables或者ipvs。
 
-userspace模式由于性能问题已经不推荐使用。这里主要介绍iptables和IPVS两种模式的比较及选择。
+userspace模式由于性能问题已经不推荐使用。这里主要介绍iptables和ipvs两种模式的比较及选择。
 
-### 选择推荐
+### 如何选择
 
-* 如果您是长连接服务、集群规模较大、服务多，推荐您选择IPVS。（详见后续测试数据）
+* 对于集群规模较大，特别是Service数量可能超过1000的，推荐选择ipvs。（详见后续测试数据）
 
-* 如果您是短连接服务、集群规模中等，推荐您选择iptables。
+* 对于集群规模中等，Service数量不多的，推荐选择iptables。
 
-注：在使用IPVS模式的kubernetes集群中进行滚动更新，同一个客户端发送http短链接，客户端端口会被重用，导致node收到五元组相同的报文，会触发IPVS复用Connection，导致将报文发到了一个已经彻底销毁的Pod上。
+* 如果客户端会出现大量并发短链接，目前建议选择iptables，原因见下方备注。
+
+>>备注：在使用ipvs模式的kubernetes集群中进行滚动更新，期间如果有一个客户端在短时间内（两分钟）内发送大量短链接，客户端端口会被复用，导致node收到的来自于该客户端的请求报文网络五元组相同，触发IPVS复用Connection，有可能导致报文被转发到了一个已经销毁的Pod上，导致业务异常。
 
 官方issue：https://github.com/kubernetes/kubernetes/issues/81775
 
-所以如果您的服务是短连接服务涉及以上使用场景，推荐使用iptables，或使用IPVS需要参考issue进行内核参数修改。
 
 
 ### iptables模式
 
-iptables是一个Linux内核功能，是一个高效的防火墙，并提供了大量的数据包处理和过滤方面的能力。它可以在核心数据包处理管线上用Hook挂接一系列的规则。iptables模式中kube-proxy在NAT pre-routing Hook中实现它的NAT和负载均衡功能。这种方法简单有效，依赖于成熟的内核功能，并且能够和其它跟 iptables 协作的应用融洽相处。
+iptables是一个Linux内核功能，是一个高效的防火墙，并提供了数据包处理和过滤方面的能力。它可以在核心数据包处理管线上用Hook挂接一系列的规则。iptables模式中kube-proxy在NAT pre-routing Hook中实现它的NAT和负载均衡功能。这种方法简单有效，依赖于成熟的内核功能，并且能够和其它跟 iptables 协作的应用融洽相处。
 
-### IPVS模式
+### ipvs模式
 
-IPVS是一个用于负载均衡的Linux内核功能。IPVS模式下，kube-proxy使用IPVS负载均衡代替了iptable。这种模式同样有效，IPVS的设计就是用来为大量服务进行负载均衡的，它有一套优化过的API，使用优化的查找算法，而不是从列表中查找规则。
+ipvs是一个用于负载均衡的Linux内核功能。ipvs模式下，kube-proxy使用ipvs负载均衡代替了iptables。ipvs的设计思路就是用来为大量服务进行负载均衡的，它有一套优化过的API，使用优化的查找算法，而不是从列表中查找规则，在大规模场景下相对ipvs性能更好。
 
 
 ### 模式对比
 
-无论是iptables模式还是IPVS模式，转发性能都与Service和对应Endpoint数量有关，理由是Node上iptables或IPVS转发规则的数量与svc和ep的数目成正比。
+无论是iptables模式还是ipvs模式，转发性能都与Service及对应的Endpoint数量有关，原因是Node上iptables或ipvs转发规则的数量与svc和ep的数目成正比。
 
-IPVS和iptables转发性能主要差异体现在TCP三次握手连接建立的过程，因此短连接请求场景下，两种模式的性能差异较为突出。
+ipvs和iptables转发性能主要差异体现在TCP三次握手连接建立的过程，因此在大量短连接请求的场景下，两种模式的性能差异尤为突出。
 
-在Service和Endpoint的数量较少的情况下(Service数十到数百，Endpoint数百到数千)，iptables模式转发性能要略优于IPVS。
+在Service和Endpoint的数量较少的情况下(Service数十到数百，Endpoint数百到数千)，iptables模式转发性能要略优于ipvs。
 
-随着Service和Endpoint的数量逐渐提升，iptables模式转发性能明显下降，IPVS模式转发性能则能保持稳定。
+随着Service和Endpoint的数量逐渐提升，iptables模式转发性能明显下降，ipvs模式转发性能则相对稳定。
 
 Service数量1000左右，Endpoint数量到20000左右时，iptables模式转发性能开始低于IPVS，随着Service和Endpoint的数量继续增大（Service数千，Endpoint数万），ipvs模式性能略微下降，iptables模式性能则大幅下降。
 
@@ -44,7 +45,7 @@ Service数量1000左右，Endpoint数量到20000左右时，iptables模式转发
 
 在N1和N2上准备好压测客户端ab，并发连接数1000，一共需要完成10000次短连接请求。
 
-在N1和N2上分别但不同时执行测试命令，观察ab返回的结果，重点关注以下：
+在N1和N2上分别但不同时执行测试命令，观察ab返回的结果：
 
 ```
 Connection Times (ms)
