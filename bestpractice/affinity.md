@@ -114,7 +114,7 @@ preferredDuringSchedulingIgnoredDuringExecution:
 
 #### 值得注意的
 
-如果同时指定nodeSelector和nodeAffinity，都必须满足该吊舱被调度到的候选节点。
+如果同时指定nodeSelector和nodeAffinity，都必须全部满足条件，Pod才会被调度到的候选节点。
 
 如果指定了多个nodeSelectorTerms关联nodeAffinity类型，如果能满足其中一个nodeSelectorTerms，则pod就可以调度到这个节点。
 
