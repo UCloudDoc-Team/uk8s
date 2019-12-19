@@ -17,6 +17,7 @@
         * [删除集群](compute/uk8s/userguide/deletecluster)
         * [查看集群](compute/uk8s/userguide/describecluster)
         * [添加节点](compute/uk8s/userguide/addnode)
+        * [kube-proxy模式切换](compute/uk8s/userguide/kubeproxy_edit)
 * [使用kubectl操作集群](compute/uk8s/manageviakubectl/README)
     * 
         * [kubectl命令行简介](compute/uk8s/manageviakubectl/intro_of_kubectl)
