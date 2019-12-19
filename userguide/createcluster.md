@@ -20,13 +20,27 @@ Pod与Node同处于一个VPC 子网下，因此VPC子网的网段大小决定了
 
 ### 三、选择集群节点（云主机）配置
 
-Master默认三个节点，生产环境的Master配置建议在4C 8G以上，且磁盘类型必须为SSD，Node节点配置请根据业务需要自行选择。
+Master默认三个节点，生产环境的Master配置建议可查看[集群节点配置推荐](/compute/uk8s/introduction/node_requirements)，在具有多个可用区的地域可以选择讲k8s集群部署在多个可用区中，需要Master分布于多个可用区，如Master处于单个可用区则不支持多克用区模式集群创建。
+
+![](/images/userguide/master.png)
+
+Node节点的可用区选择会根据Master的可用区选择变化，现已支持针对节点的CPU平台、硬件隔离组、最大Pod数、标签等设置。
+
 ![](/images/userguide/node.png)
 
-### 四、填写登录密码
+> Node节点的数据盘会mount到节点的`/data`目录，集群Node安装Docker引擎时安装在`/data`目录下，如创建时Node节点配置使用了数据盘，手动删除数据盘会导致Node节点不可用，如不需要数据盘可以在创建选择时删除，Docker引擎会安装到系统盘的`/data`目录下
 
-集群的所有Node均可在云主机页面查看到，你可以使用此密码登录Master或Node，并直接操作集群，如果你对Kubernetes缺乏足够了解，不建议随意变动。
-![](/images/userguide/password.png)
+### 四、填写管理信息
+
+在管理设置中我们进行以下设置
+* 开启APIServer创建外网访问
+* K8S版本选择
+* kube-proxy查看[kube-proxy模式选择](/compute/uk8s/introduction/kubeproxy_mode)
+* 集群的所有节点的密码设置，集群中所有节点都可以在云主机页面查看到，你可以使用密码登陆这些节点进行管理。
+
+![](/images/userguide/manager.png)
+
+> 如果你对Kubernetes缺乏足够了解，不建议谨慎操作。
 
 ### 五、创建完毕
 
