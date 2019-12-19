@@ -15,7 +15,9 @@ userspace模式由于性能问题已经不推荐使用。这里主要介绍iptab
 
 官方issue：https://github.com/kubernetes/kubernetes/issues/81775
 
+### 如何切换
 
+请参考[kube-proxy模式切换](/compute/uk8s/userguide/kubeproxy_edit)
 
 ### iptables模式
 
