@@ -26,7 +26,7 @@ Master默认三个节点，生产环境的Master配置建议可查看[集群节�
 
 Node节点的可用区选择会根据Master的可用区选择变化，现已支持针对节点的CPU平台、硬件隔离组、最大Pod数、标签等设置。
 
-![](/images/userguide/node.png)
+![](/images/userguide/node2.png)
 
 > Node节点的数据盘会mount到节点的`/data`目录，集群Node安装Docker引擎时安装在`/data`目录下，如创建时Node节点配置使用了数据盘，手动删除数据盘会导致Node节点不可用，如不需要数据盘可以在创建选择时删除，Docker引擎会安装到系统盘的`/data`目录下
 
