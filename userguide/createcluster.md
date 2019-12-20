@@ -40,7 +40,6 @@ Node节点的可用区选择会根据Master的可用区选择变化，现已支�
 
 ![](/images/userguide/manager.png)
 
-> 如果你对Kubernetes缺乏足够了解，不建议谨慎操作。
 
 ### 五、创建完毕
 
