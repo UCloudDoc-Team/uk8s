@@ -37,7 +37,7 @@ spec:
     server: 10.19.255.192
   mountOptions:
     - nolock
-    - nfsvers=3
+    - nfsvers=4.0
 ```
 
 **UFS SSD性能型**
@@ -60,6 +60,8 @@ spec:
     - nolock
     - nfsvers=4.0
 ```
+
+> 其中`nfsvers=4.0`需要在创建UFS的时候，与UFS显示的版本保持一致，如UFS协议显示NFSv3则需要`nfsvers=3`。
 
 yaml关键字段：
 
