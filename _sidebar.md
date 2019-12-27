@@ -43,7 +43,7 @@
         * [获取真实客户端IP](compute/uk8s/service/getresourceip)
         * [通过ULB暴露Dashboard](compute/uk8s/service/dashboard)
         * [Ingress支持](compute/uk8s/service/ingress/README)
-* [集群网络](compute/uk8s/network)  
+#* [集群网络](compute/uk8s/network)  
 * [NetworkPolicy支持](compute/uk8s/networkpolicy)
 * [应用商店](compute/uk8s/helm/README)
     * 
