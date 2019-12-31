@@ -120,7 +120,76 @@ mountOptions:
 
 4、修改rbac.yaml
 
-rbac这块，如果nfs-client是启动在default下的话，那是不需要修改的，这里我们改为在kube-system下运行，直接将里面所有NameSpace的值改为kube-system即可,此处省略。
+rbac这块，如果nfs-client是启动在default下的话，那是不需要修改的，这里我们改为在kube-system下运行，直接将里面所有NameSpace的值改为kube-system即可,并在RoleBinding处新增NameSpace，显式指定为kube-system。
+
+```
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nfs-client-provisioner
+  # replace with namespace where provisioner is deployed
+  namespace: kube-system #修改namespace为kube-system
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: nfs-client-provisioner-runner
+rules:
+  - apiGroups: [""]
+    resources: ["persistentvolumes"]
+    verbs: ["get", "list", "watch", "create", "delete"]
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list", "watch", "update"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["storageclasses"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "update", "patch"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: run-nfs-client-provisioner
+subjects:
+  - kind: ServiceAccount
+    name: nfs-client-provisioner
+    # replace with namespace where provisioner is deployed
+    namespace: kube-system  #修改namespace为kube-system
+roleRef:
+  kind: ClusterRole
+  name: nfs-client-provisioner-runner
+  apiGroup: rbac.authorization.k8s.io
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: leader-locking-nfs-client-provisioner
+    # replace with namespace where provisioner is deployed
+  namespace: kube-system #修改namespace为kube-system
+rules:
+  - apiGroups: [""]
+    resources: ["endpoints"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: leader-locking-nfs-client-provisioner
+  namespace: kube-system  #显式声明RoleBinding创建在kube-system下。
+subjects:
+  - kind: ServiceAccount
+    name: nfs-client-provisioner
+    # replace with namespace where provisioner is deployed
+    namespace: kube-system #修改namespace为kube-system
+roleRef:
+  kind: Role
+  name: leader-locking-nfs-client-provisioner
+  apiGroup: rbac.authorization.k8s.io
+  namespace: kube-system #显式声明RoleBinding创建在kube-system下
+
+```
 
 5、验证
 

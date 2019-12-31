@@ -40,7 +40,7 @@ VServer的负载均衡模式，枚举值为roundrobin（轮询）、source（源
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout 
 
-listentype为packetstransmit时表示连接保持的时间，单位为秒，取值范围：[60，900]，0表示禁用连接保持，默认为60。
+listentype为packetstransmit时表示连接保持的时间，单位为秒，取值范围：[60，900]，0表示禁用连接保持，默认为0。
 
 
 
@@ -68,7 +68,7 @@ VServer的负载均衡模式，枚举值为roundrobin（轮询）、source（源
 
 * service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout 
 
-ListenType为packetstransmit时表示连接保持的时间，单位为秒，取值范围：[60，900]，0表示禁用连接保持，默认为60。
+ListenType为packetstransmit时表示连接保持的时间，单位为秒，取值范围：[60，900]，0表示禁用连接保持，默认为0。
 
 ### 外网ULB7
 

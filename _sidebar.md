@@ -44,6 +44,7 @@
         * [通过ULB暴露Dashboard](compute/uk8s/service/dashboard)
         * [Ingress支持](compute/uk8s/service/ingress/README)
 * [集群网络](compute/uk8s/network)  
+* [网络隔离](compute/uk8s/networkpolicy)
 * [应用商店](compute/uk8s/helm/README)
     * 
         * [关于应用商店](compute/uk8s/helm/abouthelm)
