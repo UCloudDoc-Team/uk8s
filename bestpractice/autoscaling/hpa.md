@@ -40,7 +40,7 @@ spec:
   maxReplicas: 5 #最大副本数
   minReplicas: 1 #最小副本数
   scaleTargetRef:
-    apiVersion: extensions/v1beta1
+    apiVersion: apps/v1
     kind: Deployment #需要伸缩的资源类型
     name: nginxtest  #需要伸缩的资源名称
   targetCPUUtilizationPercentage: 50 #触发伸缩的cpu使用率

@@ -11,7 +11,7 @@ UK8S 在console中提供 web terminal，你可以通过web terminal 登录到集
 
 ```yaml
 # ------------------- kubectl Deployment ------------------- #
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:

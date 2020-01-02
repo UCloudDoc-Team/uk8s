@@ -16,7 +16,7 @@ kubectl apply -f dashboard-ui.yaml
 
 ```
 # ------------------- Dashboard Deployment ------------------- #
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:

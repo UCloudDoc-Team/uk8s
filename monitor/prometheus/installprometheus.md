@@ -149,7 +149,7 @@ kubectl -n monitoring get po
 #### 7、监控应用指标
 我们先来部署一组Pod及SVC，该镜像里的主进程会在8080端口上输出metrics信息。
 ```
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: example-app
