@@ -42,7 +42,7 @@ metadata:
 stringData:
   accessKeyID: TOKEN_9a6ec9fd-9cb7-4510-8ded-xxxxxxxx # 非账号公钥，为Ufile的令牌公钥。
   secretAccessKey: c429c8e5-e4e6-4366-bf93-xxxxxx # 非账号私钥，为Ufile的令牌私钥。
-  endpoint: internal.s3-cn-bj.ufileos.com
+  endpoint: http://http://internal.s3-cn-bj.ufileos.com
 ```
 
 字段说明：
