@@ -169,7 +169,7 @@ Pipeline 有两种创建方法，一是直接在 Jenkins 的 Web UI 界面中输
 
 1、 点击”new item“，输入Job名称，选择Pipeline，点击"OK"。
 
-{{:compute:uk8s:bestpractice:pipeline1.png?600|}}
+![](/images/bestpractice/pipeline1.png)
 
 2、 在最下方的pipeline 脚本部分，输入以下脚本内容，并点击保存
 
