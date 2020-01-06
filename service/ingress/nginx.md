@@ -100,7 +100,7 @@ ingress-nginx   LoadBalancer   172.17.118.146   117.50.x.x   80:34947/TCP,443:48
 在下面的yaml中，我们定义了2个镜像名为echo-nginx的应用，主要是输出nginx应用自身的一些全局变量。
 
 ```
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: uhost
@@ -133,7 +133,7 @@ spec:
   selector:
     app: uhost
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: uk8s
