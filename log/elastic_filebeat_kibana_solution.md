@@ -40,7 +40,7 @@ kubectl create namespace elk
 ```
 **不区分节点角色**
 
-这种模式下，集群中的节点不做角色的区分，配置文件请参考[elk-cluster.yaml](https://github.com/quchenyuan/uk8s-app/blob/master/elk/elk-cluster.yaml)
+这种模式下，集群中的节点不做角色的区分，配置文件请参考[elk-cluster.yaml](https://github.com/UCloudDocs/uk8s/blob/master/yaml/log/elk-cluster.yaml)
 
 ```
 bash-4.4# kubectl apply -f elk-cluster.yaml
@@ -67,7 +67,7 @@ bash-4.4#
 
 **区分节点角色**
 
-如果需要区分节点的角色，就需要建立两个StatefulSet部署，一个是Master集群，一个是Data集群。Data集群的存储示例中简单使用了emptyDir，可以根据需要使用localStorage或者hostPath，关于存储的介绍，可以参考[Kubernetes官网](https://kubernetes.io/docs/concepts/storage/)。这样就可以避免Data节点在本机重启时发生数据丢失而重建索引，但是如果发生迁移的话，如果想保留数据，只能采用共享存储的方案了。具体的编排文件在这里[elk-role-cluster.yaml](https://github.com/quchenyuan/uk8s-app/blob/master/elk/elk-role-cluster.yaml)
+如果需要区分节点的角色，就需要建立两个StatefulSet部署，一个是Master集群，一个是Data集群。Data集群的存储示例中简单使用了emptyDir，可以根据需要使用localStorage或者hostPath，关于存储的介绍，可以参考[Kubernetes官网](https://kubernetes.io/docs/concepts/storage/)。这样就可以避免Data节点在本机重启时发生数据丢失而重建索引，但是如果发生迁移的话，如果想保留数据，只能采用共享存储的方案了。具体的编排文件在这里[elk-role-cluster.yaml](https://github.com/UCloudDocs/uk8s/blob/master/yaml/log/elk-role-cluster.yaml)
 
 ```
 bash-4.4# kubectl apply -f elk-role-cluster.yaml
