@@ -2,7 +2,7 @@
 kind: List
 apiVersion: v1
 items:
-- apiVersion: apps/v1beta1
+- apiVersion: apps/v1
   kind: Deployment
   metadata:
     name: kb-single
@@ -39,7 +39,7 @@ items:
     selector:
       app: kb-single
 
-- apiVersion: apps/v1beta1
+- apiVersion: apps/v1
   kind: StatefulSet
   metadata:
     name: es-cluster
