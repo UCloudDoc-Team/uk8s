@@ -15,7 +15,7 @@
 
 ```bash
 
-kubectl apply -f http://uk8s.cn-bj.ufileos.com/policy_calico-policy-only.yaml
+kubectl apply -f https://raw.githubusercontent.com/UCloudDocs/uk8s/master/yaml/policy_calico-policy-only.yaml
 
 ```
 
