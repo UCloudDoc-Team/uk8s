@@ -1,0 +1,23 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: udisk-ssd-jenkins
+provisioner: ucloud/udisk
+parameters:
+  type: ssd
+reclaimPolicy: Retain
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: jenkins-pvc-claim
+  namespace: jenkins
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: udisk-ssd-jenkins
+  resources:
+    requests:
+      storage: 20Gi
+

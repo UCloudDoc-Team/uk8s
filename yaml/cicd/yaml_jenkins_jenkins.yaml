@@ -1,0 +1,53 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jenkins-deployment
+  namespace: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+      - name: jenkins
+        image: uhub.service.ucloud.cn/library/jenkins:lts-slim
+        ports:
+        - containerPort: 8080
+          name: web
+          protocol: TCP
+        - containerPort: 50000
+          name: agent
+          protocol: TCP
+        volumeMounts:
+        - name: jenkins-strorage
+          mountPath: /var/jenkins_home
+      volumes:
+      - name: jenkins-strorage
+        persistentVolumeClaim:
+          claimName: jenkins-pvc-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins
+  namespace: jenkins
+  labels:
+    app: jenkins
+spec:
+  type: LoadBalancer
+  ports:
+    - name: web
+      port: 8080
+      targetPort: web
+    - name: agent
+      port: 50000
+      targetPort: agent
+  selector:
+    app: jenkins
