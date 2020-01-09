@@ -1,0 +1,23 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: load-generator 
+  labels:
+    app: load-generator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: load-generator
+  template:
+    metadata:
+      labels:
+        app: load-generator
+    spec:
+      containers:
+      - name: load-generator
+        image: uhub.service.ucloud.cn/library/busybox:latest 
+        command:
+          - "sh"
+          - "-c"
+          - "while true; do wget -q -O- http://hpa-example.default.svc.cluster.local; done"

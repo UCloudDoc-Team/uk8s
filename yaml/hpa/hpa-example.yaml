@@ -1,0 +1,40 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: hpa-example
+  labels:
+    app: hpa-example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hpa-example
+  template:
+    metadata:
+      labels:
+        app: hpa-example
+    spec:
+      containers:
+      - name: hpa-example
+        image: uhub.service.ucloud.cn/testforfun/hpa-example:v1
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+           cpu: "250m"
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: hpa-example
+  labels:
+    app: hpa-example
+spec:
+  selector:
+    app: hpa-example
+  ports:
+  - protocol: TCP
+    name: http
+    port: 80 
+    targetPort: 80
+  type: ClusterIP
