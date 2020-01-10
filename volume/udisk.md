@@ -63,7 +63,7 @@ reclaimPolicy: Retain
 
 ### 二、创建持久化存储卷声明（PVC）
 
->>storageClassName必须与上文创建的StorageClass的name一致。
+>storageClassName必须与上文创建的StorageClass的name一致。
 
 ```yaml
 kind: PersistentVolumeClaim

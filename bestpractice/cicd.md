@@ -193,7 +193,7 @@ node('jnlp-slave') {
 ```
 
 
->> 上面的脚本内容中，我们给 node 添加了一个 jnlp-slave 标签，指定这个pipeline的4个stage，都运行在jenkins的slave节点中。
+> 上面的脚本内容中，我们给 node 添加了一个 jnlp-slave 标签，指定这个pipeline的4个stage，都运行在jenkins的slave节点中。
 
 
 3、 任务创建好之后，点击”立即构建“，我们可以通过kubectl命令发现UK8S集群中正启动一个新的pod用于构建任务。

@@ -47,7 +47,7 @@ reclaimPolicy: Retain
 ### 2.创建PV
 
 
->> 注意将StorageClass修改为你自己创建的名称。CSI版本与FlexVolume版本差别很大，请务必注意，否则无法创建成功。
+> 注意将StorageClass修改为你自己创建的名称。CSI版本与FlexVolume版本差别很大，请务必注意，否则无法创建成功。
 
 
 #### CSI版本

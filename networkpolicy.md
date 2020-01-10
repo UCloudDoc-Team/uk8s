@@ -7,7 +7,7 @@
 
 但在实际业务场景中，为了保障业务安全，网络隔离是非常必要的。下面介绍下如何在UK8S中实现网络隔离。
 
->> NetworkPolicy支持仅限于2019年12月3日之后创建的UK8S集群，或cni版本大于等于19.12.1(在Node节点执行/opt/cni/bin/cnivpc version)。之前创建的集群如想使用NetworkPolicy，请联系UK8S团队协助处理。
+> NetworkPolicy支持仅限于2019年12月3日之后创建的UK8S集群，或cni版本大于等于19.12.1(在Node节点执行/opt/cni/bin/cnivpc version)。之前创建的集群如想使用NetworkPolicy，请联系UK8S团队协助处理。
 
 ### 安装插件
 
@@ -19,7 +19,7 @@ kubectl apply -f https://raw.githubusercontent.com/UCloudDocs/uk8s/master/yaml/p
 
 ```
 
->> Warning: 在安装calico网络隔离插件之间，请务必确认cni版本大于等于19.12.1，否则会删除Node上原有的网络配置，导致pod网络不通。
+> Warning: 在安装calico网络隔离插件之间，请务必确认cni版本大于等于19.12.1，否则会删除Node上原有的网络配置，导致pod网络不通。
 
 
 
@@ -152,7 +152,7 @@ spec:
 
 ### 各地域VPC内公共服务网段
 
->> 公共服务网段主要用于内网DNS、ULB健康检查等，建议在配置NetworkPolicy时，放行各地域的公共服务网段。
+> 公共服务网段主要用于内网DNS、ULB健康检查等，建议在配置NetworkPolicy时，放行各地域的公共服务网段。
 
 | 所属地域 | 网段 |
 | ---- | ---- |
