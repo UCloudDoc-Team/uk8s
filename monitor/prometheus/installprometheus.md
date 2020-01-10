@@ -58,13 +58,13 @@ ssh到任意一台Master节点，克隆kube-prometheus项目。该项目源自Co
 
 ```
 yum install git -y
-git clone https://github.com/zhangpengboshanghai/kube-prometheus.git
+git clone --depth=1 -b kube-prometheus https://github.com/ucloud/uk8s-demo.git
 ```
 
 ####  3、修改UK8S专属文件配置参数
 在manifests目录下有UK8S目录，这批配置文件主要用于为UK8S中的controller-manager、schduler、etcd手动创建endpoints和svc，便于Prometheus Server通过ServiceMonitor来采集这三个组件的监控数据。
 ```
-cd /kube-prometheus/manifests/uk8s
+cd /uk8s-demo/manifests/uk8s
 # 修改以下两个文件，将其中的IP替换为你自己UK8S Master节点的内网IP
 vi controllerManagerAndScheduler_ep.yaml
 vi etcd_ep.yaml
