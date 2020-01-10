@@ -262,7 +262,7 @@ Finished: SUCCESS
 
 **开始之前的准备工作**
 
-为了演示方便，我们准备了一个简单的helloworld程序，并将业务代码、dockerfile、yaml 放置 [github代码仓库](https://github.com/svenlu/jenkins_k8s_cicd_demo),接下来我们来逐步编写Pipeline脚本。
+为了演示方便，我们准备了一个简单的helloworld程序，并将业务代码、dockerfile、yaml 放置 [github代码仓库](https://github.com/ucloud/uk8s-demo.git),分支:jenkins-cicd,接下来我们来逐步编写Pipeline脚本。
 
 1、clone代码，我们将git commit的记录作为后面构建的镜像 tag，让镜像tag和git commit记录对应起来，方便后续排查问题。
 
