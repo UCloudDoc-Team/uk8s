@@ -20,7 +20,7 @@ Pod与Node同处于一个VPC 子网下，因此VPC子网的网段大小决定了
 
 ### 三、选择集群节点（云主机）配置
 
-Master默认三个节点，生产环境的Master配置建议可查看[集群节点配置推荐](/compute/uk8s/introduction/node_requirements)，在具有多个可用区的地域可以选择讲k8s集群部署在多个可用区中，需要Master分布于多个可用区，如Master处于单个可用区则不支持多克用区模式集群创建。
+Master默认三个节点，生产环境的Master配置建议可查看[集群节点配置推荐](/compute/uk8s/introduction/node_requirements)，在具有多个可用区的地域可以选择讲k8s集群部署在多个可用区中，需要Master分布于多个可用区，如Master处于单个可用区则不支持多可用区模式集群创建。
 
 ![](/images/userguide/master.png)
 
