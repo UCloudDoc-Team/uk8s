@@ -21,6 +21,10 @@ kubectl apply -f https://raw.githubusercontent.com/UCloudDocs/uk8s/master/yaml/s
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 |兼容性|✓|✓|✓|?|?|✕|
 
+* ✓ 完全支持的版本范围。
+* ? 由于Kubernetes API版本之间的存在变化，某些功能可能无法正常使用（测试未覆盖完整）。
+* ✕ 不支持的版本范围。
+
 #### Dashboard v2.0.0-rc1
 
 推荐kubernetes1.13及以上版本使用
