@@ -16,8 +16,9 @@ UK8S集群没有默认安装Dashboard，如果你希望体验社区原生Dashboa
 kubectl apply -f https://raw.githubusercontent.com/UCloudDocs/uk8s/master/yaml/service/dashboard.v1.10.0.yaml
 ```
 官方兼容性提示
-| kubernetes版本 | 1.8 | 1.9 | 1.10 | 1.11 | 1.12 | 1.13 |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+
+|kubernetes版本|1.8|1.9|1.10|1.11|1.12|1.13|
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 |兼容性|✓|✓|✓|?|?|✕|
 
 #### Dashboard v2.0.0-rc1
@@ -28,6 +29,7 @@ kubectl apply -f https://raw.githubusercontent.com/UCloudDocs/uk8s/master/yaml/s
 kubectl apply -f https://raw.githubusercontent.com/UCloudDocs/uk8s/master/yaml/service/dashboard.v2.0.0-rc1.yaml
 ```
 官方兼容性提示
+
 |kubernetes版本|1.12|1.13|1.14|1.15|1.16|
 |:-:|:-:|:-:|:-:|:-:|:-:|
 |兼容性|?|?|?|?|✓|
