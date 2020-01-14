@@ -4,8 +4,6 @@
 
 Dashboard是Kubernetes社区的一个Web开源项目，你可以通过Dashboard来部署更新应用、排查应用故障以及管理Kubernetes集群资源。另外，Dashboard还提供了集群的状态，以及错误日志等信息。下面我们介绍下如何在UK8S上部署、访问DashBoard。
 
-> 根据[官方文档](https://github.com/kubernetes/dashboard/releases)指出，1.16版本以上集群由于API变动较大，推荐使用v2以上版本的dashboard，如果您使用的是1.14、1.15版本的集群针对文档提供的两种dashboard都可使用。
-
 ### 部署Dashboard
 
 UK8S集群没有默认安装Dashboard，如果你希望体验社区原生Dashboard，需要自行安装，[官方文档](https://github.com/kubernetes/dashboard/releases)。执行以下命令安装Dashboard，使用的镜像已经去掉了Https的证书限制。
@@ -18,8 +16,8 @@ UK8S集群没有默认安装Dashboard，如果你希望体验社区原生Dashboa
 kubectl apply -f https://raw.githubusercontent.com/UCloudDocs/uk8s/master/yaml/service/dashboard.v1.10.0.yaml
 ```
 官方兼容性提示
-|kubernetes版本|1.8|1.9|1.10|1.11|1.12|1.13|
-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| kubernetes版本 | 1.8 | 1.9 | 1.10 | 1.11 | 1.12 | 1.13 |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 |兼容性|✓|✓|✓|?|?|✕|
 
 #### Dashboard v2.0.0-rc1
