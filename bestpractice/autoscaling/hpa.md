@@ -57,7 +57,7 @@ status:
 #### 1、部署测试应用
 
 ```
-kubectl apply -f  https://raw.githubusercontent.com/UCloudDocs/uk8s/master/yaml/hpa/hpa-example.yaml
+kubectl apply -f  https://docs.ucloud.cn/compute/uk8s/yaml/hpa/hpa-example.yaml
 ```
 
 这是一个计算密集型的PHP应用，代码示例如下：
@@ -75,13 +75,13 @@ kubectl apply -f  https://raw.githubusercontent.com/UCloudDocs/uk8s/master/yaml/
 #### 2、为测试应用开启HPA
 
 ```
-kubectl apply -f  https://raw.githubusercontent.com/UCloudDocs/uk8s/master/yaml/hpa/hpa.yaml
+kubectl apply -f  https://docs.ucloud.cn/compute/uk8s/yaml/hpa/hpa.yaml
 ```
 
 #### 3、部署压测工具
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/UCloudDocs/uk8s/master/yaml/hpa/load.yaml
+kubectl apply -f https://docs.ucloud.cn/compute/uk8s/yaml/hpa/load.yaml
 ```
 
 压测工具是一个busybox容器，容器启动后循环访问测试应用。
