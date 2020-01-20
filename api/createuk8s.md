@@ -26,7 +26,7 @@ UK8S的三台Master默认属于统一个硬件隔离组，确保高可用，Node
 |MasterBootDiskType|string|建议为SSD云盘，请参考[磁盘类型](api/uhost-api/disk_type)。|**Yes**|
 |MasterDataDiskType|string|请参考[磁盘类型](api/uhost-api/disk_type)|No|
 |MasterDataDiskSize|string|数据磁盘大小，单位GB。默认0。范围 ：[20, 1000]|No|
-|Nodes.N.Zone|string|可用区。参见 [可用区列表](../summary/regionlist.html)|**Yes**|
+|Nodes.N.Zone|string|可用区。参见 [可用区列表](api/summary/regionlist.html)|**Yes**|
 |Nodes.N.MachineType|string|云主机机型（V2.0），枚举值["N", "C", "G","O"]。|**Yes**|
 |Nodes.N.CPU|int|虚拟CPU核数。可选参数：2-64（具体机型与CPU的对应关系参照控制台）|**Yes**|
 |Nodes.N.Mem|int|内存大小。单位：MB。范围 ：[4096, 262144]，取值为1024的倍数（可选范围参考控制台）|**Yes**|
