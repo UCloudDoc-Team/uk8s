@@ -168,7 +168,7 @@ spec:
     spec:
       containers:
         - name: kubernetes-dashboard
-          image: uhub.service.ucloud.cn/wxyz/kubernetes-dashboard-http:2.0.0-rc1
+          image: uhub.service.ucloud.cn/library/kubernetes-dashboard-http:2.0.0-rc1
           imagePullPolicy: Always
           ports:
             # - containerPort: 8443

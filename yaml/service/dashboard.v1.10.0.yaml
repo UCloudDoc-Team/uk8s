@@ -20,7 +20,7 @@ spec:
         - --enable-insecure-login=true
         - --insecure-bind-address=0.0.0.0
         - --disable-skip=true
-        image: uhub.service.ucloud.cn/library/kubernetes-dashboard-http
+        image: uhub.service.ucloud.cn/library/kubernetes-dashboard-http:1.10.0
         imagePullPolicy: IfNotPresent
         name: kubernetes-dashboard-http
         ports:
