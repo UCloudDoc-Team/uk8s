@@ -33,7 +33,7 @@ UK8S会使用到以下产品的全部操作权限，例如代替你创建、删�
 
 **如何识别由UK8S创建的云资源？**
 
-由UK8S创建的云资源名称，都遵循明确的命名规范，具体详见[命名规范](/uk8s/introduction/restriction),简要说明如下：
+由UK8S创建的云资源名称，都遵循明确的命名规范，具体详见[命名规范](/compute/uk8s/introduction/restriction),简要说明如下：
 
 1. UHost名称：[cluster-id]-[nodetype]-[randomcode]，如名称为uk8s-uxl1l3l0-n-4rd91的云主机，是"uk8s-uxl1l3l0"这个UK8S集群的Node节点。
 

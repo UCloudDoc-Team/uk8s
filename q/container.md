@@ -59,5 +59,5 @@ UK8S使用VPC网络实现内网互通，拉取Uhub镜像不受影响，拉取外
 
 ### Pod删除后，如何复用原先的云盘？
 
-可以使用静态创建PV的方法进行原有云盘绑定的方法进行复用原有云盘，详见[在UK8S中使用已有UDISK]((/compute/uk8s/volume/statusudisk)
-)
+可以使用静态创建PV的方法进行原有云盘绑定的方法进行复用原有云盘，详见[在UK8S中使用已有UDISK](/compute/uk8s/volume/statusudisk)
+
