@@ -61,6 +61,7 @@
     * [集群常见问题](compute/uk8s/q/cluster)  
     * [镜像库常见问题](compute/uk8s/q/registry) 
     * [容器常见问题](compute/uk8s/q/container) 
+    * [存储插件问题](compute/uk8s/q/storage)
 * [API文档](compute/uk8s/api/README)
     * [创建集群](compute/uk8s/api/createuk8s)
     * [获取集群列表](compute/uk8s/api/listuk8s)

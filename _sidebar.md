@@ -71,6 +71,7 @@
         * [集群常见问题](compute/uk8s/q/cluster)  
         * [镜像库常见问题](compute/uk8s/q/registry) 
         * [容器常见问题](compute/uk8s/q/container) 
+        * [存储插件问题](compute/uk8s/q/storage)
 * [最佳实践](compute/uk8s/bestpractice/README)
     * 
         * [基于Jenkins的CI/CD实践](compute/uk8s/bestpractice/cicd)
