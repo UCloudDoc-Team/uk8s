@@ -342,7 +342,7 @@ stage('Deploy') {
 node('jnlp-slave') {
     stage('Clone') {
       echo "1.Clone Stage"
-      git url: "https://github.com/svenlu/jenkins_k8s_cicd_demo.git"
+      git branch: 'jenkins-cicd', url: 'https://github.com/ucloud/uk8s-demo.git'
       script {
           build_tag = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
       }
