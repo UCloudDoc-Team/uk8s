@@ -19,7 +19,7 @@ metadata:
     "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"  
      # ULB类型，默认为outer，支持outer、inner
     "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "tcp"       
-     # 用于声明ULB协议类型，tcp与udp等价，均表示为ULB4，http和https等价，均表示为ULB7。
+     # 用于声明ULB协议类型，内网暂时只支持tcp
 spec:
   type: LoadBalancer
   ports:
