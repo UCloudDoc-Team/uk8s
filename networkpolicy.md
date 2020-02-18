@@ -15,7 +15,7 @@
 
 ```bash
 
-kubectl apply -f https://docs.ucloud.cn/compute/uk8s/yaml/policy_calico-policy-only.yaml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/policy_calico-policy-only.yaml
 
 ```
 

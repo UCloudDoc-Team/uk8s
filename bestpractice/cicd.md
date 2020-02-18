@@ -37,13 +37,13 @@ kubectl create namespace jenkins
 2、 声明一个PVC对象，后面我们要将Jenkins容器的 /var/jenkins_home 目录挂载到了这个名为PVC对象上面。
 
 ```
-kubectl apply -f https://docs.ucloud.cn/compute/uk8s/yaml/cicd/yaml_jenkins_jenkins-pvc.yaml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins-pvc.yaml
 ```
 
 3、 以Deployment方式部署Jenkins master,为了演示方便，我们还使用LoadBalancer类型的service将其暴露到外网。
 
 ```
-kubectl apply -f https://docs.ucloud.cn/compute/uk8s/yaml/cicd/yaml_jenkins_jenkins.yaml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins.yaml
 ```
 
 4、 等到服务启动成功后，我们就可以根据LoadBalancer的IP（即EXTERNAL-IP），访问 jenkins 服务了，并根据提示信息进行安装配置。
@@ -57,7 +57,7 @@ jenkins   LoadBalancer   172.17.201.210   106.75.98.80   8080:33651/TCP,50000:43
 5、 创建一个名为jenkins2的ServiceAccount，并且为其赋予特定的权限，后面配置Jenkins-Slave我们会用到。
 
 ```
-kubectl apply -f https://docs.ucloud.cn/compute/uk8s/yaml/cicd/yaml_jenkins_jenkins-rbac.yaml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins-rbac.yaml
 ```
 
 ### 三、安装Kubernetes插件
