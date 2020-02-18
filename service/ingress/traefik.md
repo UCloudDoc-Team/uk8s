@@ -19,10 +19,9 @@ Traefik是一个为了让部署微服务更加便捷而诞生的现代HTTP反向
 ### 一、部署Ingress Controller
 这里我们选择Traefik作为Ingress Controller，部署Traefik Ingress Controller非常简单，执行一下指令即可。
 
-```yaml
+```
 kubectl apply -f https://docs.ucloud.cn/compute/uk8s/yaml/ingress_treafik/mandatory.yaml
 ```
-[下载](https://docs.ucloud.cn/compute/uk8s/yaml/ingress_treafik/mandatory.yaml)
 
 在mandatory.yaml这个文件里，正是Traefik官方提供的安装文件[traefik-rbac.yaml](https://github.com/containous/traefik/blob/v1.7/examples/k8s/traefik-rbac.yaml)和[traefik-deployment.yaml](https://github.com/containous/traefik/blob/v1.7/examples/k8s/traefik-deployment.yaml)，我们可以把yaml文件下载到本地仔细研读下，从执行结果来看大家可以看出，我们在这里创建了ClusterRole、ClusterRoleBinding、pod、serviceaccount。
 ```
