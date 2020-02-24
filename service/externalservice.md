@@ -2,7 +2,9 @@
 ## 通过外网ULB访问Service
 
 
->  1.除EIP带宽外，ULB相关参数目前均不支持Update，如不确认如何填写，请咨询UCloud 技术支持。2.请勿修改ULB和Vserver的名称和备注，否则会导致Service无法正常更新。3.Kubernetes下LoadBalancer类型的Service，尚不支持多协议，比如TCP、UDP。
+1. 除EIP带宽外，ULB相关参数目前均不支持Update，如不确认如何填写，请咨询UCloud 技术支持。
+2. 请勿修改ULB和Vserver的名称和备注，否则会导致Service无法正常更新。
+3. Kubernetes下LoadBalancer类型的Service，尚不支持多协议，比如UDP。
 
 
 
