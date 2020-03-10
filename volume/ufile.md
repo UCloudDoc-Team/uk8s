@@ -12,13 +12,8 @@ UFile对象存储适合用户上传、下载静态数据文件，如视频，图
 
 ### 已支持UK8S挂载UFile的地域（持续更新）
 
-| 地域 | 外网 | 内网 |
-|:---|:---|:---|
-| 北京二 | s3-cn-bj.ufileos.com | internal.s3-cn-bj.ufileos.com |
-| 上海 | s3-cn-sh2.ufileos.com | internal.s3-cn-sh2.ufileos.com |
-| 拉各斯 | s3-afr-nigeria.ufileos.com | internal.s3-afr-nigeria.ufileos.com |
-| 胡志明市 | s3-vn-sng.ufileos.com | internal.s3-vn-sng.ufileos.com |
 
+UK8S已经支持挂载UFile，具体支持地域请查看 [UFile接入域名](https://docs.ucloud.cn/storage_cdn/ufile/s3/s3_introduction?id=%E6%8E%A5%E5%85%A5%E5%9F%9F%E5%90%8D%EF%BC%88endpoint%EF%BC%89)
 
 
 ### 一、创建UFile授权Secret
