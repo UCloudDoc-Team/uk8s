@@ -366,7 +366,7 @@ spec:
 
 #### 4. UK8S的LoadBalancer类型的Service是否支持UDP？
 
-目前暂不支持，后续计划支持。
+目前已支持，后续计划支持，灰度中。
 
 #### 5. 如果Loadbalancer创建外网ULB后，用户在ULB控制台页面绑定了新的EIP，会被删除吗？
 
