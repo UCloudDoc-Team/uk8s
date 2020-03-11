@@ -69,7 +69,7 @@ spec:
 
 #### 3.2 UDP应用通过内网ULB4对外暴露服务
 
-如果你的应用是UDP协议，或者UDP和TCP混用，则务必显示声明健康检查的类型为port(端口检查)，而非ping。
+如果你的应用是UDP协议，或者UDP和TCP混用，则务必显式声明健康检查的类型为port(端口检查)，否则默认为ping，可能导致ULB误认为后端业务不正常。
 
 ```yaml
 apiVersion: v1

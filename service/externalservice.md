@@ -75,6 +75,8 @@ spec:
 
 #### 4.2、通过外网ULB4暴露服务（UDP协议）
 
+相对于TCP应用，务必在annotations中显式声明健康检查的类型为port，否则ULB可能将正常工作的Pod认为不健康，导致流量转发异常。
+
 ```yaml
 apiVersion: v1
 kind: Service
