@@ -2,23 +2,36 @@
 ## 通过外网ULB访问Service
 
 
-1. 除EIP带宽外，ULB相关参数目前均不支持Update，如不确认如何填写，请咨询UCloud 技术支持。
-2. 请勿修改ULB和Vserver的名称和备注，否则会导致Service无法正常更新。
-3. Kubernetes下LoadBalancer类型的Service，尚不支持多协议，比如UDP。
+### 1、使用提醒
+1. 请勿修改由UK8S创建的ULB及Vserver的名称和备注，否则会导致Service异常无法访问。
+
+2. 除外网EIP外，ULB相关参数目前均不支持Update，如不确认如何填写，请咨询UCloud 技术支持。
+
+3. 外网ULB4已支持UDP协议，目前灰度中，如需使用，请联系UCloud技术支持。
+
+### 2、使用UDP协议前必读
+
+1. 目前ULB4针对UDP协议的健康检查支持ping和port两种模式，默认为ping，强烈推荐改为port；
 
 
+2. port健康检查的后端实现是对UDP端口发送UDP报文( "Health Check" 字符串)和针对RS IP发送ICMP Ping报文。 如果超时时间内回复了UDP报文则认为健康；如果超时时间内回复了ICMP端口不可达报文，则认为不健康；如果超时时间没收到UDP回包，则以Ping的探测结果为准。因此您的应用程序需要响应UDP健康检查报文。
+
+3. **需要注意的是UDP回包长度不要超过1440，以避免可能的分片导致ULB4无法收到健康检查响应，导致健康检查失败。**
 
 
-外网模式下，ULB支持“报文转发(ULB4)”及“请求代理（ULB7）”两种转发模式，两种模式配置方式大致相同，默认推荐使用ULB4。
+### 3、选择UL4还是ULB7
+
+外网模式下，ULB支持“报文转发(ULB4)”及“请求代理（ULB7）”两种转发模式，推荐使用ULB4，因为ULB4的性能更好；
 
 
-### 通过外网ULB4暴露服务
+### 4、操作指南
 
-> 使用外网ULB4来暴露服务非常简单，如无特别要求，不需要填写任何 annotations。
+#### 4.1、通过外网ULB4暴露服务
 
-当前LoadBalancer类型的Service暂不支持UDP，请知悉。
+> 使用外网ULB4来暴露服务非常简单，如果是TCP协议，不需要填写任何 annotations。
 
-```
+
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -31,7 +44,7 @@ metadata:
     "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "tcp"
     # 表示ULB协议类型，tcp与udp等价，表示ULB4；http与httpS等价，表示ULB7；tcp为默认值，此处可省略。
     "service.beta.kubernetes.io/ucloud-load-balancer-eip-bandwidth": "2" 
-    # bandwidth下默认为2Mpbs
+    # bandwidth下默认为10Mpbs,建议显式声明带宽大小，避免费用超标。
     "service.beta.kubernetes.io/ucloud-load-balancer-eip-chargetype": "month" 
     # 付费模式，支持month，year，dynamic，默认为month
     "service.beta.kubernetes.io/ucloud-load-balancer-eip-quantity": "1" 
@@ -57,6 +70,55 @@ spec:
     image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
     ports:
     - containerPort: 80
+```
+
+#### 4.2、通过外网ULB4暴露服务（UDP协议）
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ucloud-nginx-out-tcp-new
+  labels:
+    app: ucloud-nginx-out-tcp-new
+  annotations:
+    "service.beta.kubernetes.io/ucloud-load-balancer-type": "outer"
+    # 代表ULB网络类型，outer为外网，inner为内网；outer为默认值，此处可省略。
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "tcp"
+    # 表示ULB协议类型，tcp与udp等价，表示ULB4；http与httpS等价，表示ULB7；tcp为默认值，此处可省略。
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type": "port"
+     # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。
+spec:
+  type: LoadBalancer
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: udp
+      protocol: UDP
+      port: 1002
+      targetPort: 1002
+  selector:
+    app: ucloud-nginx-out-tcp-new
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-nginx-out-tcp
+  labels:
+    app: ucloud-nginx-out-tcp-new
+spec:
+  containers:
+  - name: nginx
+    image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
+    ports:
+    - name: tcp
+      containerPort: 80
+      protocol: TCP
+    - name: udp
+      containerPort: 1002
+      protocol: UDP 
 ```
 
 

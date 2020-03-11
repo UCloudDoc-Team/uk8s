@@ -18,6 +18,8 @@
    # VServer负载均衡模式
    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout"  
    # 空闲连接的回收时间
+   "service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type": "port"
+     # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。
 ```
 
 **Annotations 详解**
@@ -53,6 +55,8 @@ listentype为packetstransmit时表示连接保持的时间，单位为秒，取�
     # VServer负载均衡模式
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout  
     # 空闲连接的回收时间
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type": "port"
+     # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。
 
 ```
 **Annotations 详解**
