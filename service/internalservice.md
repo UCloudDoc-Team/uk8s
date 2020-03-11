@@ -17,7 +17,7 @@
 
 1. 目前ULB4针对UDP协议的健康检查支持ping和port两种模式，默认为ping，强烈推荐改为port；
 
-2. port健康检查的后端实现是对UDP端口发送UDP报文( "Health Check" 字符串)和针对RS IP发送ICMP Ping报文。 如果超时时间内回复了UDP报文则认为健康；如果超时时间内回复了ICMP端口不可达报文，则认为不健康；如果超时时间没收到UDP回包，则以Ping的探测结果为准。因此您的应用程序需要响应UDP健康检查报文。
+2. port健康检查的后端实现是对UDP端口发送UDP报文( "Health Check" 字符串)和针对RS IP发送ICMP Ping报文。 如果超时时间内回复了UDP报文则认为健康；如果超时时间没收到UDP回包，则以Ping的探测结果为准，因此您的应用程序需要响应UDP健康检查报文。
 
 3. **需要注意的是UDP回包长度不要超过1440，以避免可能的分片导致ULB4无法收到健康检查响应，导致健康检查失败。**
 
@@ -41,7 +41,7 @@ metadata:
     "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"  
      # ULB类型，默认为outer，支持outer、inner
     "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "tcp"       
-     # 用于声明ULB协议类型，并非应用的协议。
+     # 用于声明ULB协议类型，并非应用协议，tcp和udp均代表ULB4，https和http均代表ULB7；
     "service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type": "port"
      # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。
 spec:
@@ -110,6 +110,11 @@ spec:
   - name: nginx
     image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
     ports:
-    - containerPort: 80
+    - name: tcp
+      containerPort: 80
+      protocol: TCP
+    - name: udp
+      containerPort: 1002
+      protocol: UDP
 
 ```

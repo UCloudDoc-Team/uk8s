@@ -14,7 +14,7 @@
 1. 目前ULB4针对UDP协议的健康检查支持ping和port两种模式，默认为ping，强烈推荐改为port；
 
 
-2. port健康检查的后端实现是对UDP端口发送UDP报文( "Health Check" 字符串)和针对RS IP发送ICMP Ping报文。 如果超时时间内回复了UDP报文则认为健康；如果超时时间内回复了ICMP端口不可达报文，则认为不健康；如果超时时间没收到UDP回包，则以Ping的探测结果为准。因此您的应用程序需要响应UDP健康检查报文。
+2. port健康检查的后端实现是对UDP端口发送UDP报文( "Health Check" 字符串)和针对RS IP发送ICMP Ping报文。 如果超时时间内回复了UDP报文则认为健康；如果超时时间没收到UDP回包，则以Ping的探测结果为准。因此您的应用程序需要响应UDP健康检查报文。
 
 3. **需要注意的是UDP回包长度不要超过1440，以避免可能的分片导致ULB4无法收到健康检查响应，导致健康检查失败。**
 
@@ -26,9 +26,9 @@
 
 ### 4、操作指南
 
-#### 4.1、通过外网ULB4暴露服务
+#### 4.1、通过外网ULB4暴露服务(TCP)
 
-> 使用外网ULB4来暴露服务非常简单，如果是TCP协议，不需要填写任何 annotations。
+> 使用外网ULB4来暴露服务非常简单，对于TCP协议，可不填写任何 annotations。
 
 
 ```yaml
@@ -70,6 +70,7 @@ spec:
     image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
     ports:
     - containerPort: 80
+      protocol: TCP
 ```
 
 #### 4.2、通过外网ULB4暴露服务（UDP协议）
@@ -122,7 +123,7 @@ spec:
 ```
 
 
-### 重要说明
+### 5、重要说明
 
 UK8S的cloudprovider 插件做一个大更新，大于等于19.05.3的版本支持多端口，指定ULB-id等功能，你可以通过如下命令查看cloudprovider的版本：
 
