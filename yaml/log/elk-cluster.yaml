@@ -50,6 +50,9 @@ items:
   spec:
     serviceName: es-cluster
     replicas: 3
+    selector:
+      matchLabels:
+        app: es-cluster
     template:
       metadata:
         name: es-cluster
