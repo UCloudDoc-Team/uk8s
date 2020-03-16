@@ -10,8 +10,8 @@ items:
   spec:
     replicas: 1
     selector:
-    matchLabels:
-      app: kb-single
+      matchLabels:
+        app: kb-single
     template:
       metadata:
         name: kb-single
