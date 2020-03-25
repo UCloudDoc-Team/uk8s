@@ -24,7 +24,7 @@ Kubernetes自身只提供了网络规范和开放接口，Kubernetes用户可以
 
 3. Pod与Service之间的通信。Kubernetes社区提供了IPtables和IPVS两套方案，UK8S使用的IPtables方案，如果对这块的具体原理感兴趣，可以查看官方文档，此处不再赘述。
 
-4. 集群外部与Service之间的通信。Kubernetes提供了LoadBalancer类型的Service，UK8S已支持，具体请参见[Service](https://docs.ucloud.cn/uk8s/service/intro)
+4. 集群外部与Service之间的通信。Kubernetes提供了LoadBalancer类型的Service，UK8S已支持，具体请参见[Service](https://docs.ucloud.cn/compute/uk8s/service/intro)
 
 综合以上几点，与第三方插件通常用的overlay方案不同，而我们结合公有云的特点，使用了underlay方案。
 

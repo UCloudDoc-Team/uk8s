@@ -7,13 +7,13 @@ UK8S推出了一个新的插件功能，旨在帮助用户快速部署UK8S集群
 
 支持UK8S版本：1.15.5、1.14.6（2019年9月17日之后创建）
 
-ELK插件安装需要挂载UDisk，UK8S支持挂载UDisk的地域请查看[链接](uk8s/volume/intro)
+ELK插件安装需要挂载UDisk，UK8S支持挂载UDisk的地域请查看[链接](compute/uk8s/volume/intro)
 
 ### ELK日志插件
 
 **插件-日志ELK**是UK8S基于ELK打造的一站式日志服务，包括Elasticsearch（可选）、Logstash、Filebeat 和 Kibana（可选）多个组件，实现了集群内日志的自动采集、过滤和存储，并内置了日志检索功能。
 
-关于ELK组件介绍请参考[ELK日志解决方案](uk8s/log/elastic_filebeat_kibana_solution)
+关于ELK组件介绍请参考[ELK日志解决方案](compute/uk8s/log/elastic_filebeat_kibana_solution)
 
 用户进入集群后可以选择为集群安装完整的一套ELK组件或者安装Filebeat等组件关联用户所使用的UES，通过UK8S插件部署的完整ELK组件可以在UCloud页面进行统一化日志查询展示。
 
@@ -50,7 +50,7 @@ ELK插件安装需要挂载UDisk，UK8S支持挂载UDisk的地域请查看[链�
 
 ### 关联UES安装
 
-1. UES是UCloud提供的高可用Elasticsearch集群，使用UK8S关联UES前请创建UES服务，详情请参考[UES操作文档](https://docs.ucloud.cn/ues/README)，这里我们建立好了一个UES集群，在UES集群详情中的节点信息，选择任意一节点，记录节点IP地址。
+1. UES是UCloud提供的高可用Elasticsearch集群，使用UK8S关联UES前请创建UES服务，详情请参考[UES操作文档](https://docs.ucloud.cn/analysis/ues/index)，这里我们建立好了一个UES集群，在UES集群详情中的节点信息，选择任意一节点，记录节点IP地址。
 
 ![](../images/log/UES_list.png)
 

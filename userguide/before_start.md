@@ -7,7 +7,7 @@ UK8S为容器应用提供编排、调度的能力，应用本身是运行在UClo
 
 1. 你需要授权给 UK8S 部分产品的管理权限，以便你在操作集群时可以利用到 UCloud的其他产品，如创建一个 PVC时，集群帮你创建一块 UDisk；
 
-2. 通过集群创建的诸如EIP、UDisk等资源，会产生相应的费用，详见[UK8S价格](uk8s/price)；
+2. 通过集群创建的诸如EIP、UDisk等资源，会产生相应的费用，详见[UK8S价格](/compute/uk8s/price)；
 
 3. 组成UK8S集群的基础设施，如UHost、UDisk等，你可以在UCloud Console页面查看到，请勿随意更改或删除；
 
@@ -33,7 +33,7 @@ UK8S会使用到以下产品的全部操作权限，例如代替你创建、删�
 
 **如何识别由UK8S创建的云资源？**
 
-由UK8S创建的云资源名称，都遵循明确的命名规范，具体详见[命名规范](uk8s/introduction/restriction),简要说明如下：
+由UK8S创建的云资源名称，都遵循明确的命名规范，具体详见[命名规范](/compute/uk8s/introduction/restriction),简要说明如下：
 
 1. UHost名称：[cluster-id]-[nodetype]-[randomcode]，如名称为uk8s-uxl1l3l0-n-4rd91的云主机，是"uk8s-uxl1l3l0"这个UK8S集群的Node节点。
 

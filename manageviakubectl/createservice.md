@@ -35,4 +35,4 @@ spec:
     - name: MYSECRET
 ```
 
-系统会自动生成一个ULB，UK8S同时还支持配置ULB的各种参数，详见[service](uk8s/service/annotations)
+系统会自动生成一个ULB，UK8S同时还支持配置ULB的各种参数，详见[service](/compute/uk8s/service/annotations)

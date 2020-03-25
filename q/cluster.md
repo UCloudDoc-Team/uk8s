@@ -3,7 +3,7 @@
 
 ### 单个集群最多能添加多少个节点？
 
-A：当前单个UK8S集群对应节点数量可查看[集群节点配置推荐](uk8s/introduction/node_requirements)。
+A：当前单个UK8S集群对应节点数量可查看[集群节点配置推荐](compute/uk8s/introduction/node_requirements)。
 
 ### UK8S完全兼容原生Kubernetes API吗？
 
@@ -24,7 +24,7 @@ A：UK8S为保障生产环境Pod的运行稳定，每个Node限制了Pod数量�
 
 ### 集群内可以解析DNS，但无法联通外网？wget拉取数据失败。
 
-UK8S使用VPC网络实现内网互通，默认使用了UCloud的DNS，wget获取信息需要对VPC的子网配置网关，需要在UK8S所在的区域下进入VPC产品，对具体子网配置NAT网关，使集群节点可以通过NAT网关拉取外网数据，具体操作详见[VPC创建NAT网关](https://docs.ucloud.cn/vpc/briefguide/step4) 。
+UK8S使用VPC网络实现内网互通，默认使用了UCloud的DNS，wget获取信息需要对VPC的子网配置网关，需要在UK8S所在的区域下进入VPC产品，对具体子网配置NAT网关，使集群节点可以通过NAT网关拉取外网数据，具体操作详见[VPC创建NAT网关](https://docs.ucloud.cn/network/vpc/briefguide/step4) 。
 
 ### 集群删除了，EIP会一起被删除吗？
 

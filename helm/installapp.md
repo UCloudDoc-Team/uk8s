@@ -23,7 +23,7 @@ UK8S应用商店功能提供了一键安装功能，具体操作如下：
 
 ### 测试安装的应用
 
-这里我们通过一个简单示例验证刚刚创建的nginx-ingress。nginx-ingress的详细用法可参考[Nginx Ingress](uk8s/service/ingress/nginx)
+这里我们通过一个简单示例验证刚刚创建的nginx-ingress。nginx-ingress的详细用法可参考[Nginx Ingress](/compute/uk8s/service/ingress/nginx)
 
 **添加解析**
 

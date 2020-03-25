@@ -13,7 +13,7 @@ UFile对象存储适合用户上传、下载静态数据文件，如视频，图
 ### 已支持UK8S挂载UFile的地域（持续更新）
 
 
-UK8S已经支持挂载UFile，具体支持地域请查看 [UFile接入域名](https://docs.ucloud.cn/ufile/s3/s3_introduction?id=%E6%8E%A5%E5%85%A5%E5%9F%9F%E5%90%8D%EF%BC%88endpoint%EF%BC%89)
+UK8S已经支持挂载UFile，具体支持地域请查看 [UFile接入域名](https://docs.ucloud.cn/storage_cdn/ufile/s3/s3_introduction?id=%E6%8E%A5%E5%85%A5%E5%9F%9F%E5%90%8D%EF%BC%88endpoint%EF%BC%89)
 
 
 ### 一、创建UFile授权Secret
@@ -24,7 +24,7 @@ UK8S已经支持挂载UFile，具体支持地域请查看 [UFile接入域名](ht
 
 ![](/images/volume/ufile.png)
 
-Token创建管理教程可以[参考文档](ufile/guide/token)。
+Token创建管理教程可以[参考文档](storage_cdn/ufile/guide/token)。
 
 在Kubernetes中为此令牌创建Secret，如下所示：
 
