@@ -16,6 +16,6 @@ UK8S支持各类公有及私有镜像库，如：
 
 ### 使用帮助
 
-1. [UHub产品文档](/compute/uhub/index)
+1. [UHub产品文档](uhub/README)
 
-2. [在UK8S中使用UHub](compute/uk8s/dockerhub/using_uhub_in_uk8s)
+2. [在UK8S中使用UHub](uk8s/dockerhub/using_uhub_in_uk8s)

@@ -36,7 +36,7 @@ ULB 提供了4层（基于IP+端口）和7层（基于 URL 等应用层信息）
 |ULB4|报文转发|内网、外网|TCP、UDP|
 |ULB7|请求代理|外网|HTTP、HTTPS、TCP|
 
-如果你希望对 ULB 有深入的了解，请访问[ULB 产品介绍](/network/ulb/index)，
+如果你希望对 ULB 有深入的了解，请访问[ULB 产品介绍](ulb/README)，
 
 在 UK8S，我们同时支持 ULB4 及 ULB7，你可以通过注释（annotations ）的形式自行配置 ULB 参数 。
 
