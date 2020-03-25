@@ -3,7 +3,7 @@
 
 
 
-* [产品简介.](/uk8s/introduction/README)
+* [产品简介](/uk8s/introduction/README)
     * 
         * [产品概念](/uk8s/introduction/whatisuk8s)
         * [使用须知](/uk8s/introduction/restriction)
