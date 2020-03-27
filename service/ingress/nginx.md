@@ -51,7 +51,7 @@ data:
 本质上，这个Nginx-ingress-controller，其实是一个可以根据Ingress对象和被代理后端Service的变化，自动进行更新的Nginx负载均衡器。
 
 
-容器默认使用UTC时间，如果要使用宿主机时区，参见[Pod时区问题](/compute/uk8s/q/container)
+容器默认使用UTC时间，如果要使用宿主机时区，参见[Pod时区问题](uk8s/q/container)
 
 
 ### 二、将nginx ingress controller暴露出集群

@@ -8,7 +8,7 @@
 2. 一个子网下，有且只能创建一个UK8S集群；
 3. 单个UK8S集群最多添加5000个Node节点，生产集群建议不超过1000个；
 4. 当前支持的Kubernetes版本为1.12.7、1.14.6及1.15.5，后续还将支持更多版本，具体以产品页面为准。
-5. 如果的云账户开启了[API白名单](https://console.ucloud.cn/uapi/apikey),则需要在白名单中配置10.10.10.10/32网段，详见[API白名单配置](/compute/uk8s/q/cluster)
+5. 如果的云账户开启了[API白名单](https://console.ucloud.cn/uapi/apikey),则需要在白名单中配置10.10.10.10/32网段，详见[API白名单配置](uk8s/q/cluster)
 
 ### 节点
 
@@ -21,11 +21,11 @@
 
 1. 当前支持SATA、SSD UDisk以及UFS；
 
-    [在UK8S中使用UDisk](/compute/uk8s/volume/udisk)
+    [在UK8S中使用UDisk](uk8s/volume/udisk)
 
-    [在UK8S中使用UFS](/compute/uk8s/volume/ufs)
+    [在UK8S中使用UFS](uk8s/volume/ufs)
 
-    [在UK8S中使用UFile](/compute/uk8s/volume/ufile)
+    [在UK8S中使用UFile](uk8s/volume/ufile)
 
 2. 当前支持共享存储的地域：
 

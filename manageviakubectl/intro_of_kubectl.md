@@ -2,7 +2,7 @@
 ## kubectl命令行简介
 
 
-kubectl是一个用于操作kubernetes集群的命令行工具，本文将简要介绍下kubectl的语法，并提供一些常见命令示例，如果你想了解深入了解kubectl的用法，请查阅官方文档[kubectl overview](https://kubernetes.io/docs/reference/kubectl/overview/)，或使用kubectl help命令查看详细帮助。 安装kubectl请查看[安装及配置kubectl](/compute/uk8s/manageviakubectl/connectviakubectl)。
+kubectl是一个用于操作kubernetes集群的命令行工具，本文将简要介绍下kubectl的语法，并提供一些常见命令示例，如果你想了解深入了解kubectl的用法，请查阅官方文档[kubectl overview](https://kubernetes.io/docs/reference/kubectl/overview/)，或使用kubectl help命令查看详细帮助。 安装kubectl请查看[安装及配置kubectl](uk8s/manageviakubectl/connectviakubectl)。
 
 
 ### kubectl 语法
