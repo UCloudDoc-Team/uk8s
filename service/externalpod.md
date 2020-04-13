@@ -136,12 +136,20 @@ spec:
 在使用Pod绑定EIP功能时，可以参考以下参数设定所需要绑定的EIP参数。
 
 ```
-    "network.kubernetes.io/eip": ”true“ # 开启Pod绑定EIP，如不指定则新建一个EIP，Pod删除时一并删除
-    "network.kubernetes.io/security-group-id": "firewall-xxdsad239d" #必填项，防火墙ID
-    "network.kubernetes.io/eip-id": "eip-xsda8de" # 指定EIP，Pod删除时不会删除该EIP，且付款模式和带宽设置等都以原有EIP设置为准
-    "network.kubernetes.io/eip-paymode": "sharebandwidth" # 付款模式，支持traffic、bandwidth、sharebandwidth，默认为bandwidth(带宽计费)
-    "network.kubernetes.io/sharebandwidth-id": "bwshare-d8dklw" # 共享带宽id，paymode为sharebandwidth时需要传入
-    "network.kubernetes.io/eip-bandwidth": "2"  # 共享带宽模式下无需指定，或者配置为0，bandwidth和traffic下默认为2Mbps
-    "network.kubernetes.io/eip-chargetype": "month" # EIP付费模式，支持month，year，dynamic，默认为dynamic
-    "network.kubernetes.io/eip-quantity": "1" # 付费时长，默认为1,dynamic下只默认且只能为1
+    "network.kubernetes.io/eip": ”true“ 
+    # 开启Pod绑定EIP，如不指定则新建一个EIP，Pod删除时一并删除
+    "network.kubernetes.io/security-group-id": "firewall-xxdsad239d" 
+    #必填项，防火墙ID
+    "network.kubernetes.io/eip-id": "eip-xsda8de" 
+    # 指定EIP，Pod删除时不会删除该EIP，且付款模式和带宽设置等都以原有EIP设置为准
+    "network.kubernetes.io/eip-paymode": "sharebandwidth" 
+    # 付款模式，支持traffic、bandwidth、sharebandwidth，默认为bandwidth(带宽计费)
+    "network.kubernetes.io/sharebandwidth-id": "bwshare-d8dklw" 
+    # 共享带宽id，paymode为sharebandwidth时需要传入
+    "network.kubernetes.io/eip-bandwidth": "2"  
+    # 共享带宽模式下无需指定，或者配置为0，bandwidth和traffic下默认为2Mbps
+    "network.kubernetes.io/eip-chargetype": "month" 
+    # EIP付费模式，支持month，year，dynamic，默认为dynamic
+    "network.kubernetes.io/eip-quantity": "1" 
+    # 付费时长，默认为1，dynamic下只默认且只能为1
 ```
