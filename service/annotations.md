@@ -144,8 +144,8 @@ ListenType为RequestProxy时表示空闲连接的回收时间，单位为秒，�
  # 支持traffic、bandwidth、sharebandwidth，默认为bandwidth
 "service.beta.kubernetes.io/ucloud-load-balancer-eip-sharebandwidthid": "bwshare-d8dklw" 
  # 共享带宽id
-"service.beta.kubernetes.io/ucloud-load-balancer-eip-bandwidth": "10" 
- # 共享带宽模式下无需指定，或者配置为0，bandwidth下默认为10Mbps
+"service.beta.kubernetes.io/ucloud-load-balancer-eip-bandwidth": "2" 
+ # 共享带宽模式下无需指定，或者配置为0，bandwidth下默认为2Mbps
 "service.beta.kubernetes.io/ucloud-load-balancer-eip-chargetype": "month"
  # 付费模式，支持month，year，dynamic
 "service.beta.kubernetes.io/ucloud-load-balancer-eip-quantity": "1" 
