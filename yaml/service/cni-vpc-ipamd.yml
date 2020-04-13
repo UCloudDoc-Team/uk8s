@@ -73,7 +73,7 @@ spec:
         - name: cni-vpc-ipamd
           securityContext:
             privileged: true
-          image: uhub.service.ucloud.cn/wxyz/cni-vpc-ipamd:eip.36
+          image: uhub.service.ucloud.cn/wxyz/cni-vpc-ipamd:eip.61
           args:
             - "--availablePodIPLowWatermark=5"
             - "--secondaryIPWarmingSeconds=10"
