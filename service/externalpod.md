@@ -4,8 +4,8 @@
 
 UK8S支持使用ULB访问Service
 
-* (通过内网ULB访问Service)[uk8s/service/internalservice]
-* (通过外网ULB访问Service)[uk8s/service/externalservice]
+* [通过内网ULB访问Service](uk8s/service/internalservice)
+* [通过外网ULB访问Service](uk8s/service/externalservice)
 
 ## 直接使用EIP访问Pod
 
@@ -68,10 +68,10 @@ Status:       Running
 
 访问annotations里的EIP地址117.50.135.126，我们可以看到页面已经可以正常访问了。
 
-![](/images/podeip.png)
+![](/images/service/podeip.png)
 
 
-在这个例子里需要进行以下两个参数声明
+#### 在这个例子里需要进行以下两个参数声明
 
 * metadata.annotations
   
@@ -79,7 +79,7 @@ Status:       Running
 
 * spec.containers[0].resources.limits
 
-需要声明`ucloud.cn/uni: 1`，**注意此步骤非常重要**，对于pod来说有且只能有一个container声明此参数。
+需要声明`ucloud.cn/uni: 1`，注意此步骤非常重要，对于pod来说有且只能有一个container声明此参数。
 
 
 ### Deployment控制Pod绑定EIP
@@ -119,7 +119,7 @@ spec:
           protocol: TCP
 ```
 
-在Deployment中需要增加以下两个参数声明
+#### 在Deployment中需要增加以下两个参数声明
 
 * spec.template.metadata.annotations
 
@@ -127,7 +127,7 @@ spec:
 
 * spec.template.spec.containers[0].resources.limits
 
-  同Pod，需要声明`ucloud.cn/uni: 1`，**注意此步骤非常重要**，对于pod来说有且只能有一个container声明此参数。
+  同Pod，需要声明`ucloud.cn/uni: 1`。
 
 
 
