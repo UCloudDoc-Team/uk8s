@@ -44,7 +44,7 @@ metadata:
     "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "tcp"
     # 表示ULB协议类型，tcp与udp等价，表示ULB4；http与httpS等价，表示ULB7；tcp为默认值，此处可省略。
     "service.beta.kubernetes.io/ucloud-load-balancer-eip-bandwidth": "2" 
-    # bandwidth下默认为10Mpbs,建议显式声明带宽大小，避免费用超标。
+    # bandwidth下默认为2Mpbs,建议显式声明带宽大小，避免费用超标。
     "service.beta.kubernetes.io/ucloud-load-balancer-eip-chargetype": "month" 
     # 付费模式，支持month，year，dynamic，默认为month
     "service.beta.kubernetes.io/ucloud-load-balancer-eip-quantity": "1" 
