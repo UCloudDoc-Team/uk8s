@@ -25,7 +25,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: ufspv3
+  name: ufspv4
 spec:
   capacity:
     storage: 10Gi
@@ -46,7 +46,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: ufspv4.0
+  name: ufspv4
 spec:
   capacity:
     storage: 10Gi
