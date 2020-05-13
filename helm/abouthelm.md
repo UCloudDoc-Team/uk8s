@@ -3,6 +3,7 @@
 
 UK8S为方便用户快速部署常用的应用组件，提供了应用商店功能，用户可以通过进入UK8S集群查看到应用商店，使用Helm进行安装部署。
 ![](/images/helm/shop.png)
+
 ### 关于Helm
 Helm是Kubernetes的包管理工具，用于简化Kubernetes应用的部署和管理。初期学习理解时可以将Helm比作Linux下的yum/apt-get，这两款软件都是Linux系统下的包管理工具。本文通过安装Helm使用应用商店进行介绍。
 
