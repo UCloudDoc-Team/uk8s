@@ -74,7 +74,7 @@ spec:
             mountPath: /etc/sysconfig/
       containers:
         - name: cni-vpc-ipamd
-          image: uhub.service.ucloud.cn/uk8s/cni-vpc-ipamd:20.04.3
+          image: uhub.service.ucloud.cn/uk8s/cni-vpc-ipamd:20.05.1
           securityContext:
             privileged: true
           args:
