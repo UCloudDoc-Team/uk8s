@@ -63,6 +63,7 @@
 * [集群管理](/uk8s/administercluster/README)
     * 
         * [配置自定义DNS服务](/uk8s/administercluster/custom_dns_service)  
+        * [ETCD备份](/uk8s/administercluster/etcd_backup)
 * [镜像仓库](/uk8s/dockerhub/README)  
     * 
         * [概述](/uk8s/dockerhub/outline)  
