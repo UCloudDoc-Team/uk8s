@@ -19,11 +19,11 @@ kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/service/dashboard.v
 
 |kubernetes版本|1.8|1.9|1.10|1.11|1.12|1.13|
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|兼容性|✓|✓|✓|?|?|✕|
+|兼容性|✓|✓|✓|?|?|×|
 
 * ✓ 完全支持的版本范围。
 * ? 由于Kubernetes API版本之间的存在变化，某些功能可能无法正常使用（测试未覆盖完整）。
-* ✕ 不支持的版本范围。
+* × 不支持的版本范围。
 
 #### Dashboard v2.0.0-rc1
 
@@ -40,7 +40,7 @@ kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/service/dashboard.v
 
 * ✓ 完全支持的版本范围。
 * ? 由于Kubernetes API版本之间的存在变化，某些功能可能无法正常使用（测试未覆盖完整）。
-* ✕ 不支持的版本范围。
+* × 不支持的版本范围。
 
 
 您可以通过访问或下载这个yaml文件，这个yaml中使用外网ULB暴露服务，产生额外的EIP费用。
