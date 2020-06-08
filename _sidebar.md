@@ -69,3 +69,6 @@
     * [亲和性实践](/uk8s/bestpractice/affinity)
     * [Kubernetes弹性伸缩](/uk8s/bestpractice/autoscaling/README)
     
+    
+    
+    
