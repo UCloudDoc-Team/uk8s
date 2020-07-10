@@ -32,7 +32,7 @@ parameters:
   type: "ssd"   # 存储介质，支持sdd和sata，必填
   fsType: "ext4"    # 文件系统，必填
   udataArkMode: "no"   # 是否开启方舟模式，默认不开启，非必填
-  chargeType: "month" # 付费类型，支持dynamic、month、year，默认为month，非必填
+  chargeType: "month" # 付费类型，支持dynamic、month、year，非必填
   quantity: "1" # 购买时长，dynamic无需填写，可购买1-9个月，或1-10年
 reclaimPolicy: Delete  # PV回收策略，支持Delete和Retain，默认为Delete，非必填
 mountOptions:   
