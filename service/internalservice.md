@@ -92,10 +92,6 @@ spec:
       protocol: UDP
       port: 1002
       targetPort: 1002
-    - name: tcp
-      protocol: TCP
-      port: 80
-      targetPort: 80
   selector:
     app: ucloud-nginx-out-tcp-new
 ---

@@ -242,4 +242,3 @@ kubectl delete service nginx-deployment-internet
 
 ```
 
-
