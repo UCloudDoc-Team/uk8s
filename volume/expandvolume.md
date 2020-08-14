@@ -4,13 +4,13 @@
 
 ### 1、限制条件
 
-1. UK8S Node节点实例的创建时间必须晚于2020年5月，不满足此条件的节点，则必须先对Node节点进行先关机，再开机操作；
+1. UK8S Node节点实例的创建时间必须晚于2020年5月，不满足此条件的节点，则必须先对Node节点进行先关机，再开机操作;
 
-2. Kubernetes版本不低于1.14。1.14和1.15必须开启--feature-gates=ExpandCSIVolumes=true; 1.16及以上无需配置；
+2. Kubernetes版本不低于1.14。1.14和1.15必须开启--feature-gates=ExpandCSIVolumes=true; 1.16及以上无需配置;
 
 3. CSI-UDisk版本不低于20.08.1 ;
 
-4. 扩容时声明的期望容量大小应该是10的整数倍，单位为GB;
+4. 扩容时声明的期望容量大小应该是10的整数倍，单位为Gi;
 
 5. 只支持动态创建的PVC扩容，且storageClass必须显示声明可扩容(见后文)；
 
@@ -96,10 +96,10 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: ssd-csi-udisk
+  storageClassName: csi-udisk-ssd
   resources:
     requests:
-      storage: 10G
+      storage: 10Gi
 ---
 apiVersion: v1
 kind: Pod
@@ -124,17 +124,17 @@ spec:
 
 ```
 
-Pod启动后，我们分别查看下pvc、pv、以及容器内的文件系统大小，可以发现，目前都是10G
+Pod启动后，我们分别查看下pvc、pv、以及容器内的文件系统大小，可以发现，目前都是10Gi
 
 ```bash
 
 # kubectl  get pv
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                         STORAGECLASS    REASON   AGE
-pvc-25b83584-35de-43e4-ad23-c1fc638a09e2   10G       RWO            Delete           Bound    default/udisk-volume-expand   ssd-csi-udisk            2m26s
+pvc-25b83584-35de-43e4-ad23-c1fc638a09e2   10Gi       RWO            Delete           Bound    default/udisk-volume-expand   ssd-csi-udisk            2m26s
 
 # kubectl  get pvc
 NAME                  STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS    AGE
-udisk-volume-expand   Bound    pvc-25b83584-35de-43e4-ad23-c1fc638a09e2   10G       RWO            ssd-csi-udisk   2m30s
+udisk-volume-expand   Bound    pvc-25b83584-35de-43e4-ad23-c1fc638a09e2   10Gi       RWO            ssd-csi-udisk   2m30s
 
 # kubectl  exec -it udisk-expand-test -- df -h
 Filesystem      Size  Used Avail Use% Mounted on
@@ -146,18 +146,18 @@ Filesystem      Size  Used Avail Use% Mounted on
 
 #### 3.3 在线扩容PVC
 
-执行kubectl edit pvc udisk-volume-expand，将spec.resource.requests.storage改成20G, 保存后退出， 大概在一分钟左右，pv、pvc以及容器内的文件系统大小容量属性都变成了20GB。
+执行kubectl edit pvc udisk-volume-expand，将spec.resource.requests.storage改成20Gi, 保存后退出， 大概在一分钟左右，pv、pvc以及容器内的文件系统大小容量属性都变成了20GB。
 
 
 ```bash
 
 # kubectl  get pv
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                         STORAGECLASS    REASON   AGE
-pvc-25b83584-35de-43e4-ad23-c1fc638a09e2   20G       RWO            Delete           Bound    default/udisk-volume-expand   ssd-csi-udisk            2m26s
+pvc-25b83584-35de-43e4-ad23-c1fc638a09e2   20Gi       RWO            Delete           Bound    default/udisk-volume-expand   ssd-csi-udisk            2m26s
 
 # kubectl  get pvc
 NAME                  STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS    AGE
-udisk-volume-expand   Bound    pvc-25b83584-35de-43e4-ad23-c1fc638a09e2   20G       RWO            ssd-csi-udisk   2m30s
+udisk-volume-expand   Bound    pvc-25b83584-35de-43e4-ad23-c1fc638a09e2   20Gi       RWO            ssd-csi-udisk   2m30s
 
 # kubectl  exec -it udisk-expand-test -- df -h
 Filesystem      Size  Used Avail Use% Mounted on
@@ -166,15 +166,15 @@ Filesystem      Size  Used Avail Use% Mounted on
 ...
 
 ```
-同时登录UDisk控制台，发现UDisk展示容量也增大到了20GB。这样我们完成了Pod不重启，服务不停机的数据卷在线扩容。
+同时登录UDisk控制台，发现UDisk展示容量也增大到了20Gi。这样我们完成了Pod不重启，服务不停机的数据卷在线扩容。
 
 #### 3.4 离线扩容PVC(推荐)
 
 在上面的示例中，我们完成了数据卷的在线扩容。但在高IO的场景下，Pod不重启进行数据卷扩容，有小概率导致文件系统异常。最稳定的扩容方案是先停止应用层服务、解除挂载目录，再进行数据卷扩容。下面我们演示下如何进行停服操作。
 
-上文步骤3.3完成的时候，我们有一个Pod且挂载了一个20GB的数据卷，现在我们需要对数据卷进行停服扩容。
+上文步骤3.3完成的时候，我们有一个Pod且挂载了一个20Gi的数据卷，现在我们需要对数据卷进行停服扩容。
 
-1. 单独创建一个名为udisk-expand-test的yaml，删除Pod，但保留pvc和pv。
+1. 基于上文的示例yaml，去掉PVC相关的内容，单独创建一个名为udisk-expand-test的yaml，只保留Pod的相关信息。然后删除Pod，但保留pvc和pv。
 
 ```bash
 # kubectl  delete po udisk-expand-test
@@ -183,20 +183,23 @@ pod "udisk-expand-test" deleted
 ```
 此时，pv和pvc依然相互Bound，对应的UDisk已经从云主机中卸载，处于可用状态。 
 
-2. kubectl edit pvc udisk-volume-expand，将spec.resource.requests.storage改成30G, 保存并退出。
+2. 修改pvc信息，将spec.resource.requests.storage改成30Gi, 保存并退出。
 
-等待一分钟左右后，执行kubectl get pv，发现pv的容量增长到30G后，重建Pod。
+等待一分钟左右后，执行kubectl get pv，当pv的容量增长到30G后，重建Pod。需要注意的是，此时执行kubectl get pvc的时候，返回的pvc容量依然是20Gi，这是因为文件系统尚未扩容完毕，pvc处于FileSystemResizePending状态。
 
 ```bash
+# kubectl edit pvc udisk-volume-expand
+persistentvolumeclaim/udisk-volume-expand edited
+
 # kubectl  get pv
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                   STORAGECLASS    REASON   AGE
-pvc-25b83584-35de-43e4-ad23-c1fc638a09e2   30G       RWO            Delete           Bound    default/udisk-volume-expand   ssd-csi-udisk            20m
+pvc-25b83584-35de-43e4-ad23-c1fc638a09e2   30Gi       RWO            Delete           Bound    default/udisk-volume-expand   ssd-csi-udisk            20m
 
 # kubectl create -f udisk-expand-test.yml
 
 ```
 
-当Pod重新创建成功后，可以发现，pv，pvc的容量大小以及UDisk控制台展示的容量都是30GB，同时在容器中执行df看到的对应文件系统容量也是30GB。
+当Pod重新创建成功后，可以发现，pv，pvc的容量大小的容量都是30Gi，同时在容器中执行df看到的对应文件系统容量也是30Gi。
 
 
 
