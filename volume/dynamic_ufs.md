@@ -16,7 +16,7 @@
 
 1、克隆项目，这里我们只需要关注三个文件，分别是class.yaml,deployment.yaml,rbac.yaml。
 
-```
+```bash
 # git clone https://github.com/kubernetes-incubator/external-storage.git
 # cd external-storage/nfs-client/deploy/
 # ls
@@ -27,22 +27,19 @@ class.yaml  deployment-arm.yaml  deployment.yaml  objects  rbac.yaml  test-claim
 
 nfs-client-provisioner服务启动时，需要挂载UFS，官网文档是通过spec.volume.nfs来声明的，UFS虽然支持nfs协议，但mount到云主机时，需要指定mountOption，但spec.volume.nfs不支持mountOption参数。因此我们要放弃spec.volume.nfs这种方式，改为静态声明PV的方式来完成首次挂载。具体改动见Yaml说明。
 
-```
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: nfs-client-provisioner
-  namespace: kube-system # 命名空间修改为kube-system
+```yaml
 ---
 kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: nfs-client-provisioner
-  namespace:  kube-system # 命名空间修改为kube-system
 spec:
   replicas: 1
   strategy:
     type: Recreate
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
   template:
     metadata:
       labels:
@@ -72,7 +69,6 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: nfs-client-root
-  namespace:  kube-system 
 spec:
   accessModes:
     - ReadWriteMany
@@ -80,7 +76,7 @@ spec:
     requests:
       storage: 200Gi
 ---
-#手动创建PV，注意需要MountOption处，性能型与容量型的UFS不一样。
+#手动创建PV，需要指定mountOption。
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -93,10 +89,10 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     path: /  
-    server: 10.9.106.78 #这里直接写UFS的Server地址即可。
+    server: 10.9.x.x  #这里直接写UFS的Server地址即可。
   mountOptions:
     - nolock   
-    - nfsvers=4.0  #容量型和性能型不同,详见UFS产品文档。
+    - nfsvers=4.0  
 
 ```
 
@@ -114,83 +110,11 @@ parameters:
   archiveOnDelete: "false"
 mountOptions:
   - nolock
-  - nfsvers=4.0  #各区域的UFS协议不一样，详见UFS产品文档。
+  - nfsvers=4.0  
 
 ```
 
-4、修改rbac.yaml
 
-rbac这块，如果nfs-client是启动在default下的话，那是不需要修改的，这里我们改为在kube-system下运行，直接将里面所有NameSpace的值改为kube-system即可,并在RoleBinding处新增NameSpace，显式指定为kube-system。
-
-```
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: nfs-client-provisioner
-  # replace with namespace where provisioner is deployed
-  namespace: kube-system #修改namespace为kube-system
----
-kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: nfs-client-provisioner-runner
-rules:
-  - apiGroups: [""]
-    resources: ["persistentvolumes"]
-    verbs: ["get", "list", "watch", "create", "delete"]
-  - apiGroups: [""]
-    resources: ["persistentvolumeclaims"]
-    verbs: ["get", "list", "watch", "update"]
-  - apiGroups: ["storage.k8s.io"]
-    resources: ["storageclasses"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: [""]
-    resources: ["events"]
-    verbs: ["create", "update", "patch"]
----
-kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: run-nfs-client-provisioner
-subjects:
-  - kind: ServiceAccount
-    name: nfs-client-provisioner
-    # replace with namespace where provisioner is deployed
-    namespace: kube-system  #修改namespace为kube-system
-roleRef:
-  kind: ClusterRole
-  name: nfs-client-provisioner-runner
-  apiGroup: rbac.authorization.k8s.io
----
-kind: Role
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: leader-locking-nfs-client-provisioner
-    # replace with namespace where provisioner is deployed
-  namespace: kube-system #修改namespace为kube-system
-rules:
-  - apiGroups: [""]
-    resources: ["endpoints"]
-    verbs: ["get", "list", "watch", "create", "update", "patch"]
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: leader-locking-nfs-client-provisioner
-  namespace: kube-system  #显式声明RoleBinding创建在kube-system下。
-subjects:
-  - kind: ServiceAccount
-    name: nfs-client-provisioner
-    # replace with namespace where provisioner is deployed
-    namespace: kube-system #修改namespace为kube-system
-roleRef:
-  kind: Role
-  name: leader-locking-nfs-client-provisioner
-  apiGroup: rbac.authorization.k8s.io
-  namespace: kube-system #显式声明RoleBinding创建在kube-system下
-
-```
-
-5、验证
+4、验证
 
 我们依次执行kubectl apply -f rbac.yaml、deployment.yaml、class.yaml，使用官方的test-pvc和test-pod测试，发现pod已经挂载了UFS，且UFS里面有一个新的目录。

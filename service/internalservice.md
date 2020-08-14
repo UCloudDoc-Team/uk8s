@@ -69,7 +69,7 @@ spec:
 
 #### 3.2 UDP应用通过内网ULB4对外暴露服务
 
-如果你的应用是UDP协议，或者UDP和TCP混用，则务必显式声明健康检查的类型为port(端口检查)，否则默认为ping，可能导致ULB误认为后端业务不正常。
+如果你的应用是UDP协议，则务必显式声明健康检查的类型为port(端口检查)，否则默认为ping，可能导致ULB误认为后端业务不正常。
 
 ```yaml
 apiVersion: v1
@@ -81,7 +81,7 @@ metadata:
   annotations:
     "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"  
      # ULB类型，默认为outer，支持outer、inner
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "tcp"       
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "udp"       
      # 用于声明ULB的Vserver类型，tcp和udp均代表ULB4，https和http均代表ULB7；
     "service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type": "port"
      # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。
@@ -92,10 +92,6 @@ spec:
       protocol: UDP
       port: 1002
       targetPort: 1002
-    - name: tcp
-      protocol: TCP
-      port: 80
-      targetPort: 80
   selector:
     app: ucloud-nginx-out-tcp-new
 ---

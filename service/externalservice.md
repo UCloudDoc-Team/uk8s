@@ -94,10 +94,6 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - name: tcp
-      protocol: TCP
-      port: 80
-      targetPort: 80
     - name: udp
       protocol: UDP
       port: 1002
@@ -116,9 +112,6 @@ spec:
   - name: nginx
     image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
     ports:
-    - name: tcp
-      containerPort: 80
-      protocol: TCP
     - name: udp
       containerPort: 1002
       protocol: UDP 
