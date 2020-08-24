@@ -146,7 +146,7 @@ Filesystem      Size  Used Avail Use% Mounted on
 
 #### 3.3 在线扩容PVC
 
-执行kubectl edit pvc udisk-volume-expand，将spec.resource.requests.storage改成20Gi, 保存后退出， 大概在一分钟左右，pv、pvc以及容器内的文件系统大小容量属性都变成了20GB。
+执行kubectl edit pvc udisk-volume-expand，将spec.resource.requests.storage改成20Gi, 保存后退出， 大概在一分钟左右，pv、pvc以及容器内的文件系统大小容量属性都变成了20Gi。
 
 
 ```bash
@@ -185,7 +185,7 @@ pod "udisk-expand-test" deleted
 
 2. 修改pvc信息，将spec.resource.requests.storage改成30Gi, 保存并退出。
 
-等待一分钟左右后，执行kubectl get pv，当pv的容量增长到30G后，重建Pod。需要注意的是，此时执行kubectl get pvc的时候，返回的pvc容量依然是20Gi，这是因为文件系统尚未扩容完毕，pvc处于FileSystemResizePending状态。
+等待一分钟左右后，执行kubectl get pv，当pv的容量增长到30Gi后，重建Pod。需要注意的是，此时执行kubectl get pvc的时候，返回的pvc容量依然是20Gi，这是因为文件系统尚未扩容完毕，pvc处于FileSystemResizePending状态。
 
 ```bash
 # kubectl edit pvc udisk-volume-expand

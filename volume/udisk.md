@@ -29,7 +29,7 @@ metadata:
   name: udisk-ssd-test
 provisioner: udisk.csi.ucloud.cn #存储供应方，此处不可更改。
 parameters:
-  type: "ssd"   # 存储介质，支持sdd和sata，必填
+  type: "ssd"   # 存储介质，支持ssd和sata，必填
   fsType: "ext4"    # 文件系统，必填
   udataArkMode: "no"   # 是否开启方舟模式，默认不开启，非必填
   chargeType: "month" # 付费类型，支持dynamic、month、year，非必填
