@@ -5,7 +5,7 @@ UK8S支持直接在集群中使用UDisk作为持久化存储卷。
 
 **备注:**
 
-1. 支持SSD/SATA UDisk，**暂不支持快杰云主机挂载**；
+1. 非快杰云主机支持SSD/SATA UDisk，**如果节点的云主机类型为快杰，则只支持RSSD UDisk**；
 
 2. SSD UDisk的最小值为20GB，最大值为8000GB；
 
