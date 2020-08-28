@@ -1,0 +1,55 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: elk-log-pipeline
+  namespace: elk
+spec:
+  selector:
+    matchLabels:
+      name: elk-log-pipeline
+  template:
+    metadata:
+      labels:
+        name: elk-log-pipeline
+    spec:
+      hostname: elk-log-pipeline
+      containers:
+      - name: elk-log-pipeline
+        ports:
+          - containerPort: 5044
+            name: filebeat
+          - containerPort: 9600
+            name: logstash
+        image: docker.elastic.co/logstash/logstash-oss:6.2.1
+        args: [
+          "-f", "/usr/share/logstash/pipeline/elk-log.conf",
+        ]
+        volumeMounts:
+        - name: elk-log-config
+          mountPath: /usr/share/logstash/pipeline/
+        command:
+        - logstash
+      volumes:
+      - name: elk-log-config
+        configMap:
+          name: elk-pipeline-config
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: elk-log-pipeline
+  namespace: elk
+spec:
+  selector:
+    name: elk-log-pipeline
+  ports:
+  - protocol: TCP
+    port: 5044
+    targetPort: 5044
+    name: filebeat
+  - protocol: TCP
+    port: 9600
+    targetPort: 9600
+    name: logstash
+---

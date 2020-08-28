@@ -101,7 +101,7 @@ kb-single-svc         LoadBalancer   172.17.183.59   117.50.92.74   5601:32782/T
 ### 二、部署FileBeat
 
 在进行日志收集的过程中，我们首先想到的是使用Logstash，因为它是ELK stack中的重要成员，但是在测试过程中发现，Logstash是基于JDK的，在没有产生日志的情况单纯启动Logstash就大概要消耗500M内存，在每个Pod中都启动一个日志收集组件的情况下，使用logstash有点浪费系统资源，因此我们更推荐一个轻量级的日志采集工具Filebeat，经测试单独启动Filebeat容器大约只会消耗12M内存。
-具体的编排文件可以参考[filebeat.yaml](https://github.com/quchenyuan/uk8s-app/blob/master/elk/filebeat.yaml)，本例采用DaemonSet的方式编排。
+具体的编排文件可以参考[filebeat.yaml](https://github.com/UCloudDocs/uk8s/blob/master/yaml/log/filebeat.yaml)，本例采用DaemonSet的方式编排。
 
 ```
 bash-4.4# kubectl apply -f filebeat.yaml
@@ -135,7 +135,7 @@ Filebeat命令行参数可以参考 [Filebeat Command Reference](https://www.ela
 
 #### 1、创建配置文件
 
-创建Logstash的配置文件，可以参考[elk-log.conf](https://github.com/quchenyuan/uk8s-app/blob/master/elk/elk-log.conf)，更详细的配置信息见[Configuring Logstash](https://www.elastic.co/guide/en/logstash/current/configuration.html)。大部分Logstash配置文件都可以分为3部分：input, filter 和 output，示例配置文件中指定Logstash从Filebeat获取数据，并输出到Elasticsearch。
+创建Logstash的配置文件，可以参考[elk-log.conf](https://github.com/UCloudDocs/uk8s/blob/master/yaml/log/elk-log.conf)，更详细的配置信息见[Configuring Logstash](https://www.elastic.co/guide/en/logstash/current/configuration.html)。大部分Logstash配置文件都可以分为3部分：input, filter 和 output，示例配置文件中指定Logstash从Filebeat获取数据，并输出到Elasticsearch。
 
 #### 2、根据配置文件创建一个名为elk-pipeline-config的ConfigMap，如下：
 
@@ -150,7 +150,7 @@ filebeat-config       1      21m
 ```
 #### 3、在K8S集群部署logstash。
 
-编写 [logstash.yaml](https://github.com/quchenyuan/uk8s-app/blob/master/elk/logstash.yaml) ，在yaml文件中挂载之前创建的ConfigMap。需要注意的是，此处使用了logstash-oss镜像，关于oss和non-oss版本的区别请参考[链接](https://discuss.elastic.co/t/what-are-the-differences-between-the-kibana-oss-and-non-oss-build/152364)。
+编写 [logstash.yaml](https://github.com/UCloudDocs/uk8s/blob/master/yaml/log/logstash.yaml) ，在yaml文件中挂载之前创建的ConfigMap。需要注意的是，此处使用了logstash-oss镜像，关于oss和non-oss版本的区别请参考[链接](https://discuss.elastic.co/t/what-are-the-differences-between-the-kibana-oss-and-non-oss-build/152364)。
 
 ```
 bash-4.4# kubectl apply -f logstash.yaml
@@ -198,7 +198,7 @@ items:
 
 #### 1、部署nginx应用
 
-创建一个Nginx的部署和LoadBalancer服务，这样可以通过eip访问Nginx。配置文件请参考[nginx.yaml](https://github.com/quchenyuan/uk8s-app/blob/master/elk/nginx.yaml)，我们将Nginx访问日志的输出路径以hostPath的形式挂载到宿主的/var/log/nginx/路径下。
+创建一个Nginx的部署和LoadBalancer服务，这样可以通过eip访问Nginx。配置文件请参考[nginx.yaml](https://github.com/UCloudDocs/uk8s/blob/master/yaml/log/nginx.yaml)，我们将Nginx访问日志的输出路径以hostPath的形式挂载到宿主的/var/log/nginx/路径下。
 
 
 ```
