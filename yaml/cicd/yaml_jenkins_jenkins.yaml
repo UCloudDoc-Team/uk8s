@@ -17,7 +17,7 @@ spec:
         fsGroup: 1000
       containers:
       - name: jenkins
-        image: uhub.service.ucloud.cn/library/jenkins:2.222.3
+        image: uhub.service.ucloud.cn/ucloud/jenkins:2.222.3
         ports:
         - containerPort: 8080
           name: web
