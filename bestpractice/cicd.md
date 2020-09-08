@@ -36,8 +36,22 @@ kubectl create namespace jenkins
 
 2、 声明一个PVC对象，后面我们要将Jenkins容器的 /var/jenkins_home 目录挂载到了这个名为PVC对象上面。
 
+* 如果您使用的k8s版本大于等于1.14，且没有使用快杰云主机，请部署。
+
 ```
 kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins-pvc.yaml
+```
+
+* 如果您使用的k8s版本大于等于1.14，且使用快杰云主机，请部署。
+
+```
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins-pvc-rssd.yaml
+```
+
+* 如果您使用的k8s版本小于1.14，请部署。
+
+```
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins-pvc-1.13.yaml
 ```
 
 3、 以Deployment方式部署Jenkins master,为了演示方便，我们还使用LoadBalancer类型的service将其暴露到外网。
