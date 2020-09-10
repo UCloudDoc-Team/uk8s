@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: elk
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.9.1
+        ports:
+        - containerPort: 80
+          name: web
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: nginx-vol
+        - mountPath: /var/log/nginx
+          name: nginx-log
+      volumes:
+      - name: nginx-vol
+        hostPath:
+          path: /data/k8s/volumes
+      - name: nginx-log
+        hostPath:
+          path: /var/log/nginx
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-cluster
+  namespace: elk
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 5680
+    targetPort: 80
+  selector:
+    app: nginx
+

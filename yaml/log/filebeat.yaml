@@ -1,0 +1,152 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: uk8s-filebeat
+  namespace: elk
+  labels:
+    k8s-app: filebeat
+    kubernetes.io/cluster-service: "true"
+    app: uk8s-filebeat
+data:
+  filebeat.yml: |
+    processors:
+      - add_kubernetes_metadata:
+          in_cluster: true
+          namespace: elk
+      - drop_event:
+          when:
+            and:
+              - equals:
+                  kubernetes.namespace: elk
+              - or:
+                - equals:
+                    kubernetes.labels.app: elk-log-pipeline
+    filebeat.modules:
+    - module: system
+    filebeat.inputs:
+    - type: log
+      paths:
+        - /var/log/containers/*.log
+        - /var/log/messages
+        - /var/log/nginx/*.log
+        - /var/log/*
+      symlinks: true
+      include_lines: ['hyperkube']
+    output.logstash:
+      hosts: ["elk-log-pipeline:5044"]
+    logging.level: info
+    index: filebeat-
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: filebeat
+  namespace: elk
+  labels:
+    k8s-app: filebeat
+    kubernetes.io/cluster-service: "true"
+spec:
+  selector:
+    matchLabels:
+      k8s-app: filebeat
+  template:
+    metadata:
+      name: filebeat
+      labels:
+        app: filebeat
+        k8s-app: filebeat
+        kubernetes.io/cluster-service: "true"
+    spec:
+      containers:
+      - image: docker.elastic.co/beats/filebeat:6.6.0
+        name: filebeat
+        args: [
+          "-c", "/home/uk8s-filebeat/filebeat.yml",
+          "-d", "*",
+          "-e",
+        ]
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+        - name: filebeat-storage
+          mountPath: /var/log/containers
+        - name: varlogpods
+          mountPath: /var/log/pods
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
+        - name: varlibdockercontainers
+          mountPath: /var/lib/docker/containers
+        - name: filebeat-volume
+          mountPath: /home/uk8s-filebeat
+        - name: messages
+          mountPath: /var/log/messages
+        - name: nginx-log
+          mountPath: /var/log/nginx
+
+      serviceAccountName: filebeat
+      volumes:
+        - name: filebeat-storage
+          hostPath:
+            path: /var/log/containers
+        - name: varlogpods
+          hostPath:
+            path: /var/log/pods
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock
+        - name: varlibdockercontainers
+          hostPath:
+            path: /var/lib/docker/containers
+        - name: messages
+          hostPath:
+            path: /var/log/messages
+        - name: nginx-log
+          hostPath:
+            path: /var/log/nginx
+        - name: filebeat-volume
+          configMap:
+            name: uk8s-filebeat
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: filebeat
+  namespace: elk
+subjects:
+- kind: ServiceAccount
+  name: filebeat
+  namespace: elk
+roleRef:
+  kind: ClusterRole
+  name: filebeat
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: filebeat
+  namespace: elk
+  labels:
+    k8s-app: filebeat
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources:
+  - namespaces
+  - pods
+  verbs:
+  - get
+  - watch
+  - list
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: filebeat
+  namespace: elk
+  labels:
+    k8s-app: filebeat

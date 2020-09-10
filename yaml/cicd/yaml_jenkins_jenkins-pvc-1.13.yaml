@@ -6,8 +6,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: ssd-csi-udisk
+  storageClassName: udisk-ssd
   resources:
     requests:
       storage: 20Gi
-
