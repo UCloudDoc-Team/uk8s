@@ -1,17 +1,29 @@
-# 通过EIP访问Pod
+# Pod通过独立EIP出外网
 
-## 其它方式
+### 前言
 
-UK8S支持使用ULB访问Service
+UK8S支持为Pod绑定EIP（弹性外网IP），绑定后，该Pod可通过此EIP访问外网。该功能适合应用程序需要独立且固定的外网出口IP，如调用外部支持接口，数据抓取等场景。
+
+如要对外暴露服务，建议使用LoadBalancer类型的Service，具体参见：
 
 * [通过内网ULB访问Service](uk8s/service/internalservice)
 * [通过外网ULB访问Service](uk8s/service/externalservice)
 
-## 直接使用EIP访问Pod
 
-本文主要针对需要使用EIP直接绑定Pod提供服务的使用场景进行讲解，如需要外网的批处理任务等场景。
+### 限制条件
 
-### 安装插件
+1. Pod不能被调度到快杰云主机和物理云主机， 由于Pod绑定EIP的实现依赖弹性网卡，但快杰云主机和物理云主机目前尚不支持挂载弹性网卡。
+
+2. CNI(网络插件)版本必须大于等于20.04.3，低于该版本请先在控制台升级CNI。
+
+3. 一台云主机可绑定的弹性网卡数量等于其CPU核数，如4核8G的云主机只允许绑定4张弹性网卡。
+
+
+下面演示下如何在UK8S中为Pod绑定EIP。
+
+
+
+### 安装EIP管理组件 
 
 为了在UK8S中实现Pod绑定EIP，需要额外部署支持EIP绑定的组件，直接在UK8S通过kubectl命令安装即可。
 
@@ -19,7 +31,7 @@ UK8S支持使用ULB访问Service
 kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/service/cni-vpc-ipamd.yml
 ```
 
-### Pod绑定EIP
+### 创建Pod时显式声明需要绑定EIP
 
 完成插件安装后，我们就可以在创建Pod的时候增加EIP的绑定声明，如下所示。
 
@@ -129,6 +141,8 @@ spec:
 
   同Pod，需要声明`ucloud.cn/uni: 1`。
 
+
+>> 如果不显式指定EIP-ID，Pod被删除后，其绑定的EIP会被更换，如果你需要固定的外网IP地址，则需要显式指定EIP-ID。（该种情况下，副本数不能大于1）
 
 
 ### Annotations详细参数
