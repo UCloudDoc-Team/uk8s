@@ -10,11 +10,15 @@
 helm repo update
 #查询tomcat应用
 helm search tomcat
-#安装商店应用
+#安装商店应用 Helm2
 helm install stable/tomcat
+#安装商店应用 Helm3
+helm install name stable/tomcat
 ```
 
-执行了安装商店应用的命令后，我们看到了系统返回给我们了安装的详细信息，由于没有在安装命令中定义 --name 所以Helm随机生成了一个名字 giggly-leopard (此处每次创建都会随机生成)，其中Pod正在启动，LoadBalancer类型的Service正在获取EIP。
+执行了安装商店应用的命令后，我们看到了系统返回给我们了安装的详细信息。在Helm2中，由于没有在安装命令中定义 --name 所以Helm随机生成了一个名字 giggly-leopard (此处每次创建都会随机生成)，在Helm3中，则必须指定名字。
+
+其中Pod正在启动，LoadBalancer类型的Service正在获取EIP。
 ```
 NAME:   giggly-leopard
 ……

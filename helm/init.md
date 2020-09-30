@@ -1,18 +1,64 @@
 
-## 安装使用应用商店
+# 安装使用应用商店
 
-本文使用Helm的2.14.1版本进行讲解和演示使用。
+本文分别使用Helm的3.3.1和2.14.1版本进行讲解和演示使用。
 
-如果您已经安装了Helm的客户端和服务端，您可以直接添加应用商店进行使用，添加命令如下：
+[Helm3安装](#helm3安装)
+[Helm2安装](#helm2安装)
+
+如果您已经安装了Helm的客户端(和服务端)，您可以直接添加应用商店进行使用，添加命令如下：
 ```
 helm repo add ucloud http://helm.ucloud.cn
 ```
 
-### 先决条件
+## 先决条件
 
 1. 已创建UK8S集群
 2. 已安装配置kubectl连接到kubernetes集群(UK8S master默认安装kubectl)
-3. 已配置集群网关 **(商店暂时只支持外网拉取)**
+3. 已配置集群网关
+
+## 版本对应关系
+
+Helm对应支持的k8s版本信息，请遵循k8s版本选择对应的Helm安装
+
+|Helm版本|支持的Kubernetes版本|
+|---|---|
+|3.3.x|1.18.x - 1.15.x|
+|2.14.x|1.14.x - 1.13.x|
+
+## Helm3安装
+
+> 使用此文档请在master节点安装。
+
+1. 下载Helm
+```
+wget http://k8s.cn-bj.ufileos.com/helm-v3.3.1-linux-amd64.tar.gz
+```
+
+2. 解压程序包
+```
+tar -zxvf helm-v3.3.1-linux-amd64.tar.gz
+```
+
+3. 将压缩包中的Helm二进制文件移动到目标位置
+
+```
+mv linux-amd64/helm /usr/local/bin/helm
+```
+4. 执行客户端命令查看是否安装成功
+
+```
+helm help
+```
+### 设置Helm命令的自动补全
+
+为了方便Helm命令的使用，Helm提供了自动补全功能，执行如下命令
+```
+echo "source <(helm completion bash)" >> ~/.bashrc
+```
+
+
+## Helm2安装
 
 ### 安装Helm客户端
 
