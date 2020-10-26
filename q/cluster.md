@@ -40,3 +40,7 @@ UK8S使用VPC网络实现内网互通，默认使用了UCloud的DNS，wget获取
 健康检查失败不是发生了错误，当设置了externalTrafficPolicy为Local时，Node上的iptables规则会设置只将IP包转发到在本机上运行的Pod，如果本机上无对应Pod在运行，此包将被DROP。失败的节点均是没有运行对应Pod的，ULB的VServer对该节点健康检查探测会因为iptables的DROP规则而失败，这样来自用户的请求永远不会被发往这些节点上，可以确保这些请求都能被正确响应。
 
 ![](/images/q/vserver.png)
+
+### 为什么无法查看集群凭证
+
+由于查看集群凭证可以直接登录集群，所以查看集群凭证的操作已归为用户角色权限中的增权限，如需查看集群凭证，请确保所在角色已开启UK8S增权限。
