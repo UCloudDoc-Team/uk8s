@@ -22,7 +22,7 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.13.5/bin/l
 
 ```
 如果您要下载最新版本的安装包，使用如下命令即可：
-将v1.13.5替换为$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)即可。
+将v1.13.5替换为`$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)`即可。
 
 ```
 curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
