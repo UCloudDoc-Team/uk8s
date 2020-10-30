@@ -8,18 +8,19 @@
 
 ### 内网ULB4
 
-```
-   "service.beta.kubernetes.io/ucloud-load-balancer-type" 
-   # 负载均衡器类型，必须指定，枚举值为inner或outer，此处应为inner;
-   "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol"  
-   # tcp和udp均代表ULB4，https和http均代表ULB7；
-    
-   "service.beta.kubernetes.io/ucloud-load-balancer-vserver-method"   
-   # VServer负载均衡模式
-   "service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout"  
-   # 空闲连接的回收时间
-   "service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type": "port"
-     # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。
+```yaml
+    # 负载均衡器类型，必须指定，枚举值为inner或outer，此处应为inner;
+    "service.beta.kubernetes.io/ucloud-load-balancer-type" 
+    # tcp和udp均代表ULB4，https和http均代表ULB7；
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol"  
+    # VServer负载均衡模式
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-method"   
+    # 空闲连接的回收时间
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout"  
+    # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type": "port"
+    # 控制创建ULB所在子网，填写子网ID，不填写使用VPC默认子网
+    "service.beta.kubernetes.io/ucloud-load-balancer-subnet-id": "subnet-xxxx" 
 ```
 
 **Annotations 详解**
@@ -44,19 +45,21 @@ VServer的负载均衡模式，枚举值为roundrobin（轮询）、source（源
 
 listentype为packetstransmit时表示连接保持的时间，单位为秒，取值范围：[60，900]，0表示禁用连接保持，默认为0。
 
+* service.beta.kubernetes.io/ucloud-load-balancer-subnet-id
 
-
+控制创建ULB所在子网，填写子网ID，不填写使用VPC默认子网
 
 ### 外网ULB4
-```
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: "TCP"  
+```yaml
     # tcp和udp均代表ULB4，https和http均代表ULB7；
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-method   
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "TCP"  
     # VServer负载均衡模式
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout  
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-method   
     # 空闲连接的回收时间
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout  
+    # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。
     "service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type": "port"
-     # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。
+
 
 ```
 **Annotations 详解**
@@ -76,27 +79,27 @@ ListenType为packetstransmit时表示连接保持的时间，单位为秒，取�
 
 ### 外网ULB7
 
-```
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: "HTTPS" 
+```yaml
     # 协议类型，tcp和udp均表示ULB4,https和http均表示ULB7
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert: "ssl-b103etqy"
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: "HTTPS" 
     # ssl证书id
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port: "443"
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert: "ssl-b103etqy"
     # 开启ssl协议的端口，多个用","分隔开，必须和ssl-cert同时指定
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-method    
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port: "443"
     # VServer负载均衡模式
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-type  
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-method    
     ## VServer会话保持方式
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-info 
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-type  
     ## 用户自定义String，会话保持方式为userdefined有效
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout   
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-info 
     ## 空闲连接的回收时间
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type 
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout   
     ## 健康检查类型
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-domain 
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type 
     ## HTTP检查域名
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-domain 
+    ## HTTP检查路径
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-path 
-    ##HTTP检查路径
 ```
 
 **Annotations 详解**
@@ -139,15 +142,15 @@ ListenType为RequestProxy时表示空闲连接的回收时间，单位为秒，�
 
 ### 外网ULB绑定的EIP注释
 
-```
-"service.beta.kubernetes.io/ucloud-load-balancer-eip-paymode": "sharebandwidth" 
- # 支持traffic、bandwidth、sharebandwidth，默认为bandwidth
-"service.beta.kubernetes.io/ucloud-load-balancer-eip-sharebandwidthid": "bwshare-d8dklw" 
- # 共享带宽id
-"service.beta.kubernetes.io/ucloud-load-balancer-eip-bandwidth": "2" 
- # 共享带宽模式下无需指定，或者配置为0，bandwidth下默认为2Mbps
-"service.beta.kubernetes.io/ucloud-load-balancer-eip-chargetype": "month"
- # 付费模式，支持month，year，dynamic
-"service.beta.kubernetes.io/ucloud-load-balancer-eip-quantity": "1" 
- # 付费时长，默认为1，chargetype为dynamic时无需填写。
+```yaml
+    # 支持traffic、bandwidth、sharebandwidth，默认为bandwidth
+    "service.beta.kubernetes.io/ucloud-load-balancer-eip-paymode": "sharebandwidth" 
+    # 共享带宽id
+    "service.beta.kubernetes.io/ucloud-load-balancer-eip-sharebandwidthid": "bwshare-d8dklw" 
+    # 共享带宽模式下无需指定，或者配置为0，bandwidth下默认为2Mbps
+    "service.beta.kubernetes.io/ucloud-load-balancer-eip-bandwidth": "2" 
+    # 付费模式，支持month，year，dynamic
+    "service.beta.kubernetes.io/ucloud-load-balancer-eip-chargetype": "month"
+    # 付费时长，默认为1，chargetype为dynamic时无需填写。
+    "service.beta.kubernetes.io/ucloud-load-balancer-eip-quantity": "1" 
 ```

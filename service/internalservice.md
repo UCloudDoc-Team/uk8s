@@ -38,12 +38,15 @@ metadata:
   labels:
     app: ucloud-nginx-out-tcp-new
   annotations:
-    "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"  
      # ULB类型，默认为outer，支持outer、inner
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "tcp"       
+    "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"  
      # 用于声明ULB协议类型，并非应用协议，tcp和udp均代表ULB4，https和http均代表ULB7；
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type": "port"
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "tcp"       
      # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type": "port"
+     # 控制创建ULB所在子网，填写子网ID
+    "service.beta.kubernetes.io/ucloud-load-balancer-subnet-id": "subnet-xxxx" 
+
 spec:
   type: LoadBalancer
   ports:
@@ -79,12 +82,14 @@ metadata:
   labels:
     app: ucloud-nginx-out-tcp-new
   annotations:
-    "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"  
      # ULB类型，默认为outer，支持outer、inner
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "udp"       
+    "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"  
      # 用于声明ULB的Vserver类型，tcp和udp均代表ULB4，https和http均代表ULB7；
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type": "port"
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "udp"       
      # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type": "port"
+     # 控制创建ULB所在子网，填写子网ID
+    "service.beta.kubernetes.io/ucloud-load-balancer-subnet-id": "subnet-xxxx" 
 spec:
   type: LoadBalancer
   ports:
