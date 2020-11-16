@@ -4,4 +4,4 @@
 * [安装使用应用商店](/uk8s/helm/init)
 * [安装应用](/uk8s/helm/install)
 * [管理应用](/uk8s/helm/manager)
-* [一键安装应用](/uk8s/helm/installapp)
+<!-- * [一键安装应用](/uk8s/helm/installapp) -->
