@@ -1,4 +1,8 @@
-## 在UK8S中使用UFile
+## 在UK8S中使用US3
+
+### UFile更名为US3
+
+> UFile为UCloud原对象存储产品，已于2020年10月23日升级为US3。以下文档中UFile等同于US3产品使用。
 
 UK8S支持在集群中使用UFile对象存储作为持久化存储卷
 
