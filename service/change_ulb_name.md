@@ -13,5 +13,5 @@ service.beta.kubernetes.io/ucloud-load-balancer-id-provision: <ulb-id>
 
 2. 升级UK8S集群cloudprovider插件至最新版本。
 
-    UK8S cloudprovider插件在20.10.1版本后已经默认支持关联ULB-id，避免用户修改ULB名称后影响cloudprovider重建ULB。升级文档[请查看](https://docs.ucloud.cn/uk8s/introduction/vulnerability/cloudprovider)
+    UK8S cloudprovider插件在20.10.1版本后已经默认支持关联ULB-id，避免用户修改ULB名称后影响cloudprovider重建ULB。[升级文档](https://docs.ucloud.cn/uk8s/introduction/vulnerability/cloudprovider)。
 
