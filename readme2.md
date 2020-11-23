@@ -108,7 +108,7 @@ UK8S默认支持使用UCloud提供的ULB、EIP等服务，您可以通过ULB暴�
 * [通过外网ULB访问Service](/uk8s/service/externalservice)
 * [使用已有的ULB](/uk8s/service/ulb_designation)
 * [ULB参数说明](/uk8s/service/annotations)
-* [ULB名称修改的处理方法](/uk8s/service/change_ulb_name)
+* [ULB属性修改的处理方法](/uk8s/service/change_ulb_name)
 * [获取真实客户端IP](/uk8s/service/getresourceip)
 * [通过ULB暴露Dashboard](/uk8s/service/dashboard)
 * [Ingress支持](/uk8s/service/ingress/README)
