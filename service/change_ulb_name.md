@@ -6,7 +6,7 @@
 
 ## 操作方法
 
-1. 修改UK8S集群中的service注释。
+1. 修改UK8S集群中的service注释，**以下注释仅限由UK8S创建的ULB添加**。
 
 ```yaml
 # 增加ULB-id进行关联
