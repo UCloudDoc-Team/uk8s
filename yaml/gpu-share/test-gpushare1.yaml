@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-gpushare1
+  labels:
+    app: test-gpushare1
+spec:
+  selector:
+    matchLabels:
+      app: test-gpushare1
+  template:
+    metadata:
+      labels:
+        app: test-gpushare1
+    spec:
+      schedulerName: gpushare-scheduler
+      containers:
+      - name: test-gpushare1
+        image: uhub.service.ucloud.cn/ucloud/gpu-player:share
+        command:
+          - python3
+          - /app/main.py
+        resources:
+          limits:
+            # GiB
+            ucloud.cn/gpu-mem: 1
