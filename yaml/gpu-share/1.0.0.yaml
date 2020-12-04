@@ -395,7 +395,7 @@ spec:
       nodeSelector:
         nodeShareGPU: "true"
       containers:
-        - image: "uhub.service.ucloud.cn/wxyz/uk8s-device-plugin:v1.0.0"
+        - image: "uhub.service.ucloud.cn/uk8s/uk8s-device-plugin:v1.0.0"
           name: gpushare
           # Make this pod as Guaranteed pod which will never be evicted because of node's resource consumption.
           command:
@@ -462,7 +462,7 @@ spec:
       serviceAccount: uk8s-device-plugin-scheduler
       containers:
         - name: uk8s-device-plugin-scheduler
-          image: "uhub.service.ucloud.cn/wxyz/uk8s-device-plugin-scheduler:v1.0.0"
+          image: "uhub.service.ucloud.cn/uk8s/uk8s-device-plugin-scheduler:v1.0.0"
           env:
             - name: LOG_LEVEL
               value: "info"
