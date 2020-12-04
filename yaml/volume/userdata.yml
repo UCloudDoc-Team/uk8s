@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: uk8sconfig
+  namespace: kube-system
+data:
+  UCLOUD_REGION_ID: 'cn-bj2'
+  UCLOUD_PROJECT_ID: 'org-1uxhh0'
+  UCLOUD_VPC_ID: 'uvnet-fngihq'
+  UCLOUD_SUBNET_ID: 'subnet-tk2h2v'
+  UCLOUD_API_ENDPOINT: 'http://api.service.ucloud.cn'
+  UCLOUD_UK8S_CLUSTER_ID: 'uk8s-3aqwlaey'

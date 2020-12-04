@@ -25,6 +25,7 @@
     * [创建PVC](/uk8s/manageviakubectl/createpvc)
     * [创建Service](/uk8s/manageviakubectl/createservice)
 * [存储卷](/uk8s/volume/README)
+    * [CSI 升级](/uk8s/volume/CSI_update)
     * [Volume 介绍](/uk8s/volume/intro)
     * [在UK8S中使用UDISK](/uk8s/volume/udisk)
     * [在UK8S中使用RSSD UDisk](/uk8s/volume/rssdudisk)
