@@ -78,9 +78,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ucloud-nginx-out-tcp-new
+  name: ucloud-inner-udp-new
   labels:
-    app: ucloud-nginx-out-tcp-new
+    app: ucloud-inner-udp-new
   annotations:
      # ULB类型，默认为outer，支持outer、inner
     "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"  
@@ -95,27 +95,24 @@ spec:
   ports:
     - name: udp
       protocol: UDP
-      port: 1002
-      targetPort: 1002
+      port: 53
+      targetPort: 53
   selector:
-    app: ucloud-nginx-out-tcp-new
+    app: ucloud-inner-udp-new
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-nginx-out-tcp
+  name: test-out-tcp
   labels:
-    app: ucloud-nginx-out-tcp-new
+    app: ucloud-inner-udp-new
 spec:
   containers:
-  - name: nginx
-    image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
+  - name: dns
+    image:  uhub.service.ucloud.cn/library/coredns:1.4.0
     ports:
-    - name: tcp
-      containerPort: 80
-      protocol: TCP
     - name: udp
-      containerPort: 1002
+      containerPort: 53
       protocol: UDP
 
 ```

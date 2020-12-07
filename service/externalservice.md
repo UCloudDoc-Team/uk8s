@@ -81,13 +81,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ucloud-nginx-out-tcp-new
+  name: ucloud-out-udp-new
   labels:
-    app: ucloud-nginx-out-tcp-new
+    app: ucloud-out-udp-new
   annotations:
     "service.beta.kubernetes.io/ucloud-load-balancer-type": "outer"
     # 代表ULB网络类型，outer为外网，inner为内网；outer为默认值，此处可省略。
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "tcp"
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "udp"
     # 表示ULB协议类型，tcp与udp等价，表示ULB4；http与httpS等价，表示ULB7；tcp为默认值，此处可省略。
     "service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type": "port"
      # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。
@@ -96,24 +96,24 @@ spec:
   ports:
     - name: udp
       protocol: UDP
-      port: 1002
-      targetPort: 1002
+      port: 53
+      targetPort: 53
   selector:
-    app: ucloud-nginx-out-tcp-new
+    app: ucloud-out-udp-new
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-nginx-out-tcp
+  name: test-out-udp
   labels:
-    app: ucloud-nginx-out-tcp-new
+    app: ucloud-out-udp-new
 spec:
   containers:
-  - name: nginx
-    image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
+  - name: dns
+    image:  uhub.service.ucloud.cn/library/coredns:1.4.0
     ports:
     - name: udp
-      containerPort: 1002
+      containerPort: 53
       protocol: UDP 
 ```
 
