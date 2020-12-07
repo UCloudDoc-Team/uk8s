@@ -103,7 +103,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-out-tcp
+  name: test-inner-udp
   labels:
     app: ucloud-inner-udp-new
 spec:
