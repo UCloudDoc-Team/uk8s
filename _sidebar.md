@@ -1,4 +1,3 @@
-<div class="sidebar_title icon__uk8s"> 容器云  UK8S</div>
 
 * [概览](/uk8s/README) 
 * [新手引导](/uk8s/readme2)
