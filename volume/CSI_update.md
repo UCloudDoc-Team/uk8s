@@ -50,17 +50,17 @@ data:
 ### 更新UDisk CSI插件
 
 ```bash
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/valume/udisk21.01.1/csi-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/valume/udisk21.01.1/csi-node.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/valume/udisk21.01.1/rbac-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/valume/udisk21.01.1/rbac-node.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk21.01.1/csi-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk21.01.1/csi-node.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk21.01.1/rbac-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk21.01.1/rbac-node.yml
 ```
 
 ### 更新UFile CSI插件
 
 ```bash
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/valume/ufile20.10.1/csi-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/valume/ufile20.10.1/csi-node.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/valume/ufile20.10.1/rbac-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/valume/ufile20.10.1/rbac-node.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile20.10.1/csi-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile20.10.1/csi-node.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile20.10.1/rbac-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile20.10.1/rbac-node.yml
 ```
