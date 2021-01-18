@@ -6,6 +6,17 @@
 
 ## 变更记录
 
+### 更新版本: 21.01.1
+
+更新时间： 2020.01.13
+
+更新内容：
+
+* UDisk的起始大小变更为1GB。
+
+
+
+
 ### 更新版本：20.10.1
 
 更新时间：2020.10.14
@@ -42,10 +53,10 @@ data:
 ### 更新UDisk CSI插件
 
 ```bash
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/valume/udisk20.10.1/csi-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/valume/udisk20.10.1/csi-node.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/valume/udisk20.10.1/rbac-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/valume/udisk20.10.1/rbac-node.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/valume/udisk21.01.1/csi-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/valume/udisk21.01.1/csi-node.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/valume/udisk21.01.1/rbac-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/valume/udisk21.01.1/rbac-node.yml
 ```
 
 ### 更新UFile CSI插件
