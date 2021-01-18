@@ -96,7 +96,7 @@ spec:
         - name: socket-dir
           mountPath: /csi/
       - name: csi-udisk
-        image: uhub.service.ucloud.cn/uk8s/csi-uk8s:20.01.1
+        image: uhub.service.ucloud.cn/uk8s/csi-uk8s:21.01.1
         imagePullPolicy: "Always"
         args:
         - "--drivername=udisk.csi.ucloud.cn"
