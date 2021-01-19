@@ -10,6 +10,7 @@
     * [kube-proxy模式选择](/uk8s/introduction/kubeproxy_mode)
 * [产品价格](/uk8s/price)
 * [操作指南](/uk8s/userguide/README)
+    * [Docker VS Containerd](/uk8s/userguide/docker_vs_containerd)
     * [使用必读](/uk8s/userguide/before_start)
     * [创建集群](/uk8s/userguide/createcluster)
     * [删除集群](/uk8s/userguide/deletecluster)
