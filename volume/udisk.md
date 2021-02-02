@@ -7,11 +7,11 @@ UK8S支持直接在集群中使用UDisk作为持久化存储卷。
 
 1. 非快杰云主机支持SSD/SATA UDisk，**如果节点的云主机类型为快杰，则只支持RSSD UDisk**；
 
-2. SSD UDisk的最小值为20GB，最大值为8000GB；
+2. SSD UDisk的最小值为1GB，最大值为8000GB；
 
-3. UDisk的步长为10GB，即你只能创建20GB、30GB、110GB的存储卷；
+3. UK8S有flexVolume和CSI两种存储插件版本，2019年9月17日之后创建的UK8S集群为CSI，其余为flexVolume，两者的主要区别在StorageClass部分。
 
-4. UK8S有flexVolume和CSI两种存储插件版本，2019年9月17日之后创建的UK8S集群为CSI，其余为flexVolume，两者的主要区别在StorageClass部分。
+4. UDisk和云主机必须位于同一可用区，如果您的集群是跨可用区模式，在应用部署的时候请注意。
 
 ### 一、存储类 StorageClass
 

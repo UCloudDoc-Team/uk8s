@@ -11,11 +11,11 @@
 
 1. 下载工具
 
-下载uk8sctl工具，使用该工具创建一台镜像为UK8S基础镜像的云主机，该基础镜像为CentOS7.6（暂不支持Ubuntu）。
+下载uk8sctl工具，使用该工具创建一台镜像为UK8S基础镜像的云主机，可以指定镜像类型为centos或ubuntu。
 
 ```bash
 
-wget https://github.com/XiaYinchang/uk8sctl/releases/download/v0.1.0/uk8sctl
+wget https://github.com/XiaYinchang/uk8sctl/releases/download/v0.2.0/uk8sctl
 
 chmod +x uk8sctl
 
@@ -26,7 +26,7 @@ chmod +x uk8sctl
 命令行示例如下，更多参数[点击此处查看](https://github.com/XiaYinchang/uk8sctl)
 
 ```bash
-./uk8sctl create-base-uhost --publickey your-ucloud-public-key --privatekey you-ucloud-private-key --region cn-bj2 --project-id org-test --password your-uhost-password
+./uk8sctl create-base-uhost --publickey your-ucloud-public-key --privatekey you-ucloud-private-key --region cn-bj2 --project-id org-test --password your-uhost-password --image-type centos
 
 ```
 
