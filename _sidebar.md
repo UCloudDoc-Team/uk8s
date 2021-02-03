@@ -72,6 +72,10 @@
     * [镜像库常见问题](/uk8s/q/registry) 
     * [容器常见问题](/uk8s/q/container) 
     * [存储插件问题](/uk8s/q/storage)
+* 排障指南
+    * [入门必读](/uk8s/troubleshooting/startguide)
+    * Pod 故障处理
+        * [总体思路](/uk8s/troubleshooting/pod_debug_summary)
 * [最佳实践](/uk8s/bestpractice/README)
     * [基于Jenkins的CI/CD实践](/uk8s/bestpractice/cicd)
     * [权限管理](/uk8s/bestpractice/authorization/README)
