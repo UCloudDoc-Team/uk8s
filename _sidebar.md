@@ -77,7 +77,10 @@
 * 排障指南
     * [入门必读](/uk8s/troubleshooting/startguide)
     * Pod 故障处理
-        * [总体思路](/uk8s/troubleshooting/pod_debug_summary)
+        * [概述](/uk8s/troubleshooting/pod_debug_summary)
+    * Node 故障处理
+        * [概述](/uk8s/troubleshooting/node_debug_summary)
+        * [预防OOM](/uk8s/troubleshooting/prevent_oom)
 * [最佳实践](/uk8s/bestpractice/README)
     * [基于Jenkins的CI/CD实践](/uk8s/bestpractice/cicd)
     * [权限管理](/uk8s/bestpractice/authorization/README)
