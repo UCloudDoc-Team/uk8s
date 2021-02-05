@@ -24,6 +24,7 @@
     * [集群更新凭证](/uk8s/manageviakubectl/reset_token)
     * [创建PVC](/uk8s/manageviakubectl/createpvc)
     * [创建Service](/uk8s/manageviakubectl/createservice)
+    * [StatefulSet示例](/uk8s/manageviakubectl/sts_example)
 * [存储卷](/uk8s/volume/README)
     * [CSI 升级](/uk8s/volume/CSI_update)
     * [Volume 介绍](/uk8s/volume/intro)
