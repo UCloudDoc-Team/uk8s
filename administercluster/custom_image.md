@@ -36,6 +36,7 @@ chmod +x uk8sctl
 
 开始制作后，可进入到[镜像管理界面](https://console.ucloud.cn/uhost/uimage)，查看镜像制作进度，并获取镜像ID。
 
+!> 请勿修改主机的 ssh 端口，否则会导致 Node 节点部署失败。
 
 4. 删除云主机
 
