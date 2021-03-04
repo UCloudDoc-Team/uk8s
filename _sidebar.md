@@ -61,7 +61,7 @@
     * [Prometheus监控方案](/uk8s/monitor/prometheus/README)
     * 监控中心操作指南
         * [概述](/uk8s/monitor/prometheusplugin/intro.md)
-        * [开启监控](/uk8s/monitor/prometheusplugin/addmonitortarget.md)
+        * [开启监控](/uk8s/monitor/prometheusplugin/startmonitor.md)
         * [添加告警目标](/uk8s/monitor/prometheusplugin/addmonitortarget.md)
         * [添加接收人](/uk8s/monitor/prometheusplugin/addreceiver.md)
 * [集群管理](/uk8s/administercluster/README)
