@@ -10,7 +10,7 @@
 * [为什么我的集群连不上外网?](#为什么我的集群连不上外网)
 * [为什么我的 UHub 登陆失败了?](#为什么我的-uhub-登陆失败了)
 * [UHub 下载失败（慢）](#uhub-下载失败慢)
-* [PV/PVC/SC 以及 UDisk 的各种关系？](#pvpvcsc-以及-udisk-的各种关系)
+* [PV/PVC/StorageClass 以及 UDisk 的各种关系？](#pvpvcstorageclass-以及-udisk-的各种关系)
   - [Statefulset 中使用 pvc](#statefulset-中使用-pvc)
 * [VolumeAttachment 的作用](#volumeattachment-的作用)
 * [如何查看 PVC 对应的 UDisk 实际挂载情况](#如何查看-pvc-对应的-udisk-实际挂载情况)
@@ -110,7 +110,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGIFVUtrp+jAnIu1fBvyLx/4L4GNsX+6v8RodxM+t
 4. 在拉镜像节点执行`iftop -i any -f 'host <uhub-ip>'`命令，同时尝试拉取 UHub 镜像，查看命令输出（uhub-ip替换为步骤1中得到的ip）
 5. 对于公网拉镜像的用户，还需要在 Console 页面查看外网访问是否开启
 
-## PV/PVC/SC 以及 UDisk 的各种关系？
+## PV/PVC/StorageClass 以及 UDisk 的各种关系？
 
 ```yaml
 apiVersion: storage.k8s.io/v1
