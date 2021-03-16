@@ -1,8 +1,8 @@
 * [UK8S 人工支持](#uk8s-人工支持)
 * [为什么我的容器一起来就退出了？](#为什么我的容器一起来就退出了)
 * [Docker 如何调整日志等级](#docker-如何调整日志等级)
-* [为什么节点已经异常了，但是 pod 还处在 running 状态](#为什么节点已经异常了但是-pod-还处在-running-状态)
-* [节点宕机了，pod 一直卡在 termnating 怎么办](#节点宕机了-pod-一直卡在-termnating-怎么办)
+* [为什么节点已经异常了，但是 Pod 还处在 Running 状态](#为什么节点已经异常了但是-pod-还处在-running-状态)
+* [节点宕机了 Pod 一直卡在 Termnating 怎么办](#节点宕机了-pod-一直卡在-termnating-怎么办)
 * [Pod 异常退出了怎么办？](#pod-异常退出了怎么办)
 * [CNI 插件升级为什么失败了？](#cni-插件升级为什么失败了)
 * [UK8S 页面概览页一直刷新不出来？](#uk8s-页面概览页一直刷新不出来)
@@ -13,14 +13,14 @@
 * [PV, PVC, SC 以及 UDisk 的各种关系？](#pv-pvc-sc-以及-udisk-的各种关系)
   - [Statefulset 中使用 pvc](#statefulset-中使用-pvc)
 * [VolumeAttachment 的作用](#volumeattachment-的作用)
-* [如何查看 pvc 对应的 udisk 实际挂载情况](#如何查看-pvc-对应的-udisk-实际挂载情况)
+* [如何查看 PVC 对应的 UDisk 实际挂载情况](#如何查看-pvc-对应的-udisk-实际挂载情况)
 * [磁盘挂载的错误处理](#磁盘挂载的错误处理)
-  - [pv 和 pvc 一直卡在 terminating/磁盘卸载失败怎么办](#pv和pvc一直卡在terminating磁盘卸载失败怎么办)
-  - [pod 的 pvc 一直挂载不上怎么办？](#pod的pvc一直挂载不上怎么办)
+  - [PV 和 PVC 一直卡在 terminating/磁盘卸载失败怎么办](#pv-和-pvc-一直卡在-terminating磁盘卸载失败怎么办)
+  - [Pod 的 PVC 一直挂载不上怎么办？](#pod-的-pvc-一直挂载不上怎么办)
 * [UDisk-PVC 使用注意事项](#udisk-pvc-使用注意事项)
 * [为什么在 K8S 节点 Docker 直接起容器网络不通](#为什么在-k8s-节点-docker-直接起容器网络不通)
 * [使用 ULB4 时 Vserver 为什么会有健康检查失效](#使用-ulb4-时-vserver-为什么会有健康检查失效)
-* [ULB4 对应的端口为什么不是 nodePort 的端口](#ulb4-对应的端口为什么不是-nodeport-的端口)
+* [ULB4 对应的端口为什么不是 NodePort 的端口](#ulb4-对应的端口为什么不是-nodeport-的端口)
 
 
 
@@ -50,7 +50,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGIFVUtrp+jAnIu1fBvyLx/4L4GNsX+6v8RodxM+t
 1. 这是由于k8s的状态保护造成的，在节点较少或异常节点很多的情况下很容易出现
 2. 具体可以查看文档 https://kubernetes.io/zh/docs/concepts/architecture/nodes/#reliability
 
-## 节点宕机了，Pod 一直卡在 termnating 怎么办
+## 节点宕机了 Pod 一直卡在 Termnating 怎么办
 
 1. 节点宕机超过一定时间后（一般为 5 分钟），k8s 会尝试驱逐 pod，导致 pod 变为 Termnating 状态
 2. 由于此时 kubelet 无法执行删除pod的一系列操作，pod 会一直卡在 Termnating
@@ -235,7 +235,7 @@ spec:
 3. 查看节点上 kube-proxy 服务是否正常 `systemctl status kube-proxy`
 4. 执行`iptables -L -n -t nat |grep KUBE-SVC` 及 `ipvsadm -L -n`查看转发规则是否下发正常
 
-## ULB4 应的端口为什么不是 NodePort 的端口
+## ULB4 对应的端口为什么不是 NodePort 的端口
 
 1. K8S 节点上对 ulb_ip+serviceport 的端口组合进行了 iptables 转发，所以不走 nodeport
 2. 如果有兴趣，可以通过在节点上执行`iptables -L -n -t nat` 或者`ipvsadm -L -n` 查看对应规则 
