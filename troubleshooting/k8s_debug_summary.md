@@ -1,26 +1,26 @@
-- [UK8S人工支持](#UK8S人工支持)
-- [为什么我的容器一起来就退出了？](#为什么我的容器一起来就退出了)
-- [docker如何调整日志等级](#docker如何调整日志等级)
-- [为什么节点已经异常了，但是pod还处在running状态](#为什么节点已经异常了但是pod还处在running状态)
-- [节点宕机了，pod一直卡在termnating怎么办](#节点宕机了pod一直卡在termnating怎么办)
-- [Pod异常退出了怎么办？](#pod异常退出了怎么办)
-- [CNI插件升级为什么失败了？](#cni插件升级为什么失败了)
-- [UK8S页面概览页一直刷新不出来？](#UK8S页面概览页一直刷新不出来)
-- [UK8S节点NotReady了怎么办](#UK8S节点notready了怎么办)
-- [为什么我的集群连不上外网?](#为什么我的集群连不上外网)
-- [为什么我的UHub登陆失败了?](#为什么我的UHub登陆失败了)
-- [UHub下载失败（慢）](#UHub下载失败慢)
-- [pv, pvc, sc 以及udisk的各种关系？](#pv-pvc-sc-以及udisk的各种关系)
-  - [Statefulset中使用pvc](#statefulset中使用pvc)
-- [volumeattachment的作用](#volumeattachment的作用)
-- [如何查看pvc对应的udisk实际挂载情况](#如何查看pvc对应的udisk实际挂载情况)
-- [磁盘挂载的错误处理](#磁盘挂载的错误处理)
-  - [pv和pvc一直卡在terminating/磁盘卸载失败怎么办](#pv和pvc一直卡在terminating磁盘卸载失败怎么办)
-  - [pod的pvc一直挂载不上怎么办？](#pod的pvc一直挂载不上怎么办)
-- [udisk-pvc使用注意事项](#udisk-pvc使用注意事项)
-- [为什么在k8s节点docker直接起容器网络不通](#为什么在k8s节点docker直接起容器网络不通)
-- [使用ulb4时vserver为什么会有健康检查失效](#使用ulb4时vserver为什么会有健康检查失效)
-- [ulb4对应的端口为什么不是nodePort的端口](#ulb4对应的端口为什么不是nodeport的端口)
+* [UK8S人工支持](#uk8s人工支持)
+* [为什么我的容器一起来就退出了？](#为什么我的容器一起来就退出了)
+* [docker如何调整日志等级](#docker如何调整日志等级)
+* [为什么节点已经异常了，但是pod还处在running状态](#为什么节点已经异常了但是pod还处在running状态)
+* [节点宕机了，pod一直卡在termnating怎么办](#节点宕机了pod一直卡在termnating怎么办)
+* [Pod异常退出了怎么办？](#pod异常退出了怎么办)
+* [CNI插件升级为什么失败了？](#cni插件升级为什么失败了)
+* [UK8S页面概览页一直刷新不出来？](#uk8s页面概览页一直刷新不出来)
+* [UK8S节点NotReady了怎么办](#uk8s节点notready了怎么办)
+* [为什么我的集群连不上外网?](#为什么我的集群连不上外网)
+* [为什么我的UHub登陆失败了?](#为什么我的uhub登陆失败了)
+* [UHub下载失败（慢）](#uhub下载失败慢)
+* [pv, pvc, sc 以及udisk的各种关系？](#pv-pvc-sc-以及udisk的各种关系)
+  - [Statefulset中使用pvc](#statefulset中使用pvc)
+* [volumeattachment的作用](#volumeattachment的作用)
+* [如何查看pvc对应的udisk实际挂载情况](#如何查看pvc对应的udisk实际挂载情况)
+* [磁盘挂载的错误处理](#磁盘挂载的错误处理)
+  -  [pv和pvc一直卡在terminating/磁盘卸载失败怎么办](#pv和pvc一直卡在terminating磁盘卸载失败怎么办)
+  - [pod的pvc一直挂载不上怎么办？](#pod的pvc一直挂载不上怎么办)
+* [udisk-pvc使用注意事项](#udisk-pvc使用注意事项)
+* [为什么在k8s节点docker直接起容器网络不通](#为什么在k8s节点docker直接起容器网络不通)
+* [使用ulb4时vserver为什么会有健康检查失效](#使用ulb4时vserver为什么会有健康检查失效)
+* [ulb4对应的端口为什么不是nodePort的端口](#ulb4对应的端口为什么不是nodeport的端口)
 
 
 
@@ -125,8 +125,8 @@ spec:
 2. statefulset 只负责创建不负责删除pvc，因此对应多余的pvc，需要手动删除
 
 
-## volumeattachment的作用
-volumeattachment 并不由用户自己创建，因此很多用户并不清楚它的作用，但是在pvc的使用过程中，volumeattachment有着很重要的作用
+## VolumeAttachment的作用
+VolumeAttachment 并不由用户自己创建，因此很多用户并不清楚它的作用，但是在pvc的使用过程中，VolumeAttachment有着很重要的作用
 
 1. volumeattachment所表示的，是k8s集群中记载的pv和某个node的挂载关系。可以执行`kubectl get volumeattachment |grep pv-name` 进行查看
 2. 这个挂载关系和udisk与云主机的挂载关系往往是一致的，但是有时可能会出现不一致的情况。
