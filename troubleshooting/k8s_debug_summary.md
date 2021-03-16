@@ -79,8 +79,8 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGIFVUtrp+jAnIu1fBvyLx/4L4GNsX+6v8RodxM+t
 1. api-server 对应的 ulb4 是否被删除（`uk8s-xxxxxx-master-ulb4`）
 2. UK8S 集群的三台 master 主机是否被删了或者关机等
 3. 登陆到 UK8S 三台 master 节点，检查 etcd 和 kube-apiserver 服务是否正常，如果异常，尝试重启服务
-3.1. `systemctl status etcd`  / `systemctl restart etcd` 如果单个 etcd 重启失败，请尝试三台节点的 etcd 同时重启
-3.2. `systemctl status kube-apiserver`  / `systemctl restart kube-apiserver`
+  - 3.1 `systemctl status etcd`  / `systemctl restart etcd` 如果单个 etcd 重启失败，请尝试三台节点的 etcd 同时重启
+  - 3.2 `systemctl status kube-apiserver`  / `systemctl restart kube-apiserver`
 
 ## UK8S 节点 NotReady 了怎么办
 
