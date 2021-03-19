@@ -22,9 +22,13 @@ metadata:
   name: udisk-ssd-test
 provisioner: udisk.csi.ucloud.cn
 parameters:
-  type: "ssd"   
+  type: "ssd"   # 存储介质，支持ssd和sata，必填
+  fsType: "ext4"    # 文件系统，必填
+  udataArkMode: "no"   # 是否开启方舟模式，默认不开启，非必填
+  chargeType: "month" # 付费类型，支持dynamic、month、year,不填默认为按小时。
+  quantity: "1" # 购买时长，dynamic无需填写，可购买1-9个月，或1-10年
 reclaimPolicy: Retain  
-
+volumeBindingMode: WaitForFirstConsumer   # 强烈建议配置该参数
 ```
 
 #### flexVolume版本（2019年9月17日之前创建的集群）

@@ -6,43 +6,20 @@
 
 ### 一、前置条件
 
-* 在[UFS产品页面](https://console.ucloud.cn/ufs/ufs)购买UFS实例并设置好挂载点，操作完毕后，您会得到UFS挂载地址和目录，类似10.19.255.192:/ufs-w4wmpkev。
+* 在[UFS产品页面](https://console.ucloud.cn/ufs/ufs)购买UFS实例并设置好挂载点，操作完毕后，您会得到UFS挂载地址和目录，类似10.19.255.192:/
 
 * 集群节点安装nfs-utils，使用''yum install -y nfs-utils''命令，2019年5月1日以后的UK8S节点已默认安装nfs-utils。
 
-* UFS与UK8S集群必须处于同一VPC，否则网络无法互通。
-
+* UFS与UK8S集群必须处于同一VPC，否则文件系统无法成功挂载。
 
 
 ### 二、创建PV
-
 
 需要在集群内手动创建持久化存储卷，yaml示例如下两种：
 
 **UFS 容量型**
 
-```
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: ufspv4
-spec:
-  capacity:
-    storage: 10Gi
-  accessModes:
-    - ReadWriteMany
-  persistentVolumeReclaimPolicy: Retain
-  nfs:
-    path: /ufs-hoj1utv1
-    server: 10.19.255.192
-  mountOptions:
-    - nolock
-    - nfsvers=4.0
-```
-
-**UFS SSD性能型**
-
-```
+```yaml
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -55,13 +32,33 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     path: /
-    server: 10.9.136.151
+    server: 10.19.255.12  # 请修改为你UFS的挂载地址
   mountOptions:
     - nolock
-    - nfsvers=4.0
+    - nfsvers=4.0    # 必须与创建的UFS协议一致
 ```
 
-> 其中`nfsvers=4.0`需要在创建UFS的时候，与UFS显示的版本保持一致，如UFS协议显示NFSv3则需要`nfsvers=3`。
+**UFS SSD性能型**
+
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ufspv4
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    path: /
+    server: 10.9.136.11   # 请修改为你UFS的挂载地址
+  mountOptions:
+    - nolock
+    - nfsvers=4.0  # 必须与创建的UFS协议一致
+```
+
 
 yaml关键字段：
 

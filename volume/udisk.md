@@ -13,6 +13,8 @@ UK8S支持直接在集群中使用UDisk作为持久化存储卷。
 
 4. UDisk和云主机必须位于同一可用区，如果您的集群是跨可用区模式，在应用部署的时候请注意。
 
+5. 同一个Pod如果挂载多块UDisk，则必须确保UDisk处于同一可用区，否则容器无法启动。
+
 ### 一、存储类 StorageClass
 
 在创建持久化存储卷（persistentVolume）之前，你需要先创建StorageClass，然后在PVC中使用StorageClassName。
@@ -32,9 +34,10 @@ parameters:
   type: "ssd"   # 存储介质，支持ssd和sata，必填
   fsType: "ext4"    # 文件系统，必填
   udataArkMode: "no"   # 是否开启方舟模式，默认不开启，非必填
-  chargeType: "month" # 付费类型，支持dynamic、month、year，非必填
+  chargeType: "month" # 付费类型，支持dynamic、month、year,不填默认为按小时。
   quantity: "1" # 购买时长，dynamic无需填写，可购买1-9个月，或1-10年
 reclaimPolicy: Delete  # PV回收策略，支持Delete和Retain，默认为Delete，非必填
+volumeBindingMode: WaitForFirstConsumer   # 强烈建议配置该参数
 mountOptions:   
   - debug
   - rw

@@ -187,7 +187,7 @@ spec:
 
 19.05.3以后的插件，外网ULB7同时支持HTTP和HTTPS两种协议，下文示例中，对外暴露了三个端口，其中80端口使用HTTP协议，443和8443使用HTTPS协议。
 
-```
+```yaml
 
 apiVersion: v1
 kind: Service
@@ -236,7 +236,7 @@ spec:
     image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
     ports:
     - containerPort: 80
-</code>
+```
 
 ### HTTPS支持(cloudprovider-ucloud version<19.05.3)
 
