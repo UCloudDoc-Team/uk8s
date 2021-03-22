@@ -32,7 +32,7 @@ Helm对应支持的k8s版本信息，请遵循k8s版本选择对应的Helm安装
 
 1. 下载Helm
 ```
-wget http://k8s.cn-bj.ufileos.com/helm-v3.3.1-linux-amd64.tar.gz
+wget http://helm-releases.cn-bj.ufileos.com/helm-v3.3.1-linux-amd64.tar.gz
 ```
 
 2. 解压程序包
