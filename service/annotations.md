@@ -3,7 +3,9 @@
 
 本文主要描述用于创建LoadBalancer 类型的Service时，与ULB相关的Annotations说明。
 
-> 备注：目前除了EIP带宽值以外，其他参数暂时不支持update，请谨慎配置。
+> 备注：
+1. 目前除了外网 ULB 绑定的 EIP 的带宽值以外，其他参数暂时不支持修改，请谨慎配置。
+2. 外网 ULB 绑定的 EIP 的带宽值，必须通过 Annotations 修改，Annotations 将会覆盖控制台修改的配置。
 
 
 ### 内网ULB4
@@ -143,13 +145,13 @@ ListenType为RequestProxy时表示空闲连接的回收时间，单位为秒，�
 ### 外网ULB绑定的EIP注释
 
 ```yaml
-    # 支持traffic、bandwidth、sharebandwidth，默认为bandwidth
+    # 计费模式，支持traffic（流量计费）、bandwidth（带宽计费）、sharebandwidth（共享带宽），默认为bandwidth
     "service.beta.kubernetes.io/ucloud-load-balancer-eip-paymode": "sharebandwidth" 
     # 共享带宽id
     "service.beta.kubernetes.io/ucloud-load-balancer-eip-sharebandwidthid": "bwshare-d8dklw" 
-    # 共享带宽模式下无需指定，或者配置为0，bandwidth下默认为2Mbps
+    # 外网带宽，共享带宽模式下无需指定，或者配置为0，bandwidth下默认为2Mbps，外网带宽必须通过 annotation 修改，直接控制台修改将不生效
     "service.beta.kubernetes.io/ucloud-load-balancer-eip-bandwidth": "2" 
-    # 付费模式，支持month，year，dynamic
+    # 付费模式，支持month（按月付费），year（按年付费），dynamic（按时付费）
     "service.beta.kubernetes.io/ucloud-load-balancer-eip-chargetype": "month"
     # 付费时长，默认为1，chargetype为dynamic时无需填写。
     "service.beta.kubernetes.io/ucloud-load-balancer-eip-quantity": "1" 
