@@ -7,8 +7,6 @@
 
 2. 除外网EIP外，ULB相关参数目前均不支持Update，如不确认如何填写，请咨询UCloud 技术支持。
 
-3. 外网ULB4已支持UDP协议，目前灰度中，如需使用，请联系UCloud技术支持。
-
 ### 2、使用UDP协议前必读
 
 1. 目前ULB4针对UDP协议的健康检查支持ping和port两种模式，默认为ping，强烈推荐改为port；
