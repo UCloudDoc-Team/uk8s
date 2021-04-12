@@ -22,7 +22,7 @@ UK8S已经支持挂载US3，具体支持地域请查看 [US3接入域名](https:
 
 首先我们事先在US3的控制台创建好对象存储目录，并为这个目录生成一个授权令牌（Token），如图：
 
-![](/images/volume/ufile.png)
+![](/images/volume/us3.png)
 
 Token创建管理教程可以[参考文档](ufile/guide/token)。
 
