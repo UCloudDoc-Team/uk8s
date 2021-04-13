@@ -69,7 +69,7 @@
     * [镜像库常见问题](/uk8s/q/registry) 
     * [容器常见问题](/uk8s/q/container) 
     * [存储插件问题](/uk8s/q/storage)
-* 排障指南
+* [排障指南](/uk8s/troubleshooting/README)
     * [入门必读](/uk8s/troubleshooting/startguide)
     * [镜像制作与容器常见问题](/uk8s/troubleshooting/k8s_debug_summary)
     * Pod 故障处理
@@ -77,6 +77,7 @@
     * Node 故障处理
         * [概述](/uk8s/troubleshooting/node_debug_summary)
         * [预防OOM](/uk8s/troubleshooting/prevent_oom)
+    * [集群ULB误删处理](/uk8s/troubleshooting/ulb_undelete)
 * [最佳实践](/uk8s/bestpractice/README)
     * [基于Jenkins的CI/CD实践](/uk8s/bestpractice/cicd)
     * [权限管理](/uk8s/bestpractice/authorization/README)
