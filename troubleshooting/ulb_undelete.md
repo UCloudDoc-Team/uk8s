@@ -19,4 +19,4 @@ Master ULB，即集群 APIServer 绑定的 ULB，用于三台 Master 节点上 A
 
 1. 创建 ULB 时 ULB 类型需要与 Service 的类型相匹配，服务类型为 TCP/UDP 时指定报文转发，为 HTTP/HTTPS 时指定请求代理类型）
 2. 删除集群内原 Service
-2. 根据文档重新绑定 ULB 和 Service：![使用已有ULB创建服务](/uk8s/service/ulb_designation)
+2. 根据文档重新绑定 ULB 和 Service：[使用已有ULB创建服务](/uk8s/service/ulb_designation)
