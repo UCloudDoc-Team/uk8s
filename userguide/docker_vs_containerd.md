@@ -1,4 +1,4 @@
-## Docker 和Containerd 容器引擎
+## Docker 和 Containerd 容器引擎
 
 
 在UK8S中新建V1.19以后的Kubernetes版本，其容器引擎已经默认更换为Containerd，1.19之前的Kubernetes则为Docker。 这两种容器引擎都有各自的命令工具来管理镜像和容器。
