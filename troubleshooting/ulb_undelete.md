@@ -7,7 +7,8 @@
 
 ### Master ULB 误删
 
-Master ULB，即集群 APIServer 绑定的 ULB，用于三台 Master 节点上 APIServer 的流量负载，通常命名为 uk8s-xxxxxxxx-master-ulb4（内网 ULB，创建集群时自动生成）及 uk8s-xxxxxxxx-master-ulb4-external（外网 ULB，创建集群时如开启外网 APIServer 则自动生成）
+Master ULB，即集群 APIServer 绑定的 ULB，用于三台 Master 节点上 APIServer 的流量负载。
+Master ULB 通常命名为 uk8s-xxxxxxxx-master-ulb4（内网 ULB，创建集群时自动生成）及 uk8s-xxxxxxxx-master-ulb4-external（外网 ULB，创建集群时如开启外网 APIServer 则自动生成）
 
 1. 创建 ULB 时类型需要指定为报文转发型
 2. 新建端口为 6443 的 VServer，指定类型为 TCP
