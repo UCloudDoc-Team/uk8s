@@ -192,7 +192,7 @@ spec:
 
 在上面的例子中,
 
-1. 我们创建了一个LoadBalancer类型的Service，K8S姜维该Service分配一个ExternalIP，IP类型为内网IP。在UK8S中，意味着这将在你的云账户下创建一个ULB（云负载均衡）。
+1. 我们创建了一个LoadBalancer类型的Service，K8S将为该Service分配一个ExternalIP，IP类型为内网IP。在UK8S中，意味着这将在你的云账户下创建一个ULB（云负载均衡）。
 
 2. 通过metadata.annotations，我们声明该ULB的类型为inner，这意味着该ULB只能在VPC内可达。
 
