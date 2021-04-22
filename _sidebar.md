@@ -14,10 +14,12 @@
     * [删除集群](/uk8s/userguide/deletecluster)
     * [查看集群](/uk8s/userguide/describecluster)
     * [添加节点](/uk8s/userguide/addnode)
-    * [kube-proxy模式选择](/uk8s/userguide/kubeproxy_mode)
+    * kube-proxy 相关
+        * [kube-proxy模式选择](/uk8s/userguide/kubeproxy_mode)
         * [kube-proxy模式切换](/uk8s/userguide/kubeproxy_edit)
 * [集群管理](/uk8s/administercluster/README)
-    * [使用kubectl操作集群](/uk8s/manageviakubectl/README)
+    * kubectl 使用指南
+        * [使用kubectl操作集群](/uk8s/manageviakubectl/README)
         * [kubectl命令行简介](/uk8s/manageviakubectl/intro_of_kubectl)
         * [安装及配置kubectl](/uk8s/manageviakubectl/connectviakubectl)
         * [使用web kubectl](/uk8s/manageviakubectl/webterminal)
@@ -26,7 +28,7 @@
         * [创建Service](/uk8s/manageviakubectl/createservice)
         * [StatefulSet示例](/uk8s/manageviakubectl/sts_example)
     * [集群版本升级](/uk8s/administercluster/cluster_version_update)
-    * [Kubernetes弹性伸缩](/uk8s/administercluster/autoscaling/README)
+    * Kubernetes弹性伸缩
         * [概述](/uk8s/administercluster/autoscaling/intro)
         * [弹性伸缩（HPA）](/uk8s/administercluster/autoscaling/hpa)
         * [定时伸缩（CronHPA）](/uk8s/administercluster/autoscaling/cronhpa)
@@ -94,7 +96,3 @@
     * [权限管理](/uk8s/bestpractice/authorization/README)
     * [亲和性实践](/uk8s/bestpractice/affinity)
 * [产品价格](/uk8s/price)
-    
-    
-    
-    
