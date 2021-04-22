@@ -34,7 +34,7 @@ UK8S是一项基于Kubernetes的容器管理服务，你可以在UK8S上部署�
 * [名词解释](/uk8s/introduction/concept)
 * [漏洞修复记录](/uk8s/introduction/vulnerability/README)
 * [集群节点配置推荐](/uk8s/introduction/node_requirements)
-* [kube-proxy模式选择](/uk8s/introduction/kubeproxy_mode)
+* [kube-proxy模式选择](/uk8s/userguide/kubeproxy_mode)
 * [产品价格](/uk8s/price)
 
 ##### [返回顶部](#UK8S概览)
@@ -145,7 +145,7 @@ Prometheus是一套开源的系统监控报警框架。UK8S支持使用以下方
 * [什么是Prometheus](/uk8s/monitor/prometheus/intro)
 * [核心概念](/uk8s/monitor/prometheus/concept)
 * [部署Prometheus](/uk8s/monitor/prometheus/installprometheus)
-
+* [监控中心操作指南](/uk8s/monitor/prometheusplugin/intro.md)
 ##### [返回顶部](#UK8S概览)
 
 ### 最佳实践
@@ -155,6 +155,6 @@ UK8S提供了关于CICD的建立、K8S的权限管理、K8S的亲和性、弹性
 * [基于Jenkins的CI/CD实践](/uk8s/bestpractice/cicd)
 * [权限管理](/uk8s/bestpractice/authorization/README)
 * [亲和性实践](/uk8s/bestpractice/affinity)
-* [Kubernetes弹性伸缩](/uk8s/bestpractice/autoscaling/README)
+* [Kubernetes弹性伸缩](/uk8s/administercluster/autoscaling/README)
 
 ##### [返回顶部](#UK8S概览)
