@@ -18,8 +18,7 @@
         * [kube-proxy模式选择](/uk8s/userguide/kubeproxy_mode)
         * [kube-proxy模式切换](/uk8s/userguide/kubeproxy_edit)
 * [集群管理](/uk8s/administercluster/README)
-    * kubectl 使用指南
-        * [使用kubectl操作集群](/uk8s/manageviakubectl/README)
+    * 使用 kubectl 操作集群
         * [kubectl命令行简介](/uk8s/manageviakubectl/intro_of_kubectl)
         * [安装及配置kubectl](/uk8s/manageviakubectl/connectviakubectl)
         * [使用web kubectl](/uk8s/manageviakubectl/webterminal)
