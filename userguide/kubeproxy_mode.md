@@ -62,17 +62,17 @@ Total:         51   79   7.5     78     101
 
 以下为UK8S团队针对IPVS和iptables进行的性能测试数据。
 
-![](/images/introduction/s100.png)
+![](/images/userguide/s100.png)
 
-![](/images/introduction/s500.png)
+![](/images/userguide/s500.png)
 
-![](/images/introduction/s1000.png)
+![](/images/userguide/s1000.png)
 
-![](/images/introduction/s2000.png)
+![](/images/userguide/s2000.png)
 
-![](/images/introduction/s3000.png)
+![](/images/userguide/s3000.png)
 
-![](/images/introduction/s4000.png)
+![](/images/userguide/s4000.png)
 
 可以看出，在Service数量为100和500时，iptables转发性能要优于IPVS；Service数量达到1000时，两者大体持平；Service数量继续增大，IPVS的性能优势则越发明显。
 
