@@ -1,5 +1,4 @@
-
-* [概览](/uk8s/README) 
+<!--* [概览](/uk8s/README) -->
 * [新手引导](/uk8s/readme2)
 * 产品简介
     * [产品概念](/uk8s/introduction/whatisuk8s)
