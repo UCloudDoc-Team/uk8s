@@ -1,13 +1,13 @@
 
 * [概览](/uk8s/README) 
 * [新手引导](/uk8s/readme2)
-* [产品简介](/uk8s/introduction/README)
+* 产品简介
     * [产品概念](/uk8s/introduction/whatisuk8s)
     * [使用须知](/uk8s/introduction/restriction)
     * [名词解释](/uk8s/introduction/concept)
     * [漏洞修复记录](/uk8s/introduction/vulnerability/README)
     * [集群节点配置推荐](/uk8s/introduction/node_requirements)
-* [操作指南](/uk8s/userguide/README)
+* 操作指南
     * [Docker VS Containerd](/uk8s/userguide/docker_vs_containerd)
     * [使用必读](/uk8s/userguide/before_start)
     * [创建集群](/uk8s/userguide/createcluster)
@@ -17,7 +17,7 @@
     * kube-proxy 相关
         * [kube-proxy模式选择](/uk8s/userguide/kubeproxy_mode)
         * [kube-proxy模式切换](/uk8s/userguide/kubeproxy_edit)
-* [集群管理](/uk8s/administercluster/README)
+* 集群管理
     * 使用 kubectl 操作集群
         * [kubectl命令行简介](/uk8s/manageviakubectl/intro_of_kubectl)
         * [安装及配置kubectl](/uk8s/manageviakubectl/connectviakubectl)
@@ -37,15 +37,19 @@
     * [制作自定义镜像](/uk8s/administercluster/custom_image)
     * [自定义数据及初始化脚本](/uk8s/administercluster/cloud_init)
     * [GPU共享插件](/uk8s/administercluster/gpu-share)
-* [存储卷](/uk8s/volume/README)
-    * [CSI 升级](/uk8s/volume/CSI_update)
+* 集群网络
+    * [集群网络](/uk8s/network/uk8s_network)
+    * [网络隔离](/uk8s/network/networkpolicy)
+    * [CNI 网络插件升级](/uk8s/network/cni_update)
+* 集群存储
     * [Volume 介绍](/uk8s/volume/intro)
     * [在UK8S中使用UDISK](/uk8s/volume/udisk)
     * [在UK8S中使用已有UDISK](/uk8s/volume/statusudisk)
     * [在UK8S中使用UFS](/uk8s/volume/ufs)
     * [动态PV使用UFS](/uk8s/volume/dynamic_ufs)
     * [在UK8S中使用US3](/uk8s/volume/ufile)
-* [服务发现](/uk8s/service/README)
+    * [CSI 存储插件升级](/uk8s/volume/CSI_update)
+* 服务发现
     * [Service 介绍](/uk8s/service/intro)
     * [通过内网ULB访问Service](/uk8s/service/internalservice)
     * [通过外网ULB访问Service](/uk8s/service/externalservice)
@@ -55,34 +59,30 @@
     * [获取真实客户端IP](/uk8s/service/getresourceip)
     * [通过ULB暴露Dashboard](/uk8s/service/dashboard)
     * [Ingress支持](/uk8s/service/ingress/README)
-* [集群网络](/uk8s/network)  
-* [网络隔离](/uk8s/networkpolicy)
-* [应用商店](/uk8s/helm/README)
-    * [关于应用商店](/uk8s/helm/abouthelm)
-    * [安装使用应用商店](/uk8s/helm/init)
-    * [安装应用](/uk8s/helm/install)
-    * [管理应用](/uk8s/helm/manager)
-    <!-- * [一键安装应用](/uk8s/helm/installapp) -->
-* [日志管理](/uk8s/log/README)
+* 日志监控方案
     * [使用ELK自建UK8S日志解决方案](/uk8s/log/elastic_filebeat_kibana_solution)
     * [使用UK8S日志插件功能](/uk8s/log/ELKplugin)
-* [监控管理](/uk8s/monitor/README.md)
     * [Prometheus监控方案](/uk8s/monitor/prometheus/README)
     * 监控中心操作指南
         * [概述](/uk8s/monitor/prometheusplugin/intro.md)
         * [开启监控](/uk8s/monitor/prometheusplugin/startmonitor.md)
         * [添加告警目标](/uk8s/monitor/prometheusplugin/addmonitortarget.md)
         * [添加接收人](/uk8s/monitor/prometheusplugin/addreceiver.md)
-* [镜像仓库](/uk8s/dockerhub/README)  
+* 应用商店
+    * [关于应用商店](/uk8s/helm/abouthelm)
+    * [安装使用应用商店](/uk8s/helm/init)
+    * [安装应用](/uk8s/helm/install)
+    * [管理应用](/uk8s/helm/manager)
+    <!-- * [一键安装应用](/uk8s/helm/installapp) -->
+* 镜像仓库
     * [概述](/uk8s/dockerhub/outline)  
     * [在UK8S中使用UHub](/uk8s/dockerhub/using_uhub_in_uk8s)   
-* [常见问题](/uk8s/q/README)
+* 常见问题及排障指南
+    * [入门必读](/uk8s/troubleshooting/startguide)
     * [集群常见问题](/uk8s/q/cluster)  
     * [镜像库常见问题](/uk8s/q/registry) 
     * [容器常见问题](/uk8s/q/container) 
     * [存储插件问题](/uk8s/q/storage)
-* [排障指南](/uk8s/troubleshooting/README)
-    * [入门必读](/uk8s/troubleshooting/startguide)
     * [镜像制作与容器常见问题](/uk8s/troubleshooting/k8s_debug_summary)
     * Pod 故障处理
         * [概述](/uk8s/troubleshooting/pod_debug_summary)
@@ -90,7 +90,7 @@
         * [概述](/uk8s/troubleshooting/node_debug_summary)
         * [预防OOM](/uk8s/troubleshooting/prevent_oom)
     * [集群ULB误删处理](/uk8s/troubleshooting/ulb_undelete)
-* [最佳实践](/uk8s/bestpractice/README)
+* 最佳实践
     * [基于Jenkins的CI/CD实践](/uk8s/bestpractice/cicd)
     * [权限管理](/uk8s/bestpractice/authorization/README)
     * [亲和性实践](/uk8s/bestpractice/affinity)

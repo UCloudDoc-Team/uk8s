@@ -112,8 +112,8 @@ UK8S默认支持使用UCloud提供的ULB、EIP等服务，您可以通过ULB暴�
 * [获取真实客户端IP](/uk8s/service/getresourceip)
 * [通过ULB暴露Dashboard](/uk8s/service/dashboard)
 * [Ingress支持](/uk8s/service/ingress/README)
-* [集群网络](/uk8s/network)  
-* [网络隔离](/uk8s/networkpolicy)
+* [集群网络](/uk8s/network/uk8s_network)  
+* [网络隔离](/uk8s/network/networkpolicy)
 
 ##### [返回顶部](#UK8S概览)
 
