@@ -1,13 +1,13 @@
 # 概览
 
 * [新手引导](/uk8s/readme2)
-* [产品简介](/uk8s/introduction/README)
+* 产品简介
     * [产品概念](/uk8s/introduction/whatisuk8s)
     * [使用须知](/uk8s/introduction/restriction)
     * [名词解释](/uk8s/introduction/concept)
     * [漏洞修复记录](/uk8s/introduction/vulnerability/README)
     * [集群节点配置推荐](/uk8s/introduction/node_requirements)
-* [操作指南](/uk8s/userguide/README)
+* 操作指南
     * [Docker VS Containerd](/uk8s/userguide/docker_vs_containerd)
     * [使用必读](/uk8s/userguide/before_start)
     * [创建集群](/uk8s/userguide/createcluster)
@@ -17,7 +17,7 @@
     * kube-proxy 相关
         * [kube-proxy模式选择](/uk8s/userguide/kubeproxy_mode)
         * [kube-proxy模式切换](/uk8s/userguide/kubeproxy_edit)
-* [集群管理](/uk8s/administercluster/README)
+* 集群管理
     * 使用 kubectl 操作集群
         * [kubectl命令行简介](/uk8s/manageviakubectl/intro_of_kubectl)
         * [安装及配置kubectl](/uk8s/manageviakubectl/connectviakubectl)
@@ -37,7 +37,8 @@
     * [制作自定义镜像](/uk8s/administercluster/custom_image)
     * [自定义数据及初始化脚本](/uk8s/administercluster/cloud_init)
     * [GPU共享插件](/uk8s/administercluster/gpu-share)
-* [存储卷](/uk8s/volume/README)
+* [集群网络](/uk8s/network)
+* 存储卷
     * [CSI 升级](/uk8s/volume/CSI_update)
     * [Volume 介绍](/uk8s/volume/intro)
     * [在UK8S中使用UDISK](/uk8s/volume/udisk)
@@ -55,7 +56,6 @@
     * [获取真实客户端IP](/uk8s/service/getresourceip)
     * [通过ULB暴露Dashboard](/uk8s/service/dashboard)
     * [Ingress支持](/uk8s/service/ingress/README)
-* [集群网络](/uk8s/network)  
 * [网络隔离](/uk8s/networkpolicy)
 * [应用商店](/uk8s/helm/README)
     * [关于应用商店](/uk8s/helm/abouthelm)

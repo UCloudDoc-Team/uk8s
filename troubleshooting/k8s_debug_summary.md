@@ -1,3 +1,5 @@
+# 镜像制作与容器常见问题
+
 * [UK8S 人工支持](#uk8s-人工支持)
 * [为什么我的容器一起来就退出了？](#为什么我的容器一起来就退出了)
 * [Docker 如何调整日志等级](#docker-如何调整日志等级)
@@ -65,7 +67,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGIFVUtrp+jAnIu1fBvyLx/4L4GNsX+6v8RodxM+t
 2. 如果是 pod 自己退出，`kubectl logs pod-name -p -n ns` 查看容器退出的日志，排查原因
 3. 如果是由于 oom 被杀，建议根据业务重新调整 pod 的 request 和 limit 设置（两者不宜相差过大），或检查是否有内存泄漏
 4. 如果 pod 被驱逐，说明节点压力过大，需要检查时哪个 pod 占用资源过多，并调整 request 和 limit 设置
-5. 非 pod 自身原因导致的退出，需要执行`dmesg`查看系统日志以及`journactl -u kubelet`查看 kubelet 相关日志。
+5. 非 pod 自身原因导致的退出，需要执行`dmesg`查看系统日志以及`journalctl -u kubelet`查看 kubelet 相关日志。
 
 
 ## CNI 插件升级为什么失败了？
@@ -85,7 +87,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGIFVUtrp+jAnIu1fBvyLx/4L4GNsX+6v8RodxM+t
 ## UK8S 节点 NotReady 了怎么办
 
 1. `kubectl describe node node-name` 查看节点 notReady 的原因，也可以直接在 console 页面上查看节点详情。
-2. 如果可以登陆节点，`journactl -u kubelet` 查看 kubelet 的日志， `system status kubelet`查看 kubelet 工作是否正常。
+2. 如果可以登陆节点，`journalctl -u kubelet` 查看 kubelet 的日志， `system status kubelet`查看 kubelet 工作是否正常。
 3. 对于节点已经登陆不了的情况，如果希望快速恢复可以在控制台找到对应主机断电重启。
 4. 查看主机监控，或登陆主机执行`sar`命令，如果发现磁盘 cpu 和磁盘使用率突然上涨, 且内存使用率也高，一般情况下是内存 oom 导致的。关于内存占用过高导致节点宕机，由于内存占用过高，磁盘缓存量很少，会导致磁盘读写频繁，进一步增加系统负载，打高cpu的恶性循环
 5. 内存 oom 的情况需要客户自查是进程的内存情况，k8s 建议 request 和 limit 设置的值不宜相差过大，如果相差较大，比较容易导致节点宕机。
