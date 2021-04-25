@@ -4,7 +4,7 @@
 
 ## 添加虚拟节点
 
-在集群节点列表页，点击「添加虚拟节点」按钮，为 UK8S 集群添加虚拟节点，当前一个 UK8S 集群支持最多添加 8 个虚拟节点。
+在集群节点列表页，点击「添加虚拟节点」按钮，为 UK8S 集群添加虚拟节点，当前一个 UK8S 集群支持最多添加 8 个虚拟节点，所添加的虚拟节点名称为 uk8s-xxxxxxxx-vk-xxxxx，该名称将被注册为虚拟节点的 spec.nodeName，其中 uk8s-xxxxxxxx 为 UK8S 集群 ID，末五位为随机生成的数字字母组合。
 
 ![](../images/administercluster/vk_01.png)
 
@@ -35,8 +35,9 @@ VK 节点与普通 Node 节点一样，是 UK8S 集群当中的一个 Node 对�
 
 ```yaml
 nodeSelector:
-  type: virtual-kubelet
-tolerations:
+  spec.nodeName: uk8s-xxxxxxxx-vk-xxxxx    # 指定节点名称
+# VK 节点添加了 virtual-kubelet.io/provider=ucloud:NoSchedule 的污点，确保一些 Node 节点 DS 不被调度到 VK 节点上，通过 VK 节点创建 Cube 需要添加相应的容忍
+tolerations:                               
   - effect: NoSchedule
     key: virtual-kubelet.io/provider
     operator: Equal
