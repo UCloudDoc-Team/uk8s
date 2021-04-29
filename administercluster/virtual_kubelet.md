@@ -42,11 +42,10 @@ tolerations:                               # 添加污点容忍
     operator: Equal
     value: ucloud
 ```
-创建 Cube 实例时，需注意特定 CPU / 内存规格有一定的比例及限制，Cube 支持规格配置如下：
+创建 Cube 实例时，需注意特定 CPU / 内存规格有一定的比例及限制，VK 支持创建 Cube 规格配置如下：
 
 | CPU | 内存 |
 |-----|-----|
-|100m|128Mi|
 |500m|512Mi/1Gi/2Gi|
 |1|1Gi/2Gi/4Gi|
 |2|2Gi/4Gi/8Gi|
