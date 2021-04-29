@@ -14,7 +14,7 @@ HPA(Horizontal Pod Autoscaling)指Kubernetes Pod的横向自动伸缩，是kuber
 
 #### 2.添加定时伸缩条件
 
-用户点击添加进入新增定时任务页面，在页面中需要输入定时器的名字、选择需要伸缩的对象、执行计划的时间和目标Pod数量。
+用户点击添加进入新增定时任务页面，在页面中需要输入定时器的名字、选择需要伸缩的对象、执行计划的时间和目标Pod数量。如勾选「单次执行」选项，则表明该定时伸缩任务仅需执行一次，非周期性执行。
 
 ![](/images/administercluster/autoscaling/createcronhpa.png)
 
@@ -44,7 +44,7 @@ Crontab格式（前5位为时间选项，这里我们只用到了前5位）
 
 #### 针对UTC时间说明
 
-如图，执行时间为UTC时间是因为CronTab的命令时间为UTC时间，方便于用户填写时间命令，实际真实执行时间用户可以进行+8小时计算。
+如图，执行时间为 UTC 时间是因为 CronTab 的命令时间为UTC时间，方便于用户填写时间命令，实际真实执行时间用户可以进行+8小时计算。
 
 
 ![](/images/administercluster/autoscaling/createcronhpa.png)
@@ -72,3 +72,13 @@ Crontab格式（前5位为时间选项，这里我们只用到了前5位）
 我们查看nginx-deployment已经缩容到了2个。
 
 ![](/images/administercluster/autoscaling/4cronhpa.png)
+
+### CronHPA 定时伸缩支持 HPA 对象
+
+CronHPA 插件支持在创建时，选择原有的 HPA 对象，兼容规则如下：
+
+| HPA 配置（min/max）| CronHPA 目标 Pod 数 | Deployment 当前 Pod 数 | 扩缩结果 | 说明 |
+|:-----:|-----:|-----:|:-----|:-----|
+|1/10|5|5|HPA（min/max）：5/10<br>Deployment：5|当CronHPA中的目标副本数大于HPA中的副本数下限，修改HPA中的副本数下限|
+|5/10|4|5|HPA（min/max）：4/10<br>Deployment：5|当CronHPA中的目标副本数小于HPA中的副本数下限，修改HPA中的副本数下限<br>当业务下降低于设定阈值范围时，HPA 将将 Deployment 中副本数调整为 4|
+|1/10|11|5|HPA（min/max）：11/11<br>Deployment：11|当CronHPA中的目标副本数大于HPA中的副本数上限，同时修改HPA中的副本数上限与下限|
