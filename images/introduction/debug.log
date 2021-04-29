@@ -1,2 +1,6 @@
 [0429/113102:WARNING:dns_config_service_win.cc(674)] Failed to read DnsConfig.
 [0429/114102:WARNING:dns_config_service_win.cc(674)] Failed to read DnsConfig.
+[0429/120423:WARNING:dns_config_service_win.cc(674)] Failed to read DnsConfig.
+[0429/121246:WARNING:dns_config_service_win.cc(674)] Failed to read DnsConfig.
+[0429/121540:WARNING:dns_config_service_win.cc(674)] Failed to read DnsConfig.
+[0429/132238:WARNING:url_request_job_manager.cc(89)] Failed to map: weixin://resourceid/blank
