@@ -77,8 +77,8 @@ Crontab格式（前5位为时间选项，这里我们只用到了前5位）
 
 CronHPA 插件支持在创建时，选择原有的 HPA 对象，兼容规则如下：
 
-| HPA 配置<br>min/max| CronHPA<br>目标 Pod 数 | Deployment<br>当前 Pod 数 | 扩缩结果 | 说明 |
-|-----|-----|-----|-----|-----|
+| HPA 配置<br>min/max| CronHPA<br>目标Pod数 | Deployment<br>当前 Pod 数 | 扩缩结果 | 说明 |
+|:-----:|:-----:|:-----:|:-----|:-----|
 |1/10|5|5|HPA（min/max）：5/10<br>Deployment：5|当CronHPA中的目标副本数大于HPA中的副本数下限，修改HPA中的副本数下限|
 |5/10|4|5|HPA（min/max）：4/10<br>Deployment：5|当CronHPA中的目标副本数小于HPA中的副本数下限，修改HPA中的副本数下限<br>当业务下降低于设定阈值范围时，HPA 将将 Deployment 中副本数调整为 4|
 |1/10|11|5|HPA（min/max）：11/11<br>Deployment：11|当CronHPA中的目标副本数大于HPA中的副本数上限，同时修改HPA中的副本数上限与下限|
