@@ -27,6 +27,7 @@
         * [创建Service](/uk8s/manageviakubectl/createservice)
         * [StatefulSet示例](/uk8s/manageviakubectl/sts_example)
     * [集群版本升级](/uk8s/administercluster/cluster_version_update)
+    * [Virtual Kubelet 虚拟节点](/uk8s/administercluster/virtual_kubelet)
     * Kubernetes弹性伸缩
         * [概述](/uk8s/administercluster/autoscaling/intro)
         * [弹性伸缩（HPA）](/uk8s/administercluster/autoscaling/hpa)
