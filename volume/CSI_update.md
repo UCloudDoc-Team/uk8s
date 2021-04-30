@@ -66,17 +66,17 @@ data:
 ### 更新UDisk CSI插件
 
 ```bash
-kubectl apply -f https://git.ucloudadmin.com/uk8s/csi-uk8s/-/blob/21.04.1/deploy/udisk/csi-controller.yml
-kubectl apply -f https://git.ucloudadmin.com/uk8s/csi-uk8s/-/blob/21.04.1/deploy/udisk/csi-node.yml
-kubectl apply -f https://git.ucloudadmin.com/uk8s/csi-uk8s/-/blob/21.04.1/deploy/udisk/rbac-controller.yml
-kubectl apply -f https://git.ucloudadmin.com/uk8s/csi-uk8s/-/blob/21.04.1/deploy/udisk/rbac-node.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk.21.04.1/csi-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk.21.04.1/csi-node.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk.21.04.1/rbac-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk.21.04.1/rbac-node.yml
 ```
 
 ### 更新UFile CSI插件
 
 ```bash
-kubectl apply -f https://git.ucloudadmin.com/uk8s/csi-uk8s/-/blob/21.04.1/deploy/ufile/csi-controller.yml
-kubectl apply -f https://git.ucloudadmin.com/uk8s/csi-uk8s/-/blob/21.04.1/deploy/ufile/csi-node.yml
-kubectl apply -f https://git.ucloudadmin.com/uk8s/csi-uk8s/-/blob/21.04.1/deploy/ufile/rbac-controller.yml
-kubectl apply -f https://git.ucloudadmin.com/uk8s/csi-uk8s/-/blob/21.04.1/deploy/ufile/rbac-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile.21.04.1/csi-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile.21.04.1/csi-node.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile.21.04.1/rbac-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile.21.04.1/rbac-controller.yml
 ```
