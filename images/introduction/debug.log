@@ -6,3 +6,15 @@
 [0429/132238:WARNING:url_request_job_manager.cc(89)] Failed to map: weixin://resourceid/blank
 [0429/142401:WARNING:url_request_job_manager.cc(89)] Failed to map: weixin://resourceid/blank
 [0429/151427:WARNING:url_request_job_manager.cc(89)] Failed to map: weixin://resourceid/blank
+[0429/162912:WARNING:url_request_job_manager.cc(89)] Failed to map: weixin://resourceid/blank
+[0429/162937:WARNING:url_request_job_manager.cc(89)] Failed to map: weixin://resourceid/blank
+[0429/164759:WARNING:url_request_job_manager.cc(89)] Failed to map: weixin://resourceid/blank
+[0429/165059:WARNING:url_request_job_manager.cc(89)] Failed to map: weixin://resourceid/blank
+[0429/175208:WARNING:url_request_job_manager.cc(89)] Failed to map: weixin://resourceid/blank
+[0429/175820:WARNING:url_request_job_manager.cc(89)] Failed to map: weixin://resourceid/blank
+[0429/180204:WARNING:dns_config_service_win.cc(674)] Failed to read DnsConfig.
+[0429/182648:WARNING:dns_config_service_win.cc(674)] Failed to read DnsConfig.
+[0429/183452:WARNING:dns_config_service_win.cc(674)] Failed to read DnsConfig.
+[0429/183656:WARNING:dns_config_service_win.cc(674)] Failed to read DnsConfig.
+[0429/183907:WARNING:url_request_job_manager.cc(89)] Failed to map: weixin://resourceid/blank
+[0429/190133:ERROR:browser_gpu_channel_host_factory.cc(119)] Failed to launch GPU process.

@@ -6,9 +6,25 @@
 
 ## 变更记录
 
+### 更新版本：21.04.1
+
+更新时间：2021.04.28
+
+更新内容：
+
+* 支持 UDisk 相关参数暴露在 Kubelet Metrics 中
+
+### 更新版本：21.03.1
+
+更新时间：2021.03.15
+
+更新内容：
+
+* 解决节点被删除后，volumeattachment 未被删除导致存储无法卸载的问题
+
 ### 更新版本: 21.01.1
 
-更新时间： 2020.01.13
+更新时间： 2021.01.13
 
 更新内容：
 
@@ -38,29 +54,29 @@ metadata:
   name: uk8sconfig
   namespace: kube-system
 data:
-  UCLOUD_REGION_ID: 'cn-bj2'
-  UCLOUD_PROJECT_ID: 'org-1uxhh0'
-  UCLOUD_VPC_ID: 'uvnet-fngihq'
-  UCLOUD_SUBNET_ID: 'subnet-tk2h2v'
+  UCLOUD_REGION_ID: 'cn-bj2' ## 集群所在地域，参照：https://docs.ucloud.cn/api/summary/regionlist
+  UCLOUD_PROJECT_ID: 'org-xxxxxxxx' ## 项目 ID
+  UCLOUD_VPC_ID: 'uvnet-xxxxxxxx'  ## 集群所在 VPC ID
+  UCLOUD_SUBNET_ID: 'subnet-xxxxxxxx' ## 集群 Master 节点所在子网 ID
   UCLOUD_API_ENDPOINT: 'http://api.service.ucloud.cn'
-  UCLOUD_UK8S_CLUSTER_ID: 'uk8s-3aqwlaey'
+  UCLOUD_UK8S_CLUSTER_ID: 'uk8s-3aqwlaey'  ## 集群 ID
 
 ```
 
 ### 更新UDisk CSI插件
 
 ```bash
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk21.01.1/csi-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk21.01.1/csi-node.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk21.01.1/rbac-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk21.01.1/rbac-node.yml
+kubectl apply -f https://git.ucloudadmin.com/uk8s/csi-uk8s/-/blob/21.04.1/deploy/udisk/csi-controller.yml
+kubectl apply -f https://git.ucloudadmin.com/uk8s/csi-uk8s/-/blob/21.04.1/deploy/udisk/csi-node.yml
+kubectl apply -f https://git.ucloudadmin.com/uk8s/csi-uk8s/-/blob/21.04.1/deploy/udisk/rbac-controller.yml
+kubectl apply -f https://git.ucloudadmin.com/uk8s/csi-uk8s/-/blob/21.04.1/deploy/udisk/rbac-node.yml
 ```
 
 ### 更新UFile CSI插件
 
 ```bash
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile20.10.1/csi-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile20.10.1/csi-node.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile20.10.1/rbac-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile20.10.1/rbac-node.yml
+kubectl apply -f https://git.ucloudadmin.com/uk8s/csi-uk8s/-/blob/21.04.1/deploy/ufile/csi-controller.yml
+kubectl apply -f https://git.ucloudadmin.com/uk8s/csi-uk8s/-/blob/21.04.1/deploy/ufile/csi-node.yml
+kubectl apply -f https://git.ucloudadmin.com/uk8s/csi-uk8s/-/blob/21.04.1/deploy/ufile/rbac-controller.yml
+kubectl apply -f https://git.ucloudadmin.com/uk8s/csi-uk8s/-/blob/21.04.1/deploy/ufile/rbac-controller.yml
 ```
