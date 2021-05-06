@@ -78,5 +78,5 @@ kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk.21.04.
 kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile.21.04.1/csi-controller.yml
 kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile.21.04.1/csi-node.yml
 kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile.21.04.1/rbac-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile.21.04.1/rbac-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile.21.04.1/rbac-node.yml
 ```
