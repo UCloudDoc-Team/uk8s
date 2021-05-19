@@ -1,7 +1,7 @@
 
 ## ULB 参数说明
 
-本文主要描述用于创建LoadBalancer 类型的Service时，与ULB相关的Annotations说明。
+本文主要描述用于创建 LoadBalancer 类型的 Service 时，与 ULB 相关的 Annotations 说明。
 
 > 备注：
 > 1. 目前除了外网 ULB 绑定的 EIP 的带宽值以外，其他参数暂时不支持修改，请谨慎配置。
