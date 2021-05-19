@@ -12,7 +12,7 @@
 
 ```yaml
     # 负载均衡器类型，必须指定，枚举值为inner或outer，此处应为inner;
-    service.beta.kubernetes.io/ucloud-load-balancer-type"
+    service.beta.kubernetes.io/ucloud-load-balancer-type
     # tcp和udp均代表ULB4，https和http均代表ULB7；
     service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol
     # VServer负载均衡模式
