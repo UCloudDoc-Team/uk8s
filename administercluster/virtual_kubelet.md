@@ -31,7 +31,7 @@ VK 节点与普通 Node 节点一样，是 UK8S 集群当中的一个 Node 对�
 
 ## 通过虚拟节点创建 Cube 实例
 
-通过 VK 节点创建 Cube 实例的方式，与普通 Pod 资源类似，但需要在 yaml 文件 Pod spec 中添加 nodeName 指定 VK 节点并添加污点容忍。支持直接创建 Pod，或通过 Deployment 及 StatefulSet 等控制器进行 Pod 的管理。
+通过 VK 节点创建 Cube 实例的方式，与普通 Pod 资源类似，但需要在 yaml 文件 Pod spec 中添加 nodeName 或 nodeSelector 指定 VK 节点并添加污点容忍。支持直接创建 Pod，或通过 Deployment 及 StatefulSet 等控制器进行 Pod 的管理。
 
 ```yaml
 # 通过指定 nodeName 调度到 VK 节点
