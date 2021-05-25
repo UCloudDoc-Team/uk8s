@@ -31,15 +31,22 @@ VK 节点与普通 Node 节点一样，是 UK8S 集群当中的一个 Node 对�
 
 ## 通过虚拟节点创建 Cube 实例
 
-通过 VK 节点创建 Cube 实例的方式，与普通 Pod 资源类似，但需要在 yaml 文件 Pod spec 中添加 nodeName 指定 VK 节点并添加污点容忍：
+通过 VK 节点创建 Cube 实例的方式，与普通 Pod 资源类似，但需要在 yaml 文件 Pod spec 中添加 nodeName 指定 VK 节点并添加污点容忍。支持直接创建 Pod，或通过 Deployment 及 StatefulSet 等控制器进行 Pod 的管理。
 
 ```yaml
-nodeName: uk8s-xxxxxxxx-vk-xxxxx           # 指定节点名称
-tolerations:                               # 添加污点容忍
-  - effect: NoSchedule
-    key: virtual-kubelet.io/provider
-    operator: Equal
-    value: ucloud
+# 通过指定 nodeName 调度到 VK 节点
+nodeName: uk8s-xxxxxxxx-vk-xxxxx           
+# 通过 nodeSelector 调度到 VK 节点，nodeName 及 nodeSelector 只需配置一项
+# 如以 Deploy 及 Sts 形式创建，请务必使用 nodeSelector
+# 虚拟节点创建后，也可为虚拟节点添加指定标签，用于 Pod 调度的管理
+nodeSelector:
+  type: virtual-kubelet                    
+# 添加节点容忍
+tolerations:                               
+- effect: NoSchedule
+  key: virtual-kubelet.io/provider
+  operator: Equal
+  value: ucloud
 ```
 创建 Cube 实例时，需注意特定 CPU / 内存规格有一定的比例及限制，VK 支持创建 Cube 规格配置如下：
 
