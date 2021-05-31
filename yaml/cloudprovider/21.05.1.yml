@@ -1,0 +1,103 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cloudprovider-ucloud
+  namespace: kube-system
+  labels:
+    app: "cloudprovider-ucloud"
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cloudprovider-ucloud
+  labels:
+    app: "cloudprovider-ucloud"
+rules:
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["list", "watch", "create", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["services/status"]
+    verbs: ["update", "patch"]
+  - apiGroups: [""]
+    resources: ["endpoints"]
+    verbs: ["create", "get", "list", "watch", "update"]
+  - apiGroups: [""]
+    resources: ["persistentvolumes"]
+    verbs: ["get", "list", "watch", "create", "delete"]
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list", "watch", "update"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["storageclasses"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["create", "get", "list", "watch", "update"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cloudprovider-ucloud
+  labels:
+    app: "cloudprovider-ucloud"
+subjects:
+  - kind: ServiceAccount
+    name: cloudprovider-ucloud
+    namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: cloudprovider-ucloud
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudprovider-ucloud
+  namespace: kube-system
+  labels:
+    app: cloudprovider-ucloud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudprovider-ucloud
+  template:
+    metadata:
+      labels:
+        app: cloudprovider-ucloud
+    spec:
+      serviceAccount: cloudprovider-ucloud
+      hostNetwork: true
+      containers:
+        - name: cloudprovider-ucloud
+          image: uhub.service.ucloud.cn/uk8s/cloudprovider-ucloud:21.05.1
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          envFrom:
+            - configMapRef:
+                name: uk8sconfig
+          env:
+            - name: KUBE_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          volumeMounts:
+            - name: host-log
+              mountPath: /var/log/ucloud/
+      volumes:
+        - name: host-log
+          hostPath:
+            path: /var/log/ucloud/
