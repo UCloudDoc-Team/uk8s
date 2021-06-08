@@ -4,7 +4,7 @@
 * [为什么我的容器一起来就退出了？](#为什么我的容器一起来就退出了)
 * [Docker 如何调整日志等级](#docker-如何调整日志等级)
 * [为什么节点已经异常了，但是 Pod 还处在 Running 状态](#为什么节点已经异常了但是-pod-还处在-running-状态)
-* [节点宕机了 Pod 一直卡在 Termnating 怎么办](#节点宕机了-pod-一直卡在-termnating-怎么办)
+* [节点宕机了 Pod 一直卡在 Terminating 怎么办](#节点宕机了-pod-一直卡在-Terminating-怎么办)
 * [Pod 异常退出了怎么办？](#pod-异常退出了怎么办)
 * [CNI 插件升级为什么失败了？](#cni-插件升级为什么失败了)
 * [UK8S 页面概览页一直刷新不出来？](#uk8s-页面概览页一直刷新不出来)
@@ -52,10 +52,10 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGIFVUtrp+jAnIu1fBvyLx/4L4GNsX+6v8RodxM+t
 1. 这是由于k8s的状态保护造成的，在节点较少或异常节点很多的情况下很容易出现
 2. 具体可以查看文档 https://kubernetes.io/zh/docs/concepts/architecture/nodes/#reliability
 
-## 节点宕机了 Pod 一直卡在 Termnating 怎么办
+## 节点宕机了 Pod 一直卡在 Terminating 怎么办
 
-1. 节点宕机超过一定时间后（一般为 5 分钟），k8s 会尝试驱逐 pod，导致 pod 变为 Termnating 状态
-2. 由于此时 kubelet 无法执行删除pod的一系列操作，pod 会一直卡在 Termnating
+1. 节点宕机超过一定时间后（一般为 5 分钟），k8s 会尝试驱逐 pod，导致 pod 变为 Terminating 状态
+2. 由于此时 kubelet 无法执行删除pod的一系列操作，pod 会一直卡在 Terminating
 3. 类型为 daemonset 的 pod，默认在每个节点都有调度，因此 pod 宕机不需要考虑此种类型 pod，k8s 也默认不会驱逐该类型的 pod
 4. 类型为 depolyment 和 replicaset 的 pod，当 pod 卡在 termanting 时，控制器会自动拉起对等数量的 pod
 5. 类型为 statefulset 的 pod，当 pod 卡在 termanting 时，由于 statefulset 下属的 pod 名称固定，必须等上一个 pod 彻底删除，对应的新 pod 才会被拉起，在节点宕机情况下无法自动拉起恢复
