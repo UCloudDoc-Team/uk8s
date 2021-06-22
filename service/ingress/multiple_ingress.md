@@ -82,53 +82,11 @@ spec:
 
 ### 使用 DaemonSet 部署
 
-可以将Traefik与Deployment或DaemonSet对象一起使用，而这两个选项各有利弊：
+ingress-controller可以通过Deployment或DaemonSet部署，各有利弊：
 
 * 使用Deployment时，可伸缩性可以更好，因为在使用DaemonSet时您将拥有每个节点的单一Pod模型，而在使用Deployment时，基于环境您可能需要更少的Pod。
+
 * 当节点加入群集时，DaemonSet会自动扩展到新节点，而Deployment仅在需要时在新节点上进行调度。
-* DaemonSet 确保只有一个pod副本在任何单个节点上运行。如果要确保两个pod不在同一节点上，则需要 Deployment 进行设置。
 
-这是一个DaemonSet的部署示例。这里还可以使用spec.template.spec.nodeSelector，则DaemonSet控制器将在与该节点选择器匹配的Node，同样，还可以使用spec.template.spec.affinity，控制部署的亲和性。
-
-```
-kind: DaemonSet
-apiVersion: apps/v1
-metadata:
-  name: traefik-ingress-controller
-  namespace: kube-system
-  labels:
-    k8s-app: traefik-ingress-lb
-spec:
-  template:
-    metadata:
-      labels:
-        k8s-app: traefik-ingress-lb
-        name: traefik-ingress-lb
-    spec:
-      serviceAccountName: traefik-ingress-controller
-      terminationGracePeriodSeconds: 60
-      containers:
-      - image: traefik
-        name: traefik-ingress-lb
-        ports:
-        - name: http
-          containerPort: 80
-          hostPort: 80
-        - name: admin
-          containerPort: 8080
-        args:
-        - --api
-        - --kubernetes
-        - --logLevel=INFO
-      nodeSelector: 
-        node: ingress-traefik
-```
-
-----
-
-### 多个 Ingress-traefik Controller
-
-有时，多个Traefik Deployments应该同时运行。例如，可以设想一个部署对内部提供服务，另一个对外部提供服务。
-
-对于这种情况，建议通过标签对Ingress对象进行分类，并相应地labelSelector为每个Traefik部署配置选项。为了坚持上面的内部/外部示例，所有用于内部流量的Ingress对象都可以接收traffic-type: internal标签，而为外部流量指定的对象会收到traffic-type: external标签。然后，Traefik Deployments上的标签选择器将分别为traffic-type=internal和traffic-type=external。
+* DaemonSet 确保只有一个节点有且只有一个副本。如果副本数要小于或大于集群节点数，建议通过 Deployment进行设置。
 
