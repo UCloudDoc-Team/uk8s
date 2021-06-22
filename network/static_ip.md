@@ -9,7 +9,7 @@
 ### 固定 IP 插件安装
 
 固定 IP 功能需要部署以下 3 个组件：
-* 自定义 CustomResourceDefinition 模板 VpcIPClaim，用以存储 IP + PodName信息；
+* 自定义 CustomResourceDefinition 对象 VpcIPClaim，用以存储 IP + PodName信息；
 * VIP-Controller 控制器，负责释放和重新分配固定 IP
 * CNI-VPC-IPAMD 网络插件，负责检查是否需要分配固定 IP
 
@@ -17,7 +17,7 @@
 
 ```
 kubectl apply -f vpcIpClaim.yaml
-kubectl apply -f  vip-controller.yaml
+kubectl apply -f vip-controller.yaml
 kubectl apply -f cni-vpc-ipamd.yaml
 ```
 
@@ -85,12 +85,12 @@ spec:
 
 ##### 2. Node 节点强制删除
 
-指在云主机页面（而非通过 UK8S 集群管理功能）进行 Node 节点云主机资源的删除，此情况下 UK8S 集群无法进行保留 VpcIP 操作，VpcIP 将会被主机服务强制释放，并存在被其他资源占用的可能性。
+指在云主机页面（而非通过 UK8S 集群管理功能）进行 Node 节点云主机资源的删除，此情况下 UK8S 管理服务无法进行保留 VpcIP 操作，VpcIP 将会被主机服务强制释放，并存在被其他资源占用的可能性。
 
-固定 IP 组件将会尝试申请重新申请旧有 VpcIP，并绑定至新拉起的 Pod 上，但如相应的 VpcIP 已被占用，将出现更新失败情况。
+固定 IP 组件将会尝试以指定 IP 形式重新申请旧有 VpcIP，并绑定至新拉起的 Pod 上，但如相应的 VpcIP 已被占用，将出现更新失败情况。
 
 ##### 3. 同一 StatefulSet 中出现不同 VPC 子网的 Pod
 
 固定 IP 功能暂**不支持跨 VPC 子网**，在 CNI 工作原理下，Pod 与所在 Node 节点处在同一 VPC 子网。如在 StatefulSet 扩容、Pod 异地更新、Node 节点宕机等情况下，Pod 被调度到非同子网的 Node 节点上，将会出现 Pod 创建/更新失败的错误。
 
-请**合理分配您的子网及网段**，避免在集群中存在多子网现象，或通过标签等将 StatefulSet 指定调度到同一子网 Node 节点上。
+建议您**合理分配您的子网及网段**，避免在集群中存在多子网现象，或通过标签等将 StatefulSet 指定调度到同一子网 Node 节点上。
