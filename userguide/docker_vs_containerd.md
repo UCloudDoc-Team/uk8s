@@ -5,7 +5,7 @@
 
 为了让低于 1.19 的 UK8S 集群能够升级到 1.19+，UK8S 也推出[容器运行时升级功能](#容器运行时升级)，帮助客户平滑升级。
 
-请注意，采用 containerd 运行时的节点，**请勿自行另外安装 docker，避免导致节点不可用**。UK8S 管理服务将通过 containerd 调用 CNI 网络插件进行 Pod IP 分配，如另行安装 docker，将会覆盖 containerd 的相关配置文件，CNI 将因配置冲突问题无法创建 IP。
+请注意，采用 containerd 运行时的节点，通过 containerd 调用 CNI 网络插件进行 Pod IP 分配，如另行安装 docker，将会覆盖 containerd 的相关配置文件，导致分配Pod IP失败。因此**请勿自行另外安装 docker，避免导致节点不可用**。  
 
 
 ### Docker 及 Cotainerd 命令对比
