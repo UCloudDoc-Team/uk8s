@@ -11,7 +11,7 @@
 请在您的 UK8S 集群中执行以下命令，安装固定 IP 功能组件，后续版本将支持通过控制台安装相关组件：
 
 ```
-kubectl apply -f https://gitee.com/uk8s/dashboard/projects/uk8s/uk8s/blob/master/yaml/network/cni-vpc-ipamd.yaml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/network/cni-vpc-ipamd.yml
 ```
 
 ### 创建固定 IP 类型的 StatefulSet
