@@ -8,16 +8,9 @@
 
 ### 固定 IP 插件安装
 
-固定 IP 功能需要部署以下 3 个组件：
-* 自定义 CustomResourceDefinition 对象 VpcIPClaim，用以存储 IP + PodName信息；
-* VIP-Controller 控制器，负责释放和重新分配固定 IP
-* CNI-VPC-IPAMD 网络插件，负责检查是否需要分配固定 IP
-
-请在您的 UK8S 集群中执行以下命令，安装上述固定 IP 功能需要的组件，后续版本将支持通过控制台安装相关组件：
+请在您的 UK8S 集群中执行以下命令，安装固定 IP 功能组件，后续版本将支持通过控制台安装相关组件：
 
 ```
-kubectl apply -f https://gitee.com/uk8s/dashboard/projects/uk8s/uk8s/blob/master/yaml/network/VpcIpClaim.yaml
-kubectl apply -f https://gitee.com/uk8s/dashboard/projects/uk8s/uk8s/blob/master/yaml/network/vip-controller.yaml
 kubectl apply -f https://gitee.com/uk8s/dashboard/projects/uk8s/uk8s/blob/master/yaml/network/cni-vpc-ipamd.yaml
 ```
 
@@ -28,7 +21,7 @@ kubectl apply -f https://gitee.com/uk8s/dashboard/projects/uk8s/uk8s/blob/master
 | 注释 | 注释说明 | 变量值 | 默认值 |
 |--------|--------|--------|--------|
 | service.beta.kubernetes.io/ucloud-statefulset-static-ip | 是否需要开启固定 IP 功能 | true / false | false |
-| service.beta.kubernetes.io/ucloud-statefulset-ip-claim-policy | IP 回收策略，即 Pod 销毁及绑定的 VpcIP 解绑后释放的时间 | hms / never<br>例：1h10m20s 代表 VpcIP 解绑后 1 小时 10 分 20 秒后被释放| never |
+| service.beta.kubernetes.io/ucloud-statefulset-ip-claim-policy | IP 回收策略，即 Pod 销毁及绑定的 VpcIP 解绑后释放的时间 | hms / Never<br>例：1h10m20s 代表 VpcIP 解绑后 1 小时 10 分 20 秒后被释放| Never |
 
 以下为创建一个 StatefulSet 类型的 Nginx 应用并对外暴露的 Yaml 范本
 
