@@ -60,7 +60,7 @@ tolerations:
 
 ### 详细注释说明
 
-通过 VK 插件创建 Cube 时，支持在 Pod annotations，或 Deployment / Statefulset spec.template.annotations 中添加相应字段，为 Cube 进行进一步配置
+通过 VK 插件创建 Cube 时，支持在 Pod annotations，或 Deployment / Statefulset 的 spec.template.annotations 中添加相应字段，为 Cube 进行进一步配置，相应注释说明如下：
 
 | 注释 | 参数类型 | 注释说明 | 默认值 |
 | ------ | ------ | ------ | ------ |
