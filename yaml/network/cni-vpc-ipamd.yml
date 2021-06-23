@@ -30,9 +30,6 @@ subjects:
   - kind: ServiceAccount
     name: cni-vpc-ipamd
     namespace: kube-system
-  - kind: ServiceAccount
-    name: vip-controller
-    namespace: kube-system 
 roleRef:
   kind: ClusterRole
   name: cni-vpc-ipamd
@@ -188,7 +185,7 @@ spec:
       labels:
          app: "vip-controller"
     spec:
-      serviceAccount: vip-controller
+      serviceAccount: cni-vpc-ipamd
       hostNetwork: true
       hostPID: true
       containers:
