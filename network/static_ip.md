@@ -20,8 +20,8 @@ kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/network/cni-vpc-ipa
 
 | 注释 | 注释说明 | 变量值 | 默认值 |
 |--------|--------|--------|--------|
-| service.beta.kubernetes.io/ucloud-statefulset-static-ip | 是否需要开启固定 IP 功能 | true / false | false |
-| service.beta.kubernetes.io/ucloud-statefulset-ip-claim-policy | IP 回收策略，即 Pod 销毁及绑定的 VpcIP 解绑后释放的时间 | hms / Never<br>例：1h10m20s 代表 VpcIP 解绑后 1 小时 10 分 20 秒后被释放| Never |
+| network.beta.kubernetes.io/ucloud-statefulset-static-ip | 是否需要开启固定 IP 功能 | true / false | false |
+| network.beta.kubernetes.io/ucloud-statefulset-ip-claim-policy | IP 回收策略，即 Pod 销毁及绑定的 VpcIP 解绑后释放的时间 | hms / Never<br>例：1h10m20s 代表 VpcIP 解绑后 1 小时 10 分 20 秒后被释放| Never |
 
 以下为创建一个 StatefulSet 类型的 Nginx 应用并对外暴露的 Yaml 范本
 
