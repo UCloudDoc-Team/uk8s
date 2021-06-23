@@ -65,12 +65,12 @@ tolerations:
 | 注释 | 参数类型 | 注释说明 | 默认值 |
 | ------ | ------ | ------ | ------ |
 | cube.ucloud.cn/cube-tag | string | 需要指定的业务组的名称 | / |
-| cube.ucloud.cn/cube-chargetype | year/month/postpay | 即按年预付费、按月预付费、按秒后付费，请参照[计费说明](/cube/introduction/charge) | postpay |
-| cube.ucloud.cn/cube-quantity | int | 月付时，此参数传 0，代表购买至月末 | 1 | 
+| cube.ucloud.cn/cube-chargetype | year/month/postpay | Cube 付费模式，即按年预付费、按月预付费、按秒后付费，请参照[计费说明](/cube/introduction/charge) | postpay |
+| cube.ucloud.cn/cube-quantity | int | Cube 付费时长，月付时，此参数传 0，代表购买至月末 | 1 | 
 | cube.ucloud.cn/cube-eip | true/false | 创建的 Cube 是否需要绑定 EIP | false | 
-| cube.ucloud.cn/cube-eip-id | eip-xxxxxxxx | 指定的 EIP ID | /，仅在 cube.ucloud.cn/cube-eip: "true" 时生效，<br>如该项留空，则创建新的 EIP | 
+| cube.ucloud.cn/cube-eip-id | eip-xxxxxxxx | 为 Cube 绑定指定相应资源 ID 的 EIP | /，仅在 cube.ucloud.cn/cube-eip: "true" 时生效，<br>如该项留空，则创建新的 EIP | 
 | cube.ucloud.cn/cube-eip-paymode | traffic/bandwidth/sharebandwidth | EIP 计费模式，分别代表流量计费 / 带宽计费 / 共享带宽模式 | bandwidth | 
-| cube.ucloud.cn/cube-eip-share-bandwidth-id | 仅在 EIP 计费模式为「共享带宽」时生效 | bwshare-xxxxxx | / | 
+| cube.ucloud.cn/cube-eip-share-bandwidth-id | bwshare-xxxxxx | 共享带宽 ID，仅在 EIP 计费模式为「共享带宽」时生效 | / | 
 | cube.ucloud.cn/cube-eip-bandwidth | int | 绑定 EIP 的外网带宽大小，共享带宽模式必须指定 0 | 2 | 
 | cube.ucloud.cn/cube-eip-chargetype | year/month/dynamic | EIP 付费模式，即按年预付费、按月预付费、按时后付费 | 取 cube.ucloud.cn/cube-chargetype 值；<br>该项为 postpay 时取 dynamic | 
 | cube.ucloud.cn/cube-eip-quantity | int | EIP 付费时长 | 取 cube.ucloud.cn/cube-quantity 值 | 
