@@ -18,7 +18,7 @@ kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/network/cni-vpc-ipa
 
 当前仅支持通过 Yaml 形式创建固定 IP 类型的 StatefulSet，需要您在 spec.template.annotations 添加相应注释进行配置，后续版本将支持通过控制台表单创建：
 
-| 注释 | 注释说明 | 变量值 | 默认值 |
+| 注释 | 注释说明 | 参数类型 | 默认值 |
 |--------|--------|--------|--------|
 | network.beta.kubernetes.io/ucloud-statefulset-static-ip | 是否需要开启固定 IP 功能 | true / false | false |
 | network.beta.kubernetes.io/ucloud-statefulset-ip-claim-policy | IP 回收策略，即 Pod 销毁及绑定的 VpcIP 解绑后释放的时间 | hms / Never<br>例：1h10m20s 代表 VpcIP 解绑后 1 小时 10 分 20 秒后被释放| Never |
