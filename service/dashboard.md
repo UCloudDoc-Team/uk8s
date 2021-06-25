@@ -54,6 +54,7 @@ Service的访问类型为HTTP，如果您希望使用HTTPS，请先购买SSL证�
 
 获取到外网IP后，我们直接在浏览器中输入IP，到达登录页面，Dashboard支持kubeconfig和token两种身份验证方式，此处我们选择Token验证方式。将获取的token复制到输入框，点击登录，即可开始使用Dashboard。
 
+>> 注意： 使用chrome登录，会报证书错误，点高级之后进入即可（mac电脑需要直接在键盘上盲输thisisunsafe）
 
 #### Dashboard v1.10.0
 查看EIP
