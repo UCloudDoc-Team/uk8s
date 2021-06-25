@@ -1,0 +1,269 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cni-vpc-ipamd
+  namespace: kube-system
+  labels:
+    app: "cni-vpc-ipamd"
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cni-vpc-ipamd
+  labels:
+    app: "cni-vpc-ipamd"
+rules:
+- apiGroups: [""]
+  resources: ["pods", "events", "nodes"]
+  verbs: ["get", "list","update", "watch", "delete", "create", "patch"]
+- apiGroups: ["vipcontroller.uk8s.com"]
+  resources: ["vpcipclaims"]
+  verbs: ["get", "list","update", "create", "delete", "watch", "patch"]  
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cni-vpc-ipamd
+  labels:
+    app: "cni-vpc-ipamd"
+subjects:
+  - kind: ServiceAccount
+    name: cni-vpc-ipamd
+    namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: cni-vpc-ipamd
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: cni-vpc-ipamd
+  namespace: kube-system
+  labels:
+    app: "cni-vpc-ipamd"
+spec:
+  selector:
+    matchLabels:
+      app: "cni-vpc-ipamd"
+  template:
+    metadata:
+      labels:
+         app: "cni-vpc-ipamd"
+    spec:
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - key: dedicated
+        operator: Exists
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
+      - effect: NoSchedule
+        key: node.cloudprovider.kubernetes.io/uninitialized
+        value: "true"
+      serviceAccount: cni-vpc-ipamd
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key:  node.uk8s.ucloud.cn/instance_type
+                  operator: In
+                  values:
+                    - uhost
+      hostNetwork: true
+      hostPID: true
+      initContainers:
+      - name: init-sqlite3-file
+        image: uhub.service.ucloud.cn/uk8s/cni-db-update:19.11.1
+        volumeMounts:
+          - name: host-cni
+            mountPath: /opt/cni/
+          - name: host-sysconfig
+            mountPath: /etc/sysconfig/
+      containers:
+        - name: cni-vpc-ipamd
+          image: uhub.service.ucloud.cn/uk8s/cni-vpc-ipamd:21.06.1
+          resources:
+            limits:
+              cpu: 200m 
+              memory: 500Mi
+            requests:
+              cpu: 200m
+              memory: 500Mi
+          securityContext:
+            privileged: true
+          args:
+            - "--availablePodIPLowWatermark=5"
+            - "--secondaryIPWarmingSeconds=10"
+          imagePullPolicy: "Always"
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "rm -rf /run/cni-vpc-ipamd.sock"]
+          envFrom:
+          - configMapRef:
+              name: uk8sconfig
+          env:
+            - name: KUBE_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          livenessProbe:
+            exec:
+              command:
+              - /opt/cni/bin/cnivpc
+              - version
+            periodSeconds: 10
+            initialDelaySeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            exec:
+              command:
+              - /opt/cni/bin/cnivpc
+              - version
+            periodSeconds: 10
+            initialDelaySeconds: 5
+            failureThreshold: 5
+          volumeMounts:
+            - name: user-config
+              mountPath: /etc/uk8s/
+            - name: host-run
+              mountPath: /run/
+            - name: host-log
+              mountPath: /var/log/ucloud/
+            - name: host-cni
+              mountPath: /opt/cni/
+            - name: device-plugin-path
+              mountPath: /var/lib/kubelet/device-plugins
+            - name: var-run-ns
+              mountPath: /var/run/netns/
+              mountPropagation: "Bidirectional"
+            - name: host-data
+              mountPath: /etc/kubernetes
+              readOnly: true
+      volumes:
+        - name: host-run
+          hostPath:
+            path: /run/
+        - name: host-log
+          hostPath:
+            path: /var/log/ucloud/
+        - name: device-plugin-path
+          hostPath:
+            path: /var/lib/kubelet/device-plugins
+            type: "Directory"
+        - name: host-sysconfig
+          hostPath:
+            path: /etc/sysconfig/
+        - name: var-run-ns
+          hostPath:
+            path: /var/run/netns/
+        - name: host-cni
+          hostPath:
+            path: /opt/cni/
+        - name: user-config
+          configMap:
+            name: uk8sconfig
+        - name: host-data
+          hostPath:
+            path: /etc/kubernetes
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vip-controller
+  namespace: kube-system
+  labels:
+    app: "vip-controller"
+spec:
+  selector:
+    matchLabels:
+      app: "vip-controller"
+  template:
+    metadata:
+      labels:
+         app: "vip-controller"
+    spec:
+      serviceAccount: cni-vpc-ipamd
+      hostNetwork: true
+      hostPID: true
+      containers:
+        - name: vip-controller
+          image: uhub.service.ucloud.cn/uk8s/vip-controller:21.06.1
+          resources:
+            limits:
+              cpu: 200m 
+              memory: 500Mi
+            requests:
+              cpu: 200m
+              memory: 500Mi
+
+          securityContext:
+            privileged: true
+          imagePullPolicy: "Always"
+          envFrom:
+          - configMapRef:
+              name: uk8sconfig
+          volumeMounts:
+            - name: user-config
+              mountPath: /etc/uk8s/
+            - name: host-data
+              mountPath: /etc/kubernetes
+              readOnly: true
+      volumes:
+        - name: host-sysconfig
+          hostPath:
+            path: /etc/sysconfig/
+        - name: user-config
+          configMap:
+            name: uk8sconfig
+        - name: host-data
+          hostPath:
+            path: /etc/kubernetes 
+--- 
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: vpcipclaims.vipcontroller.uk8s.com
+spec:
+  group: vipcontroller.uk8s.com 
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                podname:
+                  type: string 
+                subnetId:
+                  type: string
+                vpcId:
+                  type: string 
+                ip:
+                  type: string 
+                mac:
+                  type: string 
+                mask:
+                  type: string 
+                gateway:
+                  type: string
+            status:
+              type: object 
+              properties:
+                attach: 
+                  type: boolean 
+                lastunattachtime:
+                  type: string
+                releasetime: 
+                  type: string 
+  scope: Namespaced  
+  names:
+    plural: vpcipclaims
+    singular: vpcipclaim
+    kind: VpcIpClaim

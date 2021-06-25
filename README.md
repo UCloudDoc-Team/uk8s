@@ -41,7 +41,8 @@
 * 集群网络
     * [集群网络](/uk8s/network/uk8s_network)
     * [网络隔离](/uk8s/network/networkpolicy)
-    * [CNI 网络插件升级](/uk8s/network/cni_update)
+    * [固定 IP 使用方法](/uk8s/network/static_ip)
+    * [CNI 网络插件升级](/uk8s/network/cni_update)    
 * 集群存储
     * [Volume 介绍](/uk8s/volume/intro)
     * [在UK8S中使用UDISK](/uk8s/volume/udisk)
