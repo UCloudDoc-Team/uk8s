@@ -1,5 +1,6 @@
-# 最佳实践
+#最佳实践
 * [基于Jenkins的CI/CD实践](/uk8s/bestpractice/cicd)
+* [Kaniko&Jenkins CD/CD实践](/uk8s/bestpractice/cicd_contaierd)
 * [权限管理](/uk8s/bestpractice/authorization/README)
     * [了解RBAC](/uk8s/bestpractice/authorization/rbac)
     * [权限管理实践](/uk8s/bestpractice/authorization/practice)
