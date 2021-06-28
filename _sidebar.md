@@ -92,7 +92,8 @@
         * [预防OOM](/uk8s/troubleshooting/prevent_oom)
     * [集群ULB误删处理](/uk8s/troubleshooting/ulb_undelete)
 * 最佳实践
-    * [基于Jenkins的CI/CD实践](/uk8s/bestpractice/cicd)
+    * [Docker&Jenkins CI/CD实践](/uk8s/bestpractice/cicd)
+    * [Kaniko&Jenkins CI/CD实践](/uk8s/bestpractice/cicd_containerd)
     * [权限管理](/uk8s/bestpractice/authorization/README)
     * [亲和性实践](/uk8s/bestpractice/affinity)
 * [产品价格](/uk8s/price)
