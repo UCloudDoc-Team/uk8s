@@ -17,7 +17,7 @@ Master规格跟集群规模有关，集群规模越大，所需要的Master规�
 如随着集群规模提升，有升级 Master 节点规格配置需求，请在云主机节点管理页面，**逐台进行更改配置**。
 ![](/images/introduction/node_requirement_01.png)
 
-在升级下一台 Master 节点前，**请确保上一台节点已处于 Ready 状态**。
+在升级下一台 Master 节点前，**请确保其它两台 Master 节点已处于 Ready 状态**。
 
 ### 2、如何选择Node配置大小
 
