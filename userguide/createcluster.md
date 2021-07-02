@@ -3,7 +3,7 @@
 
 如果你是初次接触Kubernetes，我们建议你预先创建好一个新的VPC和子网，与生产环境隔离。
 
-创建集群之前，你需要先了解下Kubernetes中的Node CIDR、Pod CIDR、Service CIDR等基本概念，[点击查看](uk8s/network)
+创建集群之前，你需要先了解下Kubernetes中的Node CIDR、Pod CIDR、Service CIDR等基本概念，[点击查看](uk8s/network/uk8s_network)
 
 
 ### 一、集群授权
@@ -15,7 +15,7 @@
 
 ### 二、配置集群网络信息
 
-Pod与Node同处于一个VPC 子网下，因此VPC子网的网段大小决定了集群可创建的Pod数量上限，详情请查看[Kubernetes网络](uk8s/network)
+Pod与Node同处于一个VPC 子网下，因此VPC子网的网段大小决定了集群可创建的Pod数量上限，详情请查看[Kubernetes网络](uk8s/network/uk8s_network)
 ![](/images/userguide/clusternet.png)
 
 ### 三、选择集群节点（云主机）配置
