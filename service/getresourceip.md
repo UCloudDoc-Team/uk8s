@@ -44,7 +44,7 @@ metadata:
 spec:
   containers:
   - name: nginx
-    image: uhub.service.ucloud.cn/wxyz/uk8s-helloworld:1.8
+    image: uhub.service.ucloud.cn/uk8s/uk8s-helloworld:stable
     ports:
      - containerPort: 12345
 
