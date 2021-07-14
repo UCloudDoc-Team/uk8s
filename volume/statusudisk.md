@@ -1,15 +1,13 @@
-
-## 在UK8S中使用已有UDisk
-
+# 在UK8S中使用已有UDisk
 
 
 已创建UDisk云盘如图显示，其中资源ID、和类型，在集群中挂载时需要使用。
 
 ![](/images/volume/have_udisk.png)
 
-### 1.新建StorageClass
+## 1. 新建StorageClass
 
-在集群中创建对应的StorageClass，由于UK8S的存储插件有CSI和flexVolume两个版本，分别示例如下：
+在集群中创建对应的 StorageClass，由于UK8S的存储插件有CSI和flexVolume两个版本，分别示例如下：
 
 #### CSI版本 （2019年9月17日之后创建的集群）
 

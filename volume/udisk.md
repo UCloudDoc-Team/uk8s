@@ -14,14 +14,11 @@ UK8S支持直接在集群中使用UDisk作为持久化存储卷。
 
 5. 同一个Pod如果挂载多块UDisk，则必须确保UDisk处于同一可用区，否则容器无法启动。
 
-## 一、存储类 StorageClass
+## 一. 存储类 StorageClass
 
 在创建持久化存储卷（PersistentVolume）之前，你需要先创建 StorageClass，然后在 PVC 中使用 StorageClassName。
 
 UK8S 集群默认创建了两个 StorageClass，你也可以创建一个新的StorageClass，示例及说明如下：
-
-
-### 1. CSI版本（2019年9月17日之后创建的 UK8S 集群）
 
 ```yaml
 apiVersion: storage.k8s.io/v1
@@ -43,30 +40,61 @@ mountOptions:
 ```
 备注：1.15之前的Kubernetes版本，mountOptions无法正常使用，请勿填写，详见[Issue80191](https://github.com/kubernetes/kubernetes/pull/80191) 
 
-#### 2. flexVolume版本(2019年9月17日之前创建的UK8S集群)
+
+## 二. 创建持久化存储卷声明 PVC
+
+
+### 1. 新建 UDisk
+
+> 使用新建 UDisk，则可直接创建 PVC 对象，CSI 会自动创建 UDisk 并关联。
+
+>
 
 ```yaml
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
+kind: PersistentVolumeClaim
+apiVersion: v1
 metadata:
-  name: udisk-ssd-test
-provisioner: ucloud/udisk
-parameters:
-  type: ssd
-reclaimPolicy: Retain
+  name: test-pvc-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+## storageClassName必须与上文创建的 StorageClass 的name一致
+  storageClassName: udisk-ssd-test
+  resources:
+    requests:
+      storage: 20Gi
 ```
 
-**provisioner:** 存储供应方，此处必须为`ucloud/udisk`，否则创建出来的StorageClass可能无效。
 
-**parameters.type:** UDisk的存储介质类型，支持ssd和sata，默认为ssd。
+### 2. 使用已有 UDisk
 
-**reclaimPolicy:** 回收策略，支持Delete和Retain，默认为Delete。
+> 如需使用已有 UDisk，需先创建 PV 对象并与已有 UDisk 绑定，再创建 PVC 对象、使用与 PV 相同的声明进行关联
 
+#### 创建持久化存储卷 PV
 
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: test-pvc-claim
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 20Gi
+  csi:
+    driver: udisk.csi.ucloud.cn
+    volumeAttributes:
+      type: ssd # 磁盘类型，枚举值为ssd,sata,rssd
+    volumeHandle: bs-qg55w254 # 请修改为自己的UDiskId
+  persistentVolumeReclaimPolicy: Retain
+## storageClassName必须与上文创建的 StorageClass 的name一致
+  storageClassName: udisk-ssd-test
+```
 
-## 二、创建持久化存储卷声明（PVC）
+#### 创建 PVC 并与 PV 关联
 
->spec.storageClassName必须与上文创建的 StorageClass 的name一致。
+**spec.storageClassName**、**spec.resources.requests.storage**、**volumeName**需要与pv相对应。
 
 ```yaml
 kind: PersistentVolumeClaim
@@ -80,9 +108,10 @@ spec:
   resources:
     requests:
       storage: 20Gi
+  volumeName: test-pvc-claim
 ```
 
-## 三、在pod中使用PVC
+## 三. 在 Pod 中使用 PVC
 
 ```yaml
 apiVersion: v1
