@@ -76,3 +76,63 @@ tolerations:
 | cube.ucloud.cn/cube-eip-quantity | int | EIP 付费时长 | 取 cube.ucloud.cn/cube-quantity 值 | 
 | cube.ucloud.cn/cube-eip-release | true/false | 删除 Cube 实例时是否需要释放绑定的 EIP | true | 
 | cube.ucloud.cn/cube-eip-security-group-id | firewall-xxxxxxxx | 需要绑定的外网防火墙策略，不指定时绑定项目默认防火墙 |/ | 
+
+
+## UDisk 存储卷挂载支持
+
+用户可以通过声明 PVC 存储卷的方式为 VK 节点上的 Cube 实例创建挂载 UDisk 存储卷，这部分工作由 CSI UDisk 和 Virtual Kubelet 组件共同完成，存储类、持久卷声明用法与正常在 UK8S 中使用存储卷一致（详见：[在 UK8S 中使用 UDisk](/uk8s/volume/udisk)）。
+
+以下是使用例子：
+
+```yaml
+## 创建存储类 StorageClass
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ssd-csi-udisk
+provisioner: udisk.csi.ucloud.cn
+parameters:
+  type: "ssd"
+  fsType: "ext4"
+reclaimPolicy: Delete
+## 如绑定模式设置为 WaitForFirstConsumer，则只能通过 pod.spec.nodeSelector 指定 VK 节点
+volumeBindingMode: WaitForFirstConsumer
+---
+## 创建持久化存储卷声明 PVC
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: logdisk-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ssd-csi-udisk
+  resources:
+    requests:
+      storage: 20Gi
+---
+## 在 Pod 中使用 VPC
+apiVersion: v1
+kind: Pod
+metadata:
+  name: httpbasic
+  labels:
+spec:
+  tolerations:                               
+  - effect: NoSchedule
+    key: virtual-kubelet.io/provider
+    operator: Equal
+    value: ucloud
+  nodeSelector:
+    type: virtual-kubelet
+  containers:
+  - name: http
+    image: uhub.service.ucloud.cn/ucloud/nginx:latest
+    volumeMounts:
+    - name: log
+      mountPath: /data
+  volumes:
+  - name: log
+    persistentVolumeClaim:
+      claimName: logdisk-claim
+```

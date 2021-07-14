@@ -1,5 +1,4 @@
-
-## 在UK8S中使用UDISK
+# 在UK8S中使用UDISK
 
 UK8S支持直接在集群中使用UDisk作为持久化存储卷。
 
@@ -15,15 +14,15 @@ UK8S支持直接在集群中使用UDisk作为持久化存储卷。
 
 5. 同一个Pod如果挂载多块UDisk，则必须确保UDisk处于同一可用区，否则容器无法启动。
 
-### 一、存储类 StorageClass
+## 一、存储类 StorageClass
 
-在创建持久化存储卷（persistentVolume）之前，你需要先创建StorageClass，然后在PVC中使用StorageClassName。
+在创建持久化存储卷（PersistentVolume）之前，你需要先创建 StorageClass，然后在 PVC 中使用 StorageClassName。
+
+UK8S 集群默认创建了两个 StorageClass，你也可以创建一个新的StorageClass，示例及说明如下：
 
 
-UK8S集群默认创建了两个StorageClass，你也可以创建一个新的StorageClass，示例及说明如下：
+### 1. CSI版本（2019年9月17日之后创建的 UK8S 集群）
 
-
-#### 1、CSI版本（2019年9月17日之后创建的UK8S集群）
 ```yaml
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -44,7 +43,8 @@ mountOptions:
 ```
 备注：1.15之前的Kubernetes版本，mountOptions无法正常使用，请勿填写，详见[Issue80191](https://github.com/kubernetes/kubernetes/pull/80191) 
 
-#### 2、flexVolume版本(2019年9月17日之前创建的UK8S集群)
+#### 2. flexVolume版本(2019年9月17日之前创建的UK8S集群)
+
 ```yaml
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
@@ -64,9 +64,9 @@ reclaimPolicy: Retain
 
 
 
-### 二、创建持久化存储卷声明（PVC）
+## 二、创建持久化存储卷声明（PVC）
 
->storageClassName必须与上文创建的StorageClass的name一致。
+>spec.storageClassName必须与上文创建的 StorageClass 的name一致。
 
 ```yaml
 kind: PersistentVolumeClaim
@@ -82,7 +82,7 @@ spec:
       storage: 20Gi
 ```
 
-### 三、在pod中使用PVC
+## 三、在pod中使用PVC
 
 ```yaml
 apiVersion: v1
@@ -92,7 +92,7 @@ metadata:
 spec:
   containers:
   - name: nginx
-    image: nginx
+    image: uhub.service.ucloud.cn/ucloud/nginx:latest
     volumeMounts:
     - name: test
       mountPath: /data
