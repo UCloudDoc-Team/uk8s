@@ -48,8 +48,6 @@ mountOptions:
 
 > 使用新建 UDisk，则可直接创建 PVC 对象，CSI 会自动创建 UDisk 并关联。
 
->
-
 ```yaml
 kind: PersistentVolumeClaim
 apiVersion: v1

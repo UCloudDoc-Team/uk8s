@@ -81,7 +81,7 @@ tolerations:
 
 ## UDisk 存储卷挂载支持
 
-用户可以通过声明 PVC 存储卷的方式为 VK 节点上的 Cube 实例创建挂载 UDisk 存储卷，这部分工作由 CSI UDisk 和 Virtual Kubelet 组件共同完成，存储类、持久卷声明用法与正常在 UK8S 中使用存储卷一致（包括新建 UDisk 及使用已有 UDisk，详见：[在 UK8S 中使用 UDisk](/uk8s/volume/udisk)）。
+用户可以通过声明 PVC 存储卷的方式为 VK 节点上的 Cube 实例创建挂载 UDisk 存储卷，这部分工作由 CSI UDisk 和 Virtual Kubelet 组件共同完成，存储类、持久卷声明用法与正常在 UK8S 中使用存储卷一致（**包括新建 UDisk 及使用已有 UDisk**，详见：[在 UK8S 中使用 UDisk](/uk8s/volume/udisk)）。
 
 以下是使用例子：
 
@@ -93,7 +93,7 @@ metadata:
   name: ssd-csi-udisk
 provisioner: udisk.csi.ucloud.cn
 parameters:
-## 建议使用 SSD 云盘，避免因 RSSD 云盘 RDMA 区域与 Cube 无法匹配导致云盘无法挂载
+## 建议使用 SSD 或 SATA 云盘，避免因 RSSD 云盘 RDMA 区域与 Cube 无法匹配导致云盘无法挂载
   type: "ssd"
 ## 不支持 xfs 文件系统
   fsType: "ext4"
@@ -103,6 +103,7 @@ reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer
 ---
 ## 创建持久化存储卷声明 PVC
+## 不支持 Volume Expansion（存储卷动态扩容）
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
