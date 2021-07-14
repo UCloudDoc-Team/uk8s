@@ -140,6 +140,3 @@ spec:
     persistentVolumeClaim:
       claimName: logdisk-claim
 ```
-
-### 常见问题
-
