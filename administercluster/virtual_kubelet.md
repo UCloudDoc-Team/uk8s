@@ -116,7 +116,7 @@ spec:
     requests:
       storage: 20Gi
 ---
-## 在 Pod 中使用 VPC
+## 在 Pod 中使用 PVC
 apiVersion: v1
 kind: Pod
 metadata:
