@@ -37,16 +37,16 @@ metadata:
   labels:
     app: ucloud-nginx-out-tcp-new
   annotations:
-    "service.beta.kubernetes.io/ucloud-load-balancer-type": "outer"
     # 代表ULB网络类型，outer为外网，inner为内网；outer为默认值，此处可省略。
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "tcp"
+    "service.beta.kubernetes.io/ucloud-load-balancer-type": "outer"
     # 表示ULB协议类型，tcp与udp等价，表示ULB4；http与httpS等价，表示ULB7；tcp为默认值，此处可省略。
-    "service.beta.kubernetes.io/ucloud-load-balancer-eip-bandwidth": "2" 
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "tcp"
     # bandwidth下默认为2Mpbs,建议显式声明带宽大小，避免费用超标。
-    "service.beta.kubernetes.io/ucloud-load-balancer-eip-chargetype": "month" 
+    "service.beta.kubernetes.io/ucloud-load-balancer-eip-bandwidth": "2" 
     # 付费模式，支持month，year，dynamic，默认为month
-    "service.beta.kubernetes.io/ucloud-load-balancer-eip-quantity": "1" 
+    "service.beta.kubernetes.io/ucloud-load-balancer-eip-chargetype": "month" 
     # 付费时长，默认为1，chargetype为dynimic时无效    
+    "service.beta.kubernetes.io/ucloud-load-balancer-eip-quantity": "1"     
 spec:
   type: LoadBalancer
   ports:
@@ -83,12 +83,12 @@ metadata:
   labels:
     app: ucloud-out-udp-new
   annotations:
-    "service.beta.kubernetes.io/ucloud-load-balancer-type": "outer"
     # 代表ULB网络类型，outer为外网，inner为内网；outer为默认值，此处可省略。
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "udp"
+    "service.beta.kubernetes.io/ucloud-load-balancer-type": "outer"
     # 表示ULB协议类型，tcp与udp等价，表示ULB4；http与httpS等价，表示ULB7；tcp为默认值，此处可省略。
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type": "port"
-     # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "udp"
+    # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type": "port"    
 spec:
   type: LoadBalancer
   ports:
@@ -135,8 +135,7 @@ Git Commit ID:			2723d13b69a4d6f5b905a7f96bd7eed49617f439
 
 老版本的ULB7只支持单种协议，即HTTP或HTTPS。 下文示例中，对外暴露2个端口,都使用HTTP协议。
 
-```
-
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -144,13 +143,12 @@ metadata:
   labels:
     app: ucloud-nginx-out-tcp-new
   annotations:
-    "service.beta.kubernetes.io/ucloud-load-balancer-type": "outer"
     # 代表ULB类型，outer为外网，inner为内网；outer为默认值，此处可省略。
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-listentype": "requestproxy"
+    "service.beta.kubernetes.io/ucloud-load-balancer-type": "outer"
     # 代表监听器的类型为请求代理，必须填写。
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "http"
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-listentype": "requestproxy"
     # 表示Verser的协议类型，此处为http，则所有的service端口对应的Vserver protocol 都为http，反之亦然。
-
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "http"
 spec:
   type: LoadBalancer
   ports:
@@ -186,7 +184,6 @@ spec:
 19.05.3以后的插件，外网ULB7同时支持HTTP和HTTPS两种协议，下文示例中，对外暴露了三个端口，其中80端口使用HTTP协议，443和8443使用HTTPS协议。
 
 ```yaml
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -194,16 +191,16 @@ metadata:
   labels:
     app: ucloud-nginx-out-tcp-new
   annotations:
-    "service.beta.kubernetes.io/ucloud-load-balancer-type": "outer"
     # 代表ULB类型，outer为外网，inner为内网；outer为默认值，此处可省略。
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-listentype": "requestproxy"
+    "service.beta.kubernetes.io/ucloud-load-balancer-type": "outer"
     # 代表监听器的类型为请求代理，5月30日后安装的集群无需填写。
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "https"
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-listentype": "requestproxy"
     # 表示ULB协议类型，http与https等价，表示ULB7；
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert": "ssl-b103etqy"
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "https"
     # 声明要绑定的SSL证书Id，需要先将证书上传至UCloud；
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port": "443,8443"
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert": "ssl-b103etqy"
     # 声明使用SSL协议的Service端口，多个用","分隔；
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port": "443,8443"    
 spec:
   type: LoadBalancer
   ports:
@@ -240,8 +237,7 @@ spec:
 
 小于19.05.3版本的插件，所有service端口只能是HTTP或HTTPS，不能混合使用。
 
-<code yaml>
-
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -249,14 +245,14 @@ metadata:
   labels:
     app: ucloud-nginx-out-tcp-new
   annotations:
-    "service.beta.kubernetes.io/ucloud-load-balancer-type": "outer"
     # 代表ULB类型，outer为外网，inner为内网；outer为默认值，此处可省略。
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-listentype": "requestproxy"
+    "service.beta.kubernetes.io/ucloud-load-balancer-type": "outer"
     # 代表监听器的类型为请求代理，插件版本小于19.05.3的版本必须填写。
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "https"
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-listentype": "requestproxy"
     # 表示Verser的协议类型，此处为https，则所有的service端口对应的Vserver protocol 都为https，反之亦然。
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert": "ssl-b103etqy"
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "https"
     # 声明要绑定的SSL证书Id，需要先将证书上传至UCloud；
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert": "ssl-b103etqy"    
 spec:
   type: LoadBalancer
   ports:
@@ -297,8 +293,7 @@ spec:
 使用ULB7的HTTPS协议模式时，Pod内的服务程序不需要实现HTTPS协议服务，只需要提供HTTP服务即可，ULB7发往后端的报文为解密后的HTTP协议报文。
 
 
-```
-
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -306,14 +301,14 @@ metadata:
   labels:
     app: ucloud-nginx-out-tcp-new
   annotations:
-    "service.beta.kubernetes.io/ucloud-load-balancer-type": "outer"
     # 代表ULB类型，outer为外网，inner为内网；outer为默认值，此处可省略。
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "http"
+    "service.beta.kubernetes.io/ucloud-load-balancer-type": "outer"
     # 表示ULB协议类型，http与https等价，表示ULB7；
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert": "ssl-b103etqy"
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "http"
     # 声明要绑定的SSL证书Id，需要先将证书上传至UCloud；
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port": "443"
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert": "ssl-b103etqy"
     # 声明使用SSL协议的Service端口，多个用","分隔；
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port": "443"    
 spec:
   type: LoadBalancer
   ports:
