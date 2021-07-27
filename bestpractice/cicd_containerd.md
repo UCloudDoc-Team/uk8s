@@ -58,7 +58,7 @@ spec:
         fsGroup: 1000
       containers:
       - name: jenkins
-        image: uhub.service.ucloud.cn/longlong/jenkins:2.295-centos
+        image: uhub.service.ucloud.cn/uk8s/jenkins:2.295-centos
         resources:
           limits:
             memory: "8G"
