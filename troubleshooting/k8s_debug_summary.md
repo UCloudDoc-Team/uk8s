@@ -31,6 +31,7 @@
 对于使用 UK8S 遇到的本文档未涉及的问题，如果需要人工支持，请添加下面公钥信任，并提供主机的 uhost-id
 
 > Centos 系统认证文件为 /root/.ssh/autorized_keys
+
 > Ubuntu 系统认证文件为 /home/.ssh/autorized_keys
 
 ```
