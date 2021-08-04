@@ -30,20 +30,12 @@
 
 对于使用 UK8S 遇到的本文档未涉及的问题，如果需要人工支持，请添加下面公钥信任，并提供主机的 uhost-id
 
-> Centos 系统认证文件为 /root/.ssh/authorized_keys  
-> Ubuntu 系统认证文件为 /home/.ssh/authorized_keys
+> Centos 系统认证文件为 /root/.ssh/authorized_keys<br>Ubuntu 系统认证文件为 /home/.ssh/authorized_keys
 
 ```
 cat << EOF > /root/.ssh/authorized_keys
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGIFVUtrp+jAnIu1fBvyLx/4L4GNsX+6v8RodxM+t3G7gCgaG+kHqs1xkLBWQNNMVQz2c/vA1gMNYASnvK/aQJmI9NxuOoaoqbL/yrZ58caJG82TrDKGgByvAYcT5yJkJqGRuLlF3XL1p2C0P8nxf2dzfjQgy5LGvZ1awEsIeoSdEuicaxFoxkxzTH/OM2WSLuJ+VbFg8Xl0j3F5kP9sT/no1Gau15zSHxQmjmpGJSjiTpjSBCm4sMaJQ0upruK8RuuLAzGwNw8qRXJ4qY7Tvg36lu39KHwZ22w/VZT1cNZq1mQXvsR54Piaix163YoXfS7jke6j8L6Nm2xtY4inqd uk8s-tech-support
 EOF
-```
-修改配置文件
-
-```
-# vim /etc/ssh/sshd_config
-PubkeyAuthentication yes
-AuthorizedKeysFile /root/.ssh/authorized_keys
 ```
 
 ## 为什么我的容器一起来就退出了？
