@@ -14,7 +14,7 @@
 |地域|VK 节点所属地域，即 UK8S 集群所在地域，不可更改。|
 |所属子网|VK 节点及生成的 Cube Pod 所在子网，默认为 UK8S 集群 Master 节点所在子网。|
 |可用区|VK 节点及生成的 Cube Pod 所在可用区，<br>当前 Cube 支持可用区：华北（北京）B/E，上海二A，广州B，香港B，东京A。|
-|Pod 默认配置|不指定资源 requests 情况下，VK 节点生成的 Cube Pod 的默认资源配置。|
+|Pod 默认配置|不指定资源 requests 情况下，VK 节点生成的 Cube Pod 中单个 Container 的默认资源配置。|
 |节点最大 Pod 数|节点最大可以创建的 Cube Pod 数量，当前支持最多 200 个 Cube Pod。|
 |Cluster IP 支持|虚拟节点生成的 Cube Pod 可与 UK8S 中 Pod 通过 Cluster IP 互相访问。<br>当 Cube 急剧扩容时，开启该功能会导致 UK8S ApiServer 压力急剧上升。对无需使用 K8S Service 转发能力的容器，建议不开启该功能。|
 
@@ -49,7 +49,7 @@ tolerations:
   operator: Equal
   value: ucloud
 ```
-创建 Cube 实例时，需注意特定 CPU / 内存规格有一定的比例及限制，VK 支持创建 Cube 规格配置如下：
+创建 Cube 实例时，需注意特定 CPU / 内存规格有一定的比例及限制，单个 Container 的规格配置如下：
 
 | CPU | 内存 |
 |-----|-----|
@@ -57,7 +57,11 @@ tolerations:
 |1|1Gi/2Gi/4Gi|
 |2|2Gi/4Gi/8Gi|
 |4|4Gi/8Gi/16Gi|
-|8|8Gi/16Gi|
+|8|8Gi/16Gi/32Gi|
+|16|16Gi/32Gi/64Gi|
+|32|32Gi/64Gi|
+
+单个 Cube 实例所有 Container 资源总和上限为 32C64G。
 
 ### 详细注释说明
 
