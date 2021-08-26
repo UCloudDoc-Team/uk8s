@@ -104,12 +104,12 @@ EOF
 
 ## 为什么我的 UHub 登陆失败了?
 
-1. 请确认是在公网还是 UCloud 内网进行登陆的（如果 ping uhub 的 ip 为 117.50.7.5 则表示是通过公网拉取）
+1. 请确认是在公网还是 UCloud 内网进行登陆的（如果 ping uhub 的 ip 为 106.75.56.109 则表示是通过公网拉取）
 2. 如果在公网登陆，请在 UHub 的 Console 页面确认外网访问选项打开
 3. 确认是否使用独立密码登陆，UHub 独立密码是和用户绑定的，而不是和镜像库绑定的
 
 ## UHub 下载失败（慢）
-1. `ping uhub.service.ucloud.cn` （如果ip为117.50.7.5 则表示是通过公网拉取，有限速）
+1. `ping uhub.service.ucloud.cn` （如果ip为106.75.56.109 则表示是通过公网拉取，有限速）
 2. `curl https://uhub.service.ucloud.cn/v2/` 查看是否通，正常会返回 UNAUTHORIZED 或 301
 3. `systemctl show --property=Environment docker` 查看是否配置了代理
 4. 在拉镜像节点执行`iftop -i any -f 'host <uhub-ip>'`命令，同时尝试拉取 UHub 镜像，查看命令输出（uhub-ip替换为步骤1中得到的ip）
