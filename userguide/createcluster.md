@@ -30,7 +30,7 @@ UK8S 专有版集群默认需要创建三个 Master 节点以保证生产环境�
 |可用区|Master/Node 节点所在可用区，在具有多个可用区的地域可以选择多可用区 UK8S 集群，建议在创建集群时将 Master 节点分布于多个可用区。|
 |节点规格|包括机型、CPU 平台、CPU、内存、系统盘类型、数据盘类型、数据盘大小等配置，详见[机型与 CPU 平台](/uhost/introduction/uhost/type_new)。<br>Node 节点的数据盘会 mount 到节点的 `/data` 目录，集群 Node 安装 Docker 引擎时安装在 `/data` 目录下，如创建时 Node 节点配置使用了数据盘，手动删除数据盘会导致 Node 节点不可用，如不需要数据盘可以在创建选择时删除，Docker 引擎会安装到系统盘的 `/data` 目录下|
 |硬件隔离组|Master 节点默认位于同一硬件隔离组，硬件隔离组能严格确保组内的每一台云主机都落在不同的物理机上。每个隔离组在单个可用区至多可以添加 7 台云主机，详见[硬件隔离组](uhost/guide/isolationgroup)|
-|最大 Pod 数|单个 Node 节点可承载的最大 Pod 数量|
+|最大 Pod 数|单个 Node 节点可支持承载的最大 Pod 数量|
 |标签|Node 节点标签，详见 Kubernetes 官方文档：[标签和运算符](https://kubernetes.io/zh/docs/concepts/overview/working-with-objects/labels/)|
 |污点|Node 节点污点，详见 Kubernetes 官方文档：[污点和容忍度](https://kubernetes.io/zh/docs/concepts/scheduling-eviction/taint-and-toleration/)|
 |Node 节点数量|初始集群 Node 节点数量限制为 1 - 10 台|

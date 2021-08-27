@@ -8,7 +8,6 @@
     * [漏洞修复记录](/uk8s/introduction/vulnerability/README)
     * [集群节点配置推荐](/uk8s/introduction/node_requirements)
 * 操作指南
-    * [Docker VS Containerd](/uk8s/userguide/docker_vs_containerd)
     * [使用必读](/uk8s/userguide/before_start)
     * [创建集群](/uk8s/userguide/createcluster)
     * [删除集群](/uk8s/userguide/deletecluster)
@@ -17,6 +16,7 @@
     * kube-proxy 相关
         * [kube-proxy模式选择](/uk8s/userguide/kubeproxy_mode)
         * [kube-proxy模式切换](/uk8s/userguide/kubeproxy_edit)
+    * [Docker VS Containerd](/uk8s/userguide/docker_vs_containerd)    
 * 集群管理
     * 通过 Kubectl 管理集群
         * [kubectl命令行简介](/uk8s/manageviakubectl/intro_of_kubectl)
