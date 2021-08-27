@@ -1,47 +1,81 @@
+# 创建集群
 
-## 创建集群
+如果您是初次接触 Kubernetes，我们建议您预先创建好一个新的 VPC 和子网，与生产环境隔离。
 
-如果你是初次接触Kubernetes，我们建议你预先创建好一个新的VPC和子网，与生产环境隔离。
+创建集群之前，您需要先了解下 Kubernetes 中的Node CIDR、Pod CIDR、Service CIDR等基本概念，[点击查看](uk8s/network/uk8s_network)
 
-创建集群之前，你需要先了解下Kubernetes中的Node CIDR、Pod CIDR、Service CIDR等基本概念，[点击查看](uk8s/network/uk8s_network)
+## 1. 配置集群网络信息
+
+登录控制台**私有网络 VPC**页面，进行 VPC 网络及子网网段的规划（[私有网络 VPC 文档](vpc/README)）。在 UK8S 集群中，Pod 与其所在的 Node 同处于一个 VPC 子网下，因此 VPC 子网的网段大小决定了集群可创建的 Pod 数量上限，详情请查看[Kubernetes网络](uk8s/network/uk8s_network)。
+
+## 2. 创建 UK8S 集群
+
+### 2.1 创建 UK8S 专有版集群
+
+UK8S 专有版集群默认需要创建三个 Master 节点以保证生产环境的高可用性，登录 UK8S 服务管理控制台，在集群列表页面，点击**创建集群**按钮，在集群类型中选择**专有版**，开始进行专有版集群的创建。
+
+#### 基础配置
+
+| 配置项 | 描述 |
+|-----|--------|
+|集群所属 VPC|设置节点及 Pod 所处的 VPC 网络|
+|集群所属子网|设置初始节点及 Pod 所处的子网，集群中 Node 可处于同一 VPC 下的不同子网|
+|Service 网段|设置集群 Service 网段，Service 网段不能与节点网段重复|
+|节点镜像|设置集群节点的 UHost 镜像，您可以选择自定义镜像，但必须基于 UK8S 标准镜像制作，请参考[制作自定义镜像](uk8s/administercluster/custom_image)|
+|Service 网段|设置集群 Service 网段，Service 网段不能与节点网段重复|
+
+#### Master/Node 节点配置
+
+生产环境的 Master 配置建议可查看[集群节点配置推荐](uk8s/introduction/node_requirements)。
+
+| 配置项 | 描述 |
+|-----|--------|
+|可用区|Master/Node 节点所在可用区，在具有多个可用区的地域可以选择多可用区 UK8S 集群，建议在创建集群时将 Master 节点分布于多个可用区。|
+|节点规格|包括机型、CPU 平台、CPU、内存、系统盘类型、数据盘类型、数据盘大小等配置，详见[机型与 CPU 平台](/uhost/introduction/uhost/type_new)。<br>Node 节点的数据盘会 mount 到节点的 `/data` 目录，集群 Node 安装 Docker 引擎时安装在 `/data` 目录下，如创建时 Node 节点配置使用了数据盘，手动删除数据盘会导致 Node 节点不可用，如不需要数据盘可以在创建选择时删除，Docker 引擎会安装到系统盘的 `/data` 目录下|
+|硬件隔离组|Master 节点默认位于同一硬件隔离组，硬件隔离组能严格确保组内的每一台云主机都落在不同的物理机上。每个隔离组在单个可用区至多可以添加 7 台云主机，详见[硬件隔离组](uhost/guide/isolationgroup)|
+|最大 Pod 数|单个 Node 节点可承载的最大 Pod 数量|
+|标签|Node 节点标签，详见 Kubernetes 官方文档：[标签和运算符](https://kubernetes.io/zh/docs/concepts/overview/working-with-objects/labels/)|
+|污点|Node 节点污点，详见 Kubernetes 官方文档：[污点和容忍度](https://kubernetes.io/zh/docs/concepts/scheduling-eviction/taint-and-toleration/)|
+|Node 节点数量|初始集群 Node 节点数量限制为 1 - 10 台|
+
+#### 管理设置
+
+| 配置项 | 描述 |
+|-----|--------|
+|集群名称|UK8S 集群名称，后期可更改|
+|外网 APIServer|APIServer 通过 ULB 负载均衡服务对外提供暴露。内网 Master ULB 在创建集群时自动生成，如开启外网 APIServer，将自动购买一个外网 ULB 服务，起始带宽为 1MB。<br>APIServer 服务 ULB 命名规则为 uk8s-xxxxxxxx-master-ulb4（内网 ULB）/ uk8s-xxxxxxxx-master-ulb4-external（外网 ULB），**删除将导致集群 APIServer 服务不可用**。|
+|K8S 版本|UK8S 集群版本|
+|kube-proxy|默认选择为 iptables，选择标准和切换请参考：[kube-proxy模式选择](uk8s/userguide/kubeproxy_mode)|
+|容器运行时|K8S 1.19 及以上版本默认为 containerd，采用 containerd 运行时的节点，请勿自行另外安装 docker，避免配置冲突导致节点不可用。|
+|管理员密码|适用于本次创建的所有 Master 和 Node 节点|
+|集群本地域名|默认值为 cluster.local，用户可自定义后缀，域名由两段组成，每段不超过 63 个字符，且只能使用大小写字母和数字，不能为空。|
+|自定义数据|是指主机初次启动或每次启动时，系统自动运行的配置脚本，该脚本可由控制台 API 等传入元数据服务器，并由主机内的 cloud-init 程序获取，脚本遵循标准 CloudInit 语法。该脚本会阻塞 UK8S 的安装脚本，即只有该脚本执行完毕后，才会开始K8S相关组件的安装，如Kubelet、Scheduler等。|
+|初始化脚本|该脚本只在 UK8S 启动后执行一次，且是在 K8S 相关组件安装成功后执行。遵循标准shell语法， 执行结果会存入到 `/var/log/message/` 目录下。|
 
 
-### 一、集群授权
-
-如果你是初次使用UK8S服务，你需要先对UK8S服务授权，详情请查看[授权给UK8S](uk8s/userguide/before_start)
-
-![](/images/userguide/oauth.png)
+集群初始化时间在 5 分钟左右，创建成功后，您可以通过直接登录 Master 节点访问和管理集群，也可以在同 VPC 下的云主机上通过 APIServer 管理集群。
 
 
-### 二、配置集群网络信息
+### 2.2 创建 UK8S 专有版集群
 
-Pod与Node同处于一个VPC 子网下，因此VPC子网的网段大小决定了集群可创建的Pod数量上限，详情请查看[Kubernetes网络](uk8s/network/uk8s_network)
-![](/images/userguide/clusternet.png)
+登录 UK8S 服务管理控制台，在集群列表页面，点击**创建集群**按钮，在集群类型中选择**托管版**，开始进行专有版集群的创建。托管版集群只需创建 Node 节点，Master 节点及 ETCD 等组件由 UCloud 容器服务创建并托管，让用户能更专注业务本身。
 
-### 三、选择集群节点（云主机）配置
+#### 基础配置
 
-Master默认三个节点，生产环境的Master配置建议可查看[集群节点配置推荐](uk8s/introduction/node_requirements)，在具有多个可用区的地域可以选择讲k8s集群部署在多个可用区中，需要Master分布于多个可用区，如Master处于单个可用区则不支持多可用区模式集群创建。
+| 配置项 | 描述 |
+|-----|--------|
+|集群所属 VPC|设置节点及 Pod 所处的 VPC 网络|
+|集群所属子网|设置初始节点及 Pod 所处的子网，单个集群中支持将 Node 分配到同一 VPC 下的不同子网|
+|Service 网段|设置集群 Service 网段，Service 网段不能与节点网段重复|
 
-![](/images/userguide/master.png)
+#### 管理设置
 
-Node节点的可用区选择会根据Master的可用区选择变化，现已支持针对节点的CPU平台、硬件隔离组、最大Pod数、标签等设置。
+| 配置项 | 描述 |
+|-----|--------|
+|集群名称|UK8S 集群名称，后期可更改|
+|K8S 版本|UK8S 集群版本|
+|kube-proxy|默认选择为 iptables，选择标准和切换请参考：[kube-proxy模式选择](uk8s/userguide/kubeproxy_mode)|
+|容器运行时|K8S 1.19 及以上版本默认为 containerd，采用 containerd 运行时的节点，请勿自行另外安装 docker，避免配置冲突导致节点不可用。|
+|集群本地域名|默认值为cluster.local，用户可自定义后缀，域名由两段组成，每段不超过63个字符，且只能使用大小写字母和数字，不能为空。|
 
-![](/images/userguide/node2.png)
-
-> Node节点的数据盘会mount到节点的`/data`目录，集群Node安装Docker引擎时安装在`/data`目录下，如创建时Node节点配置使用了数据盘，手动删除数据盘会导致Node节点不可用，如不需要数据盘可以在创建选择时删除，Docker引擎会安装到系统盘的`/data`目录下
-
-### 四、填写管理信息
-
-在管理设置中我们进行以下设置
-* 开启APIServer创建外网访问
-* K8S版本选择
-* kube-proxy查看[kube-proxy模式选择](uk8s/introduction/kubeproxy_mode)
-* 集群的所有节点的密码设置，集群中所有节点都可以在云主机页面查看到，你可以使用密码登陆这些节点进行管理。
-
-![](/images/userguide/manager.png)
-
-
-### 五、创建完毕
-
-集群初始化时间在5分钟左右，创建成功后，你可以通过直接登录Master节点访问和管理集群，也可以在同VPC下的云主机上通过APIServer管理集群。
-![](/images/userguide/done.png)
+集群初始化时间在 5 分钟左右，创建成功后，您可在该集群详情页的节点展示处，添加 Node 节点，详见：[添加节点](uk8s/userguide/addnode)
