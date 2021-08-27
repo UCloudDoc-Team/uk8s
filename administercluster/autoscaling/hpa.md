@@ -29,9 +29,9 @@ desiredReplicas = ceil[currentReplicas * ( currentMetricValue / desiredMetricVal
 
 ## HPA 对象控制台管理
 
-HPA 对象的添加、查看和删除，可在 UK8S 集群管理控制台**集群伸缩**页面**弹性伸缩(HPA)**子页进行。
+HPA 对象的添加、查看和删除，可在 UK8S 集群管理控制台**集群伸缩**页面**弹性伸缩(HPA)** 子页进行。
 
-点击**表单添加**可通过控制台页面进行添加，您也可以通过 yaml 进行添加。
+点击**表单添加**可通过控制台页面添加 HPA 对象，您也可以通过 yaml 进行添加。
 
 |配置项|描述|
 |----|----|
@@ -44,7 +44,7 @@ HPA 对象的添加、查看和删除，可在 UK8S 集群管理控制台**集�
 
 **HPA API对象详解**
 
-UK8S 控制台通过 **autoscaling/v2beta2** 版本 API 进行 HPA 对象的创建。
+UK8S 控制台通过 **autoscaling/v2beta2** 版本 Kubernetes API 进行 HPA 对象的创建。
 
 ```yaml
 apiVersion: autoscaling/v2beta2
