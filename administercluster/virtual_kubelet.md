@@ -7,6 +7,8 @@
 
 在集群节点列表页，点击「添加虚拟节点」按钮，为 UK8S 集群添加虚拟节点，当前一个 UK8S 集群支持最多添加 8 个虚拟节点，所添加的虚拟节点名称为 **uk8s-xxxxxxxx-vk-xxxxx**，该名称将被注册为虚拟节点的 **spec.nodeName**，其中 **uk8s-xxxxxxxx** 为 UK8S 集群 ID，末五位为随机生成的数字字母组合。
 
+如您使用的是 [UK8S 托管版集群](uk8s/userguide/createcluster)，在添加虚拟节点前，需要集群中至少有一个 Node 节点。
+
 ![](../images/administercluster/vk_01.png)
 
 | 字段 | 说明 |
