@@ -94,7 +94,7 @@ UK8S默认支持使用UCloud提供的UDisk（块存储）、UFS（文件存储�
 * [在UK8S中使用UDISK](/uk8s/volume/udisk)
 * [在UK8S中使用已有UDISK](/uk8s/volume/statusudisk)
 * [在UK8S中使用UFS](/uk8s/volume/ufs)
-* [动态PV使用UFS](/uk8s/volume/dynamic_ufs)
+<!-- * [动态PV使用UFS](/uk8s/volume/dynamic_ufs) -->
 * [在UK8S中使用US3](/uk8s/volume/ufile)
 
 ##### [返回顶部](#UK8S概览)
@@ -118,7 +118,7 @@ UK8S默认支持使用UCloud提供的ULB、EIP等服务，您可以通过ULB暴�
 
 ##### [返回顶部](#UK8S概览)
 
-### 应用商店
+<!-- ### 应用商店
 
 UK8S为方便用户快速部署常用的应用组件，提供了应用商店功能，用户可以通过进入UK8S集群查看到应用商店，使用Helm进行安装部署。
 
@@ -126,7 +126,7 @@ UK8S为方便用户快速部署常用的应用组件，提供了应用商店功�
 * [安装使用应用商店](/uk8s/helm/init)
 * [安装应用](/uk8s/helm/install)
 * [管理应用](/uk8s/helm/manager)
-<!-- * [一键安装应用](/uk8s/helm/installapp) -->
+* [一键安装应用](/uk8s/helm/installapp) -->
 
 ##### [返回顶部](#UK8S概览)
 

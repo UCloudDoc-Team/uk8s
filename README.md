@@ -48,7 +48,7 @@
     * [在UK8S中使用UDISK](/uk8s/volume/udisk)
     <!-- * [在UK8S中使用已有UDISK](/uk8s/volume/statusudisk) -->
     * [在UK8S中使用UFS](/uk8s/volume/ufs)
-    * [动态PV使用UFS](/uk8s/volume/dynamic_ufs)
+    <!-- * [动态PV使用UFS](/uk8s/volume/dynamic_ufs)-->
     * [在UK8S中使用US3](/uk8s/volume/ufile)
     * [CSI 存储插件升级](/uk8s/volume/CSI_update)
 * 服务发现
@@ -70,12 +70,12 @@
         * [开启监控](/uk8s/monitor/prometheusplugin/startmonitor.md)
         * [添加告警目标](/uk8s/monitor/prometheusplugin/addmonitortarget.md)
         * [添加接收人](/uk8s/monitor/prometheusplugin/addreceiver.md)
-* 应用商店
+<!--* 应用商店
     * [关于应用商店](/uk8s/helm/abouthelm)
     * [安装使用应用商店](/uk8s/helm/init)
     * [安装应用](/uk8s/helm/install)
     * [管理应用](/uk8s/helm/manager)
-    <!-- * [一键安装应用](/uk8s/helm/installapp) -->
+     * [一键安装应用](/uk8s/helm/installapp) -->
 * 镜像仓库
     * [概述](/uk8s/dockerhub/outline)  
     * [在UK8S中使用UHub](/uk8s/dockerhub/using_uhub_in_uk8s)   
