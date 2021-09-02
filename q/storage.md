@@ -1,6 +1,6 @@
 # 存储插件相关问题
 
-## Kubernetes 1.17 版本升级到 1.18 过程中云盘 Detach 问题
+## 1. Kubernetes 1.17 版本升级到 1.18 过程中云盘 Detach 问题
 
 我们发现在 UK8S 集群从 1.17 升级至 1.18 的过程中，部分挂载 PVC 的 Pod 会出现 IO 错误。查相关日志发现是因为挂载的盘被卸载导致 IO 异常。
 
@@ -23,7 +23,7 @@ Node `annotations` 中应该有 `volumes.kubernetes.io/controller-managed-attach
 如确认上述数据一致，且 Annotations 中有相应记录，则可以正常进行升级。如有问题，请联系技术支持。
 
 
-## Flexv 插件导致 pod 删除失败
+## 2. Flexv 插件导致 pod 删除失败
 
 ### 现象描述
 
