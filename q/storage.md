@@ -4,13 +4,11 @@
 
 我们发现在 UK8S 集群从 1.17 升级至 1.18 的过程中，部分挂载 PVC 的 Pod 会出现 IO 错误。查相关日志发现是因为挂载的盘被卸载导致 IO 异常。
 
-社区在 1.18 版本为了解决 Dangling Attachments 引入该问题。参见[Recover CSI volumes from dangling attachments](https://github.com/kubernetes/kubernetes/commit/4cd106a920cde9c2929d9d0e20e2e96b875b8e2d)
+社区在 1.18 版本为了解决 Dangling Attachments 引入该问题。参见 [Recover CSI volumes from dangling attachments](https://github.com/kubernetes/kubernetes/commit/4cd106a920cde9c2929d9d0e20e2e96b875b8e2d)
 
 K8S 处理挂盘和卸盘的实现中，单个 Node 可以选择由 kubelet 和 controller-manager 进行管理挂盘和卸盘，上面的代码在解决 dangling attachments 问题时引入了一个新的问题，由 kubelet 管理挂盘的 Node 节点，在 controller-manager 重启后，该节点的磁盘会被强制卸载掉。
 
-为了解决该问题，需要将由 kubelet 负责挂盘的节点改为由 controller-manager 负责挂盘。
-
-UK8S 添加的节点已经默认使用 controller-manager 负责挂盘，后续添加节点无需再手动更改
+为了解决该问题，需要将由 kubelet 负责挂盘的节点改为由 controller-manager 负责挂盘。UK8S 添加的节点已经默认使用 controller-manager 负责挂盘，后续添加节点无需再手动更改
 
 ### 规避方法
 
