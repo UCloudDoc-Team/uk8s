@@ -115,14 +115,12 @@ spec:
   - name: nginx
     image: uhub.service.ucloud.cn/ucloud/nginx:latest
     volumeMounts:
-## 容器挂载路径
-      - mountPath: "/data/"
+      - mountPath: "/data/" # 容器挂载路径
         name: mynfs
   volumes:
   - name: mynfs
     nfs:
-## NFS 挂载地址
-      server: 10.10.112.139 
+      server: 10.10.112.139 # NFS 挂载地址
       path: /
 ```
 
@@ -145,10 +143,9 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   nfs:
+    server: 10.10.112.139 ## NFS 挂载地址
     path: /
-    server: 10.10.112.139 
-## 挂载参数配置
-  mountOptions:
+  mountOptions: # 挂载参数配置
     - nolock
     - nfsvers=4.0 
 ---
@@ -170,7 +167,13 @@ kind: Pod
 metadata:
   name: vknfs
 spec:
-  nodeName: virtual-cube-node 
+  tolerations:                               
+  - effect: NoSchedule
+    key: virtual-kubelet.io/provider
+    operator: Equal
+    value: ucloud
+  nodeSelector:
+    type: virtual-kubelet
   containers:
   - name: nginx
     image: uhub.service.ucloud.cn/ucloud/nginx:latest
