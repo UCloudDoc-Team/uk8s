@@ -241,7 +241,7 @@ spec:
   nodeSelector:
     type: virtual-kubelet
   containers:
-  - name: http
+  - name: nginx
     image: uhub.service.ucloud.cn/ucloud/nginx:latest
     volumeMounts:
     - name: log
