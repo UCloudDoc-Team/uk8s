@@ -6,6 +6,14 @@ metadata:
   labels:
     app: "cni-vpc-ipamd"
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vip-controller
+  namespace: kube-system
+  labels:
+    app: "vip-controller"
+---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -14,11 +22,34 @@ metadata:
     app: "cni-vpc-ipamd"
 rules:
 - apiGroups: [""]
-  resources: ["pods", "events", "nodes"]
-  verbs: ["get", "list","update", "watch", "delete", "create", "patch"]
-- apiGroups: ["vipcontroller.uk8s.com"]
+  resources: ["pods"]
+  verbs: ["get","list", "update"]
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get"]
+- apiGroups: ["vpc.uk8s.ucloud.cn"]
   resources: ["vpcipclaims"]
-  verbs: ["get", "list","update", "create", "delete", "watch", "patch"]  
+  verbs: ["get", "create","delete","update"]  
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: vip-controller
+  labels:
+    app: "vip-controller"
+rules:
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create", "patch"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get"]
+- apiGroups: ["apps"]
+  resources: ["statefulsets"]
+  verbs: ["list", "watch", "get"]
+- apiGroups: ["vpc.uk8s.ucloud.cn"]
+  resources: ["vpcipclaims"]
+  verbs: ["watch","get","update","list","delete"]  
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -33,6 +64,21 @@ subjects:
 roleRef:
   kind: ClusterRole
   name: cni-vpc-ipamd
+  apiGroup: rbac.authorization.k8s.io
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: vip-controller
+  labels:
+    app: "vip-controller"
+subjects:
+  - kind: ServiceAccount
+    name: vip-controller
+    namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: vip-controller
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: apps/v1
@@ -62,40 +108,23 @@ spec:
         key: node.cloudprovider.kubernetes.io/uninitialized
         value: "true"
       serviceAccount: cni-vpc-ipamd
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                - key:  node.uk8s.ucloud.cn/instance_type
-                  operator: In
-                  values:
-                    - uhost
       hostNetwork: true
+      priorityClassName: system-node-critical
       hostPID: true
-      initContainers:
-      - name: init-sqlite3-file
-        image: uhub.service.ucloud.cn/uk8s/cni-db-update:19.11.1
-        volumeMounts:
-          - name: host-cni
-            mountPath: /opt/cni/
-          - name: host-sysconfig
-            mountPath: /etc/sysconfig/
       containers:
         - name: cni-vpc-ipamd
-          image: uhub.service.ucloud.cn/uk8s/cni-vpc-ipamd:21.06.1
+          image: uhub.service.ucloud.cn/uk8s/cni-vpc-ipamd:21.08.3
           resources:
             limits:
               cpu: 200m 
-              memory: 500Mi
+              memory: 512Mi
             requests:
               cpu: 200m
-              memory: 500Mi
+              memory: 512Mi
           securityContext:
             privileged: true
           args:
             - "--availablePodIPLowWatermark=5"
-            - "--secondaryIPWarmingSeconds=10"
           imagePullPolicy: "Always"
           lifecycle:
             preStop:
@@ -109,22 +138,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          livenessProbe:
-            exec:
-              command:
-              - /opt/cni/bin/cnivpc
-              - version
-            periodSeconds: 10
-            initialDelaySeconds: 5
-            failureThreshold: 5
-          readinessProbe:
-            exec:
-              command:
-              - /opt/cni/bin/cnivpc
-              - version
-            periodSeconds: 10
-            initialDelaySeconds: 5
-            failureThreshold: 5
           volumeMounts:
             - name: user-config
               mountPath: /etc/uk8s/
@@ -153,9 +166,6 @@ spec:
           hostPath:
             path: /var/lib/kubelet/device-plugins
             type: "Directory"
-        - name: host-sysconfig
-          hostPath:
-            path: /etc/sysconfig/
         - name: var-run-ns
           hostPath:
             path: /var/run/netns/
@@ -177,6 +187,7 @@ metadata:
   labels:
     app: "vip-controller"
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: "vip-controller"
@@ -185,20 +196,22 @@ spec:
       labels:
          app: "vip-controller"
     spec:
-      serviceAccount: cni-vpc-ipamd
+      serviceAccount: vip-controller
       hostNetwork: true
       hostPID: true
+      priorityClassName: system-node-critical
       containers:
         - name: vip-controller
-          image: uhub.service.ucloud.cn/uk8s/vip-controller:21.06.1
+          image: uhub.service.ucloud.cn/uk8s/vip-controller:21.08.3
+          args:
+            - "--static-ip-gc-interval=1h"
           resources:
             limits:
               cpu: 200m 
-              memory: 500Mi
+              memory: 512Mi
             requests:
               cpu: 200m
-              memory: 500Mi
-
+              memory: 512Mi
           securityContext:
             privileged: true
           imagePullPolicy: "Always"
@@ -212,9 +225,6 @@ spec:
               mountPath: /etc/kubernetes
               readOnly: true
       volumes:
-        - name: host-sysconfig
-          hostPath:
-            path: /etc/sysconfig/
         - name: user-config
           configMap:
             name: uk8sconfig
@@ -225,11 +235,11 @@ spec:
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: vpcipclaims.vipcontroller.uk8s.com
+  name: vpcipclaims.vpc.uk8s.ucloud.cn
 spec:
-  group: vipcontroller.uk8s.com 
+  group: vpc.uk8s.ucloud.cn
   versions:
-    - name: v1
+    - name: v1beta1
       served: true
       storage: true
       schema:
@@ -239,15 +249,11 @@ spec:
             spec:
               type: object
               properties:
-                podname:
-                  type: string 
                 subnetId:
                   type: string
                 vpcId:
                   type: string 
                 ip:
-                  type: string 
-                mac:
                   type: string 
                 mask:
                   type: string 
@@ -256,14 +262,21 @@ spec:
             status:
               type: object 
               properties:
-                attach: 
+                attached: 
                   type: boolean 
-                lastunattachtime:
+                lastDetachtime:
                   type: string
-                releasetime: 
+                releaseTime: 
+                  type: string 
+                sandboxId: 
+                  type: string 
+                mac:
+                  type: string 
+                zone:
                   type: string 
   scope: Namespaced  
   names:
     plural: vpcipclaims
     singular: vpcipclaim
     kind: VpcIpClaim
+---
