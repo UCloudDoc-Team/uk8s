@@ -1,35 +1,26 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: csi-udisk
+  name: csi-ufile
   namespace: kube-system
   labels:
-    app: "csi-udisk"
+    app: "csi-ufile"
     role: "node"
     owner: "ucloud"
 spec:
   selector:
     matchLabels:
-      app: "csi-udisk"
+      app: "csi-ufile"
       role: "node"
       owner: "ucloud"
   template:
     metadata:
       labels:
-        app: "csi-udisk"
-        role: "node"
-        owner: "ucloud"
+         app: "csi-ufile"
+         role: "node"
+         owner: "ucloud"
     spec:
-      serviceAccount: csi-udisk-node
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                - key:  node.uk8s.ucloud.cn/instance_type
-                  operator: In
-                  values:
-                    - uhost
+      serviceAccount: csi-ufile-node
       tolerations:
       - key: CriticalAddonsOnly
         operator: Exists
@@ -42,6 +33,21 @@ spec:
         value: "true"
       hostNetwork: true
       hostPID: true
+      priorityClassName: system-node-critical
+      initContainers: 
+        - name: us3launcher-installer
+          image: uhub.service.ucloud.cn/uk8s/csi-us3launcher:21.08.1
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["SYS_ADMIN"]
+          volumeMounts:
+            - name: host-usr-local-bin
+              mountPath: /usr/local/bin/
+            - name: host-systemd-service
+              mountPath: /usr/lib/systemd/system/
+            - name: host-sys-fs-cgroup
+              mountPath: /sys/fs/cgroup/
       containers:
         - name: node-registrar
           image:  uhub.service.ucloud.cn/uk8s/csi-node-driver-registrar:v1.1.0
@@ -49,7 +55,7 @@ spec:
           args:
             - "--v=5"
             - "--csi-address=/csi/csi.sock"
-            - "--kubelet-registration-path=/var/lib/kubelet/csi-plugins/udisk.csi.ucloud.cn/csi.sock"
+            - "--kubelet-registration-path=/var/lib/kubelet/csi-plugins/ufile.csi.ucloud.cn/csi.sock"
           env:
             - name: ADDRESS
               value: unix://csi/csi.sock
@@ -57,27 +63,33 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "125m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
           volumeMounts:
             - name: plugin-dir
               mountPath: /csi
             - name: registration-dir
               mountPath: /registration
-        - name: csi-udisk
+        - name: csi-ufile
           securityContext:
             privileged: true
           # CAP_SYS_ADMIN is required for mount() syscall.
             capabilities:
               add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
-          image: uhub.service.ucloud.cn/uk8s/csi-uk8s:21.01.1
+          image: uhub.service.ucloud.cn/uk8s/csi-uk8s:21.09.1
           args :
+            - "--drivername=ufile.csi.ucloud.cn"
             - "--hostname=$(KUBE_NODE_NAME)"
             - "--endpoint=$(CSI_ENDPOINT)"
             - "--v=7"
-            - "--maxvolume=20"
-            - "--drivername=udisk.csi.ucloud.cn"
             - "--alsologtostderr=true"
-            - "--plugin-dir=/var/lib/kubelet/csi-plugins/udisk.csi.ucloud.cn/"
+            - "--plugin-dir=/var/lib/kubelet/csi-plugins/ufile.csi.ucloud.cn/"
           imagePullPolicy: "Always"
           envFrom:
           - configMapRef:
@@ -88,10 +100,17 @@ spec:
                 fieldRef:
                   fieldPath: spec.nodeName
             - name: CSI_ENDPOINT
-              value: unix://var/lib/kubelet/csi-plugins/udisk.csi.ucloud.cn/csi.sock
+              value: unix://var/lib/kubelet/csi-plugins/ufile.csi.ucloud.cn/csi.sock
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "125m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
           volumeMounts:
             - name: plugin-dir
-              mountPath: /var/lib/kubelet/csi-plugins/udisk.csi.ucloud.cn
+              mountPath: /var/lib/kubelet/csi-plugins/ufile.csi.ucloud.cn
             - name: user-config
               mountPath: /etc/uk8s/
             - name: pods-mount-dir
@@ -99,15 +118,15 @@ spec:
               mountPropagation: "Bidirectional"
             - name: host-log
               mountPath: /var/log/ucloud/
-            - name: host-sys
-              mountPath: /sys/
+            - name: host-run-csi
+              mountPath: /var/run/csi/
             - name: host-dev
               mountPath: /dev
               mountPropagation: "HostToContainer"
       volumes:
         - name: plugin-dir
           hostPath:
-            path: /var/lib/kubelet/csi-plugins/udisk.csi.ucloud.cn/
+            path: /var/lib/kubelet/csi-plugins/ufile.csi.ucloud.cn/
             type: DirectoryOrCreate
         - name: registration-dir
           hostPath:
@@ -119,12 +138,21 @@ spec:
         - name: host-dev
           hostPath:
             path: /dev
-        - name: host-sys
-          hostPath:
-            path: /sys
         - name: host-log
           hostPath:
             path: /var/log/ucloud/
+        - name: host-run-csi
+          hostPath:
+            path: /var/run/csi/
         - name: user-config
           configMap:
             name: uk8sconfig
+        - name: host-usr-local-bin
+          hostPath:
+            path: /usr/local/bin/
+        - name: host-systemd-service
+          hostPath:
+            path: /usr/lib/systemd/system/
+        - name: host-sys-fs-cgroup
+          hostPath:
+            path: /sys/fs/cgroup/

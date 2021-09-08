@@ -1,43 +1,43 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: csi-udisk-controller
+  name: csi-ufile-controller
   namespace: kube-system
   labels:
-    app: "csi-udisk"
+    app: "csi-ufile"
     role: "controller"
     owner: "ucloud"
 spec:
   selector:
-    app: "csi-udisk"
+    app: "csi-ufile"
     role: "controller"
     owner: "ucloud"
   ports:
     - name: dummy
       port: 12345
 ---
-
 kind: StatefulSet 
 apiVersion: apps/v1
 metadata:
-  name: csi-udisk-controller
+  name: csi-ufile-controller
   namespace: kube-system
 spec:
-  serviceName: "csi-udisk-controller"
+  serviceName: "csi-ufile-controller"
   replicas: 1
   selector:
     matchLabels:
-      app:  "csi-udisk"
+      app:  "csi-ufile"
       role: "controller"
       owner: "ucloud"
   template:
     metadata:
       labels:
-        app:  "csi-udisk"
+        app:  "csi-ufile"
         role: "controller"
         owner: "ucloud"
     spec:
-      serviceAccount: csi-udisk-controller
+      serviceAccount: csi-ufile-controller
+      priorityClassName: system-node-critical
       containers:
       - name: csi-provisioner
         image: uhub.service.ucloud.cn/uk8s/csi-provisioner:v1.5.0
@@ -47,11 +47,17 @@ spec:
         - "--connection-timeout=30s"
         - "--v=5"
         - "--timeout=600s"
-        - "--feature-gates=Topology=true"
         env:
         - name: ADDRESS
           value: /csi/csi.sock
         imagePullPolicy: "Always"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
         volumeMounts:
         - name: socket-dir
           mountPath: /csi
@@ -71,6 +77,13 @@ spec:
             fieldRef:
               fieldPath: metadata.name
         imagePullPolicy: "Always"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "125m"
+          limits:
+            memory: "256Mi"
+            cpu: "125m"
         volumeMounts:
         - name: socket-dir
           mountPath: /csi
@@ -82,27 +95,21 @@ spec:
         volumeMounts:
         - name: socket-dir
           mountPath: /csi
-      - name: csi-resizer
-        image: uhub.service.ucloud.cn/uk8s/csi-resizer:v1.0.0-rc2
-        args:
-        - "--v=5"
-        - "--csi-address=$(ADDRESS)"
-        - "--leader-election=true"
-        env:
-        - name: ADDRESS
-          value: /csi/csi.sock
-        imagePullPolicy: "Always"
-        volumeMounts:
-        - name: socket-dir
-          mountPath: /csi/
-      - name: csi-udisk
-        image: uhub.service.ucloud.cn/uk8s/csi-uk8s:21.01.1
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+      - name: csi-ufile
+        image: uhub.service.ucloud.cn/uk8s/csi-uk8s:21.09.1
         imagePullPolicy: "Always"
         args:
-        - "--drivername=udisk.csi.ucloud.cn"
+        - "--drivername=ufile.csi.ucloud.cn"
         - "--endpoint=$(CSI_ENDPOINT)"
         - "--hostname=$(KUBE_NODE_NAME)"
-        - "--maxvolume=20"
+        - "--maxvolume=100"
         - "--v=5"
         envFrom:
         - configMapRef:
@@ -114,6 +121,13 @@ spec:
               fieldPath: spec.nodeName
         - name: CSI_ENDPOINT
           value: unix://csi/csi.sock
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
         volumeMounts:
         - name: socket-dir
           mountPath: /csi
