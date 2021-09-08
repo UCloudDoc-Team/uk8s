@@ -23,14 +23,15 @@ kind: Policy
 omitStages:
   - "RequestReceived"
 rules:
-  # The following requests were manually identified as high-volume and low-risk,
-  # so drop them.
+  # 集群中包含大量以下低风险请求，建议不做审计（不记录日志）
+  # kube-proxy 的 watch 请求
   - level: None
     users: ["system:kube-proxy"]
     verbs: ["watch"]
     resources:
       - group: "" # core
         resources: ["endpoints", "services", "services/status"]
+  # 在 kube-system namespace 下对 configmap 的 get 请求
   - level: None
     users: ["system:unsecured"]
     namespaces: ["kube-system"]
@@ -38,18 +39,21 @@ rules:
     resources:
       - group: "" # core
         resources: ["configmaps"]
+  # kubelet 对于 node 节点的 get 请求
   - level: None
     users: ["kubelet"] # legacy kubelet identity
     verbs: ["get"]
     resources:
       - group: "" # core
         resources: ["nodes", "nodes/status"]
+  # system:node 用户组对于 node 节点的 get 请求
   - level: None
     userGroups: ["system:nodes"]
     verbs: ["get"]
     resources:
       - group: "" # core
         resources: ["nodes", "nodes/status"]
+  # 系统组件在 kube-system namespace 下对于 endpoints 的 get/update 请求
   - level: None
     users:
       - system:kube-controller-manager
@@ -60,12 +64,14 @@ rules:
     resources:
       - group: "" # core
         resources: ["endpoints"]
+  # apiserver 对于 namespace 的 get 请求
   - level: None
     users: ["system:apiserver"]
     verbs: ["get"]
     resources:
       - group: "" # core
         resources: ["namespaces", "namespaces/status", "namespaces/finalize"]
+  # cluster-autoscaler 集群伸缩组件在 kube-system namespace 下对 configmap、endpoint 的 get/update 请求
   - level: None
     users: ["cluster-autoscaler"]
     verbs: ["get", "update"]
@@ -73,35 +79,32 @@ rules:
     resources:
       - group: "" # core
         resources: ["configmaps", "endpoints"]
-  # Don't log HPA fetching metrics.
+  # HPA 通过 controller manager 获取 metrics 信息的请求
   - level: None
     users:
       - system:kube-controller-manager
     verbs: ["get", "list"]
     resources:
       - group: "metrics.k8s.io"
-
-  # Don't log these read-only URLs.
+  # 以下只读 URL
   - level: None
     nonResourceURLs:
       - /healthz*
       - /version
       - /swagger*
-
-  # Don't log events requests because of performance impact.
+  # event 事件
   - level: None
     resources:
       - group: "" # core
         resources: ["events"]
 
-  # node and pod status calls from nodes are high-volume and can be large, don't log responses for expected updates from nodes
+  # kubelet、system:node-problem-detector 和 system:nodes 对于节点的 update 和 patch 请求，等级设置为 Request，记录元数据和请求的消息体
   - level: Request
     users: ["kubelet", "system:node-problem-detector", "system:serviceaccount:kube-system:node-problem-detector"]
     verbs: ["update","patch"]
     resources:
       - group: "" # core
         resources: ["nodes/status", "pods/status"]
-
   - level: Request
     userGroups: ["system:nodes"]
     verbs: ["update","patch"]
@@ -109,8 +112,7 @@ rules:
       - group: "" # core
         resources: ["nodes/status", "pods/status"]
 
-  # Secrets, ConfigMaps, TokenRequest and TokenReviews can contain sensitive & binary data,
-  # so only log at the Metadata level.
+  # 对于可能包含敏感信息或二进制文件的 Secrets，ConfigMaps，tokenreviews 接口的日志等级设为 Metadata
   - level: Metadata
     resources:
       - group: "" # core
@@ -118,7 +120,7 @@ rules:
       - group: authentication.k8s.io
         resources: ["tokenreviews"]
 
-  # Get responses can be large; skip them.
+  # 对于一些返回体比较大的 get, list, watch 请求，设置为 Request
   - level: Request
     verbs: ["get", "list", "watch"]
     resources:
@@ -141,7 +143,7 @@ rules:
       - group: "scheduling.k8s.io"
       - group: "storage.k8s.io"
       
-  # Default level for known APIs
+  # 对已知 Kubernetes API 默认设置为 RequestResponse
   - level: RequestResponse
     resources:
       - group: "" # core
@@ -162,11 +164,13 @@ rules:
       - group: "rbac.authorization.k8s.io"
       - group: "scheduling.k8s.io"
       - group: "storage.k8s.io"
-  # Default level for all other requests.
+      
+  # 对于其他请求都设置为 Metadata
   - level: Metadata
 ```
 
 ### 1.1 阶段（omitStages）
+
 |  阶段   | 含义  |
 |  ----  | ----  |
 | RequestReceived | 此阶段对应审计处理器接收到请求后，并且在委托给 其余处理器之前生成的事件 |
@@ -175,12 +179,23 @@ rules:
 | Panic | 当 panic 发生时生成 |
 
 ### 1.2 审计级别（level）
+
 |  级别   | 含义  |
 |  ----  | ----  |
 | None  | 符合这条规则的日志将不会记录 |
 | Metadata  | 记录请求的元数据（请求的用户、时间戳、资源、动词等等），但是不记录请求或者响应的消息体 |
 | Request | 记录事件的元数据和请求的消息体，但是不记录响应的消息体。 这不适用于非资源类型的请求 |
 | RequestResponse | 记录事件的元数据，请求和响应的消息体。这不适用于非资源类型的请 |
+
+### 1.3 说明
+
+* 在收到请求后不立即记录日志，当返回体 Header 发送后才开始记录。
+* kube-proxy watch 请求，kubelet 和 system:nodes 对于节点的 get 请求，kube 组件在 kube-system 下对于 endpoint 的操作，以及 API Server 对于 Namespaces 的 get 请求等不作审计。
+* 对于 /healthz*，/version*，/swagger* 等只读URL不作审计。
+* kubelet、system:node-problem-detector 和 system:nodes 对于节点的 update 和 patch 请求，等级设置为 Request，记录元数据和请求的消息体。
+* 对于可能包含敏感信息或二进制文件的 Secrets，ConfigMaps，tokenreviews 接口的日志等级设为 Metadata。
+* 对于一些返回体比较大的 get, list, watch 请求，设置为 Request。
+* 其他请求都设置为 Metadata。
 
 ## 2. 审计日志配置
 
@@ -198,16 +213,6 @@ rules:
 # 定义审计日志文件的最大大小（兆字节）
 --audit-log-maxsize=1000
 ```
-
-## 3. 说明
-
-* 在收到请求后不立即记录日志，当返回体Header发送后才开始记录。
-* kube-proxy watch请求，kubelet和system:nodes对于节点的get请求，kube组件在kube-system下对于endpoint的操作，以及API Server对于Namespaces的get请求等不作审计。
-* 对于/healthz*，/version*/swagger*等只读URL不作审计。
-* kubelet、system:node-problem-detector和system:nodes对于节点的update和patch请求，等级设置为Request，记录元数据和请求的消息体。
-* 对于可能包含敏感信息或二进制文件的Secrets，ConfigMaps，tokenreviews接口的日志等级设为Metadata。
-* 对于一些返回体比较大的get, list, watch请求，设置为Request。
-* 其他请求都设置为Metadata。
 
 ## 4. 参考
 
