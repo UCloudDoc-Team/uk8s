@@ -61,3 +61,4 @@ kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.09.1/
 |**21.03.1**|2021.03.15|解决节点被删除后，volumeattachment 未被删除导致存储无法卸载的问题|
 |**21.01.1**|2021.01.13|UDisk的起始大小变更为1GB|
 |**20.10.1**|2020.10.14|支持CSI限制节点最大可挂载卷的数量<br>避免UCloud API客户端可能产生的并发竞争行为|
+
