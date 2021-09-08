@@ -36,7 +36,7 @@ spec:
       priorityClassName: system-node-critical
       initContainers: 
         - name: us3launcher-installer
-          image: uhub.service.ucloud.cn/uk8s/csi-us3launcher:21.08.1
+          image: uhub.service.ucloud.cn/uk8s/csi-us3launcher:21.09.1
           securityContext:
             privileged: true
             capabilities:
