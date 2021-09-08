@@ -164,7 +164,7 @@ rules:
       - group: "rbac.authorization.k8s.io"
       - group: "scheduling.k8s.io"
       - group: "storage.k8s.io"
-      
+
   # 对于其他请求都设置为 Metadata
   - level: Metadata
 ```
@@ -187,16 +187,6 @@ rules:
 | Request | 记录事件的元数据和请求的消息体，但是不记录响应的消息体。 这不适用于非资源类型的请求 |
 | RequestResponse | 记录事件的元数据，请求和响应的消息体。这不适用于非资源类型的请 |
 
-### 1.3 说明
-
-* 在收到请求后不立即记录日志，当返回体 Header 发送后才开始记录。
-* kube-proxy watch 请求，kubelet 和 system:nodes 对于节点的 get 请求，kube 组件在 kube-system 下对于 endpoint 的操作，以及 API Server 对于 Namespaces 的 get 请求等不作审计。
-* 对于 /healthz*，/version*，/swagger* 等只读URL不作审计。
-* kubelet、system:node-problem-detector 和 system:nodes 对于节点的 update 和 patch 请求，等级设置为 Request，记录元数据和请求的消息体。
-* 对于可能包含敏感信息或二进制文件的 Secrets，ConfigMaps，tokenreviews 接口的日志等级设为 Metadata。
-* 对于一些返回体比较大的 get, list, watch 请求，设置为 Request。
-* 其他请求都设置为 Metadata。
-
 ## 2. 审计日志配置
 
 分别登录 3 台 Master 节点，在 APIServer 配置文件 `/etc/kubernetes/apiserver` 中添加以下参数，并通过 `systemctl restart kube-apiserver` 重启 APIServer：
@@ -214,6 +204,6 @@ rules:
 --audit-log-maxsize=1000
 ```
 
-## 4. 参考
+## 3. 参考
 
 * [Kubernetes 官方文档 - 审计](https://kubernetes.io/zh/docs/tasks/debug-application-cluster/audit/)
