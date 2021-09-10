@@ -1,6 +1,8 @@
 # 从 Flexvolume UDisk 存储卷升级到 CSI UDisk 存储卷
 
-Kubernetes v1.13 以及更早版本的用户，Pod 通过 Flexvolume 存储卷的方式挂载 UDisk 块存储卷。由于支持拓扑感知动态调度等基础特性，Flexvolume 方案早已停止演进，而 CSI 已经成为容器存储实现标准。使用了Flexvolume 创建 UDisk 挂载卷的 UK8S 早期用户目前面临着升级将 Flexvolume PV 转换成 CSI PV 的问题，本文档提供一个示例，用于指导如何完成这一转换。
+Kubernetes v1.13 以及更早版本的用户，Pod 通过 Flexvolume 存储卷的方式挂载 UDisk 块存储卷。由于不支持拓扑感知动态调度等基础特性，Flexvolume 方案早已停止演进，而 CSI 已经成为容器存储实现标准。
+
+使用 Flexvolume 创建 UDisk 挂载卷的 UK8S 早期用户目前面临着集群升级时将 Flexvolume PV 转换成 CSI PV 的问题，本文档提供一个示例，用于说明如何完成这一转换。
 
 > ⚠️ 升级时会造成服务中断，请合理规划迁移时间，并做好相关备份。
 
@@ -85,9 +87,9 @@ Events:         <none>
 
 > ⚠️ 升级时会造成服务中断，请合理规划迁移时间，准备好所有需要的 yaml 文件，并做好相关备份。
 
-### 2.1 确认原有 PV 回收策略
+### 2.1 确认原有 PV 回收策略为 Retain
 
-如果 PV 的回收策略不是 Retain，则通过以下命令将其回收策略改成 **Retain**。这时即使您删除 Pod 和对应的 PVC，可以发现，PV 依然存在，对应的 UDisk 实例也依然保留.
+如果 PV 的回收策略不是 **Retain**，则需要通过以下命令将其回收策略改成 **Retain**。这时即使您删除 Pod 和对应的 PVC，可以发现，PV 依然存在，对应的 UDisk 实例也依然保留.
 
 ```
 kubectl patch pv <your-pv-name1> <your-pv-name2> <your-pv-name3> -p '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'
@@ -99,13 +101,13 @@ kubectl patch pv <your-pv-name1> <your-pv-name2> <your-pv-name3> -p '{"spec":{"p
 
 ### 2.3 删除原有 Pod 及 PVC
 
-通过 `kubectl delete -f nginx-fv.yaml`，删除原有 PVC 及 Pod，这时可以发现由于 PV 回收策略为 Retain，PV 及相应的 UDisk 仍被保留，PV 状态为 **Release**。
+通过 `kubectl delete -f nginx-fv.yaml`，删除原有 PVC 及 Pod，这时可以发现由于 PV 回收策略为 **Retain**，PV 及相应的 UDisk 仍被保留，PV 状态为 **Release**。
 
 ### 2.4 通过 CSI 以指定 UDisk 创建新的 PV 及 PVC
 
 接下来，我们将以原先的 UDisk 数据盘，创建 PV 并关联 PVC，详见[在 UK8S 中使用 UDisk](/uk8s/volume/udisk)文档中「使用已有 UDisk 部分」。
 
-以下为实例文件 nginx-csi-pv.yaml
+以下为示例文件 nginx-csi-pv.yaml
 
 ```yaml
 apiVersion: v1
@@ -143,9 +145,7 @@ spec:
 
 ### 2.5 将 PVC 挂载到相应的 Pod
 
-详见[在 UK8S 中使用 UDisk](/uk8s/volume/udisk)文档中「使用已有 UDisk 部分」。
-
-以下为实例 yaml 文件 nginx-csi.yaml
+详见[在 UK8S 中使用 UDisk](/uk8s/volume/udisk)文档，以下为示例 yaml 文件 nginx-csi.yaml
 
 ```yaml
 apiVersion: v1
@@ -172,4 +172,5 @@ spec:
 
 执行 `kubectl apply -f nginx-csi.yaml` 后，我们可以看到新的 Pod 已经创建成功，并与相应的 PVC 绑定。
 
-> 升级成功后，原有的 FlexVolume 可保留，只要在申明新的 StorageClass、PV 和 PVC 时，按照 CSI 相应的规范进行声明即可。
+> 升级成功后，原有的 FlexVolume 安装文件可保留，只要在申明新的 StorageClass、PV 和 PVC 时，按照 CSI 相应的规范进行声明即可。
+
