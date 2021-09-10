@@ -14,7 +14,7 @@ UK8S支持直接在集群中使用UDisk作为持久化存储卷。
 
 5. 同一个 Pod 如果挂载多块 UDisk，则必须确保 UDisk 处于同一可用区，否则容器无法启动。
 
-## 一. 存储类 StorageClass
+## 1. 存储类 StorageClass
 
 在创建持久化存储卷（PersistentVolume）之前，你需要先创建 StorageClass，然后在 PVC 中使用 StorageClassName。
 
@@ -41,10 +41,10 @@ mountOptions:
 备注：1.15之前的Kubernetes版本，mountOptions无法正常使用，请勿填写，详见[Issue80191](https://github.com/kubernetes/kubernetes/pull/80191) 
 
 
-## 二. 创建持久化存储卷声明 PVC
+## 2. 创建持久化存储卷声明 PVC
 
 
-### 1. 新建 UDisk
+### 2.1 新建 UDisk
 
 > 使用新建 UDisk，则可直接创建 PVC 对象，CSI 会自动创建 UDisk 并关联。
 
@@ -64,7 +64,7 @@ spec:
 ```
 
 
-### 2. 使用已有 UDisk
+### 2.2 使用已有 UDisk
 
 > 如需使用已有 UDisk，需先创建 PV 对象并与已有 UDisk 绑定，再创建 PVC 对象、使用与 PV 相同的声明进行关联
 
@@ -90,7 +90,7 @@ spec:
   storageClassName: udisk-ssd-test
 ```
 
-#### 创建 PVC 并与 PV 关联
+#### 2.3 创建 PVC 并与 PV 关联
 
 **spec.storageClassName**、**spec.resources.requests.storage**、**volumeName**需要与pv相对应。
 
@@ -109,7 +109,7 @@ spec:
   volumeName: test-pvc-claim
 ```
 
-## 三. 在 Pod 中使用 PVC
+## 3. 在 Pod 中使用 PVC
 
 ```yaml
 apiVersion: v1
