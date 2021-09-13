@@ -51,6 +51,7 @@
     <!-- * [动态PV使用UFS](/uk8s/volume/dynamic_ufs)-->
     * [在UK8S中使用US3](/uk8s/volume/ufile)
     * [CSI 存储插件升级](/uk8s/volume/CSI_update)
+    * [Flexvolume 升级 CSI](/uk8s/volume/flexv_csi)
 * 服务发现
     * [Service 介绍](/uk8s/service/intro)
     * [通过内网ULB访问Service](/uk8s/service/internalservice)
@@ -87,6 +88,7 @@
         * [预防OOM](/uk8s/troubleshooting/prevent_oom)
     * [集群ULB误删处理](/uk8s/troubleshooting/ulb_undelete)
 * 最佳实践
+    * [API Server 审计功能](/uk8s/bestpractice/apiserver_audit)
     * [Docker&Jenkins CI/CD实践](/uk8s/bestpractice/cicd)
     * [Kaniko&Jenkins CI/CD实践](/uk8s/bestpractice/cicd_containerd)
     * [权限管理](/uk8s/bestpractice/authorization/README)
