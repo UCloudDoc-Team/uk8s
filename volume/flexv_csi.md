@@ -89,7 +89,9 @@ Events:         <none>
 
 ### 2.1 确认原有 PV 回收策略为 Retain
 
-如果 PV 的回收策略不是 **Retain**，则需要通过以下命令将其回收策略改成 **Retain**。这时即使您删除 Pod 和对应的 PVC，可以发现，PV 依然存在，对应的 UDisk 实例也依然保留.
+如果 PV 的回收策略不是 **Retain**，则需要通过以下命令将其回收策略改成 **Retain**。这时即使您删除 Pod 和对应的 PVC，可以发现，PV 依然存在，对应的 UDisk 实例也依然保留。
+
+> ⚠️ 如删除 Flexvolume 创建的 PV，则对应的 UDisk 会被删除，如需要相应的 UDisk，请确保该 PV 不会被删除。
 
 ```
 kubectl patch pv <your-pv-name1> <your-pv-name2> <your-pv-name3> -p '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'
@@ -173,4 +175,3 @@ spec:
 执行 `kubectl apply -f nginx-csi.yaml` 后，我们可以看到新的 Pod 已经创建成功，并与相应的 PVC 绑定。
 
 > 升级成功后，原有的 FlexVolume 安装文件可保留，只要在申明新的 StorageClass、PV 和 PVC 时，按照 CSI 相应的规范进行声明即可。
-
