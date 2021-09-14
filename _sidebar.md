@@ -61,6 +61,7 @@
     * [ULB属性修改的处理方法](/uk8s/service/change_ulb_name)
     * [获取真实客户端IP](/uk8s/service/getresourceip)
     * [通过ULB暴露Dashboard](/uk8s/service/dashboard)
+    * [CloudProvider插件升级](/uk8s/service/dashboard)
     * [Ingress支持](/uk8s/service/ingress/README)
 * 日志监控方案
     * [使用ELK自建UK8S日志解决方案](/uk8s/log/elastic_filebeat_kibana_solution)
