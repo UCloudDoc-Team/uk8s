@@ -16,7 +16,7 @@ KUBE_API_ARGS=" --... \
 
 修改完成后，通过 ```systemctl restart kube-apiserver```，重启 APIServer
 
-## 2. 修改节点 NodePort 范围
+## 2. 修改节点 ip_local_port_range
 
 查看当前系统开放端口范围，命令如下：
 
