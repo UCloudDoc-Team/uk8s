@@ -173,7 +173,7 @@ umount path
 
 5. 删除pvc，删除pvc之后需要手动在控制台卸载掉对应的udisk。udisk的id为pv名字的最后几位，例如pv名字是pvc-58f9978e-3133-11ea-b4d6-5254000cee42-bsm-olx0uqti， 则对应的udisk名字就是bsm-olx0uqti。也可以通过describe pv拿到spec.flexVolume.options中的diskId字段。
 
-## 4. 其他常见存储问题汇总
+## 8. 其他常见存储问题汇总
 
 ### 1. 一个PVC可以挂载到多个 pod 吗？
 

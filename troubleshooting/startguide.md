@@ -1,13 +1,13 @@
-## 入门必读
+# 入门必读
 
 Kubernetes 提供了一系列的命令行工具来辅助我们调试和定位问题，本指南列举一些常见的命令来帮助应用管理者快速定位和解决问题。
 
 
-### 定位问题
+## 1. 定位问题
 
 在开始处理问题之前，我们需要确认问题的类型，是 Pod ，Service ，或者 Controller（Deployment、StatefulSet） 的问题，然后分别使用不同的命令来查看故障原因。 
 
-### Pod 常见命令
+## 2. Pod 常见命令
 
 当我们发现 Pod 处于 Pending 状态，或者反复 crash，无法接受流量，可以使用以下命令来快速定位问题：
 
@@ -41,7 +41,7 @@ kubectl  -n ${NAMESPACE} logs ${POD_NAME} ${CONTAINER_NAME}
 kubectl -n ${NAMESPACE} exec -it  ${POD_NAME} /bin/bash
 ```
 
-### Controller 常见命令
+## 3. Controller 常见命令
 
 控制器负责 Pod 的生命周期管理，一般 Pod 无法被注册时，可以通过 Controller 来查看原因。这里以 Deployment 为例，介绍 Kubernetes Controller 的常用命令,其他 Controller 的命令类型与其一致。
 
@@ -63,7 +63,7 @@ kubectl -n ${NAMESPACE} get deploy ${DEPLOYMENT_NAME} -o yaml
 kubectl -n ${NAMESPACE} describe deployment ${DEPLOYMENT_NAME}
 ```
 
-### Service 常见命令
+## 4. Service 常见命令
 
 Service 描述了一组 Pod 的访问方式，当我们发现应用无法访问时，则需要使用 Service 命令来查看故障原因。
 

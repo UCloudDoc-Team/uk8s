@@ -80,9 +80,9 @@
     * [入门必读](/uk8s/troubleshooting/startguide)
     * [UK8S 集群常见问题](/uk8s/troubleshooting/k8s_debug_summary)
     <!--* [集群常见问题](/uk8s/q/cluster)-->  
-    * [镜像库常见问题](/uk8s/q/registry) 
-    * [容器常见问题](/uk8s/q/container) 
-    * [存储插件问题](/uk8s/q/storage)
+    * [镜像及镜像仓库常见问题](/uk8s/q/registry) 
+    <!--* [容器常见问题](/uk8s/q/container) -->
+    * [存储常见问题](/uk8s/q/storage)
     * [Pod 常见故障处理](/uk8s/troubleshooting/pod_debug_summary)
         <!--* [概述](/uk8s/troubleshooting/pod_debug_summary)-->
     * [Node 常见故障处理](/uk8s/troubleshooting/node_debug_summary)
