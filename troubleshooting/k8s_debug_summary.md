@@ -1,6 +1,6 @@
 # UK8S 集群常见问题
 
-* [UK8S 人工支持](#uk8s-人工支持)
+<!--* [UK8S 人工支持](#uk8s-人工支持)
 * [为什么我的容器一起来就退出了？](#为什么我的容器一起来就退出了)
 * [Docker 如何调整日志等级](#docker-如何调整日志等级)
 * [为什么节点已经异常了，但是 Pod 还处在 Running 状态](#为什么节点已经异常了但是-pod-还处在-running-状态)
@@ -12,19 +12,21 @@
 * [为什么我的集群连不上外网?](#为什么我的集群连不上外网)
 * [为什么我的 UHub 登陆失败了?](#为什么我的-uhub-登陆失败了)
 * [UHub 下载失败（慢）](#uhub-下载失败慢)
-<!--* [PV PVC StorageClass 以及 UDisk 的各种关系？](#pv-pvc-storageclass-以及-udisk-的各种关系)
+* [PV PVC StorageClass 以及 UDisk 的各种关系？](#pv-pvc-storageclass-以及-udisk-的各种关系)
   - [Statefulset 中使用 pvc](#statefulset-中使用-pvc)
 * [VolumeAttachment 的作用](#volumeattachment-的作用)
 * [如何查看 PVC 对应的 UDisk 实际挂载情况](#如何查看-pvc-对应的-udisk-实际挂载情况)
 * [磁盘挂载的错误处理](#磁盘挂载的错误处理)
   - [PV 和 PVC 一直卡在 terminating/磁盘卸载失败怎么办](#pv-和-pvc-一直卡在-terminating磁盘卸载失败怎么办)
   - [Pod 的 PVC 一直挂载不上怎么办？](#pod-的-pvc-一直挂载不上怎么办)
-* [UDisk-PVC 使用注意事项](#udisk-pvc-使用注意事项)-->
+* [UDisk-PVC 使用注意事项](#udisk-pvc-使用注意事项)
 * [为什么在 K8S 节点 Docker 直接起容器网络不通](#为什么在-k8s-节点-docker-直接起容器网络不通)
 * [使用 ULB4 时 Vserver 为什么会有健康检查失效](#使用-ulb4-时-vserver-为什么会有健康检查失效)
-* [ULB4 对应的端口为什么不是 NodePort 的端口](#ulb4-对应的端口为什么不是-nodeport-的端口)
+* [ULB4 对应的端口为什么不是 NodePort 的端口](#ulb4-对应的端口为什么不是-nodeport-的端口)-->
 
+## UK8S 完全兼容原生 Kubernetes API吗？
 
+完全兼容。
 
 ## UK8S 人工支持
 
@@ -37,6 +39,11 @@ cat << EOF > /root/.ssh/authorized_keys
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGIFVUtrp+jAnIu1fBvyLx/4L4GNsX+6v8RodxM+t3G7gCgaG+kHqs1xkLBWQNNMVQz2c/vA1gMNYASnvK/aQJmI9NxuOoaoqbL/yrZ58caJG82TrDKGgByvAYcT5yJkJqGRuLlF3XL1p2C0P8nxf2dzfjQgy5LGvZ1awEsIeoSdEuicaxFoxkxzTH/OM2WSLuJ+VbFg8Xl0j3F5kP9sT/no1Gau15zSHxQmjmpGJSjiTpjSBCm4sMaJQ0upruK8RuuLAzGwNw8qRXJ4qY7Tvg36lu39KHwZ22w/VZT1cNZq1mQXvsR54Piaix163YoXfS7jke6j8L6Nm2xtY4inqd uk8s-tech-support
 EOF
 ```
+
+## UK8S对Node上发布的容器有限制吗？如何修改？
+
+UK8S 为保障生产环境 Pod 的运行稳定，每个 Node 限制了 Pod 数量为 110 个，用户可以通过登陆 Node 节点"vim /etc/kubernetes/kubelet.conf"
+修改 `maxpods:110`，然后执行 `systemctl restart kubelet` 重启 kubelet 即可。
 
 ## 为什么我的容器一起来就退出了？
 
@@ -96,31 +103,15 @@ EOF
 5. 内存 oom 的情况需要客户自查是进程的内存情况，k8s 建议 request 和 limit 设置的值不宜相差过大，如果相差较大，比较容易导致节点宕机。
 6. 如果对节点 notready 原因有疑问，请按照[UK8S人工支持](#uk8s-人工支持)联系人工支持
 
-
 ## 为什么我的集群连不上外网?
 
-集群若需要访问公网，进行拉取镜像等操作，需要为集群所在 VPC 绑定 NAT 网关，并配置相应规则，详见：https://docs.ucloud.cn/vpc/introduction/natgw
-
-
-## 为什么我的 UHub 登陆失败了?
-
-1. 请确认是在公网还是 UCloud 内网进行登陆的（如果 ping uhub 的 ip 为 106.75.56.109 则表示是通过公网拉取）
-2. 如果在公网登陆，请在 UHub 的 Console 页面确认外网访问选项打开
-3. 确认是否使用独立密码登陆，UHub 独立密码是和用户绑定的，而不是和镜像库绑定的
-
-## UHub 下载失败（慢）
-1. `ping uhub.service.ucloud.cn` （如果ip为106.75.56.109 则表示是通过公网拉取，有限速）
-2. `curl https://uhub.service.ucloud.cn/v2/` 查看是否通，正常会返回 UNAUTHORIZED 或 301
-3. `systemctl show --property=Environment docker` 查看是否配置了代理
-4. 在拉镜像节点执行`iftop -i any -f 'host <uhub-ip>'`命令，同时尝试拉取 UHub 镜像，查看命令输出（uhub-ip替换为步骤1中得到的ip）
-5. 对于公网拉镜像的用户，还需要在 Console 页面查看外网访问是否开启
+UK8S 使用 VPC 网络实现内网互通，默认使用了 UCloud 的 DNS，wget 获取信息需要对 VPC 的子网配置网关，需要在 UK8S 所在的区域下进入VPC产品，对具体子网配置 NAT 网关，使集群节点可以通过 NAT 网关拉取外网数据，具体操作详见[VPC创建NAT网关](https://docs.ucloud.cn/vpc/briefguide/step4) 。
 
 ## 为什么在 K8S 节点 Docker 直接起容器网络不通
 
 1. UK8S 使用 UCloud 自己的 CNI 插件，而直接用 Docker 起的容器并不能使用该插件，因此网络不通。
 2. 如果需要长期跑任务，不建议在 UK8S 节点用 Docker 直接起容器，应该使用 pod
 3. 如果只是临时测试，可以添加`--network host` 参数，使用 hostnetwork 的模式起容器
-
 
 ## 使用 ULB4 时 Vserver 为什么会有健康检查失效
 
