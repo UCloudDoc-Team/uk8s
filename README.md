@@ -79,7 +79,7 @@
 * 常见问题及排障指南
     * [入门必读](/uk8s/troubleshooting/startguide)
     * [UK8S 集群常见问题](/uk8s/troubleshooting/k8s_debug_summary)
-    * [集群常见问题](/uk8s/q/cluster)  
+    <!--* [集群常见问题](/uk8s/q/cluster)-->  
     * [镜像库常见问题](/uk8s/q/registry) 
     * [容器常见问题](/uk8s/q/container) 
     * [存储插件问题](/uk8s/q/storage)
