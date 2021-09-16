@@ -62,3 +62,16 @@ umount path
 4. 在上一步umount中，会有一个以/var/lib/kubelet/pods开头的目录，umount之后需要手动删除该目录。
 
 5. 删除pvc，删除pvc之后需要手动在控制台卸载掉对应的udisk。udisk的id为pv名字的最后几位，例如pv名字是pvc-58f9978e-3133-11ea-b4d6-5254000cee42-bsm-olx0uqti， 则对应的udisk名字就是bsm-olx0uqti。也可以通过describe pv拿到spec.flexVolume.options中的diskId字段。
+
+## 3. 其他问题汇总
+
+### 1. 一个PVC可以挂载到多个 pod 吗？
+
+UDisk不支持多点读写，如需要多点读写请使用UFS。
+
+### 2. Pod删除后，如何复用原先的云盘？
+
+可以使用静态创建PV的方法进行原有云盘绑定的方法进行复用原有云盘，详见[在UK8S中使用已有UDISK](/uk8s/volume/udisk#22-使用已有-UDisk)
+
+
+

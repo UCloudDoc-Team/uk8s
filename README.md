@@ -78,21 +78,20 @@
     * [在UK8S中使用UHub](/uk8s/dockerhub/using_uhub_in_uk8s)   
 * 常见问题及排障指南
     * [入门必读](/uk8s/troubleshooting/startguide)
+    * [UK8S 集群常见问题](/uk8s/troubleshooting/k8s_debug_summary)
     * [集群常见问题](/uk8s/q/cluster)  
     * [镜像库常见问题](/uk8s/q/registry) 
     * [容器常见问题](/uk8s/q/container) 
     * [存储插件问题](/uk8s/q/storage)
-    * [镜像制作与容器常见问题](/uk8s/troubleshooting/k8s_debug_summary)
-    * Pod 故障处理
-        * [概述](/uk8s/troubleshooting/pod_debug_summary)
-    * Node 故障处理
-        * [概述](/uk8s/troubleshooting/node_debug_summary)
-        * [预防OOM](/uk8s/troubleshooting/prevent_oom)
-    * [集群ULB误删处理](/uk8s/troubleshooting/ulb_undelete)
+    * [Pod 常见故障处理](/uk8s/troubleshooting/pod_debug_summary)
+        <!--* [概述](/uk8s/troubleshooting/pod_debug_summary)-->
+    * [ode 常见故障处理](/uk8s/troubleshooting/node_debug_summary)
+        <!--* [概述](/uk8s/troubleshooting/node_debug_summary)
+        * [预防OOM](/uk8s/troubleshooting/prevent_oom)<!--
 * 最佳实践
     * [API Server 审计功能](/uk8s/bestpractice/apiserver_audit)
-    * [基于Jenkins的CI/CD实践](/uk8s/bestpractice/cicd)
-    * [Jenkins&Kaniko的CI/CD实践](/uk8s/bestpractice/cicd)
+    * [Docker & Jenkins CI/CD实践](/uk8s/bestpractice/cicd)
+    * [Kaniko & Jenkins CI/CD实践](/uk8s/bestpractice/cicd_containerd)
     * [权限管理](/uk8s/bestpractice/authorization/README)
     * [亲和性实践](/uk8s/bestpractice/affinity)
 * [产品价格](/uk8s/price)
