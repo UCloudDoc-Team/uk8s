@@ -43,9 +43,6 @@ spec:
 ```
 如果容器之前已经创建了，只需要在yaml文件中加上“volumeMounts"及"volumes"参数，再使用**kubectl apply **命令更新即可。
 
-### 一个PVC可以挂载到多个pod吗？
-UDisk不支持多点读写，如需要多点读写请使用UFS。
-
 ### 我想在删除LoadBalancer类型的Service并保留EIP该怎么操作？
 
 修改Service类型，原“type: LoadBalancer”修改为NodePort或者ClusterIP，再进行删除Service操作，EIP和ULB会保留。
@@ -57,7 +54,4 @@ UDisk不支持多点读写，如需要多点读写请使用UFS。
 UK8S使用VPC网络实现内网互通，拉取Uhub镜像不受影响，拉取外网镜像时需要对VPC的子网配置网关，需要在UK8S所在的区域下进入VPC产品，对具体子网配置NAT网关，使集群节点可以通过NAT网关拉取外网镜像，具体操作详见[VPC创建NAT网关](vpc/briefguide/step4)
 。
 
-### Pod删除后，如何复用原先的云盘？
-
-可以使用静态创建PV的方法进行原有云盘绑定的方法进行复用原有云盘，详见[在UK8S中使用已有UDISK](uk8s/volume/statusudisk)
 
