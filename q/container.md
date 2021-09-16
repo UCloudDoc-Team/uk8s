@@ -48,10 +48,3 @@ spec:
 修改Service类型，原“type: LoadBalancer”修改为NodePort或者ClusterIP，再进行删除Service操作，EIP和ULB会保留。
 
 因该操作EIP和ULB资源将不再受UK8S管理，所以需要手动至ULB和EIP页面进行资源解绑和绑定。
-
-### 怎么在UK8S集群中拉取Uhub以外的镜像？
-
-UK8S使用VPC网络实现内网互通，拉取Uhub镜像不受影响，拉取外网镜像时需要对VPC的子网配置网关，需要在UK8S所在的区域下进入VPC产品，对具体子网配置NAT网关，使集群节点可以通过NAT网关拉取外网镜像，具体操作详见[VPC创建NAT网关](vpc/briefguide/step4)
-。
-
-
