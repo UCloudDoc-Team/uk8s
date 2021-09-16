@@ -79,14 +79,14 @@
     * [入门必读](/uk8s/troubleshooting/startguide)
     * [UK8S 集群常见问题](/uk8s/troubleshooting/k8s_debug_summary)
     <!--* [集群常见问题](/uk8s/q/cluster)-->  
-    * [镜像及镜像仓库常见问题](/uk8s/q/registry) 
-    <!--* [容器常见问题](/uk8s/q/container) -->
-    * [存储常见问题](/uk8s/q/storage)
     * [Pod 常见故障处理](/uk8s/troubleshooting/pod_debug_summary)
         <!--* [概述](/uk8s/troubleshooting/pod_debug_summary)-->
     * [Node 常见故障处理](/uk8s/troubleshooting/node_debug_summary)
         <!--* [概述](/uk8s/troubleshooting/node_debug_summary)
         * [预防OOM](/uk8s/troubleshooting/prevent_oom)-->
+    * [存储常见问题](/uk8s/q/storage)
+    * [镜像及镜像仓库常见问题](/uk8s/q/registry) 
+    <!--* [容器常见问题](/uk8s/q/container) -->
     * [集群ULB误删处理](/uk8s/troubleshooting/ulb_undelete)
 * 最佳实践
     * [API Server 审计功能](/uk8s/bestpractice/apiserver_audit)
