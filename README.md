@@ -92,9 +92,10 @@
 * 最佳实践
 * 最佳实践
     * [API Server 审计功能](/uk8s/bestpractice/apiserver_audit)
-    * [Docker & Jenkins CI/CD实践](/uk8s/bestpractice/cicd)
-    * [Kaniko & Jenkins CI/CD实践](/uk8s/bestpractice/cicd_containerd)
-    * [权限管理](/uk8s/bestpractice/authorization/README)
+    * CI/CD 实践
+        * [Docker & Jenkins](/uk8s/bestpractice/cicd)
+        * [Kaniko & Jenkins](/uk8s/bestpractice/cicd_containerd)
+    * [RBAC 权限管理实践](/uk8s/bestpractice/rbac_practice)
     * [亲和性实践](/uk8s/bestpractice/affinity)
 * [产品价格](/uk8s/price)
 
