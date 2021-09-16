@@ -1,6 +1,6 @@
 # 存储常见问题
 
-## 1. ## PV PVC StorageClass 以及 UDisk 的各种关系？
+## 1. PV PVC StorageClass 以及 UDisk 的各种关系？
 
 ```yaml
 apiVersion: storage.k8s.io/v1
@@ -74,7 +74,7 @@ spec:
 1. `kubectl get pvc -n ns pvc-name` 查看对应的 VOLUME 字段，找到与 pvc 绑定的 pv，一般为（pvc-e51b694f-ffac-4d23-af5e-304a948a155a）
 2. `kubectl get pv pv-name -o yaml` 在 spec.csi.volumeHandle 字段，可以查看到改 pv 绑定的 UDisk盘(flexv 插件为 pv 的最后几位)
 3. 在控制台查看该udisk盘的状态,是否挂载到某个主机
-4. `kubectl get volumeattachment |grep pv-name` 查看 K8S 集群内记录的磁盘挂载状态，[VolumeAttachment的作用](#2-volumeattachment-的作用)
+4. `kubectl get volumeattachment |grep pv-name` 查看 K8S 集群内记录的磁盘挂载状态
 5. ssh 到对应的主机上，`lsblk`可以看到对应的盘
 6. `mount |grep pv-name` 可用查看盘的实际挂载点，有一个 globalmount 及一个或多个 pod 的 mount 点
 
