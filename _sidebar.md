@@ -84,7 +84,7 @@
     * [存储插件问题](/uk8s/q/storage)
     * [Pod 常见故障处理](/uk8s/troubleshooting/pod_debug_summary)
         <!--* [概述](/uk8s/troubleshooting/pod_debug_summary)-->
-    * [ode 常见故障处理](/uk8s/troubleshooting/node_debug_summary)
+    * [Node 常见故障处理](/uk8s/troubleshooting/node_debug_summary)
         <!--* [概述](/uk8s/troubleshooting/node_debug_summary)
         * [预防OOM](/uk8s/troubleshooting/prevent_oom)<!--
     * [集群ULB误删处理](/uk8s/troubleshooting/ulb_undelete)
