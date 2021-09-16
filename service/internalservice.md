@@ -1,26 +1,20 @@
+# 通过内网ULB访问Service
 
-## 通过内网ULB访问Service
+## 1. 使用提醒
 
-### 1、使用提醒
+1. 请勿修改由UK8S创建的ULB及Vserver的名称和备注，否则会导致Service异常无法访问。
+2. 如在 ULB 为 UK8S 在创建 Service 时同步创建，删除 Service 时 ULB 会同步删除，请勿将 ULB 关联其他 Vserver，如需多个 Service 共用 ULB，可先创建 ULB，并在创建 Service 时关联已有 ULB。
+3. 除外网EIP外，ULB相关参数目前均不支持Update，如不确认如何填写，请咨询UCloud 技术支持。
 
-
-1. **请勿修改由UK8S创建的ULB及Vserver的名称和备注，否则会导致Service异常无法访问。**
-
-2. 除外网EIP外，ULB相关参数目前均不支持Update，如不确认如何填写，请咨询UCloud 技术支持。
-
-### 2、使用UDP协议前必读
+## 2. 使用UDP协议前必读
 
 1. 目前ULB4针对UDP协议的健康检查支持ping和port两种模式，默认为ping，强烈推荐改为port；
-
 2. port健康检查的后端实现是对UDP端口发送UDP报文( "Health Check" 字符串)和针对RS IP发送ICMP Ping报文。 如果超时时间内回复了UDP报文则认为健康；如果超时时间没收到UDP回包，则以Ping的探测结果为准，因此您的应用程序需要响应UDP健康检查报文。
-
 3. **需要注意的是UDP回包长度不要超过1440，以避免可能的分片导致ULB4无法收到健康检查响应，导致健康检查失败。**
 
+## 3. 操作指南
 
-### 3、操作指南
-
-
-#### 3.1 TCP应用通过内网ULB4对外暴露
+### 3.1 TCP应用通过内网ULB4对外暴露
 
 对于TCP协议的服务，只需要在metadata.annotations 指定 load-balancer-type为inner，其他参数都有默认值，可不填写，具体如下：
 
@@ -65,7 +59,7 @@ spec:
     - containerPort: 80
 ```
 
-#### 3.2 UDP应用通过内网ULB4对外暴露服务
+### 3.2 UDP应用通过内网ULB4对外暴露服务
 
 如果你的应用是UDP协议，则务必显式声明健康检查的类型为port(端口检查)，否则默认为ping，可能导致ULB误认为后端业务不正常。
 

@@ -1,18 +1,13 @@
 
-## 使用已有的ULB
+# 使用已有的ULB
 
-### 背景
-
-UK8S支持在创建LoadBalancer类型的Service时，指定使用已有的ULB实例，而不是创建一个新的ULB实例。
+UK8S支持在创建 LoadBalancer 类型的 Service 时，指定使用已有的 ULB 实例，而不是创建一个新的ULB实例。
 
 也支持多个Service复用一个ULB实例，但存在以下规则限制：
 
-1. 已有的ULB实例，必须是你自行创建的ULB实例，不能是UK8S插件创建出来的，否则会导致ULB被意外删除（在UK8S内删除Service，ULB也会被同步删除）。
-
+1. 已有的 ULB 实例，必须是你自行创建的 ULB 实例，不能是 UK8S 插件创建出来的，否则会导致 ULB 被意外删除（在UK8S内删除Service，ULB也会被同步删除）。
 2. 多个Service复用一个ULB实例时，Service端口不能冲突，否则新Service无法创建成功。
-
 3. 指定已有的ULB实例创建LoadBalancer Service，Service被删除后，ULB实例不会被删除，仅删除对应的Vserver。
-
 4. 通过UK8S创建的Vserver命名规范为''Protocol-ServicePort-ServiceUUID''，请勿随意修改，否则可能导致脏数据。
 
 下面我们来看下如何使用已有的ULB实例。

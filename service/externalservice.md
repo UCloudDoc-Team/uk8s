@@ -1,33 +1,27 @@
+# 通过外网ULB访问Service
 
-## 通过外网ULB访问Service
 
+## 1. 使用提醒
 
-### 1、使用提醒
 1. 请勿修改由UK8S创建的ULB及Vserver的名称和备注，否则会导致Service异常无法访问。
 
 2. 除外网EIP外，ULB相关参数目前均不支持Update，如不确认如何填写，请咨询UCloud 技术支持。
 
-### 2、使用UDP协议前必读
+## 2. 使用UDP协议前必读
 
 1. 目前ULB4针对UDP协议的健康检查支持ping和port两种模式，默认为ping，强烈推荐改为port；
-
-
 2. port健康检查的后端实现是对UDP端口发送UDP报文( "Health Check" 字符串)和针对RS IP发送ICMP Ping报文。 如果超时时间内回复了UDP报文则认为健康；如果超时时间没收到UDP回包，则以Ping的探测结果为准。因此您的应用程序需要响应UDP健康检查报文。
-
 3. **需要注意的是UDP回包长度不要超过1440，以避免可能的分片导致ULB4无法收到健康检查响应，导致健康检查失败。**
 
-
-### 3、选择ULB4还是ULB7
+## 3. 选择ULB4还是ULB7
 
 外网模式下，ULB支持“报文转发(ULB4)”及“请求代理（ULB7）”两种转发模式，推荐使用ULB4，因为ULB4的性能更好；
 
+## 4. 通过外网 ULB4 暴露服务
 
-### 4、操作指南
-
-#### 4.1、通过外网ULB4暴露服务(TCP)
+### 4.1 通过外网ULB4暴露服务(TCP)
 
 > 使用外网ULB4来暴露服务非常简单，对于TCP协议，可不填写任何 annotations。
-
 
 ```yaml
 apiVersion: v1
@@ -71,7 +65,7 @@ spec:
       protocol: TCP
 ```
 
-#### 4.2、通过外网ULB4暴露服务（UDP协议）
+### 4.2 通过外网ULB4暴露服务（UDP协议）
 
 相对于TCP应用，务必在annotations中显式声明健康检查的类型为port，否则ULB可能将正常工作的Pod认为不健康，导致流量转发异常。
 
@@ -115,8 +109,7 @@ spec:
       protocol: UDP 
 ```
 
-
-### 5、重要说明
+<!--## 5. 重要说明
 
 UK8S的cloudprovider 插件做一个大更新，大于等于19.05.3的版本支持多端口，指定ULB-id等功能，你可以通过如下命令查看cloudprovider的版本：
 
@@ -129,9 +122,11 @@ Git Commit ID:			2723d13b69a4d6f5b905a7f96bd7eed49617f439
 
 ```
 
-升级指南即将发布，如有需求，请联系UCloud技术支持。
+升级指南即将发布，如有需求，请联系UCloud技术支持。-->
 
-### 通过外网ULB7暴露服务(cloudprovider-ucloud version<19.05.3)
+## 5. 通过外网ULB7暴露服务
+
+<!--(cloudprovider-ucloud version<19.05.3)
 
 老版本的ULB7只支持单种协议，即HTTP或HTTPS。 下文示例中，对外暴露2个端口,都使用HTTP协议。
 
@@ -178,10 +173,10 @@ spec:
 ```
 
 
-### 通过外网ULB7暴露服务(cloudprovider-ucloud version>=19.05.3)
+### 通过外网ULB7暴露服务(cloudprovider-ucloud version>=19.05.3)-->
 
 
-19.05.3以后的插件，外网ULB7同时支持HTTP和HTTPS两种协议，下文示例中，对外暴露了三个端口，其中80端口使用HTTP协议，443和8443使用HTTPS协议。
+19.05.3 以后的 CloudProvider 插件，外网ULB7同时支持HTTP和HTTPS两种协议，下文示例中，对外暴露了三个端口，其中80端口使用HTTP协议，443和8443使用HTTPS协议。
 
 ```yaml
 apiVersion: v1
@@ -233,7 +228,7 @@ spec:
     - containerPort: 80
 ```
 
-### HTTPS支持(cloudprovider-ucloud version<19.05.3)
+<!--### HTTPS支持(cloudprovider-ucloud version<19.05.3)
 
 小于19.05.3版本的插件，所有service端口只能是HTTP或HTTPS，不能混合使用。
 
@@ -284,6 +279,8 @@ spec:
 
 ### HTTPS支持(cloudprovider-ucloud version>=19.05.3)
 
+### 5.1 HTTPS 支持
+
 外网ULB支持HTTPS协议。用户通过service.metadata.annotations中的service.beta.kubernetes.io/ucloud-load-balancer-ssl-cert来指定已经上传的TLS证书ID。
 
 通过service.metadata.annotations中的service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port来指定HTTPS服务端口，如有多端口，用","分隔。
@@ -331,8 +328,9 @@ spec:
     ports:
     - containerPort: 80
 ```
+-->
 
-### 常见问题
+## 6. 常见问题
 
 #### 1. 如何区别使用ULB4还是ULB7？
 
