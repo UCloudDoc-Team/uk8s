@@ -90,8 +90,8 @@
     <!--* [容器常见问题](/uk8s/q/container) -->
     * [集群ULB误删处理](/uk8s/troubleshooting/ulb_undelete)
 * 最佳实践
-* 最佳实践
     * [API Server 审计功能](/uk8s/bestpractice/apiserver_audit)
+    * [NodePort 相关参数修改](/uk8s/bestpractice/modify_nodeport)
     * CI/CD 实践
         * [Docker & Jenkins](/uk8s/bestpractice/cicd)
         * [Kaniko & Jenkins](/uk8s/bestpractice/cicd_containerd)
