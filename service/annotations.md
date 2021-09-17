@@ -6,21 +6,21 @@
 > 1. 目前除了外网 ULB 绑定的 EIP 的带宽值以外，其他参数暂时不支持修改，请谨慎配置。
 > 2. 外网 ULB 绑定的 EIP 的带宽值，必须通过 Annotations 修改，Annotations 将会覆盖控制台修改的配置。
 
-#### ULB 相关参数说明
+## 1. ULB 相关参数说明
 
 |字段|默认值|说明|
 |----|----|----|
 |service.beta.kubernetes.io/ucloud-load-balancer-type|outer|负载均衡网络类型，枚举值为 inner / outer。|
-|service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol|tcp|VServer protocol，tcp 和 udp 均代表 ULB4，https 和 http 均代表 ULB7。<br>VServer 的 实际 protocol 由该值和 Service protocol共同决定。<br>如果 Service 的 protocol 为 tcp，该值为 tcp / udp，则最终 VServer为 tcp；如果 Service 的 protocol 为 tcp，该值为 https / https，则 VServer 的协议为 http / https。|
+|service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol|tcp|VServer protocol，tcp 和 udp 均代表 ULB4，https 和 http 均代表 ULB7，VServer 的 实际 protocol 由该值和 Service protocol共同决定。<br>如果 Service 的 protocol 为 tcp，该值为 tcp / udp，则最终 VServer为 tcp；如果 Service 的 protocol 为 tcp，该值为 https / https，则 VServer 的协议为 http / https。|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-method|roundrobin|VServer的负载均衡模式，枚举值为 roundrobin（轮询）、source（源地址）、consistenthash（一致性哈希）、sourceport（源地址计算端口）、consistenthashport（端口一致性哈希）。|
-|service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout|0 / 60|使用 ULB4 时，表示连接保持时间，单位为秒，取值[60, 900]，0 表示禁用连接保持，默认为 0<br>使用 ULB7 时，表示空闲连接的回收时间，单位为秒，取值[60, 900]，0 表示禁用连接保持，默认为 60，取值范围为 [60, 900] 时，persistence-type 不能为 none。|
-|service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port|/|开启 ssl 协议的端口，多个用","分隔开，必须和 ssl-cert 同时指定。|
-|service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert|/|ssl 证书 id，必须和 ssl-port 同时指定，需要先将证书上传至 UCloud。|
+|service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout|0 / 60|单位为秒，取值[60, 900]。<br>使用 ULB4 时，表示连接保持时间，0 表示禁用连接保持，默认为 0<br>使用 ULB7 时，表示空闲连接的回收时间，0 表示禁用连接保持，默认为 60，取值范围为 [60, 900] 时，persistence-type 不能为 none。|
+|service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port|/|开启 ssl 协议的端口，多个用 "," 分隔开，必须和 ssl-cert 同时指定。|
+|service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert|/|ssl 证书 ID，必须和 ssl-port 同时指定，需要先将证书上传至 UCloud。|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-type|none|会话保持方式，枚举值为 none（关闭）、serverinsert（自动生成 KEY）、userdefined（用户自定义 KEY）。|
-|service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-info|/|用户自定义KEY，persistence-type 为 userdefined 时有效。|
+|service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-info|/|用户自定义 KEY，persistence-type 为 userdefined 时有效。|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type|port|健康检查方式，枚举值为 port / path。|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-domain|/|monitor-type 为 path 时有效，指 http 检查域名。|
-|service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-path|/|monitor-type 为path时有效，指 http 检查路径。|
+|service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-path|/|monitor-type 为 path 时有效，指 http 检查路径。|
 |service.beta.kubernetes.io/ucloud-load-balancer-subnet-id|VPC 默认子网|创建 ULB 所在子网，填写子网 ID，如 subnet-xxxxxxxx。|
 |service.beta.kubernetes.io/ucloud-load balancer-remove-unscheduled-backend|true|移除不可被调度节点，枚举值 true / false，设置为 false 后节点不可调度时不会自动被 ULB 剔除。<br>仅在 21.04.1 及以后 cloudprovider 版本中支持。|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-reqmsg|/|UDP 健康检查发出的请求报文，仅在 protocol 设置为 udp 时生效。<br>仅在 21.05.1 及以后 cloudprovider 版本中支持。|
@@ -29,14 +29,14 @@
 
 CloudProvider 版本查看及升级请参见：[CloudProvider 插件更新](/uk8s/service/cp_update)
 
-#### 外网 ULB 绑定 EIP 相关参数说明
+## 2. 外网 ULB 绑定 EIP 相关参数说明
 
 |字段|默认值|说明|
 |----|----|----|
-|service.beta.kubernetes.io/ucloud-load-balancer-eip-paymode|bandwidth|计费模式，支持traffic（流量计费）、bandwidth（带宽计费）、sharebandwidth（共享带宽）。|
+|service.beta.kubernetes.io/ucloud-load-balancer-eip-paymode|bandwidth|计费模式，支持 traffic（流量计费）、bandwidth（带宽计费）、sharebandwidth（共享带宽）。|
 |service.beta.kubernetes.io/ucloud-load-balancer-eip-sharebandwidthid|/|共享带宽 ID，仅在 eip-paymode 为 sharebandwidth 时生效。|
-|service.beta.kubernetes.io/ucloud-load-balancer-eip-bandwidth|2|外网带宽，单位为 Mbps。共享带宽模式下无需指定，或者配置为0；流量计费模式下，该参数为流量计费 EIP 带宽上限。|
-|service.beta.kubernetes.io/ucloud-load-balancer-eip-chargetype|month|付费模式，支持month（按月付费），year（按年付费），dynamic（按时付费）。|
+|service.beta.kubernetes.io/ucloud-load-balancer-eip-bandwidth|2|外网带宽，单位为 Mbps。共享带宽模式下无需指定，或者配置为 0；流量计费模式下，该参数为流量计费 EIP 带宽上限。|
+|service.beta.kubernetes.io/ucloud-load-balancer-eip-chargetype|month|付费模式，支持 month（按月付费）、year（按年付费）、dynamic（按时付费）。|
 |service.beta.kubernetes.io/ucloud-load-balancer-eip-quantity|1|付费时长，chargetype 为 dynamic 时无需填写。|
 
 
