@@ -102,8 +102,8 @@ containers:
 ```yaml
 annotations:
   ## 以下参数仅对 UDP 类型 ULB 生效
-  service.beta.kubernetes.io/ucloud-loadbalancer-vserver-monitor-reqmsg: ""    ## 代表 UDP 健康检查发出的请求报文
-  service.beta.kubernetes.io/ucloud-loadbalancer-vserver-monitor-respmsg: ""   ## 代表 UDP 健康检查请求应收到的响应报文
+  service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-reqmsg: ""    ## 代表 UDP 健康检查发出的请求报文
+  service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-respmsg: ""   ## 代表 UDP 健康检查请求应收到的响应报文
 ```
 
 ### 更新版本：21.04.1
@@ -117,7 +117,7 @@ annotations:
 ```yaml
 annotations:
   ## 默认为 'true'，设置为 'false' 后节点不可调度时不会自动被 ULB 剔除
-  service.beta.kubernetes.io/ucloud-loadbalancer-remove-unscheduled-backend: "false"
+  service.beta.kubernetes.io/ucloud-load-balancer-remove-unscheduled-backend: "false"
 ```
 
 ### 更新版本：21.02.1

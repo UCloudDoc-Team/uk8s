@@ -122,16 +122,14 @@ metadata:
   labels:
     app: ucloud-nginx-out-tcp-new
   annotations:
-    "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"
     # 代表ULB类型，outer为外网，inner为内网；outer为默认值，此处可省略。
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-listentype": "requestproxy"
-    # 代表监听器的类型为请求代理
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "https"
+    "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"
     # 表示ULB协议类型，http与https等价，表示ULB7；
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert": "ssl-b103etqy"
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "https"
     # 声明要绑定的SSL证书Id，需要先将证书上传至UCloud；
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port": "443,8443"
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert": "ssl-b103etqy"
     # 声明使用SSL协议的Service端口，多个用","分隔；
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port": "443,8443"    
 spec:
   type: LoadBalancer
   ports:

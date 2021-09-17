@@ -192,8 +192,6 @@ metadata:
   annotations:
     # 代表ULB类型，outer为外网，inner为内网；outer为默认值，此处可省略。
     "service.beta.kubernetes.io/ucloud-load-balancer-type": "outer"
-    # 代表监听器的类型为请求代理，5月30日后安装的集群无需填写。
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-listentype": "requestproxy"
     # 表示ULB协议类型，http与https等价，表示ULB7；
     "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "https"
     # 声明要绑定的SSL证书Id，需要先将证书上传至UCloud；
