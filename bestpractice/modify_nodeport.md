@@ -16,21 +16,13 @@ KUBE_API_ARGS=" --... \
 
 修改完成后，通过 ```systemctl restart kube-apiserver```，重启 APIServer
 
-> ⚠️ 如果集群中的 Service 已经分配了目标 NodePort Range 之外的端口，修改之后通过 `systemctl status kube-apiserver` 查看 APIServer 状态会有类似以下 warning 事件产生，warning 事件不影响该端口使用，如希望避免该 warning，需要重建该 Service。
+> ⚠️ 如果集群中的 Service 已经分配了目标 NodePort Range 之外的端口，修改之后通过 `kubectl get event -A` 查看集群事件，会有类似以下 warning 事件产生，warning 事件不影响该端口使用，如希望避免该 warning，需要重建该 Service。
 
 ```bash
-# systemctl status kube-apiserver
-● kube-apiserver.service - Kubernetes API Server
-   Loaded: loaded (/usr/lib/systemd/system/kube-apiserver.service; enabled; vendor preset: disabled)
-   Active: active (running) since 四 2021-09-16 15:10:17 CST; 19h ago
-     Docs: https://github.com/GoogleCloudPlatform/kubernetes
-...
-9月 17 10:16:27 10-9-88-175 kube-apiserver[129226]: E0917 10:16:27.623534  129226 repair.go:156] the port 43966 for service uk8s-prometheus/uk8s-monitor is not within the port range 30000-32767; please recreate
-9月 17 10:16:27 10-9-88-175 kube-apiserver[129226]: E0917 10:16:27.624596  129226 repair.go:185] the node port 34840 appears to have leaked: cleaning up
-9月 17 10:16:27 10-9-88-175 kube-apiserver[129226]: E0917 10:16:27.625663  129226 repair.go:185] the node port 43966 appears to have leaked: cleaning up
-9月 17 10:16:27 10-9-88-175 kube-apiserver[129226]: E0917 10:16:27.626740  129226 repair.go:185] the node port 49513 appears to have leaked: cleaning up
-9月 17 10:19:27 10-9-88-175 kube-apiserver[129226]: E0917 10:19:27.645040  129226 repair.go:156] the port 34840 for service grafana/uk8s-monitor is not within the port range 30000-32767; please recreate
-9月 17 10:19:27 10-9-88-175 kube-apiserver[129226]: E0917 10:19:27.645070  129226 repair.go:156] the port 49513 for service uk8s-alertmanager/uk8s-monitor is not within the port range 30000-32767; please recreate
+# kubectl get event -A
+NAMESPACE      LAST SEEN   TYPE      REASON             OBJECT                         MESSAGE
+uk8s-monitor   79s         Warning   PortOutOfRange     service/grafana                Port 34840 is not within the port range 30000-32767; please recreate service
+uk8s-monitor   78s         Warning   PortNotAllocated   service/grafana                Port 34840 is not allocated; repairing
 ```
 
 ## 2. 修改节点 ip_local_port_range
