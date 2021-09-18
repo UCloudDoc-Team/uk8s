@@ -85,8 +85,8 @@
     * [Node 常见故障处理](/uk8s/troubleshooting/node_debug_summary)
         <!--* [概述](/uk8s/troubleshooting/node_debug_summary)
         * [预防OOM](/uk8s/troubleshooting/prevent_oom)-->
-    * [存储常见问题](/uk8s/q/storage)
-    * [镜像及镜像仓库常见问题](/uk8s/q/registry) 
+    * [存储常见问题](/uk8s/troubleshooting/storage)
+    * [镜像及镜像仓库常见问题](/uk8s/troubleshooting/registry) 
     <!--* [容器常见问题](/uk8s/q/container) -->
     * [集群ULB误删处理](/uk8s/troubleshooting/ulb_undelete)
 * 最佳实践
