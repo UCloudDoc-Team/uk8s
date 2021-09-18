@@ -67,7 +67,7 @@
 * 日志监控方案
     * [使用ELK自建UK8S日志解决方案](/uk8s/log/elastic_filebeat_kibana_solution)
     * [使用UK8S日志插件功能](/uk8s/log/ELKplugin)
-    * [Prometheus监控方案]
+    * Prometheus监控方案
         * [什么是Prometheus](/uk8s/monitor/prometheus/intro)
         * [核心概念](/uk8s/monitor/prometheus/concept)
         * [部署Prometheus](/uk8s/monitor/prometheus/installprometheus)
