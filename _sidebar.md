@@ -100,6 +100,7 @@
         * [Kaniko & Jenkins](/uk8s/bestpractice/cicd_containerd)
     * [RBAC 权限管理实践](/uk8s/bestpractice/rbac_practice)
     * [亲和性实践](/uk8s/bestpractice/affinity)
+    * [Pod 容忍节点异常时间调整](/uk8s/bestpractice/taint_base_eviction)
 * [产品价格](/uk8s/price)
 
 <!-- * 应用商店
