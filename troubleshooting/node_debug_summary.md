@@ -52,5 +52,6 @@ UK8S 核心组件及名称：
 |Controller Manager|kube-controller-manager|
 |Etcd|etcd|
 |Scheduler|kube-scheduler|
+|KubeProxy|kube-proxy|
 
 例如，查看 APIServer 组件状态，需要执行 `systemctl status kube-apiserver`。
