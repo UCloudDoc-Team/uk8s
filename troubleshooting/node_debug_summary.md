@@ -35,13 +35,13 @@ kubectl describe node ${NODE_NAME}
 
 ## 3. K8S 组件故障检查
 
+UK8S 集群默认为 3 台 Master 节点，K8S 核心组件在 3 台 Master 节点均有部署，通过负载均衡对外提供服务。如发现组件异常，请登录相应的 Master 节点（无法定位时逐台登录 Master 节点），并通过以下命令来查看节点中组件状态是否正常、错误原因是什么，及对异常组件进行重启：
+
 ```bash
 system status ${PLUGIN_NAME}
 journalctl -u ${PLUGIN_NAME}
 system restart ${PLUGIN_NAME}
 ```
-
-通过上述命令来查看节点中的两个核心组件状态是否正常、错误原因是什么，及对异常组件进行重启。
 
 UK8S 核心组件及名称：
 
