@@ -33,7 +33,7 @@ kubectl describe node ${NODE_NAME}
    3.1 网络检查： 我们可以从集群的Master节点，使用 **Ping** 命令去检查该节点的网络是否可达；
    3.2 健康检查： 登录UCloud控制台，从云主机页面查看该节点是否处于Running状态，包括查看CPU、内存使用率，确认节点是否处于高负载；
 
-4. 组件状态检查
+## 3. K8S 组件故障检查
 
 ```bash
 system status ${PLUGIN_NAME}
