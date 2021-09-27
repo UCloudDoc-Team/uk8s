@@ -33,22 +33,24 @@ kubectl describe node ${NODE_NAME}
    3.1 网络检查： 我们可以从集群的Master节点，使用 **Ping** 命令去检查该节点的网络是否可达；
    3.2 健康检查： 登录UCloud控制台，从云主机页面查看该节点是否处于Running状态，包括查看CPU、内存使用率，确认节点是否处于高负载；
 
-4. 查看节点组件状态
-```bash
-system status kube-proxy
-
-system status kubelet
-```
-
-5. 查看组件日志
+4. 组件状态检查
 
 ```bash
-journalctl -u kubelet 
-
-journalctl -u kube-proxy
-
+system status ${PLUGIN_NAME}
+journalctl -u ${PLUGIN_NAME}
+system restart ${PLUGIN_NAME}
 ```
 
-通过上述命令来查看节点中的两个核心组件，kube-proxy 和 kubelet 的状态是否正常，如果不正常，错误原因是什么。
+通过上述命令来查看节点中的两个核心组件状态是否正常、错误原因是什么，及对异常组件进行重启。
 
+UK8S 核心组件及名称：
 
+|组件|组件名称|
+|---|---|
+|Kubelet|kubelet|
+|API Server|kube-apiserver|
+|Controller Manager|kube-controller-manager|
+|Etcd|etcd|
+|Scheduler|kube-scheduler|
+
+例如，查看 APIServer 组件状态，需要执行 `systemctl status kube-apiserver`。
