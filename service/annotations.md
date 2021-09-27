@@ -11,9 +11,10 @@
 |字段|默认值|说明|
 |----|----|----|
 |service.beta.kubernetes.io/ucloud-load-balancer-type|outer|负载均衡网络类型，枚举值为 inner / outer。|
-|service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol|tcp|VServer protocol，tcp 和 udp 均代表 ULB4，https 和 http 均代表 ULB7，VServer 的 实际 protocol 由该值和 Service protocol共同决定。<br>如果 Service 的 protocol 为 tcp，该值为 tcp / udp，则最终 VServer为 tcp；如果 Service 的 protocol 为 tcp，该值为 https / https，则 VServer 的协议为 http / https。|
+|service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol|tcp|VServer 协议类型，枚举值为 tcp/udp/http/https，其中 tcp/udp 代表 ULB4，http/https 代表 ULB7。 |
+|service.beta.kubernetes.io/ucloud-load-balancer-vserver-listentype|/|监听类型，枚举值为 packetstransmit（ULB4）/ requestproxy（ULB7），默认跟随 vserver-protocol 协议配置。<br>仅在 ULB 监听类型为 requestproxy，且 vserver-protocol 类型为 tcp 时需要指定（21.02.1 及以后 cloudprovider 版本中支持）|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-method|roundrobin|VServer的负载均衡模式，枚举值为 roundrobin（轮询）、source（源地址）、consistenthash（一致性哈希）、sourceport（源地址计算端口）、consistenthashport（端口一致性哈希）。|
-|service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout|0 / 60|单位为秒，取值[60, 900]。<br>使用 ULB4 时，表示连接保持时间，0 表示禁用连接保持，默认为 0<br>使用 ULB7 时，表示空闲连接的回收时间，0 表示禁用连接保持，默认为 60，取值范围为 [60, 900] 时，persistence-type 不能为 none。|
+|service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout|0 / 60|单位为秒，取值[60, 900]。<br>使用 ULB4 时，表示连接保持时间，0 表示禁用连接保持，默认为 0。<br>使用 ULB7 时，表示空闲连接的回收时间，0 表示禁用连接保持，默认为 60，取值范围为 [60, 900] 时，persistence-type 不能为 none。|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port|/|开启 ssl 协议的端口，多个用 "," 分隔开，必须和 ssl-cert 同时指定。|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert|/|ssl 证书 ID，必须和 ssl-port 同时指定，需要先将证书上传至 UCloud。<br>证书管理请参考：|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-type|none|会话保持方式，枚举值为 none（关闭）、serverinsert（自动生成 KEY）、userdefined（用户自定义 KEY）。|
@@ -25,7 +26,6 @@
 |service.beta.kubernetes.io/ucloud-load balancer-remove-unscheduled-backend|true|移除不可被调度节点，枚举值 true / false，设置为 false 后节点不可调度时不会自动被 ULB 剔除。<br>仅在 21.04.1 及以后 cloudprovider 版本中支持。|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-reqmsg|/|UDP 健康检查发出的请求报文，仅在 protocol 设置为 udp 时生效。<br>仅在 21.05.1 及以后 cloudprovider 版本中支持。|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-respmsg|/|UDP 健康检查请求应收到的响应报文，仅在 protocol 设置为 udp 时生效。<br>仅在 21.05.1 及以后 cloudprovider 版本中支持。|
-|service.beta.kubernetes.io/ucloud-load-balancer-vserver-listentype|requestproxy|监听类型，枚举值为 packetstransmit / requestproxy，2020.5.30 后创建的集群无需指定该参数。|
 
 CloudProvider 版本查看及升级请参见：[CloudProvider 插件更新](/uk8s/service/cp_update)
 
