@@ -11,8 +11,8 @@
 |字段|默认值|说明|
 |----|----|----|
 |service.beta.kubernetes.io/ucloud-load-balancer-type|outer|负载均衡网络类型，枚举值为 inner / outer。|
-|service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol|tcp|VServer 协议类型，枚举值为 tcp/udp/http/https。 |
-|service.beta.kubernetes.io/ucloud-load-balancer-vserver-listentype|/|负载均衡类型，枚举值为 packetstransmit/requestproxy，默认跟随 vserver-protocol 协议配置，如 vserver-protocol 为 tcp/udp 时为 packetstransmit，为 http/https 时为 requestproxy，无需另外指定。 <br>仅在需要指定负载均衡类型为 requestproxy，且 vserver-protocol 类型为 tcp 时需要配置（21.02.1 及以后 cloudprovider 版本中支持）。<br>负载均衡类型及 VServer 协议类型详情说明请参见：[负载均衡类型](/ulb/fast/createulb/networktype)|
+|service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol|tcp|VServer 协议类型，枚举值为 tcp / udp / http / https。 |
+|service.beta.kubernetes.io/ucloud-load-balancer-vserver-listentype|/|负载均衡类型，枚举值为 packetstransmit / requestproxy，默认跟随 vserver-protocol 协议配置，如 vserver-protocol 为 tcp / udp 时为 packetstransmit，为 http / https 时为 requestproxy，无需另外指定。 <br>仅在需要指定负载均衡类型为 requestproxy，且 vserver-protocol 类型为 tcp 时需要配置（21.02.1 及以后 cloudprovider 版本中支持）。<br>负载均衡类型及 VServer 协议类型详情说明请参见：[负载均衡类型](/ulb/fast/createulb/networktype)|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-method|roundrobin|VServer的负载均衡模式，枚举值为 roundrobin（轮询）、source（源地址）、consistenthash（一致性哈希）、sourceport（源地址计算端口）、consistenthashport（端口一致性哈希）。|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout|0/60|使用 ULB4 时，表示连接保持时间，单位为秒，取值 [60, 900]，0 表示禁用连接保持，默认为 0（不需要指定参数）。<br>使用 ULB7 时，表示空闲连接的回收时间，单位为秒，取值为 (0, 86400]，0 表示禁用连接保持，默认为 60。<br>指定参数后，persistence-type 不能为 none。|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-type|none|会话保持方式，枚举值为 none（关闭）、serverinsert（自动生成 KEY）、userdefined（用户自定义 KEY）。|
