@@ -1,7 +1,6 @@
+# 集群节点配置推荐
 
-## 集群节点配置推荐
-
-### 1、Master 配置推荐
+## 1. Master 配置推荐
 
 Master 规格跟集群规模有关，集群规模越大，所需要的 Master 规格也越高，不同集群规模的，Master 节点配置推荐如下：
 
@@ -14,14 +13,14 @@ Master 规格跟集群规模有关，集群规模越大，所需要的 Master �
 |500-1000 个节点| >=32 核 64G|
 |1000 个以上节点|联系我们|
 
-如随着集群规模提升，有升级 Master 节点规格配置需求，请在云主机节点管理页面，**逐台进行更改配置**。
-![](/images/introduction/node_requirement_01.png)
-
-在升级下一台 Master 节点前，**请确保其它两台 Master 节点已处于 Ready 状态**。
-
 UK8S Master 节点系统盘默认 40G（不可调整），用于储存 ETCD 信息及相关配置文件等。
 
-### 2、如何选择 Node 配置大小
+如随着集群规模提升，有升级 Master 节点规格配置需求，请在云主机节点管理页面，**逐台进行更改配置**。
+
+在升级下一台 Master 节点前，**请确保其它两台 Master 节点已处于 Ready 状态**，且 Master 节点上 Kubernetes 相关核心组件状态均处于 **active** 状态。Master 节点核心组件排障方法请参考：[Node 常见故障处理](/uk8s/troubleshooting/node_debug_summary)
+
+
+## 2. 如何选择 Node 配置大小
 
 UK8S 集群要求 Node 配置不小于 2C4G，系统盘默认 40G（不可调整），用于储存相关配置文件等等。
 
