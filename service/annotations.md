@@ -17,7 +17,7 @@
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout|0/60|使用 ULB4 时，表示连接保持时间，单位为秒，取值 [60, 900]，0 表示禁用连接保持，默认为 0（不需要指定参数）。<br>使用 ULB7 时，表示空闲连接的回收时间，单位为秒，取值为 (0, 86400]，0 表示禁用连接保持，默认为 60。<br>指定参数后，persistence-type 不能为 none。|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-type|none|会话保持方式，枚举值为 none（关闭）、serverinsert（自动生成 KEY）、userdefined（用户自定义 KEY）。|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port|/|开启 ssl 协议的端口，多个用 "," 分隔开，必须和 ssl-cert 同时指定。|
-|service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert|/|ssl 证书 ID，必须和 ssl-port 同时指定，需要先将证书上传至 UCloud。<br>证书管理请参考：|
+|service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert|/|ssl 证书 ID，必须和 ssl-port 同时指定，需要先将证书上传至 UCloud。<br>负载均衡所使用的 SSL 证书的管理，请参见 ULB 文档：[添加证书](/ulb/guide/certificate/addcertificate)|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-info|/|用户自定义 KEY，persistence-type 为 userdefined 时有效。|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type|port|健康检查方式，枚举值为 port / path。|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-domain|/|monitor-type 为 path 时有效，指 http 检查域名。|
