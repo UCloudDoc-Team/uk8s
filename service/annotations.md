@@ -29,7 +29,7 @@
 
 CloudProvider 版本查看及升级请参见：[CloudProvider 插件更新](/uk8s/service/cp_update)
 
-## 3. 外网 ULB 绑定 EIP 相关参数说明
+## 2. 外网 ULB 绑定 EIP 相关参数说明
 
 |字段|默认值|说明|
 |----|----|----|
