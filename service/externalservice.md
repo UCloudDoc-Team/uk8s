@@ -182,6 +182,8 @@ spec:
 
 19.05.3 以后的 CloudProvider 插件，外网ULB7同时支持HTTP和HTTPS两种协议，下文示例中，对外暴露了三个端口，其中80端口使用HTTP协议，443和8443使用HTTPS协议。
 
+负载均衡所使用的 SSL 证书的管理，请参见 ULB 文档：[添加证书](/ulb/guide/certificate/addcertificate)
+
 ```yaml
 apiVersion: v1
 kind: Service
