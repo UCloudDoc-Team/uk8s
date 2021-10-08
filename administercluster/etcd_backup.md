@@ -36,11 +36,11 @@ kubectl create secret generic uk8s-etcd-backup-cert -n kube-system --from-file /
 当误删除 UK8S 集群 Master 节点时，集群恢复较为麻烦，需要联系 UK8S 技术人员进行支持；对于节点故障而非误删节点的情况，处理起来相对简单一些。下面分别进行说明。
 
 * etcd节点未删除，但节点存在故障
-  * [etcd集群仍然可用](#3-1-1-etcd集群仍然可用)
-  * [etcd集群不可用](#3-1-2-etcd集群不可用)
+  * [etcd集群仍然可用](#311-etcd集群仍然可用)
+  * [etcd集群不可用](#312-etcd集群不可用)
 * 误删除etcd节点
-  * [etcd集群仍然可用](#3-2-1-etcd集群仍然可用)
-  * [etcd集群不可用](#3-2-2-etcd集群不可用)
+  * [etcd集群仍然可用](#321-etcd集群仍然可用)
+  * [etcd集群不可用](#322-etcd集群不可用)
 
 ### 3.1 etcd 节点未删除，但节点存在故障
 
