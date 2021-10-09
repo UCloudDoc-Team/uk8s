@@ -41,7 +41,7 @@ UK8S 专有版集群默认需要创建三个 Master 节点以保证生产环境�
 |集群名称|UK8S 集群名称，后期可更改|
 |外网 APIServer|APIServer 通过 ULB 负载均衡服务对外提供暴露。内网 Master ULB 在创建集群时自动生成，如开启外网 APIServer，将自动购买一个外网 ULB 服务，起始带宽为 1MB。<br>APIServer 服务 ULB 命名规则为 uk8s-xxxxxxxx-master-ulb4（内网 ULB）/ uk8s-xxxxxxxx-master-ulb4-external（外网 ULB），**删除将导致集群 APIServer 服务不可用**。|
 |K8S 版本|UK8S 集群版本|
-|kube-proxy|默认选择为 iptables，选择标准和切换请参考：[kube-proxy模式选择](uk8s/userguide/kubeproxy_mode)|
+|kube-proxy|默认选择为 iptables，选择标准和切换请参考：[kube-proxy模式选择](/uk8s/userguide/kubeproxy_mode)|
 |容器运行时|K8S 1.19 及以上版本默认为 containerd，采用 containerd 运行时的节点，请勿自行另外安装 docker，避免配置冲突导致节点不可用。|
 |管理员密码|适用于本次创建的所有 Master 和 Node 节点|
 |集群本地域名|默认值为 cluster.local，用户可自定义后缀，域名由两段组成，每段不超过 63 个字符，且只能使用大小写字母和数字，不能为空。|
