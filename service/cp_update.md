@@ -74,6 +74,14 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 ## 2. 变更记录
 
+### 更新版本：21.10.1
+
+更新时间：2021 年 10 月 14 日
+
+更新内容：
+
+* 使用指定 ULB 创建 LoadBalancer 类型 Service 时，不能指定由 CloudProvider 创建的 ULB。
+
 ### 更新版本：21.05.2
 
 更新时间：2021 年 5 月 28 日
