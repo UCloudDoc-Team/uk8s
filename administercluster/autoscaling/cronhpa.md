@@ -6,7 +6,7 @@ HPA(Horizontal Pod Autoscaling) 指 Kubernetes Pod 的横向自动伸缩，是 K
 
 ### 1.1 开启定时伸缩
 
-在 UK8S 集群管理页面中点击**集群伸缩**标签页，选择**定时伸缩(CronHPA)**，点击立即开启安装 CronHPA 控制插件，开启定时伸缩功能。
+在 UK8S 集群管理页面中点击**集群伸缩**标签页，选择**定时伸缩CronHPA**，点击立即开启安装 CronHPA 控制插件，开启定时伸缩功能。
 
 ![](/images/administercluster/autoscaling/opencronhpa.png)
 
