@@ -30,13 +30,13 @@ ClusterIp 是 Kubernetes 中默认的服务类型 （ServiceType），选择此�
 
 ULB 提供了4层（基于IP+端口）和7层（基于 URL 等应用层信息）两种负载均衡类型，下表为4层和7层 ULB 的区别：
 
-|类型|转发模式|网络|协议|
-|----|--------|----|----|
-|ULB4|报文转发|内网、外网|TCP、UDP|
-|ULB7|请求代理|外网|HTTP、HTTPS、TCP|
+|负载均衡类型|网络模式|支持协议|
+|--------|----|----|
+|报文转发|内网、外网|TCP、UDP|
+|请求代理|内网、外网|HTTP、HTTPS、TCP|
 
 如果你希望对 ULB 有深入的了解，请访问[ULB 产品介绍](ulb/README)，
 
-在 UK8S，我们同时支持 ULB4 及 ULB7，你可以通过注释（annotations ）的形式自行配置 ULB 参数 。
+在 UK8S，我们同时支持报文转发及请求代理类型 ULB，你可以通过 Service yaml 中 [Annotations](/uk8s/service/annotations) 的形式自行配置 ULB 参数 。
 
 下面我们分别介绍下如何通过 ULB 在内网、外网访问 Service。
