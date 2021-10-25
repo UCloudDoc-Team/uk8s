@@ -52,12 +52,10 @@ Crontab格式（前5位为时间选项，这里我们只用到了前5位）
 apiVersion: autoscaling.ucloud.cn/v1
 kind: CronHorizontalPodAutoscaler
 metadata:
-  labels:
-  controller-tools.k8s.io: "1.0"
   name: "nginx-cronhpa"
   namespace: default
 spec:
-  jobs: # 执行计划，支持最多在同一 CronHPA 中添加 10 个执行计划
+  jobs: # 执行计划，可在同一个 CronHPA 任务中添加多个执行计划
   - name: "up5"
     schedule: "40 8 * * * "
     targetSize: 5
