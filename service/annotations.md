@@ -19,7 +19,7 @@
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port|/|开启 ssl 协议的端口，多个用 "," 分隔开，必须和 ssl-cert 同时指定。|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert|/|ssl 证书 ID，必须和 ssl-port 同时指定，需要先将证书上传至 UCloud。<br>负载均衡所使用的 SSL 证书的管理，请参见 ULB 文档：[添加证书](/ulb/guide/certificate/addcertificate)|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-info|/|用户自定义 KEY，persistence-type 为 userdefined 时有效。|
-|service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type|port|健康检查方式，枚举值为 port / path。|
+|service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type|port|健康检查方式，枚举值为 port / path / customize。<br>请求代理型 TCP 协议仅支持 port，其他协议支持 port 和 path；报文转发型 TCP 协议仅支持 port，UDP 协议支持 port 和 customize|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-domain|/|monitor-type 为 path 时有效，指 http 检查域名。|
 |service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-path|/|monitor-type 为 path 时有效，指 http 检查路径。|
 |service.beta.kubernetes.io/ucloud-load-balancer-subnet-id|VPC 默认子网|创建 ULB 所在子网，填写子网 ID，如 subnet-xxxxxxxx。|

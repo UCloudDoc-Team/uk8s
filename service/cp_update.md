@@ -110,6 +110,7 @@ containers:
 ```yaml
 annotations:
   ## 以下参数仅对 UDP 类型 ULB 生效
+  service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type: "customize"      ## 设置健康检查类型为 customize，代表 UDP 健康检查
   service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-reqmsg: ""    ## 代表 UDP 健康检查发出的请求报文
   service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-respmsg: ""   ## 代表 UDP 健康检查请求应收到的响应报文
 ```
