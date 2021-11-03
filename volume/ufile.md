@@ -63,7 +63,7 @@ metadata:
 provisioner: ufile.csi.ucloud.cn
 parameters:
   bucket: csis3-bucketname  # 事先申请好的US3 Bucket
-  csi.storage.k8s.io/node-publish-secret-name: csi-s3-secret # 关联前一步创建的Secret
+  csi.storage.k8s.io/node-publish-secret-name: us3-secret # 关联前一步创建的Secret
   csi.storage.k8s.io/node-publish-secret-namespace: kube-system
 ```
 
