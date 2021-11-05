@@ -4,7 +4,7 @@
 
 ## 1. 版本查看及插件升级
 
-### 1.1 控制台操作
+<!--### 1.1 控制台操作-->
 
 在 UK8S 集群控制台管理页面「插件-存储插件」页面，开启 CSI 存储插件升级功能，开启 CSI 插件功能会在集群中执⾏ CSI 插件查询任务，⼤约需要 3 分钟，在此过程中请不要操作集群。升级功能开启后，即可看到 CSI 插件版本信息，点击「升级 CSI」即可进行升级。
 
@@ -14,7 +14,7 @@
 
 > ⚠️ 集群进行存储插件升级时，请勿进行服务发布等操作
 
-### 1.2 命令行操作
+<!--### 1.2 命令行操作
 
 #### 集群缺失userdata的重装方法
 
@@ -39,25 +39,27 @@ data:
 #### 更新 UDisk CSI 插件
 
 ```bash
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk.21.09.1/csi-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk.21.09.1/csi-node.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk.21.09.1/rbac-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk.21.09.1/rbac-node.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk.21.11.1/csi-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk.21.11.1/csi-node.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk.21.11.1/rbac-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk.21.11.1/rbac-node.yml
 ```
 
 #### 更新 US3 CSI 插件
 
 ```bash
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.09.1/csi-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.09.1/csi-node.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.09.1/rbac-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.09.1/rbac-node.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.1/csi-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.1/csi-node.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.1/rbac-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.1/rbac-node.yml
 ```
+-->
 
-## 变更记录
+## 2. 变更记录
 
 |版本|更新时间|更新内容|
 |----|----|----|
+|**21.11.1**|2021.11.04|1. 适配了s3fs返回成功而实际挂载失败的情况<br>；2. 修复因us3公私钥长度变化导致的挂载失败<br>；3. 始终通过节点us3lancher服务操作挂载|
 |**21.09.1**|2021.09.07|将s3fs挂载操作放在Node上进行|
 |**21.08.1**|2021.08.12|优化 CSI 插件调度机制，避免被驱逐|
 |**21.07.1**|2021.07.05|支持云盘裸金属|

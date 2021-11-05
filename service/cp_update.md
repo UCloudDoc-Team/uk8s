@@ -74,6 +74,14 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 ## 2. 变更记录
 
+### 更新版本：21.10.2
+
+更新时间：2021 年 11 月 4 日
+
+更新内容：
+
+* 优化了对 VServer 和 ULB 名称的校验，修复首次创建 VServer 失败导致 Service 无法创建的问题
+
 ### 更新版本：21.10.1
 
 更新时间：2021 年 10 月 14 日
