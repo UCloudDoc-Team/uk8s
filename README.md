@@ -94,6 +94,7 @@
     * [镜像及镜像仓库常见问题](/uk8s/troubleshooting/registry) 
     <!--* [容器常见问题](/uk8s/q/container) -->
     * [集群ULB误删处理](/uk8s/troubleshooting/ulb_undelete)
+    * [集群日志组件常见问题](/uk8s/troubleshooting/log_elk_summary.md)
 * 最佳实践
     * [API Server 审计功能](/uk8s/bestpractice/apiserver_audit)
     * [NodePort 相关参数修改](/uk8s/bestpractice/modify_nodeport)
