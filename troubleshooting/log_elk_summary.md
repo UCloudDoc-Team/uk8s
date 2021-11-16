@@ -11,6 +11,8 @@ kubectl edit pvc multi-master-multi-master-0
 kubectl edit pvc multi-master-multi-master-1
 kubectl edit pvc multi-master-multi-master-2
 ```
+详细操作参考[2.3在线扩容PVC](https://docs.ucloud.cn/uk8s/volume/expandvolume)
+
 扩容后
 * 确认 pv/pvc状态 kubectl get pv | grep multi-master && kubectl get pvc
 * 解除ES索引只读模式
