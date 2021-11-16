@@ -11,7 +11,7 @@ kubectl edit pvc multi-master-multi-master-0
 kubectl edit pvc multi-master-multi-master-1
 kubectl edit pvc multi-master-multi-master-2
 ```
-详细操作参考[2.3在线扩容PVC](https://docs.ucloud.cn/uk8s/volume/expandvolume)
+详细操作参考[2.3在线扩容PVC](/uk8s/volume/expandvolume)
 
 扩容后
 * 确认 pv/pvc状态 kubectl get pv | grep multi-master && kubectl get pvc
@@ -33,7 +33,7 @@ curl http://${ES_CLUSTER_IP}:9200/_all/_settings | jq
 
 ## 2. 调整ES配置 
 
-如果目前 ES PVC 容量非常大，按照ES默认配置 95% 存储依然剩余大量空余空间，可以调大ES参数阈值, 解除索引只读模式 , 将ES集群恢复至正常状态
+如果目前 ES PVC 容量非常大，按照ES默认配置 90% 存储依然剩余大量空余空间，可以调大ES参数阈值, 解除索引只读模式 , 将ES集群恢复至正常状态
 
 ```
 #!/bin/sh
