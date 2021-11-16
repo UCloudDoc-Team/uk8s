@@ -1,6 +1,6 @@
 # 故障现象
 
-Elasticsearch 配置 cluster.routing.allocation.disk.watermark.low* 控制磁盘空间使用的默认配置是90%，磁盘使用率超过阈值，ES集群中的所有索引都标记为只读，导致新增日志无法采集，无法查询最新日志。
+Elasticsearch 控制磁盘空间使用的配置项 cluster.routing.allocation.disk.watermark.low 默认值是90%，当ES节点磁盘使用率超过阈值，ES集群中的所有索引都标记为只读，导致新增日志无法采集，无法查询最新日志。
 
 # 参考处理方式
 
