@@ -2,9 +2,10 @@
 
 在Uk8s服务控制台, 集群应用中心，日志ELK页面,开启集群日志插件,使用一段时间后，遇到故障现象如下:
 1. 日志ELK,日志查询页面无最新日志
-![](../images/log/plugin_ELK_problem_search_empty.png)
+![](./images/log/plugin_ELK_problem_search_empty.png)
+
 2. 日志ELK,组件状态页面显示最近10分钟日志总数 0 条
-![](../images/log/plugin_ELK_problem_zero_items.png)
+![](./images/log/plugin_ELK_problem_zero_items.png)
  
 ## 故障排查参考
 
@@ -35,9 +36,9 @@ curl http://${ES_CLUSTER_IP}:9200/_all/_settings?pretty
 ```
 可以看到返回信息中包含"read_only_allow_delete": "true" 从这里可以定位故障原因，虽然磁盘没有写满，但是触发了ES的保护机制：
 
-ES 默认磁盘水位警戒线是85%，超过后，es不会再为该节点分配分片;
-ES 另外一个磁盘水位警戒线是90%，超过后，将尝试将分片重定位到其他节点;
-ES cluster.routing.allocation.disk.watermark.flood_stage 默认值是95%，超过后ES集群将强制将所有索引都标记为只读，导致新增日志无法采集，无法查询最新日志,如需恢复，只能手动将 index.blocks.read_only_allow_delete 改成false.
+- ES cluster.routing.allocation.disk.watermark.low，控制磁盘使用的低水位线（watermark） 默认值85%，超过后，es不会再为该节点分配分片;
+- ES cluster.routing.allocation.disk.watermark.high，控制高水位线，默认值90%，超过后，将尝试将分片重定位到其他节点;
+- ES cluster.routing.allocation.disk.watermark.flood_stage 控制洪泛水位线。默认值95%，超过后，ES集群将强制将所有索引都标记为只读，导致新增日志无法采集，无法查询最新日志,如需恢复，只能手动将 index.blocks.read_only_allow_delete 改成false.
 
 
 # 参考处理方式
