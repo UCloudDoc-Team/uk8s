@@ -1,10 +1,13 @@
 # 故障现象
 
 在Uk8s服务控制台, 集群应用中心，日志ELK页面,开启集群日志插件,使用一段时间后，遇到故障现象如下:
+
 1. 日志ELK,日志查询页面无最新日志
+
 ![](/images/log/plugin_ELK_problem_search_empty.png)
 
 2. 日志ELK,组件状态页面显示最近10分钟日志总数 0 条
+
 ![](/images/log/plugin_ELK_problem_zero_items.png)
  
 # 故障排查参考
