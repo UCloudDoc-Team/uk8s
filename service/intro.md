@@ -4,7 +4,7 @@
 
 ## 1. Service 介绍
 
-Service 是 Kubernetes 集群中的一个资源对象，用于定义如何访问一组带有相同特征的Pods。通常情况下，Service 通过Label Selector 来确定目标Pods，ExternalName Services 类外，关于 Service 的详细介绍，请参阅官方文档中 [Services](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)章节
+Service 是 Kubernetes 集群中的一个资源对象，用于定义如何访问一组带有相同特征的Pods。通常情况下，Service 通过Label Selector 来确定目标Pods，ExternalName Services 例外，关于 Service 的详细介绍，请参阅官方文档中 [Services](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)章节
 
 Kubernetes 提供了四种类型的 Service，分别用于不同的业务场景，默认的类型是 ClusterIp 。
 
