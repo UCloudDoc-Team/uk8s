@@ -24,6 +24,8 @@ UK8S提供 CNI 在线升级的功能，插件升级不会影响现有 Pod 的网
 
 |版本|类型|更新说明|发布时间|
 |----|----|--------|--------|
+|21.12.2|Feature|ipamd 支持开启 calico policy 特性，IP 会写入到 Pod 的 annotation，calico 可以通过感知该 IP 来及时下发规则|2021年12月28日|
+|21.12.1|Enhancement|1. 优化 ipamd 申请 IP 流程，ipamd 会在申请到 IP 以后立刻发送 garp ；<br>2. 优化释放 IP 时候获取 mac 的流程。|2021年12月14日|
 |21.10.1|Bugfix|1. 修复固定 IP 意外释放导致 StatefulSet Pod 不可用的问题；<br>2. 修复 CNI 抢占文件锁超时导致释放 IP 失败的问题；<br>3. IPAMD 插件开启后，将默认使用其管理 IP。|2021年11月4日|
 |21.07.1|Bugfix|解决部分节点无法获取 CNI 版本问题|2021年7月1日|
 |21.06.1|Feature|支持 Pod 固定 IP（[固定 IP 使用方法](/uk8s/network/static_ip)）|2021年6月23日|
