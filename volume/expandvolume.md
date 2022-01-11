@@ -6,7 +6,7 @@
 
 1. UK8S Node 节点实例的创建时间必须晚于 2020 年 5 月，不满足此条件的节点，则必须先对 Node 节点进行先关机，再开机操作。
 
-2. Kubernetes版本不低于 1.14，如集群版本是 1.14 及 1.15，必须在三台 Master 节点 `/etc/kubernetes/apiserver` 文件中配置 `--feature-gates=ExpandCSIVolumes=true`，并通过 `systemctl restart kube-apiserver` 重启 APIServer。并需要在node节点中修改`/etc/kubernetes/kubelet` 文件中配置，增加`--feature-gates=ExpandCSIVolumes=true`，执行`systemctl restart kubelet` 重启 kubelet。对于 1.14 版本的集群，如果需要在线扩容(pod 不重启)，需要同时配置 `ExpandInUsePersistentVolumes=true`参数。1.13 及以下版本不支持该特性，1.16 及以上版本无需配置;
+2. Kubernetes版本不低于 1.14，如集群版本是 1.14 及 1.15，必须在三台 Master 节点 `/etc/kubernetes/apiserver` 文件中配置 `--feature-gates=ExpandCSIVolumes=true`，并通过 `systemctl restart kube-apiserver` 重启 APIServer。并需要在node节点中修改`/etc/kubernetes/kubelet` 文件中配置，增加`--feature-gates=ExpandCSIVolumes=true`，执行`systemctl restart kubelet` 重启 kubelet。对于 1.14 版本的集群，如果需要在线扩容(pod 不重启)，需要同时配置 `ExpandInUsePersistentVolumes=true`的特性开关。1.13 及以下版本不支持该特性，1.16 及以上版本无需配置;
 
 3. CSI-UDisk版本不低于 20.08.1，CSI 版本更新及升级请查看：[CSI 更新记录及升级指南](/uk8s/volume/csi_update);
 
