@@ -1,4 +1,3 @@
-
 # 使用已有的ULB
 
 UK8S支持在创建 LoadBalancer 类型的 Service 时，指定使用已有的 ULB 实例，而不是创建一个新的ULB实例。
@@ -37,7 +36,6 @@ spec:
       targetPort: 8080
   selector:
     app: https
-
 ```
 
 ### 使用已有的外网ULB（7层）

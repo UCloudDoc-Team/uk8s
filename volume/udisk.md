@@ -10,7 +10,8 @@ UK8S支持直接在集群中使用UDisk作为持久化存储卷。
 
 3. UDisk和云主机必须位于同一可用区，如果您的集群是跨可用区模式，在应用部署的时候请注意。
 
-4. 如果使用快杰云主机及 RSSD UDisk，则 UDisk 和云主机除在同一个可用区外，**也需要在同一个 RDMA 区域**，RDMA 区域范围小于可用区，如在集群中使用已有 UDisk，有可能因 RDMA 区域不一致出现挂载失败的情况；
+4. 如果使用快杰云主机及 RSSD UDisk，则 UDisk 和云主机除在同一个可用区外，**也需要在同一个 RDMA 区域**，RDMA 区域范围小于可用区，如在集群中使用已有
+   UDisk，有可能因 RDMA 区域不一致出现挂载失败的情况；
 
 5. 同一个 Pod 如果挂载多块 UDisk，则必须确保 UDisk 处于同一可用区，否则容器无法启动。
 
@@ -38,11 +39,10 @@ mountOptions:
   - debug
   - rw
 ```
-备注：1.15之前的Kubernetes版本，mountOptions无法正常使用，请勿填写，详见[Issue80191](https://github.com/kubernetes/kubernetes/pull/80191) 
 
+备注：1.15之前的Kubernetes版本，mountOptions无法正常使用，请勿填写，详见[Issue80191](https://github.com/kubernetes/kubernetes/pull/80191)
 
 ## 2. 创建持久化存储卷声明 PVC
-
 
 ### 2.1 新建 UDisk
 
@@ -62,7 +62,6 @@ spec:
     requests:
       storage: 20Gi
 ```
-
 
 ### 2.2 使用已有 UDisk
 

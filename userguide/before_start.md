@@ -1,4 +1,3 @@
-
 # 使用必读
 
 > 注意：通过 UK8S 创建的云主机、云盘、EIP 等资源，删除资源请不要通过具体的产品列表页删除，否则可能导致 UK8S 运行不正常或数据丢失风险，可以通过 UK8S 将资源释放或解绑删除。
@@ -9,8 +8,8 @@ UK8S为容器应用提供编排、调度的能力，应用本身是运行在 UCl
 
 2. UK8S产品本身不收取服务费用，但通过集群创建的诸如 EIP、UDisk等资源，会产生相应的费用，详见[UK8S价格](uk8s/price)；
 
-3. 组成 UK8S 集群的基础设施，如 UHost、UDisk 等，你可以在[集群管理页面](https://console.ucloud.cn/uk8s/manage)查看到，请勿随意在其他产品列表页更改或删除；
-
+3. 组成 UK8S 集群的基础设施，如 UHost、UDisk
+   等，你可以在[集群管理页面](https://console.ucloud.cn/uk8s/manage)查看到，请勿随意在其他产品列表页更改或删除；
 
 ## 请勿随意操作由UK8S创建的资源
 
@@ -23,7 +22,6 @@ UK8S 会以你的名义创建一批云资源，例如 UHost、UDisk 等，这些
 1. UHost名称：[cluster-id]-[nodetype]-[randomcode]，如名称为uk8s-uxl1l3l0-n-4rd91的云主机，是"uk8s-uxl1l3l0"这个UK8S集群的Node节点。
 
 2. ULB名称：[cluster-id]-[master]-ulb，如名称为uk8s-uxl1l3l0-master-4rd91的ULB，是内网ApiServer的入口，切勿删除。
-
 
 ## 请尽量规避将业务部署在Master节点
 

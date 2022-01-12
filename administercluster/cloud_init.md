@@ -2,7 +2,8 @@
 
 ## 自定义数据
 
-自定义数据是指主机初次启动或每次启动时，系统自动运行的配置脚本，该脚本可由控制台/API等传入元 数据服务器，并由主机内的cloud-init程序获取，脚本遵循标准CloudInit语法。该脚本会阻塞UK8S的安装脚本，即只有该脚本执行完毕后，才会开始K8S相关组件的安装，如Kubelet、Scheduler等。
+自定义数据是指主机初次启动或每次启动时，系统自动运行的配置脚本，该脚本可由控制台/API等传入元
+数据服务器，并由主机内的cloud-init程序获取，脚本遵循标准CloudInit语法。该脚本会阻塞UK8S的安装脚本，即只有该脚本执行完毕后，才会开始K8S相关组件的安装，如Kubelet、Scheduler等。
 
 ## 初始化脚本
 
@@ -11,7 +12,6 @@
 用户可以通过自定义数据和初始化脚本在创建时对集群进行自定义安装自有服务，比如内核修改、磁盘监控等。详细[使用方法](https://docs.ucloud.cn/uhost/guide/metadata/userdata)
 
 ![](../images/administercluster/cloud_init.png)
-
 
 ## 注意事项
 

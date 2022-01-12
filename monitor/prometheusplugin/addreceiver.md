@@ -100,4 +100,5 @@ spec:
 
 #### 4.3 添加接收人
 
-在控制台「收发设置」页面「接收人」版面点击「添加」，在 Webhook 地址栏中填写 http://alertmanager-webhook-dingtalk.uk8s-monitor.svc/dingtalk/webhook1/send
+在控制台「收发设置」页面「接收人」版面点击「添加」，在 Webhook 地址栏中填写
+http://alertmanager-webhook-dingtalk.uk8s-monitor.svc/dingtalk/webhook1/send

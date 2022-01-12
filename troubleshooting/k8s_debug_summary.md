@@ -68,12 +68,14 @@ UK8S 为保障生产环境 Pod 的运行稳定，每个 Node 限制了 Pod 数�
 2. 由于此时 kubelet 无法执行删除pod的一系列操作，pod 会一直卡在 Terminating
 3. 类型为 daemonset 的 pod，默认在每个节点都有调度，因此 pod 宕机不需要考虑此种类型 pod，k8s 也默认不会驱逐该类型的 pod
 4. 类型为 depolyment 和 replicaset 的 pod，当 pod 卡在 termanting 时，控制器会自动拉起对等数量的 pod
-5. 类型为 statefulset 的 pod，当 pod 卡在 termanting 时，由于 statefulset 下属的 pod 名称固定，必须等上一个 pod 彻底删除，对应的新 pod 才会被拉起，在节点宕机情况下无法自动拉起恢复
+5. 类型为 statefulset 的 pod，当 pod 卡在 termanting 时，由于 statefulset 下属的 pod 名称固定，必须等上一个 pod 彻底删除，对应的新 pod
+   才会被拉起，在节点宕机情况下无法自动拉起恢复
 6. 对于使用 udisk-pvc 的 pod，由于 pvc 无法卸载，会导致新起的 pod 无法运行，请按照本文 pvc 相关内容(#如何查看pvc对应的udisk实际挂载情况)，确认相关关系
 
 ## 8. Pod 异常退出了怎么办？
 
-1. `kubectl describe pods pod-name -n ns` 查看 pod 的相关 event 及每个 container 的 status，是 pod 自己退出，还是由于 oom 被杀，或者是被驱逐
+1. `kubectl describe pods pod-name -n ns` 查看 pod 的相关 event 及每个 container 的 status，是 pod 自己退出，还是由于
+   oom 被杀，或者是被驱逐
 2. 如果是 pod 自己退出，`kubectl logs pod-name -p -n ns` 查看容器退出的日志，排查原因
 3. 如果是由于 oom 被杀，建议根据业务重新调整 pod 的 request 和 limit 设置（两者不宜相差过大），或检查是否有内存泄漏
 4. 如果 pod 被驱逐，说明节点压力过大，需要检查时哪个 pod 占用资源过多，并调整 request 和 limit 设置
@@ -83,28 +85,32 @@ UK8S 为保障生产环境 Pod 的运行稳定，每个 Node 限制了 Pod 数�
 
 1. 检查节点是否设置了污点及禁止调度（master 节点的默认污点不计算在内），带有污点的节点需要选择强制升级（不会对节点有特殊影响）。
 2. 如果强制升级失败的，请重新点击 cni 强制升级。
-3. 执行`kubectl get pods -n kube-system |grep plugin-operation`找到对应插件升级的 pod，并 describe pod 查看 pod 失败原因。
+3. 执行`kubectl get pods -n kube-system |grep plugin-operation`找到对应插件升级的 pod，并 describe pod 查看 pod
+   失败原因。
 
 ## 10. UK8S 页面概览页一直刷新不出来？
 
 1. api-server 对应的 ulb4 是否被删除（`uk8s-xxxxxx-master-ulb4`）
 2. UK8S 集群的三台 master 主机是否被删了或者关机等
 3. 登陆到 UK8S 三台 master 节点，检查 etcd 和 kube-apiserver 服务是否正常，如果异常，尝试重启服务
-  - 3.1 `systemctl status etcd`  / `systemctl restart etcd` 如果单个 etcd 重启失败，请尝试三台节点的 etcd 同时重启
-  - 3.2 `systemctl status kube-apiserver`  / `systemctl restart kube-apiserver`
+
+- 3.1 `systemctl status etcd`  / `systemctl restart etcd` 如果单个 etcd 重启失败，请尝试三台节点的 etcd 同时重启
+- 3.2 `systemctl status kube-apiserver`  / `systemctl restart kube-apiserver`
 
 ## 11. UK8S 节点 NotReady 了怎么办
 
 1. `kubectl describe node node-name` 查看节点 notReady 的原因，也可以直接在 console 页面上查看节点详情。
 2. 如果可以登陆节点，`journalctl -u kubelet` 查看 kubelet 的日志， `system status kubelet`查看 kubelet 工作是否正常。
 3. 对于节点已经登陆不了的情况，如果希望快速恢复可以在控制台找到对应主机断电重启。
-4. 查看主机监控，或登陆主机执行`sar`命令，如果发现磁盘 cpu 和磁盘使用率突然上涨, 且内存使用率也高，一般情况下是内存 oom 导致的。关于内存占用过高导致节点宕机，由于内存占用过高，磁盘缓存量很少，会导致磁盘读写频繁，进一步增加系统负载，打高cpu的恶性循环
+4. 查看主机监控，或登陆主机执行`sar`命令，如果发现磁盘 cpu 和磁盘使用率突然上涨, 且内存使用率也高，一般情况下是内存 oom
+   导致的。关于内存占用过高导致节点宕机，由于内存占用过高，磁盘缓存量很少，会导致磁盘读写频繁，进一步增加系统负载，打高cpu的恶性循环
 5. 内存 oom 的情况需要客户自查是进程的内存情况，k8s 建议 request 和 limit 设置的值不宜相差过大，如果相差较大，比较容易导致节点宕机。
 6. 如果对节点 notready 原因有疑问，请按照[UK8S人工支持](#uk8s-人工支持)联系人工支持
 
 ## 12. 为什么我的集群连不上外网?
 
-UK8S 使用 VPC 网络实现内网互通，默认使用了 UCloud 的 DNS，wget 获取信息需要对 VPC 的子网配置网关，需要在 UK8S 所在的区域下进入VPC产品，对具体子网配置 NAT 网关，使集群节点可以通过 NAT 网关拉取外网数据，具体操作详见[VPC创建NAT网关](https://docs.ucloud.cn/vpc/briefguide/step4) 。
+UK8S 使用 VPC 网络实现内网互通，默认使用了 UCloud 的 DNS，wget 获取信息需要对 VPC 的子网配置网关，需要在 UK8S 所在的区域下进入VPC产品，对具体子网配置 NAT
+网关，使集群节点可以通过 NAT 网关拉取外网数据，具体操作详见[VPC创建NAT网关](https://docs.ucloud.cn/vpc/briefguide/step4) 。
 
 ## 13. 为什么在 K8S 节点 Docker 直接起容器网络不通
 
@@ -169,5 +175,5 @@ spec:
         hostPath:
            path: /usr/share/zoneinfo/Asia/Shanghai
 ```
-如果容器之前已经创建了，只需要在 yaml 文件中加上 `volumeMounts` 及 `volumes` 参数，再使用 `kubectl apply` 命令更新即可。
 
+如果容器之前已经创建了，只需要在 yaml 文件中加上 `volumeMounts` 及 `volumes` 参数，再使用 `kubectl apply` 命令更新即可。

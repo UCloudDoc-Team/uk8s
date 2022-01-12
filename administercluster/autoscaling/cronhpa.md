@@ -1,6 +1,7 @@
 # 定时伸缩
 
-HPA(Horizontal Pod Autoscaling) 指 Kubernetes Pod 的横向自动伸缩，是 Kubernetes 集群利用监控指标自动扩容或者缩容服务中的 Pod 数量，其中监控指标利用 CPU 内存等。定时伸缩不同的是通过定时器进行 Pod 的数量的伸缩，用于已知的高并发，在高并发来临前提前扩容业务进行应对。
+HPA(Horizontal Pod Autoscaling) 指 Kubernetes Pod 的横向自动伸缩，是 Kubernetes 集群利用监控指标自动扩容或者缩容服务中的 Pod
+数量，其中监控指标利用 CPU 内存等。定时伸缩不同的是通过定时器进行 Pod 的数量的伸缩，用于已知的高并发，在高并发来临前提前扩容业务进行应对。
 
 ## 1. 在UK8S使用定时伸缩
 
@@ -16,7 +17,8 @@ HPA(Horizontal Pod Autoscaling) 指 Kubernetes Pod 的横向自动伸缩，是 K
 
 ### 1.2 针对计划表语法说明
 
-针对计划表语法使用和 CronTab 一致的语法，下面列举几种常用语法，详细语法请参考[链接](https://wiki.archlinux.org/index.php/Cron_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#Crontab_%E6%A0%BC%E5%BC%8F)
+针对计划表语法使用和 CronTab
+一致的语法，下面列举几种常用语法，详细语法请参考[链接](https://wiki.archlinux.org/index.php/Cron_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#Crontab_%E6%A0%BC%E5%BC%8F)
 
 Crontab格式（前5位为时间选项，这里我们只用到了前5位）
 
@@ -46,7 +48,8 @@ Crontab格式（前5位为时间选项，这里我们只用到了前5位）
 
 ### 1.3 示例 yaml
 
-我们针对 nginx-deployment 这个应用设置了 up5 和 down2 两个执行计划，分别设置的是 `40 8 * * *` 和 `50 8 * * *`，即应用将在北京时间 16 点 40 分扩容到 5 个，在 16 点 50 分缩容到 2 个，并每天执行。
+我们针对 nginx-deployment 这个应用设置了 up5 和 down2 两个执行计划，分别设置的是 `40 8 * * *` 和 `50 8 * * *`，即应用将在北京时间 16 点
+40 分扩容到 5 个，在 16 点 50 分缩容到 2 个，并每天执行。
 
 ```yaml
 apiVersion: autoscaling.ucloud.cn/v1
@@ -74,8 +77,8 @@ spec:
 
 CronHPA 插件支持在创建时，选择原有的 HPA 对象，兼容规则如下：
 
-| HPA 配置<br>min/max| CronHPA<br>目标Pod数 | Deployment<br>当前 Pod 数 | 扩缩结果 | 说明 |
-|:-----:|:-----:|:-----:|-----|-----|
-|<div style="width:55pt">1/10</div>|<div style="width:60pt">5</div>|5|<div style="width:90pt">HPA：5/10<br>Deployment：5</div>|CronHPA 目标副本数 > HPA 副本数下限，修改 HPA 中的副本数下限|
-|5/10|4|5|HPA：4/10<br>Deployment：5|CronHPA 目标副本数 < HPA 副本数下限，修改 HPA 中的副本数下限<br>当业务下降低于 HPA 设定阈值范围时，HPA 将调整 Deployment 中副本数为 4|
-|1/10|11|5|HPA：11/11<br>Deployment：11|CronHPA 目标副本数 > HPA 副本数上限，同时修改 HPA 中的副本数上限与下限|
+|         HPA 配置<br>min/max          |        CronHPA<br>目标Pod数        | Deployment<br>当前 Pod 数 | 扩缩结果                                                   | 说明                                                                                         |
+| :--------------------------------: | :-----------------------------: | :--------------------: | ------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| <div style="width:55pt">1/10</div> | <div style="width:60pt">5</div> |           5            | <div style="width:90pt">HPA：5/10<br>Deployment：5</div> | CronHPA 目标副本数 > HPA 副本数下限，修改 HPA 中的副本数下限                                                   |
+|                5/10                |                4                |           5            | HPA：4/10<br>Deployment：5                               | CronHPA 目标副本数 < HPA 副本数下限，修改 HPA 中的副本数下限<br>当业务下降低于 HPA 设定阈值范围时，HPA 将调整 Deployment 中副本数为 4 |
+|                1/10                |               11                |           5            | HPA：11/11<br>Deployment：11                             | CronHPA 目标副本数 > HPA 副本数上限，同时修改 HPA 中的副本数上限与下限                                              |

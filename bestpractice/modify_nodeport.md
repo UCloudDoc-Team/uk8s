@@ -14,9 +14,10 @@ KUBE_API_ARGS=" --... \
                 --..."
 ```
 
-修改完成后，通过 ```systemctl restart kube-apiserver```，重启 APIServer
+修改完成后，通过 `systemctl restart kube-apiserver`，重启 APIServer
 
-> ⚠️ 如果集群中的 Service 已经分配了目标 NodePort Range 之外的端口，修改之后通过 `kubectl get event -A` 查看集群事件，会有类似以下 warning 事件产生，warning 事件不影响该端口使用，如希望避免该 warning，需要重建该 Service。
+> ⚠️ 如果集群中的 Service 已经分配了目标 NodePort Range 之外的端口，修改之后通过 `kubectl get event -A` 查看集群事件，会有类似以下 warning
+> 事件产生，warning 事件不影响该端口使用，如希望避免该 warning，需要重建该 Service。
 
 ```bash
 # kubectl get event -A

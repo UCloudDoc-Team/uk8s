@@ -6,9 +6,8 @@ UK8S支持为Pod绑定EIP（弹性外网IP），绑定后，该Pod可通过此EI
 
 如要对外暴露服务，建议使用LoadBalancer类型的Service，具体参见：
 
-* [通过内网ULB访问Service](uk8s/service/internalservice)
-* [通过外网ULB访问Service](uk8s/service/externalservice)
-
+- [通过内网ULB访问Service](uk8s/service/internalservice)
+- [通过外网ULB访问Service](uk8s/service/externalservice)
 
 ### 限制条件
 
@@ -22,9 +21,7 @@ UK8S支持为Pod绑定EIP（弹性外网IP），绑定后，该Pod可通过此EI
 
 下面演示下如何在UK8S中为Pod绑定EIP。
 
-
-
-### 安装EIP管理组件 
+### 安装EIP管理组件
 
 为了在UK8S中实现Pod绑定EIP，需要额外部署支持EIP绑定的组件，直接在UK8S通过kubectl命令安装即可。
 
@@ -83,17 +80,15 @@ Status:       Running
 
 ![](/images/service/podeip.png)
 
-
 #### 在这个例子里需要进行以下两个参数声明
 
-* metadata.annotations
-  
+- metadata.annotations
+
   声明是否需要EIP或者绑定已有EIP等信息，如例子所示，需要`network.kubernetes.io/eip: "true"`开启EIP，需要`network.kubernetes.io/security-group-id: "firewall-0j2ifbaf"`绑定防火墙(需要开相应的端口)，需要`network.kubernetes.io/eip-bandwidth: "6"`设定带宽。
 
-* spec.containers[0].resources.limits
+- spec.containers[0].resources.limits
 
 需要声明`ucloud.cn/uni: 1`，注意此步骤非常重要，对于pod来说有且只能有一个container声明此参数。
-
 
 ### Deployment控制Pod绑定EIP
 
@@ -134,17 +129,15 @@ spec:
 
 #### 在Deployment中需要增加以下两个参数声明
 
-* spec.template.metadata.annotations
+- spec.template.metadata.annotations
 
   同Pod，声明是否需要EIP或者绑定已有EIP等信息。
 
-* spec.template.spec.containers[0].resources.limits
+- spec.template.spec.containers[0].resources.limits
 
   同Pod，需要声明`ucloud.cn/uni: 1`。
 
-
->> 如果不显式指定EIP-ID，Pod被删除后，其绑定的EIP会被更换，如果你需要固定的外网IP地址，则需要显式指定EIP-ID。（该种情况下，副本数不能大于1）
-
+> 如果不显式指定EIP-ID，Pod被删除后，其绑定的EIP会被更换，如果你需要固定的外网IP地址，则需要显式指定EIP-ID。（该种情况下，副本数不能大于1）
 
 ### Annotations详细参数
 

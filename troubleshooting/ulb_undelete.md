@@ -4,12 +4,14 @@
 
 负载均衡（ULB）分内网和外网两种，在误删情况下，**首先需要重建 ULB，并且保证原 ULB IP 地址不变**。
 
-* 对于内网 ULB，需要联系技术支持，**非标**创建指定内网 IP 的 ULB；
-* 对于外网 ULB，需要创建指定 EIP 的 ULB（前提是原有 EIP 未被其他客户申请，详见：[外网弹性IP](/unet/eip/introduction)），并在创建外网 ULB 时，选择绑定该 EIP。
+- 对于内网 ULB，需要联系技术支持，**非标**创建指定内网 IP 的 ULB；
+- 对于外网 ULB，需要创建指定 EIP 的 ULB（前提是原有 EIP 未被其他客户申请，详见：[外网弹性IP](/unet/eip/introduction)），并在创建外网 ULB
+  时，选择绑定该 EIP。
 
 ## 2. Master ULB 误删
 
-Master ULB，即集群 APIServer 绑定的 ULB，用于访问三台 Master 节点上 APIServer，内网 Master ULB 在创建集群时自动生成，如创建时开启外网 APIServer 则同时生成外网 Master ULB。
+Master ULB，即集群 APIServer 绑定的 ULB，用于访问三台 Master 节点上 APIServer，内网 Master ULB 在创建集群时自动生成，如创建时开启外网
+APIServer 则同时生成外网 Master ULB。
 
 命名规则为 uk8s-xxxxxxxx-master-ulb4（内网 ULB）/ uk8s-xxxxxxxx-master-ulb4-external（外网 ULB）。
 
