@@ -2,7 +2,6 @@
 
 在部署一些有状态的服务如 Redis、MySQL 等时，我们需要使用到 StatefulSet 这个控制器，下面介绍下如果在 UK8S 中使用 UDisk 来部署 StatefulSet 服务。
 
-
 ### 了解StatefulSet
 
 ```yaml
@@ -27,18 +26,20 @@ spec:
       storageClassName: ${YOUR_STORAGECLASS_NAME}
       resources:
         requests:
-          storage: 10Gi    
+          storage: 10Gi
 ```
 
 如果我们熟悉 Deployment 的结构体，则会发现其与 StatefulSet 最大的区别在于**volumeClaimTemplates**，其他地方则基本一致。
 
-我们细看下**volumeClaimTemplates**，发现其结构体与“PersistentVolumeClaim”完全一致，没错，**volumeClaimTemplates**其实就是PVC的模板，用来生成多个访问模式为**单点读写**的PVC，供 StatefulSet 管理的 Pod 使用。
+我们细看下**volumeClaimTemplates**，发现其结构体与“PersistentVolumeClaim”完全一致，没错，**volumeClaimTemplates**其实就是PVC的模板，用来生成多个访问模式为**单点读写**的PVC，供
+StatefulSet 管理的 Pod 使用。
 
 像上面的示例，StatefulSet 不仅会创建出5个 Pod，同时也还会创建出5个 PVC，供对应的Pod使用，以实现每个 Pod 都具有独立的存储状态。
 
 ### PVC 示例
 
-对于有状态服务，我们推荐使用SSD UDisk、RSSD UDisk作为存储介质，当然，我们也可以使用LocalPV，但由于目前大多数云主机的数据盘也都是云盘，直接使用 LocalPV 还有各种限制，因此**强烈推荐使用 UDisk 作为存储介质**
+对于有状态服务，我们推荐使用SSD UDisk、RSSD UDisk作为存储介质，当然，我们也可以使用LocalPV，但由于目前大多数云主机的数据盘也都是云盘，直接使用 LocalPV
+还有各种限制，因此**强烈推荐使用 UDisk 作为存储介质**
 
 UK8S 集群在初始化的时候，已经内置了三个与 UDisk 相关的存储类，我们只需要直接引用存储类创建 PVC 供 Pod 消费即可。下面介绍下如何创建对应的PVC。
 
@@ -56,7 +57,9 @@ volumeClaimTemplates:
         requests:
           storage: 100Gi
 ```
-上面我们使用的是集群内置的 StorageClass，我们也可以根据创建新的 SC，详见[使用RSSD UDisk](https://docs.ucloud.cn/uk8s/volume/rssdudisk)
+
+上面我们使用的是集群内置的 StorageClass，我们也可以根据创建新的
+SC，详见[使用RSSD UDisk](https://docs.ucloud.cn/uk8s/volume/rssdudisk)
 
 2. 使用SSD UDisk
 
@@ -74,6 +77,7 @@ volumeClaimTemplates:
         requests:
           storage: 20Gi
 ```
+
 我们看到，需要使用不同的存储介质，只需要在创建PVC时声明不同的storageClassName即可。下面我们介绍下如果创建自定义StorageClass。
 
 3. 声明自定义的StorageClass(UDisk 类型)
@@ -95,12 +99,12 @@ mountOptions:
   - debug
   - rw
 ```
+
 上面的示例涵盖了 UDisk 的StorageClass的全部参数，我们可以根据业务需要来自定义 SC。
 
-###  StatefulSet 示例
+### StatefulSet 示例
 
 ```yaml
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -149,14 +153,6 @@ spec:
       resources:
         requests:
           storage: 100Gi
-
 ```
 
 在上面的示例中，我们声明的名称为 Web 的 StatefulSet 控制器，将创建一个3个nginx Pod，并且为每个Pod分别挂载一个RSSD UDisk，以供其存储数据。
-
-
-
-
-
-
-

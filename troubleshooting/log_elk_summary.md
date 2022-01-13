@@ -9,19 +9,20 @@
 2. 日志ELK,组件状态页面显示最近10分钟日志总数 0 条
 
 ![](/images/log/plugin_ELK_problem_zero_items.png)
- 
+
 ## 2. 故障排查参考
 
 **日志 ELK 默认部署在集群 default 命名空间,如果部署在自定义命名空间，执行命令请替换 default 名称**
- 
-step 1. 查看 logstash 组件日志, 登录集群master节点，执行命令: `kubectl logs -f uk8s-elk-release-logstash-0 -n default` 可见不断打印如下信息:
+
+step 1. 查看 logstash 组件日志, 登录集群master节点，执行命令:
+`kubectl logs -f uk8s-elk-release-logstash-0 -n default` 可见不断打印如下信息:
 
 ```
 [2021-11-16T09:55:31,753][INFO ][logstash.outputs.elasticsearch] retrying failed action with response code: 403 ({"type"=>"cluster_block_exception", "reason"=>"index [uk8s-vidxqjoo-kube-system-2021.11.16] blocked by: [FORBIDDEN/12/index read-only / allow delete (api)];"})
 [2021-11-16T09:55:31,753][INFO ][logstash.outputs.elasticsearch] Retrying individual bulk actions that failed or were rejected by the previous bulk request. {:count=>1}
 ```
 
-step 2. 查看ES组件存储卷使用率,登录集群master节点，执行命令: 
+step 2. 查看ES组件存储卷使用率,登录集群master节点，执行命令:
 
 ```bash
 for pod in multi-master-0 multi-master-1 multi-master-2
@@ -31,6 +32,7 @@ done
 ```
 
 可以看到空间磁盘使用率高达 96%
+
 ```bash
 /dev/vdb         20G   19G  933M  96% /usr/share/elasticsearch/data
 /dev/vdb         20G   19G  939M  96% /usr/share/elasticsearch/data
@@ -45,9 +47,12 @@ curl http://${ES_CLUSTER_IP}:9200/_all/_settings?pretty
 ```
 
 可以看到返回信息中包含 `"read_only_allow_delete": "true"` 从这里可以定位故障原因，虽然磁盘没有写满，但是触发了ES的保护机制：
+
 - ES cluster.routing.allocation.disk.watermark.low，控制磁盘使用的低水位线（watermark） 默认值85%，超过后，es不会再为该节点分配分片;
 - ES cluster.routing.allocation.disk.watermark.high，控制高水位线，默认值90%，超过后，将尝试将分片重定位到其他节点;
-- ES cluster.routing.allocation.disk.watermark.flood_stage 控制洪泛水位线。默认值95%，超过后，ES集群将强制将所有索引都标记为只读，导致新增日志无法采集，无法查询最新日志,如需恢复，只能手动将 index.blocks.read_only_allow_delete 改成false.
+- ES cluster.routing.allocation.disk.watermark.flood_stage
+  控制洪泛水位线。默认值95%，超过后，ES集群将强制将所有索引都标记为只读，导致新增日志无法采集，无法查询最新日志,如需恢复，只能手动将
+  index.blocks.read_only_allow_delete 改成false.
 
 ## 3. 参考处理方式
 
@@ -63,7 +68,8 @@ multi-master-multi-master-1
 multi-master-multi-master-2
 ```
 
-执行 `kubectl edit pvc {pvc-name} -n default`，将 `spec.resource.requests.storage` 的值调大，保存后退出，大概在一分钟左右，PV、PVC 以及容器内的文件系统就完成了在线扩容，详细操作参考[UDisk 动态扩容](/uk8s/volume/expandvolume)。
+执行 `kubectl edit pvc {pvc-name} -n default`，将 `spec.resource.requests.storage`
+的值调大，保存后退出，大概在一分钟左右，PV、PVC 以及容器内的文件系统就完成了在线扩容，详细操作参考[UDisk 动态扩容](/uk8s/volume/expandvolume)。
 
 扩容后确认 PV/PVC 状态：`kubectl get pv | grep multi-master && kubectl get pvc | grep multi-master`
 
@@ -102,10 +108,16 @@ curl -H "Content-Type: application/json" -XPUT http://${ES_CLUSTER_IP}:9200/_all
   "index.blocks.read_only_allow_delete": false
 }'
 ```
+
 ## 3.3 ES 相关参数说明：
 
-* cluster.routing.allocation.disk.watermark.low，控制磁盘使用的低水位线（watermark），它默认为 85%，这意味着 Elasticsearch 不会将分片分配存储空间使用率超过 85% 的节点。它还可以设置为绝对字节值（如 500MB），以防止 Elasticsearch 在可用空间少于指定数量时分配分片。此设置对新创建索引的主分片没有影响，特别是对以前从未分配过的任何分片。 
-* cluster.routing.allocation.disk.watermark.high，控制高水位线，它默认为 90%，这意味着 Elasticsearch 将尝试将分片从存储使用率高于 90% 的节点重新定位。它还可以设置为绝对字节值（类似于低水位线），以便在分片的可用空间小于指定数量时将其重新定位到远离节点的位置。此设置影响所有分片的分配，无论以前是否分配。
-* cluster.routing.allocation.disk.watermark.flood_stage，控制洪泛水位线。它默认为 95%，一旦有一个 ES 节点存储空间超过了洪泛阶段 Elasticsearch 将对索引块强制执行只读设置 index.blocks.read_only_allow_delete: true 这是防止节点耗尽存储空间的最后手段。一旦有足够的空间允许索引操作继续，则必须手动调整 index.blocks.read_only_allow_delete: false 取消索引只读属性。
+- cluster.routing.allocation.disk.watermark.low，控制磁盘使用的低水位线（watermark），它默认为 85%，这意味着 Elasticsearch
+  不会将分片分配存储空间使用率超过 85% 的节点。它还可以设置为绝对字节值（如 500MB），以防止 Elasticsearch
+  在可用空间少于指定数量时分配分片。此设置对新创建索引的主分片没有影响，特别是对以前从未分配过的任何分片。
+- cluster.routing.allocation.disk.watermark.high，控制高水位线，它默认为 90%，这意味着 Elasticsearch 将尝试将分片从存储使用率高于
+  90% 的节点重新定位。它还可以设置为绝对字节值（类似于低水位线），以便在分片的可用空间小于指定数量时将其重新定位到远离节点的位置。此设置影响所有分片的分配，无论以前是否分配。
+- cluster.routing.allocation.disk.watermark.flood_stage，控制洪泛水位线。它默认为 95%，一旦有一个 ES 节点存储空间超过了洪泛阶段
+  Elasticsearch 将对索引块强制执行只读设置 index.blocks.read_only_allow_delete: true
+  这是防止节点耗尽存储空间的最后手段。一旦有足够的空间允许索引操作继续，则必须手动调整 index.blocks.read_only_allow_delete: false 取消索引只读属性。
 
 参考：[Elasticsearch 官方文档](https://github.com/elastic/elasticsearch/tree/master/docs)

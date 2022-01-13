@@ -1,14 +1,17 @@
 # 从 Flexvolume UDisk 存储卷升级到 CSI UDisk 存储卷
 
-Kubernetes v1.13 以及更早版本的用户，Pod 通过 Flexvolume 存储卷的方式挂载 UDisk 块存储卷。由于不支持拓扑感知动态调度等基础特性，Flexvolume 方案早已停止演进，而 CSI 已经成为容器存储实现标准。
+Kubernetes v1.13 以及更早版本的用户，Pod 通过 Flexvolume 存储卷的方式挂载 UDisk 块存储卷。由于不支持拓扑感知动态调度等基础特性，Flexvolume
+方案早已停止演进，而 CSI 已经成为容器存储实现标准。
 
-使用 Flexvolume 创建 UDisk 挂载卷的 UK8S 早期用户目前面临着集群升级时将 Flexvolume PV 转换成 CSI PV 的问题，本文档提供一个示例，用于说明如何完成这一转换。
+使用 Flexvolume 创建 UDisk 挂载卷的 UK8S 早期用户目前面临着集群升级时将 Flexvolume PV 转换成 CSI PV
+的问题，本文档提供一个示例，用于说明如何完成这一转换。
 
 > ⚠️ 升级时会造成服务中断，请合理规划迁移时间，并做好相关备份。
 
 ## 1. Flexvolume UDisk 存储卷说明
 
-如下是一个已经挂载了 Flexvolume UDisk 存储卷 Workload 的 yaml 文件 nginx-fv.yaml，它包含了一个 StorageClass，一个 Pod 声明和其引用的 PVC。
+如下是一个已经挂载了 Flexvolume UDisk 存储卷 Workload 的 yaml 文件 nginx-fv.yaml，它包含了一个 StorageClass，一个 Pod 声明和其引用的
+PVC。
 
 ```yaml
 apiVersion: storage.k8s.io/v1
@@ -55,7 +58,8 @@ spec:
       claimName: nginx-fv
 ```
 
-执行 `kubectl apply -f nginx-fv.yaml`，发现相应的 StorageClass、Pod 及相关联的 PVC 已经创建成功，此外 cloudprovider 还会为这个 PVC 创建并绑定一个 PV 对象（名称与 PVC 对象的 **Volume** 值相同），如下所示：
+执行 `kubectl apply -f nginx-fv.yaml`，发现相应的 StorageClass、Pod 及相关联的 PVC 已经创建成功，此外 cloudprovider 还会为这个
+PVC 创建并绑定一个 PV 对象（名称与 PVC 对象的 **Volume** 值相同），如下所示：
 
 ```yaml
 Name:            pvc-8b7946f7-1214-11ec-8f6b-5254003e805f-bsm-upc4bc0v
@@ -89,7 +93,8 @@ Events:         <none>
 
 ### 2.1 确认原有 PV 回收策略为 Retain
 
-如果 PV 的回收策略不是 **Retain**，则需要通过以下命令将其回收策略改成 **Retain**。这时即使您删除 Pod 和对应的 PVC，可以发现，PV 依然存在，对应的 UDisk 实例也依然保留。
+如果 PV 的回收策略不是 **Retain**，则需要通过以下命令将其回收策略改成 **Retain**。这时即使您删除 Pod 和对应的 PVC，可以发现，PV 依然存在，对应的 UDisk
+实例也依然保留。
 
 > ⚠️ 如删除 Flexvolume 创建的 PV，则对应的 UDisk 会被删除，如需要相应的 UDisk，请确保该 PV 不会被删除。
 
@@ -103,7 +108,8 @@ kubectl patch pv <your-pv-name1> <your-pv-name2> <your-pv-name3> -p '{"spec":{"p
 
 ### 2.3 删除原有 Pod 及 PVC
 
-通过 `kubectl delete -f nginx-fv.yaml`，删除原有 PVC 及 Pod，这时可以发现由于 PV 回收策略为 **Retain**，PV 及相应的 UDisk 仍被保留，PV 状态为 **Release**。
+通过 `kubectl delete -f nginx-fv.yaml`，删除原有 PVC 及 Pod，这时可以发现由于 PV 回收策略为 **Retain**，PV 及相应的 UDisk
+仍被保留，PV 状态为 **Release**。
 
 ### 2.4 通过 CSI 以指定 UDisk 创建新的 PV 及 PVC
 

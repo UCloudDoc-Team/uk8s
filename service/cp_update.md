@@ -2,7 +2,8 @@
 
 UK8S 通过 CloudProvider 插件，实现集群中 LoadBalancer 类型服务（SVC）与 UCloud ULB 产品的创建和绑定。
 
-20.10.1 以前版本存在 bug，会在 Service 重启时发生误判，导致重复创建 ULB 实例并写入集群，造成集群相应 Service 的不可用。为此我们对 CloudProvider 插件进行了优化，完善 ULB 相关接口的调用逻辑，避免了上述问题的出现。
+20.10.1 以前版本存在 bug，会在 Service 重启时发生误判，导致重复创建 ULB 实例并写入集群，造成集群相应 Service 的不可用。为此我们对 CloudProvider
+插件进行了优化，完善 ULB 相关接口的调用逻辑，避免了上述问题的出现。
 
 如您集群 CloudProvider 版本为相关版本，请您务必及时按照文档更新，避免影响业务。升级过程不影响线上业务，但仍建议您在业务闲时进行更新，如有问题请及时与我们联系。
 
@@ -10,7 +11,9 @@ UK8S 通过 CloudProvider 插件，实现集群中 LoadBalancer 类型服务（S
 
 ### 1.1 控制台操作
 
-较新版本（Kubernetes 1.14 以后版本）在 UK8S 集群控制台管理页面「插件-CloudProvider」页面，开启 CloudProvider 插件升级功能，开启 CloudProvider 插件升级功能会在集群中执⾏ CloudProvider 插件查询任务，⼤约需要 3 分钟，在此过程中请不要操作集群。升级功能开启后，即可看到 CloudProvider 插件版本信息，点击「升级 CloudProvider」即可进行升级。
+较新版本（Kubernetes 1.14 以后版本）在 UK8S 集群控制台管理页面「插件-CloudProvider」页面，开启 CloudProvider 插件升级功能，开启
+CloudProvider 插件升级功能会在集群中执⾏ CloudProvider 插件查询任务，⼤约需要 3 分钟，在此过程中请不要操作集群。升级功能开启后，即可看到 CloudProvider
+插件版本信息，点击「升级 CloudProvider」即可进行升级。
 
 升级过程约需要 1-3 分钟，升级过程中「当前版本」字段会显示为「升级中」，升级完成后显示最新版本号，如升级失败，可以再次尝试升级，或与我们技术支持联系。
 
@@ -49,7 +52,7 @@ data:
   UCLOUD_REGION_ID: cn-bj2  #集群所在的地域，参考：https://docs.ucloud.cn/api/summary/regionlist
   UCLOUD_SUBNET_ID: subnet-xxxxxx  #集群所在的子网ID
   UCLOUD_UK8S_CLUSTER_ID: uk8s-xxxxxx  #UK8S集群名称
-  UCLOUD_VPC_ID: uvnet-xxxxxx   #集群所在的VPC ID  
+  UCLOUD_VPC_ID: uvnet-xxxxxx   #集群所在的VPC ID
 ```
 
 #### 3. 请执行创建ConfigMap
@@ -80,7 +83,7 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 更新内容：
 
-* 优化了对 ULB 名称的校验，修复首次创建 VServer 失败导致 Service 无法创建的问题
+- 优化了对 ULB 名称的校验，修复首次创建 VServer 失败导致 Service 无法创建的问题
 
 ### 更新版本：21.10.1
 
@@ -88,7 +91,7 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 更新内容：
 
-* 使用指定 ULB 创建 LoadBalancer 类型 Service 时，不能指定由 CloudProvider 创建的 ULB。
+- 使用指定 ULB 创建 LoadBalancer 类型 Service 时，不能指定由 CloudProvider 创建的 ULB。
 
 ### 更新版本：21.05.2
 
@@ -96,8 +99,9 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 更新内容：
 
-* 加上 Endpoint Controller，感知 Endpoint 变化，在 externalTrafficPolicy=Local 的情况下，只会将运行了 Pod 的主机节点加入 ULB VServer Backends。
-* **注意：**Endpoint 频繁变动会导致 ULB API 大量调用，需要在 cloudprovider 中添加如下参数，做限速处理。如需要调整参数，则必须通过命令行的方式，对插件进行调整。
+- 加上 Endpoint Controller，感知 Endpoint 变化，在 externalTrafficPolicy=Local 的情况下，只会将运行了 Pod 的主机节点加入 ULB
+  VServer Backends。
+- **注意：**Endpoint 频繁变动会导致 ULB API 大量调用，需要在 cloudprovider 中添加如下参数，做限速处理。如需要调整参数，则必须通过命令行的方式，对插件进行调整。
 
 ```yaml
 containers:
@@ -113,7 +117,8 @@ containers:
 
 更新内容：
 
-* 支持 UDP 类型 ULB 健康检查模式，需要在 Service 的 Annotations 中声明一下参数，ULB 健康检查机制请参考：[健康检查](/ulb/faq/ulbhealthcheck)，ULB 注释详解请参考：[ULB 参数说明](/uk8s/service/annotations)
+- 支持 UDP 类型 ULB 健康检查模式，需要在 Service 的 Annotations 中声明一下参数，ULB
+  健康检查机制请参考：[健康检查](/ulb/faq/ulbhealthcheck)，ULB 注释详解请参考：[ULB 参数说明](/uk8s/service/annotations)
 
 ```yaml
 annotations:
@@ -129,7 +134,7 @@ annotations:
 
 更新内容：
 
-* 可通过 Service Annotation，为节点添加注释，设定其在被设置为不可调度（即执行 Cordon 节点操作）后，不会自动被 ULB 剔除
+- 可通过 Service Annotation，为节点添加注释，设定其在被设置为不可调度（即执行 Cordon 节点操作）后，不会自动被 ULB 剔除
 
 ```yaml
 annotations:
@@ -143,8 +148,8 @@ annotations:
 
 更新内容：
 
-* 支持内网 ULB7
-* 支持 ULB7 的 TCP 模式
+- 支持内网 ULB7
+- 支持 ULB7 的 TCP 模式
 
 ### 更新版本：20.10.2
 
@@ -152,7 +157,7 @@ annotations:
 
 更新内容：
 
-* 更新支持创建指定子网的ULB，详细设置请查看[通过内网ULB访问Service](/uk8s/service/internalservice)。
+- 更新支持创建指定子网的ULB，详细设置请查看[通过内网ULB访问Service](/uk8s/service/internalservice)。
 
 ### 更新版本：20.10.1
 
@@ -160,7 +165,7 @@ annotations:
 
 更新内容：
 
-* 动态创建成功LoadBalancer类型的Service后，插件将把关联的ULB Id注入到Service的Annotations中，以规避因API超时等导致的ULB重建。
+- 动态创建成功LoadBalancer类型的Service后，插件将把关联的ULB Id注入到Service的Annotations中，以规避因API超时等导致的ULB重建。
 
 ### 更新版本：20.09.4
 
@@ -168,8 +173,8 @@ annotations:
 
 变更内容：
 
-* 升级UCloud Go SDK修复ULB防火墙设置，
-* 增加新创建时，使用临时的ULB客户端进行API调用。
+- 升级UCloud Go SDK修复ULB防火墙设置，
+- 增加新创建时，使用临时的ULB客户端进行API调用。
 
 ### 更新版本：20.09.3
 
@@ -177,7 +182,7 @@ annotations:
 
 变更内容：
 
-* 更新监控信息(非强制更新)。
+- 更新监控信息(非强制更新)。
 
 ### 更新版本：20.09.2
 
@@ -185,7 +190,7 @@ annotations:
 
 变更内容：
 
-* 增加cloudprovider重启后调用ULB相关接口的容错性，提高集群的运行的稳定性。
+- 增加cloudprovider重启后调用ULB相关接口的容错性，提高集群的运行的稳定性。
 
 <!---
 ## 更新前置检查

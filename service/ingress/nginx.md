@@ -1,4 +1,3 @@
-
 ## Nginx Ingress
 
 ### 什么是Ingress
@@ -13,7 +12,10 @@ Ingress 是从Kubernetes集群外部访问集群内部服务的入口，同时�
 
 ### 一、部署Ingress Controller
 
-为了使Ingress正常工作，集群内必须部署Ingress Controller。与其他类型的控制器不同，其他类型的控制器如Deployment通常作为kube-controller-manager二进制文件的一部分，在集群启动时自动运行。而Ingress Controller则需要自行部署，Kubernetes社区提供了以下Ingress Controller供选择，分别如下：
+为了使Ingress正常工作，集群内必须部署Ingress
+Controller。与其他类型的控制器不同，其他类型的控制器如Deployment通常作为kube-controller-manager二进制文件的一部分，在集群启动时自动运行。而Ingress
+Controller则需要自行部署，Kubernetes社区提供了以下Ingress Controller供选择，分别如下：
+
 1. Nginx
 2. HAProxy
 3. Envoy
@@ -27,12 +29,12 @@ kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/ingress_nginx/manda
 
 在mandatory.yaml这个文件里，正是Nginx官方为你维护的Ingress Controller的定义，我们可以把yaml文件下载到本地仔细研读下。这里简要简述下部分yaml字段的意义。
 
-这个yaml定义了一个使用nginx-ingress-controller作为镜像的pod副本集，这个Pod主要功能就是一个监听Ingress对象以及它所代理的后端Service变化的控制器。当一个新的Ingress对象由用户创建后，控制器会根据Ingress对象所定义的内容，生成一份对应的Nginx配置文件（也就是我们熟知的/etc/nginx/nginx.conf），并使用这个配置文件启动一个Nginx服务。而一旦Ingress对象被更新，控制器会更新这个配置文件。需要注意的是，如果只是被代理的Service对象被更新，控制器所管理的nginx服务不需要重新加载，这是因为nginx-ingress-controller通过nginx lua实现了upstream的动态配置。
+这个yaml定义了一个使用nginx-ingress-controller作为镜像的pod副本集，这个Pod主要功能就是一个监听Ingress对象以及它所代理的后端Service变化的控制器。当一个新的Ingress对象由用户创建后，控制器会根据Ingress对象所定义的内容，生成一份对应的Nginx配置文件（也就是我们熟知的/etc/nginx/nginx.conf），并使用这个配置文件启动一个Nginx服务。而一旦Ingress对象被更新，控制器会更新这个配置文件。需要注意的是，如果只是被代理的Service对象被更新，控制器所管理的nginx服务不需要重新加载，这是因为nginx-ingress-controller通过nginx
+lua实现了upstream的动态配置。
 
 另外，在这个yaml文件中，我们还看到定义了ConfigMap，nginx-ingress-controller可以通过ConfigMap对象来对Nginx配置文件进行定制，示例如下：
 
 ```
-
  kind: ConfigMap
  apiVersion: v1
  metadata:
@@ -50,13 +52,12 @@ data:
 
 本质上，这个Nginx-ingress-controller，其实是一个可以根据Ingress对象和被代理后端Service的变化，自动进行更新的Nginx负载均衡器。
 
-
 容器默认使用UTC时间，如果要使用宿主机时区，参见[Pod时区问题](uk8s/q/container)
-
 
 ### 二、将nginx ingress controller暴露出集群
 
-上面我们已经在UK8S中部署了一个nginx ingress controller，但这个Nginx服务只能在集群内部可达，为了在集群外部可达，我们还需要为此创建一个外部可达的Service，这里我们选择创建一个LoadBalancer类型的Service，并将其暴露到外网。
+上面我们已经在UK8S中部署了一个nginx ingress
+controller，但这个Nginx服务只能在集群内部可达，为了在集群外部可达，我们还需要为此创建一个外部可达的Service，这里我们选择创建一个LoadBalancer类型的Service，并将其暴露到外网。
 
 ```
 apiVersion: v1
@@ -81,8 +82,6 @@ spec:
   selector:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-
-
 ```
 
 这个 Service 的唯一工作，就是将所有携带 ingress-nginx 标签的 Pod 的 80 和 433 端口暴露出去，我们可以通过以下方式获取到这个Service的外网访问入口。
@@ -91,8 +90,8 @@ spec:
 bash-4.4# kubectl get svc -n ingress-nginx
 NAME            TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)                      AGE
 ingress-nginx   LoadBalancer   172.17.118.146   117.50.x.x   80:34947/TCP,443:48761/TCP   2d23h
-
 ```
+
 部署完Ingress Controller 和它所需要的 Service后 ，我们就可以使用通过他来将集群内部的其他Service代理出去了。
 
 ### 三、创建两个应用
@@ -166,7 +165,6 @@ spec:
     name: http
   selector:
     app: uk8s
-
 ```
 
 我们将上述yaml保存为uk8s-ingrss-test-nginx.yaml，并执行如下命令创建应用。
@@ -197,7 +195,6 @@ spec:
         backend:
           serviceName: uk8s-svc
           servicePort: 80
-
 ```
 
 上述yaml文件定义了一个Ingress对象，其中ingress.spec.rules便是ingress的代理规则集合。
@@ -235,14 +232,14 @@ Rules:
                     /uk8s    uk8s-svc:80 (<none>)
 Annotations:
   kubectl.kubernetes.io/last-applied-configuration:  {"apiVersion":"extensions/v1beta1","kind":"Ingress","metadata":{"annotations":{},"name":"uk8s-ingress","namespace":"default"},"spec":{"rules":[{"host":"uk8s.example.com","http":{"paths":[{"backend":{"serviceName":"uhost-svc","servicePort":80},"path":"/uhost"},{"backend":{"serviceName":"uk8s-svc","servicePort":80},"path":"/uk8s"}]}}],"tls":[{"hosts":["uk8s.example.com"],"secretName":"uk8s-secret"}]}}
-
 ```
 
 从rule规则可以看到， 我们的定义的Host是uk8s.example.com，他有两条转发规则（Path）,分别转发给uhost-svc和uk8s-svc。
 
 当然，在 Ingress 的 YAML 文件里，你还可以定义多个 Host，来为更多的域名提供负载均衡服务。
 
-接下来，我们就可以通过访问这个 Ingress 的地址和端口，访问到我们前面部署的应用了，比如，当我们访问http://uk8s.example.com/uk8s 时，应该是uk8s这个Deployment负责响应我的请求，由于我们LoadBalance绑定了EIP，所以外网是可以访问的，我们在本地添加hosts即可直接从外网通过域名访问。
+接下来，我们就可以通过访问这个 Ingress 的地址和端口，访问到我们前面部署的应用了，比如，当我们访问http://uk8s.example.com/uk8s
+时，应该是uk8s这个Deployment负责响应我的请求，由于我们LoadBalance绑定了EIP，所以外网是可以访问的，我们在本地添加hosts即可直接从外网通过域名访问。
 
 ### 五、TLS支持
 
@@ -260,7 +257,6 @@ metadata:
   name: uk8s-tls
   namespace: default
 type: kubernetes.io/tls
-
 ```
 
 我们也可以通过以下命令来快速创建secret：
@@ -293,7 +289,6 @@ spec:
         backend:
           serviceName: uk8s-svc
           servicePort: 80
-
 ```
 
 ### 六、设置访问白名单
@@ -320,5 +315,4 @@ spec:
         backend:
           serviceName: uk8s-svc
           servicePort: 80
-
 ```

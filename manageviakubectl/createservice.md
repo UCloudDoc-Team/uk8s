@@ -1,10 +1,8 @@
-
 ## 创建Service
 
 ### 创建一个类型为LoadBalancer的Service，将MYSECRET换成自定义的SecretName即可。
 
 ```
-
 apiVersion: v1
 kind: Service
 metadata: 

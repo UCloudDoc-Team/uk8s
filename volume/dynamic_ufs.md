@@ -1,4 +1,3 @@
-
 ## 动态PV 使用UFS
 
 ### 一、背景
@@ -6,7 +5,6 @@
 前面我们描述了通过创建静态PV的方式在UK8S中使用UFS，但这种方式存在两个问题，一是每次都需要手动创建PV和PVC，非常不便；二是无法自动在UFS创建子目录，需要预先配置。
 
 下面我们介绍一个名为nfs-client-provisioner的开源项目，其项目地址为[nfs-client-provisioner](https://github.com/kubernetes-incubator/external-storage/tree/master/nfs-client)，通过此工具，可实现在业务需要UFS存储资源时，只需要创建PVC，nfs-client-provisioner会自动创建PV，并在UFS下创建一个名为{namespace-pvcname}的子目录。
-
 
 ### 二、工作原理
 
@@ -20,7 +18,7 @@
 # git clone https://github.com/kubernetes-incubator/external-storage.git
 # cd external-storage/nfs-client/deploy/
 # ls
-class.yaml  deployment-arm.yaml  deployment.yaml  objects  rbac.yaml  test-claim.yaml  test-pod.yaml  
+class.yaml  deployment-arm.yaml  deployment.yaml  objects  rbac.yaml  test-claim.yaml  test-pod.yaml
 ```
 
 2、修改Deployment.yaml
@@ -92,8 +90,7 @@ spec:
     server: 10.9.x.x  #这里直接写UFS的Server地址即可。
   mountOptions:
     - nolock   
-    - nfsvers=4.0  
-
+    - nfsvers=4.0
 ```
 
 3、修改class.yaml
@@ -110,11 +107,10 @@ parameters:
   archiveOnDelete: "false"
 mountOptions:
   - nolock
-  - nfsvers=4.0  
-
+  - nfsvers=4.0
 ```
-
 
 4、验证
 
-我们依次执行kubectl apply -f rbac.yaml、deployment.yaml、class.yaml，使用官方的test-pvc和test-pod测试，发现pod已经挂载了UFS，且UFS里面有一个新的目录。
+我们依次执行kubectl apply -f
+rbac.yaml、deployment.yaml、class.yaml，使用官方的test-pvc和test-pod测试，发现pod已经挂载了UFS，且UFS里面有一个新的目录。

@@ -1,7 +1,6 @@
 # 多个Pod共享使用GPU
 
-该方案将部署GPU-Share插件，部署完成后集群节点的GPU将可以被多个Pod共同调度。
-目前仅支持命令行安装使用，后续UK8S团队会根据排期将该功能添加至集群插件中，方便一键安装。
+该方案将部署GPU-Share插件，部署完成后集群节点的GPU将可以被多个Pod共同调度。 目前仅支持命令行安装使用，后续UK8S团队会根据排期将该功能添加至集群插件中，方便一键安装。
 
 ## 安装使用GPU共享插件
 
@@ -26,12 +25,12 @@ kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/gpu-share/1.0.0.yam
 ### 测试GPU共享
 
 测试条件：
+
 1. 集群中只有一台单卡GPU云主机
 2. 该集群已经按照以上3步完成插件安装
 3. 查看插件pod已经变成running
 
 接下来我们分别运行test-gpushare1、test-gpushare2
-
 
 ```bash
 # 运行test-gpushare1

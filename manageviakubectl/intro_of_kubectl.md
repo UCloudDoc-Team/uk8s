@@ -1,29 +1,33 @@
-
 ## kubectl命令行简介
 
 > 由于查看集群凭证可以直接登录集群，所以查看集群凭证的操作已归为用户角色权限中的增权限，如需查看集群凭证，请确保所在角色已开启UK8S增权限。
 
-kubectl是一个用于操作kubernetes集群的命令行工具，本文将简要介绍下kubectl的语法，并提供一些常见命令示例，如果你想了解深入了解kubectl的用法，请查阅官方文档[kubectl overview](https://kubernetes.io/docs/reference/kubectl/overview/)，或使用kubectl help命令查看详细帮助。 安装kubectl请查看[安装及配置kubectl](uk8s/manageviakubectl/connectviakubectl)。
-
+kubectl是一个用于操作kubernetes集群的命令行工具，本文将简要介绍下kubectl的语法，并提供一些常见命令示例，如果你想了解深入了解kubectl的用法，请查阅官方文档[kubectl overview](https://kubernetes.io/docs/reference/kubectl/overview/)，或使用kubectl
+help命令查看详细帮助。 安装kubectl请查看[安装及配置kubectl](uk8s/manageviakubectl/connectviakubectl)。
 
 ### kubectl 语法
 
 kubectl的语法示例如下：
+
 ```bash
 kubectl [command] [TYPE] [NAME] [flags]
 ```
+
 **command:** command意指你想对某些资源所进行的操作，常用的有create、get、describe、delete等。
 
 **TYPE:** 声明command需要操作的资源类型，TYPE对大小写、单数、复数不敏感，支持缩写。比如，以下命令都是合法且等价的：
+
 ```bash
 kubectl get pod 
 kubectl get pods
 kubectl get po
 kubectl get POD
 ```
+
 **NAME:** 即资源的名称，NAME是大小写敏感的。如果不指定某个资源的名称，则显示所有资源，如kubectl get pods 会显示Default命名空间下所有的pod。
 
 你还可以同时获取多个资源的详细情况，如获取同一类型的资源详情，不同类型的资源详情：
+
 ```bash
 kubectl get pods pod1 pod2
 ```
@@ -32,12 +36,12 @@ kubectl get pods pod1 pod2
 kubectl get pod/example-pod1 replicationcontroller/example-rc1
 ```
 
-**flags：** 可选参数，例如，你可以使用all-namespaces来获取所有namespace下的资源对象。关于各命令的flag用法请参见[kubectl command](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands)
+**flags：**
+可选参数，例如，你可以使用all-namespaces来获取所有namespace下的资源对象。关于各命令的flag用法请参见[kubectl command](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands)
 
 重要：命令行指定的flags将覆盖默认值和任何相应的环境变量。
 
 更多关于kubectl命令的介绍，请使用kubectl help。
-
 
 ### 常见命令
 
@@ -49,7 +53,6 @@ $ kubectl create -f example-service.yaml
 
 # 使用example-controller.yaml文件创建一个"replication"对象
 $ kubectl create -f example-controller.yaml
-
 ```
 
 **kubectl describe** - 获取资源的详细状态，包括初始化中的资源。
@@ -67,7 +70,6 @@ $ kubectl describe pods <rc-name>
 
 # 查看所有pods，但不包含未初始化的pods
 $ kubectl describe pods --include-uninitialized=false
-
 ```
 
 **kubectl logs** - 获取某个pod的日志

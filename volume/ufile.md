@@ -12,9 +12,8 @@ US3对象存储适合用户上传、下载静态数据文件，如视频，图�
 
 ### 已支持UK8S挂载US3的地域（持续更新）
 
-
-UK8S已经支持挂载US3，具体支持地域请查看 [US3接入域名](https://docs.ucloud.cn/ufile/s3/s3_introduction?id=%E6%8E%A5%E5%85%A5%E5%9F%9F%E5%90%8D%EF%BC%88endpoint%EF%BC%89)
-
+UK8S已经支持挂载US3，具体支持地域请查看
+[US3接入域名](https://docs.ucloud.cn/ufile/s3/s3_introduction?id=%E6%8E%A5%E5%85%A5%E5%9F%9F%E5%90%8D%EF%BC%88endpoint%EF%BC%89)
 
 ### 一、创建US3授权Secret
 
@@ -49,7 +48,6 @@ secretAccessKey: US3私钥
 endpoint: 对应地域接入S3服务URL
 
 > 对应地域服务URL参考已支持UK8S挂载US3的地域（持续更新）章节，推荐使用内网地址。
-
 
 ### 二、创建存储类StorageClass
 
@@ -86,7 +84,6 @@ spec:
 ```
 
 ### 四、在pod中使用PVC
-
 
 ```
 apiVersion: v1

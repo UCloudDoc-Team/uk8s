@@ -1,10 +1,9 @@
-
 ## 配置自定义DNS服务
 
 本文主要介绍如何在UK8S集群中，使用自定义的DNS服务。
 
-从Kubernetes 1.11起，CoreDNS取代kube-dns成为默认的DNS方案，UK8S目前支持的Kubernetes版本>=1.11，因此本文主要介绍如何修改CoreDNS的配置以达到使用自定义DNS服务的目的。
-
+从Kubernetes
+1.11起，CoreDNS取代kube-dns成为默认的DNS方案，UK8S目前支持的Kubernetes版本>=1.11，因此本文主要介绍如何修改CoreDNS的配置以达到使用自定义DNS服务的目的。
 
 ### 简介
 
@@ -42,23 +41,27 @@ metadata:
 
 Corefile的配置信息包含以下CoreDNS的插件：
 
-* errors: 错误日志会以标准输出的方式打印到容器日志；
+- errors: 错误日志会以标准输出的方式打印到容器日志；
 
-* health: CoreDNS的健康状况；
+- health: CoreDNS的健康状况；
 
-* kubernetes: kubernetes插件是CoreDNS中用来替代kube-dns的模块，将service的域名转为IP的工作由该插件完成，其中常用的参数作用如下：
-  
-  * **pods POD-MODES**: 用于设置Pod的A记录处理模式，如**1-2-3-4.ns.pod.cluster.local. in A 1.2.3.4**。**pods disabled**为默认值，表示不为pod提供dns记录；**pods insecure**会一直返回对应的A记录，而不校验ns；**pods verified**会校验ns是否正确，如果该ns下有对应的pod，则返回A记录。
-  
-  * **upstream [ADDRESS..]**: 定义用于解析外部hosts的上游dns服务器。如果不指定，则CoreDNS会自行处理，例如使用后面会介绍到的proxy插件。
-  
-  * **fallthrough [ZONE..]**:  如果指定此选项，则DNS查询将在插件链上传递，该插件链可以包含另一个插件来处理查询，例如**in-addr.arpa**。
+- kubernetes: kubernetes插件是CoreDNS中用来替代kube-dns的模块，将service的域名转为IP的工作由该插件完成，其中常用的参数作用如下：
 
-* prometheus: CoreDNS对外暴露的监控指标，默认为http://localhost:9153/metrics。
+  - **pods POD-MODES**: 用于设置Pod的A记录处理模式，如**1-2-3-4.ns.pod.cluster.local. in A 1.2.3.4**。**pods
+    disabled**为默认值，表示不为pod提供dns记录；**pods insecure**会一直返回对应的A记录，而不校验ns；**pods
+    verified**会校验ns是否正确，如果该ns下有对应的pod，则返回A记录。
 
-* forward [from to]: 任何不属于Kubernetes集群内部的域名，其DNS请求都将指向forword指定的 DNS 服务器地址。**from**一般为"."，代表所有域名，**to**可以为多个，如111.114.114.114 8.8.8.8。需要注意的是，新版本的CoreDNS已forward插件替代proxy插件，不过使用方法是一致的，如果你的集群是proxy，建议改为forward插件，性能更好。
+  - **upstream [ADDRESS..]**: 定义用于解析外部hosts的上游dns服务器。如果不指定，则CoreDNS会自行处理，例如使用后面会介绍到的proxy插件。
 
-* reload: 允许自动加载变化了的Corefile，建议配置，这样CoreDNS可以实现热更新。
+  - **fallthrough [ZONE..]**: 如果指定此选项，则DNS查询将在插件链上传递，该插件链可以包含另一个插件来处理查询，例如**in-addr.arpa**。
+
+- prometheus: CoreDNS对外暴露的监控指标，默认为http://localhost:9153/metrics。
+
+- forward [from to]: 任何不属于Kubernetes集群内部的域名，其DNS请求都将指向forword指定的 DNS
+  服务器地址。**from**一般为"."，代表所有域名，**to**可以为多个，如111.114.114.114
+  8.8.8.8。需要注意的是，新版本的CoreDNS已forward插件替代proxy插件，不过使用方法是一致的，如果你的集群是proxy，建议改为forward插件，性能更好。
+
+- reload: 允许自动加载变化了的Corefile，建议配置，这样CoreDNS可以实现热更新。
 
 其他选项的意义请查看Kubernetes官方文档，下面我们举例说明下如何修改ConfigMap。
 
@@ -66,7 +69,8 @@ Corefile的配置信息包含以下CoreDNS的插件：
 
 #### 为特殊域配置DNS服务器
 
-假设我们有一个ucloudk8s的服务域，自建的私有DNS Server地址为10.9.10.8，则集群管理员可以执行kubectl edit configmap/coredns -n kube-system中添加如下所示的一段规则，这是个独立的**Server Block**,我们可以在Corefile里面为不同的域配置不同的**Server Block**。
+假设我们有一个ucloudk8s的服务域，自建的私有DNS Server地址为10.9.10.8，则集群管理员可以执行kubectl edit configmap/coredns -n
+kube-system中添加如下所示的一段规则，这是个独立的**Server Block**,我们可以在Corefile里面为不同的域配置不同的**Server Block**。
 
 ```
 ucloudk8s.com:53 {
@@ -123,15 +127,14 @@ metadata:
 
 ```
 docker run -d -p 53:53/tcp -p 53:53/udp --cap-add=NET_ADMIN --name dns-server andyshinn/dnsmasq:2.75
-
 ```
 
 #### 进入容器
 
 ```
 docker exec -it dns-server /bin/sh
-
 ```
+
 #### 配置上游DNS服务器
 
 ```
@@ -139,7 +142,6 @@ vi /etc/resolv.dnsmasq
 
 nameserver 114.114.114.114
 nameserver 8.8.8.8
-
 ```
 
 #### 配置本地解析规则
@@ -148,7 +150,6 @@ nameserver 8.8.8.8
 vi /etc/dnsmasqhosts
 
 110.110.110.110 baidu.com
-
 ```
 
 #### 修改dnsmasq配置文件，指定使用上述两个我们自定义的配置文件，修改下述两个选项，并重启容器。
@@ -171,7 +172,6 @@ baidu.com:53{
   forward . 10.9.10.8(测试时需修改成你的DNS地址)      
 
  }
-
 ```
 
 #### 进入K8S在容器内测试，使用dig命名测试，可以看到解析地址为110.110.110.110，符合预期。
@@ -197,7 +197,6 @@ baidu.com.              5       IN      A       110.110.110.110
 ;; SERVER: 172.17.0.2#53(172.17.0.2)
 ;; WHEN: Mon May 27 09:11:50 UTC 2019
 ;; MSG SIZE  rcvd: 63
-
 ```
 
 ### 常见问题
@@ -208,7 +207,6 @@ baidu.com.              5       IN      A       110.110.110.110
 
 其次，通过''kubectl logs COREDNS-POD-NAME -n kube-system''查看CoreDNS日志，确认CoreDNS是否正常工作，以及DNS配置是否加载成功。
 
-如果依然不能正常工作，在容器或Pod内执行''dig @YOUR-DNS-SERVER-ADDRESS  YOUR-DOMAIN''，确认您的DNS服务器是否正常工作。
+如果依然不能正常工作，在容器或Pod内执行''dig @YOUR-DNS-SERVER-ADDRESS YOUR-DOMAIN''，确认您的DNS服务器是否正常工作。
 
 如以上操作皆无效，请联系UCloud技术支持协助处理。
-

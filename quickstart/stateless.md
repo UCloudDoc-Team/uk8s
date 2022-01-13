@@ -1,7 +1,7 @@
-
 ## 在UK8S中部署无状态服务
 
 ### 前言
+
 在K8S中部署一个无状态服务是一件很简单的事，但要在K8S中部署一个健壮的无状态服务，则需要对K8S的各个概念有一个基础的了解。本文以Nginx为例来说明如何部署一个无状态应用，通过本文档，你将：
 
 1. 了解Deployment的基础知识；
@@ -34,7 +34,6 @@ spec:
         image: uhub.service.ucloud.cn/ucloud/nginx:latest
         ports:
         - containerPort: 80
-
 ```
 
 在上面的示例中：
@@ -43,25 +42,22 @@ spec:
 
 2. 该Deployment将创建2个一样的Pods，你也可以通过.spec.replicas参数来修改其数量。
 
-3. selector 字段定义 Deployment 如何查找要管理的 Pods。 一般情况下，只需要与 Pod 模板（app: nginx）中定义的标签一致即可。更复杂的匹配规则不在我们的讨论范围内。
+3. selector 字段定义 Deployment 如何查找要管理的 Pods。 一般情况下，只需要与 Pod 模板（app:
+   nginx）中定义的标签一致即可。更复杂的匹配规则不在我们的讨论范围内。
 
 4. template 字段包含以下子字段：
-    
-   * Pod 标记为app: nginx，使用labels字段;
 
-   * Pod 模板规范或 .template.spec 字段指示 Pods 运行一个容器nginx;
+   - Pod 标记为app: nginx，使用labels字段;
 
-   * 创建一个容器并使用name字段将其命名为 nginx;
+   - Pod 模板规范或 .template.spec 字段指示 Pods 运行一个容器nginx;
 
+   - 创建一个容器并使用name字段将其命名为 nginx;
 
 将上述内容保存为nginx-deployment.yaml，我们可以在kubectl中执行以下命令来运行容器：
 
 ```shell
-
-kubectl apply -f nginx-deployment.yaml 
-
-```   
-
+kubectl apply -f nginx-deployment.yaml
+```
 
 ### 2、通过Configmap实现nginx配置文件的热更新
 
@@ -70,7 +66,6 @@ kubectl apply -f nginx-deployment.yaml
 1. 首先我们创建一个nginx配置文件。
 
 ```shell
-
 cat  >www.conf <<EOF
 server {
 	server_name www.test.com;
@@ -78,22 +73,17 @@ server {
 	root /app/webroot/;
 }
 EOF
-
 ```
 
 2. 创建一个ConfigMap保存配置文件信息, 文件内容作为value, 可以自定义key, 也可以使用文件名作为key。
 
 ```shell
-
 kubectl create configmap nginx-file --from-file=./www.conf  # 文件名作为key
 
 kubectl create configmap nginx-file --from-file=www.conf=./www.conf # 自定义key（www.conf）
-
-
 ```
 
 3. 创建一个Deployment，并将ConfigMap作为Volume挂载到Pod。
-
 
 ```yaml
 apiVersion: apps/v1
@@ -122,22 +112,20 @@ spec:
       volumes:                           #创建一个存储卷
       - name: nginxcon                  #定义存储卷名字
         configMap:                     #定义存储卷类型为configMap
-          name: nginx-file            #引用名字叫nginx-file的configmap, 
-
+          name: nginx-file            #引用名字叫nginx-file的configmap,
 ```
 
-将配置信息从容器镜像中独立出来的好处是：1、不用为不同环境制作不同的镜像；2、实现配置文件的热更新。 在这个例子中，我们可以尝试去修改ConfigMap中的配置信息，然后在登录到容器中，我们会发现nginx的配置文件会也会被修改，已容器并不需要重启。
-
+将配置信息从容器镜像中独立出来的好处是：1、不用为不同环境制作不同的镜像；2、实现配置文件的热更新。
+在这个例子中，我们可以尝试去修改ConfigMap中的配置信息，然后在登录到容器中，我们会发现nginx的配置文件会也会被修改，已容器并不需要重启。
 
 ### 3、将应用暴露到集群外部
 
-上面我们已经部署好nginx应用，那如何从集群内、集群外、互联网访问这个应用呢？ 这里就涉及到Service这个K8S对象了，Service定义了一组Pod及访问它的方式。一个简单的类比，Service可以认为是负载均衡，而Pod则是云主机。
-
+上面我们已经部署好nginx应用，那如何从集群内、集群外、互联网访问这个应用呢？
+这里就涉及到Service这个K8S对象了，Service定义了一组Pod及访问它的方式。一个简单的类比，Service可以认为是负载均衡，而Pod则是云主机。
 
 #### 1. 创建一个只能在集群内访问的Service
 
 ```yaml
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -150,8 +138,8 @@ spec:
       targetPort: 80
   selector:
     app: nginx
-
 ```
+
 在上面的示例中，
 
 1. 我们创建了一个名为nignx-svc-clusterip的service；
@@ -164,10 +152,10 @@ spec:
 
 #### 2. 创建一个可在VPC内其他服务访问的Service
 
-ClusterIP类型的Service在创建成功后，K8S将为其分配一个IP，但该IP只在集群内可达。 如果我们的服务要被云账户下的其他服务（比如云主机）访问，应该怎么办? UK8S集成了内网ULB，我们只需要创建一个LoadBalancer类型的Service接口。
+ClusterIP类型的Service在创建成功后，K8S将为其分配一个IP，但该IP只在集群内可达。 如果我们的服务要被云账户下的其他服务（比如云主机）访问，应该怎么办?
+UK8S集成了内网ULB，我们只需要创建一个LoadBalancer类型的Service接口。
 
 ```yaml
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -187,7 +175,6 @@ spec:
       targetPort: 80
   selector:
     app: nginx
-
 ```
 
 在上面的例子中,
@@ -226,8 +213,8 @@ spec:
       targetPort: 80
   selector:
     app: nginx
-
 ```
+
 在上面的实例中：
 
 1. 我们创建一个LoadBalancer类型的Service，K8S将为该Service分配一个ExternalIP，IP类型为外网弹性IP，在UK8S中，这意味着将在你的云账户下创建一个外网ULB，**并产生费用**。
@@ -237,8 +224,5 @@ spec:
 在测试完毕后，我们可以删除该Service，避免持续产生费用。
 
 ```shell
-
 kubectl delete service nginx-deployment-internet
-
 ```
-

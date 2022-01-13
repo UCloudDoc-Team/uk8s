@@ -2,10 +2,10 @@
 
 Kubernetes 提供了多种节点分配使用的方法，常用的有以下4种：
 
-* 节点筛选器(nodeSelector)
-* 节点亲和与反亲和性(nodeAffinity)
-* Pod亲和与反亲和性(podAffinity)
-* 节点隔离/限制
+- 节点筛选器(nodeSelector)
+- 节点亲和与反亲和性(nodeAffinity)
+- Pod亲和与反亲和性(podAffinity)
+- 节点隔离/限制
 
 ## 1. 标签
 
@@ -27,7 +27,8 @@ Kubernetes 提供了多种节点分配使用的方法，常用的有以下4种�
 
 节点筛选器，用于创建 Pod（及 Deployment、StatefulSet 等控制器时），将 Pod 分配给相应的节点。
 
-实例 yaml 创建了一个 Pod 对象，在 `spec.nodeSelector` 下以 Map 形式增加改容器部署的节点的限制条件，nodeSelector 会筛选拥有 `disktype: ssd` 的 Node 节点进行 Pod 部署。
+实例 yaml 创建了一个 Pod 对象，在 `spec.nodeSelector` 下以 Map 形式增加改容器部署的节点的限制条件，nodeSelector 会筛选拥有
+`disktype: ssd` 的 Node 节点进行 Pod 部署。
 
 ```yaml
 apiVersion: v1
@@ -51,9 +52,12 @@ spec:
 
 ### 3.1 硬匹配
 
-在以下 yaml 示例中，`requiredDuringSchedulingIgnoredDuringExecution` 可以理解为**排除不具备指定 Label 的节点**，如果节点不含有 `ucloud=yes` 则 Pod 不会被分配到该节点。
+在以下 yaml 示例中，`requiredDuringSchedulingIgnoredDuringExecution` 可以理解为**排除不具备指定 Label 的节点**，如果节点不含有
+`ucloud=yes` 则 Pod 不会被分配到该节点。
 
-`nodeSelectorTerms` 下提供了 `matchExpressions`（匹配表达式）和 `matchFields`（匹配字段），选择使用其一，我们这里使用了 `matchExpressions`，下面的表达式中 Key 和 Values对应，`operator` 的可选参数有In、NotIn、Exists、DoesNotExist、Gt、Lt，这里可以设置 NotIn、DoesNotExist 进行反亲和的设置，也就是如果这里写入了 `operator: NotIn` 的时候，Pod 将分配在没有 `ucloud=yes` Label 的节点上。
+`nodeSelectorTerms` 下提供了 `matchExpressions`（匹配表达式）和 `matchFields`（匹配字段），选择使用其一，我们这里使用了
+`matchExpressions`，下面的表达式中 Key 和 Values对应，`operator` 的可选参数有In、NotIn、Exists、DoesNotExist、Gt、Lt，这里可以设置
+NotIn、DoesNotExist 进行反亲和的设置，也就是如果这里写入了 `operator: NotIn` 的时候，Pod 将分配在没有 `ucloud=yes` Label 的节点上。
 
 ```yaml
 apiVersion: apps/v1
@@ -93,9 +97,11 @@ spec:
 
 ### 3.2 软匹配
 
-和 `requiredDuringSchedulingIgnoredDuringExecution` 对应还有 `preferredDuringSchedulingIgnoredDuringExecution`，这里称为软匹配，这个参数为对应节点进行打分，降低不具备 Label 的节点的选中几率。
+和 `requiredDuringSchedulingIgnoredDuringExecution` 对应还有
+`preferredDuringSchedulingIgnoredDuringExecution`，这里称为软匹配，这个参数为对应节点进行打分，降低不具备 Label 的节点的选中几率。
 
-这里的 `weight` 字段在1-100范围内。对于满足所有调度要求的每个节点，调度程序将通过迭代此字段的元素计算总和，并在节点与对应的节点匹配时将「权重」添加到总和 `MatchExpressions`，然后将该分数与节点的其他优先级函数的分数组合。总得分最高的节点是最优选的。
+这里的 `weight` 字段在1-100范围内。对于满足所有调度要求的每个节点，调度程序将通过迭代此字段的元素计算总和，并在节点与对应的节点匹配时将「权重」添加到总和
+`MatchExpressions`，然后将该分数与节点的其他优先级函数的分数组合。总得分最高的节点是最优选的。
 
 ```yaml
 preferredDuringSchedulingIgnoredDuringExecution:
@@ -117,4 +123,3 @@ preferredDuringSchedulingIgnoredDuringExecution:
 3. 如果指定了多个 matchExpressions 关联的 nodeSelectorTerms，则只有在节点满足所有 matchExpressions 要求情况下才能将该容器调度到节点上。
 
 4. 如果删除或更改已有容器节点的 Label，Kubernetes 不会主动删除该容器，亲和的调度选择仅在调度 Pod 时起作用。
-

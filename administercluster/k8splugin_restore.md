@@ -2,7 +2,8 @@
 
 ## 1. APIServer、Controller Manager、Scheduler 组件的故障恢复
 
-APIServer、Controller Manager、Scheduler 是 Kubernetes 的核心管理组件，在 UK8S 集群中，默认配置三台 Master 节点，每台 Master 节点上均部署安装了这些核心组件，各个组件通过负载均衡对外提供服务，确保集群的高可用。
+APIServer、Controller Manager、Scheduler 是 Kubernetes 的核心管理组件，在 UK8S 集群中，默认配置三台 Master 节点，每台 Master
+节点上均部署安装了这些核心组件，各个组件通过负载均衡对外提供服务，确保集群的高可用。
 
 当某个组件出现故障时，请逐台登录三台 Master 节点，通过 `systemctl status ${PLUGIN_NAME}` 确认组件状态，如组件不可用，可通过以下步骤进行恢复：
 

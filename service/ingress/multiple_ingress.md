@@ -1,8 +1,9 @@
-
 ## ingress 高级用法
 
 ### 多个Ingress Controller SVC
+
 如果您只运行了一个ingress controller，想通过多个ULB对外提供服务（例如需要在ULB中绑定SSL证书），可以参考这个yaml文件。
+
 ```
 apiVersion: v1
 kind: Service
@@ -27,28 +28,33 @@ spec:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
 ```
-这里我新建了一个把ingress controller暴露出集群的svc，名为ingress-nginx2，这时针对这个nginx ingress controller就拥有了2个svc,对应了2个ULB。
+
+这里我新建了一个把ingress controller暴露出集群的svc，名为ingress-nginx2，这时针对这个nginx ingress
+controller就拥有了2个svc,对应了2个ULB。
+
 ```
 [root@10-10-10-194 ~]# kubectl get svc -n ingress-nginx
 NAME             TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
 ingress-nginx    LoadBalancer   172.17.23.246   xx.xx.xx.xx     80:32677/TCP,443:39787/TCP   10d
 ingress-nginx2   LoadBalancer   172.17.7.114    yy.yy.yy.yy     80:47962/TCP,443:45958/TCP   29m
 ```
- 用户可以解析增加n1 xx.xx.xx.xx和n2 yy.yy.yy.yy进行区分流量入口，这个操作流程将使用同一套ingress controller，多个SVC的使用场景，逻辑如下图。
- ```
- ULB1            ULB2
-  |               |
+
+用户可以解析增加n1 xx.xx.xx.xx和n2 yy.yy.yy.yy进行区分流量入口，这个操作流程将使用同一套ingress controller，多个SVC的使用场景，逻辑如下图。
+
+```
+ULB1            ULB2
+ |               |
 ing_svc1       ing_svc2
-  |               |
-  -----------------
-          |
-  ingress controller
-          |
-  -----------------      
-  |               |
+ |               |
+ -----------------
+         |
+ ingress controller
+         |
+ -----------------      
+ |               |
 app_svc1       app_svc2
-  |               |
-app_pod1       app_pod2   
+ |               |
+app_pod1       app_pod2
 ```
 
 ### 多个 Ingress Controller
@@ -76,7 +82,8 @@ spec:
           servicePort: web
 ```
 
-> 如果您部署了不同类型的ingress controller（例如nginx和traefik），而不指定注释类型，将导致这两个或者所有的ingress controller都在努力满足ingress的需求，并且所有的ingress controller都在争抢更新ingress的状态。
+> 如果您部署了不同类型的ingress controller（例如nginx和traefik），而不指定注释类型，将导致这两个或者所有的ingress
+> controller都在努力满足ingress的需求，并且所有的ingress controller都在争抢更新ingress的状态。
 
 ---
 
@@ -84,9 +91,8 @@ spec:
 
 ingress-controller可以通过Deployment或DaemonSet部署，各有利弊：
 
-* 使用Deployment时，可伸缩性可以更好，因为在使用DaemonSet时您将拥有每个节点的单一Pod模型，而在使用Deployment时，基于环境您可能需要更少的Pod。
+- 使用Deployment时，可伸缩性可以更好，因为在使用DaemonSet时您将拥有每个节点的单一Pod模型，而在使用Deployment时，基于环境您可能需要更少的Pod。
 
-* 当节点加入群集时，DaemonSet会自动扩展到新节点，而Deployment仅在需要时在新节点上进行调度。
+- 当节点加入群集时，DaemonSet会自动扩展到新节点，而Deployment仅在需要时在新节点上进行调度。
 
-* DaemonSet 确保只有一个节点有且只有一个副本。如果副本数要小于或大于集群节点数，建议通过 Deployment进行设置。
-
+- DaemonSet 确保只有一个节点有且只有一个副本。如果副本数要小于或大于集群节点数，建议通过 Deployment进行设置。

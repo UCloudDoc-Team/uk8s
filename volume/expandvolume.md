@@ -6,7 +6,12 @@
 
 1. UK8S Node 节点实例的创建时间必须晚于 2020 年 5 月，不满足此条件的节点，则必须先对 Node 节点进行先关机，再开机操作。
 
-2. Kubernetes版本不低于 1.14，如集群版本是 1.14 及 1.15，必须在三台 Master 节点 `/etc/kubernetes/apiserver` 文件中配置 `--feature-gates=ExpandCSIVolumes=true`，并通过 `systemctl restart kube-apiserver` 重启 APIServer。并需要在node节点中修改`/etc/kubernetes/kubelet` 文件中配置，增加`--feature-gates=ExpandCSIVolumes=true`，执行`systemctl restart kubelet` 重启 kubelet。对于 1.14 版本的集群，如果需要在线扩容(pod 不重启)，需要同时配置 `ExpandInUsePersistentVolumes=true`的特性开关。1.13 及以下版本不支持该特性，1.16 及以上版本无需配置;
+2. Kubernetes版本不低于 1.14，如集群版本是 1.14 及 1.15，必须在三台 Master 节点 `/etc/kubernetes/apiserver` 文件中配置
+   `--feature-gates=ExpandCSIVolumes=true`，并通过 `systemctl restart kube-apiserver` 重启
+   APIServer。并需要在node节点中修改`/etc/kubernetes/kubelet`
+   文件中配置，增加`--feature-gates=ExpandCSIVolumes=true`，执行`systemctl restart kubelet` 重启 kubelet。对于 1.14
+   版本的集群，如果需要在线扩容(pod 不重启)，需要同时配置 `ExpandInUsePersistentVolumes=true`的特性开关。1.13 及以下版本不支持该特性，1.16
+   及以上版本无需配置;
 
 3. CSI-UDisk版本不低于 20.08.1，CSI 版本更新及升级请查看：[CSI 更新记录及升级指南](/uk8s/volume/csi_update);
 
@@ -16,7 +21,6 @@
 
 <!--
 ## 2. 准备操作
-
 
 #### 2.1 升级CSI-UDisk版本
 
@@ -46,11 +50,9 @@
 
 ```
 
-
 #### 2.2 UK8S开启ExpnadCSIVolumes=true特性
 
 仅1.14和1.15两个K8S版本中需要开启，1.16及以上已默认开启，1.13及以下版本不支持该特性。
-
 
 #### 2.3 检查UK8S Node节点创建时间
 
@@ -64,7 +66,6 @@
 
 ```
 -->
-
 
 ## 2. 扩容UDisk演示
 
@@ -141,7 +142,8 @@ Filesystem      Size  Used Avail Use% Mounted on
 
 ### 2.3 在线扩容 PVC
 
-执行 `kubectl edit pvc udisk-volume-expand`，将 `spec.resource.requests.storage` 改成 20Gi, 保存后退出， 大概在一分钟左右，PV、PVC 以及容器内的文件系统大小容量属性都变成了 20Gi。
+执行 `kubectl edit pvc udisk-volume-expand`，将 `spec.resource.requests.storage` 改成 20Gi, 保存后退出，
+大概在一分钟左右，PV、PVC 以及容器内的文件系统大小容量属性都变成了 20Gi。
 
 ```bash
 # kubectl  get pv
@@ -161,7 +163,8 @@ Filesystem      Size  Used Avail Use% Mounted on
 
 ### 2.4 离线扩容 PVC（推荐）
 
-在上面的示例中，我们完成了数据卷的在线扩容。但在高 IO 的场景下，Pod 不重启进行数据卷扩容，有小概率导致文件系统异常。最稳定的扩容方案是先停止应用层服务、解除挂载目录，再进行数据卷扩容。下面我们演示下如何进行停服操作。
+在上面的示例中，我们完成了数据卷的在线扩容。但在高 IO 的场景下，Pod
+不重启进行数据卷扩容，有小概率导致文件系统异常。最稳定的扩容方案是先停止应用层服务、解除挂载目录，再进行数据卷扩容。下面我们演示下如何进行停服操作。
 
 上文步骤 2.3完成的时候，我们有一个 Pod 且挂载了一个 20Gi 的数据卷，现在我们需要对数据卷进行停服扩容。
 
@@ -172,11 +175,12 @@ Filesystem      Size  Used Avail Use% Mounted on
 pod "udisk-expand-test" deleted
 ```
 
-此时，PV 和 PVC 依然相互 Bound，对应的 UDisk 已经从云主机中卸载，处于可用状态。 
+此时，PV 和 PVC 依然相互 Bound，对应的 UDisk 已经从云主机中卸载，处于可用状态。
 
 2. 修改 PVC 信息，将 spec.resource.requests.storage 改成 30Gi, 保存并退出。
 
-等待一分钟左右后，执行 `kubectl get pv`，当 PV 的容量增长到 30Gi后，重建 Pod。需要注意的是，此时执行 `kubectl get pvc` 的时候，返回的 PVC 容量依然是 20Gi，这是因为文件系统尚未扩容完毕，PVC 处于FileSystemResizePending 状态。
+等待一分钟左右后，执行 `kubectl get pv`，当 PV 的容量增长到 30Gi后，重建 Pod。需要注意的是，此时执行 `kubectl get pvc` 的时候，返回的 PVC
+容量依然是 20Gi，这是因为文件系统尚未扩容完毕，PVC 处于FileSystemResizePending 状态。
 
 ```bash
 # kubectl edit pvc udisk-volume-expand
@@ -188,6 +192,3 @@ pvc-25b83584-35de-43e4-ad23-c1fc638a09e2   30Gi       RWO            Delete     
 ```
 
 当 Pod 重新创建成功后，可以发现，PV、PVC 的容量大小都是 30Gi，同时在容器中执行 df 看到的对应文件系统容量也是 30Gi。
-
-
-

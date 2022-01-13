@@ -1,9 +1,9 @@
-
 ## 关于应用商店
 
 > UK8S应用商店的前端页面已经下线，如需使用请通过Helm命令行操作，[安装使用应用商店](/uk8s/helm/init)
 
 ### 关于Helm
+
 Helm是Kubernetes的包管理工具，用于简化Kubernetes应用的部署和管理。初期学习理解时可以将Helm比作Linux下的yum/apt-get，这两款软件都是Linux系统下的包管理工具。本文通过安装Helm使用应用商店进行介绍。
 
 ### Helm组件及相关术语
@@ -13,17 +13,19 @@ Helm2.x是一款C/S架构软件，分为两个部分，分别是Helm的客户端
 在Helm3.x中，剔除了Helm服务端(Tiller)，直接使用Helm调用api server完成应用的创建及管理。
 
 #### Helm
+
 Helm是一个命令行下的客户端工具，主要用于Kubernetes应用程序Chart的创建、打包、发布以及管理CHart仓库。
 
 #### Tiller
 
 Tiller在 Helm3 中已经废弃。
 
-Tiller 是 Helm2 的服务端，通常运行在您的kubernetes集群中。Tiller 用于接收 Helm 的请求，并根据 Chart 生成 Kubernetes 的部署文件，然后提交给 Kubernetes 创建应用。
+Tiller 是 Helm2 的服务端，通常运行在您的kubernetes集群中。Tiller 用于接收 Helm 的请求，并根据 Chart 生成 Kubernetes 的部署文件，然后提交给
+Kubernetes 创建应用。
 
 #### Chart
-Chart是用来封装 Kubernetes 原生应用程序的一系列 YAML 文件集合。可以在你部署复杂应用的时候直接通过部署chart实现快速部署。
 
+Chart是用来封装 Kubernetes 原生应用程序的一系列 YAML 文件集合。可以在你部署复杂应用的时候直接通过部署chart实现快速部署。
 
 #### Helm工作原理
 
@@ -40,5 +42,3 @@ HElm3中删除了Tiller，只有客户端使用，调用`~/.kube/config`来访�
 Helm客户端负责管理已经添加的仓库，即应用商店，发送给Tiller进行具体命令执行。
 
 Tiller服务端负责转化Chart为一条Release，发送给k8s API Server进行部署安装。
-
-

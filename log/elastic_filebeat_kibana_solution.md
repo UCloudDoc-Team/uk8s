@@ -1,8 +1,6 @@
-
 ## 使用ELK自建UK8S日志解决方案
 
 下面我们介绍下如何使用Elasticsearch+Filebeat+Kibana来搭建UK8S日志解决方案。
-
 
 ### 一、部署Elasticsearch
 
@@ -13,9 +11,11 @@ Elasticsearch（ES）是一个基于Lucene构建的开源、分布式、RESTful�
 #### 2. 环境要求
 
 Elasticsearch运行时要求vm.max_map_count内核参数必须大于262144，因此开始之前需要确保这个参数正常调整过。
+
 ```
 sysctl -w vm.max_map_count=262144
 ```
+
 也可以在ES的的编排文件中增加一个initContainer来修改内核参数，但这要求kublet启动的时候必须添加了--allow-privileged参数，uk8s默认开启了该参数，在后面的示例中采用initContainer的方式。
 
 #### 3. ES节点角色
@@ -35,9 +35,11 @@ Trible node，为了做集群整合用的。
 #### 4. Elasticsearch部署
 
 为了方便演示，我们把本文所有的对象资源都放置在一个名为 elk 的 namespace 下面，所以我们需要添加创建一个 namespace：
+
 ```
 kubectl create namespace elk
 ```
+
 **不区分节点角色**
 
 这种模式下，集群中的节点不做角色的区分，配置文件请参考[elk-cluster.yaml](https://github.com/UCloudDocs/uk8s/blob/master/yaml/log/elk-cluster.yaml)
@@ -61,8 +63,8 @@ es-cluster            ClusterIP      None            <none>         9200/TCP,930
 es-cluster-nodeport   NodePort       172.17.177.40   <none>         9200:31200/TCP,9300:31300/TCP   2m20s
 kb-single-svc         LoadBalancer   172.17.129.82   117.50.40.48   5601:38620/TCP                  2m20s
 bash-4.4#
-
 ```
+
 通过kb-single-svc的EXTERNAL-IP，便可以访问Kibana。
 
 **区分节点角色**
@@ -94,13 +96,13 @@ bash-4.4# kubectl get svc -n elk
 NAME                  TYPE           CLUSTER-IP      EXTERNAL-IP    PORT(S)                         AGE
 es-cluster            ClusterIP      None            <none>         9200/TCP,9300/TCP               44s
 es-cluster-nodeport   NodePort       172.17.63.138   <none>         9200:31200/TCP,9300:31300/TCP   44s
-kb-single-svc         LoadBalancer   172.17.183.59   117.50.92.74   5601:32782/TCP 
-
+kb-single-svc         LoadBalancer   172.17.183.59   117.50.92.74   5601:32782/TCP
 ```
 
 ### 二、部署FileBeat
 
-在进行日志收集的过程中，我们首先想到的是使用Logstash，因为它是ELK stack中的重要成员，但是在测试过程中发现，Logstash是基于JDK的，在没有产生日志的情况单纯启动Logstash就大概要消耗500M内存，在每个Pod中都启动一个日志收集组件的情况下，使用logstash有点浪费系统资源，因此我们更推荐一个轻量级的日志采集工具Filebeat，经测试单独启动Filebeat容器大约只会消耗12M内存。
+在进行日志收集的过程中，我们首先想到的是使用Logstash，因为它是ELK
+stack中的重要成员，但是在测试过程中发现，Logstash是基于JDK的，在没有产生日志的情况单纯启动Logstash就大概要消耗500M内存，在每个Pod中都启动一个日志收集组件的情况下，使用logstash有点浪费系统资源，因此我们更推荐一个轻量级的日志采集工具Filebeat，经测试单独启动Filebeat容器大约只会消耗12M内存。
 具体的编排文件可以参考[filebeat.yaml](https://github.com/UCloudDocs/uk8s/blob/master/yaml/log/filebeat.yaml)，本例采用DaemonSet的方式编排。
 
 ```
@@ -112,22 +114,23 @@ clusterrole.rbac.authorization.k8s.io/filebeat created
 serviceaccount/filebeat created
 ```
 
-编排文件中将filebeat使用到的配置ConfigMap挂载到/home/uk8s-filebeat/filebeat.yaml，实际启动filebeat时使用该自定义配置。有关filebeat的配置可以参见 [Configuring Filebeat](https://www.elastic.co/guide/en/beats/filebeat/current/configuring-howto-filebeat.html)中相应的说明。
+编排文件中将filebeat使用到的配置ConfigMap挂载到/home/uk8s-filebeat/filebeat.yaml，实际启动filebeat时使用该自定义配置。有关filebeat的配置可以参见
+[Configuring Filebeat](https://www.elastic.co/guide/en/beats/filebeat/current/configuring-howto-filebeat.html)中相应的说明。
 
-Filebeat命令行参数可以参考 [Filebeat Command Reference](https://www.elastic.co/guide/en/beats/filebeat/current/command-line-options.html)，本例中使用到的参数说明如下：
+Filebeat命令行参数可以参考
+[Filebeat Command Reference](https://www.elastic.co/guide/en/beats/filebeat/current/command-line-options.html)，本例中使用到的参数说明如下：
 
-* -c, --c FILE
+- -c, --c FILE
 
 > 指定Filebeat使用的配置文件，如果不指定则使用默认的配置文件/usr/share/filebeat/filebeat.yaml
 
-* -d, --d SELECTORS
+- -d, --d SELECTORS
 
 > 为指定的selectors打开调试模式， selectors是以逗号分隔的列表，-d "*" 表示对所有组件进行调试。在实际生产环境中请关闭该选项，初次配置时打开可以有效排错。
 
-* -e, --e
+- -e, --e
 
 > 指定日志输出到标准错误输出，关闭默认的syslog/file输出
-
 
 ### 三、部署Logstash（可选）
 
@@ -135,7 +138,8 @@ Filebeat命令行参数可以参考 [Filebeat Command Reference](https://www.ela
 
 #### 1、创建配置文件
 
-创建Logstash的配置文件，可以参考[elk-log.conf](https://github.com/UCloudDocs/uk8s/blob/master/yaml/log/elk-log.conf)，更详细的配置信息见[Configuring Logstash](https://www.elastic.co/guide/en/logstash/current/configuration.html)。大部分Logstash配置文件都可以分为3部分：input, filter 和 output，示例配置文件中指定Logstash从Filebeat获取数据，并输出到Elasticsearch。
+创建Logstash的配置文件，可以参考[elk-log.conf](https://github.com/UCloudDocs/uk8s/blob/master/yaml/log/elk-log.conf)，更详细的配置信息见[Configuring Logstash](https://www.elastic.co/guide/en/logstash/current/configuration.html)。大部分Logstash配置文件都可以分为3部分：input,
+filter 和 output，示例配置文件中指定Logstash从Filebeat获取数据，并输出到Elasticsearch。
 
 #### 2、根据配置文件创建一个名为elk-pipeline-config的ConfigMap，如下：
 
@@ -146,11 +150,12 @@ bash-4.4# kubectl get configmap -n elk
 NAME                  DATA   AGE
 elk-pipeline-config   1      9s
 filebeat-config       1      21m
-
 ```
+
 #### 3、在K8S集群部署logstash。
 
-编写 [logstash.yaml](https://github.com/UCloudDocs/uk8s/blob/master/yaml/log/logstash.yaml) ，在yaml文件中挂载之前创建的ConfigMap。需要注意的是，此处使用了logstash-oss镜像，关于oss和non-oss版本的区别请参考[链接](https://discuss.elastic.co/t/what-are-the-differences-between-the-kibana-oss-and-non-oss-build/152364)。
+编写 [logstash.yaml](https://github.com/UCloudDocs/uk8s/blob/master/yaml/log/logstash.yaml)
+，在yaml文件中挂载之前创建的ConfigMap。需要注意的是，此处使用了logstash-oss镜像，关于oss和non-oss版本的区别请参考[链接](https://discuss.elastic.co/t/what-are-the-differences-between-the-kibana-oss-and-non-oss-build/152364)。
 
 ```
 bash-4.4# kubectl apply -f logstash.yaml
@@ -159,7 +164,6 @@ service/elk-log-pipeline created
 bash-4.4# kubectl get po -n elk
 NAME                                READY   STATUS    RESTARTS   AGE
 elk-log-pipeline-55d64bbcf4-9v49w   1/1     Running   0          50m
-
 ```
 
 #### 4、查看logstash是否正常工作，出现如下内容，则表明logstash正常工作
@@ -171,7 +175,6 @@ bash-4.4# kubectl logs -f elk-log-pipeline-55d64bbcf4-9v49w -n elk
 [2019-03-19T08:56:09,845][INFO ][logstash.inputs.beats    ] Beats inputs: Starting input listener {:address=>"0.0.0.0:5044"}
 [2019-03-19T08:56:09,934][INFO ][logstash.pipeline        ] Pipeline started succesfully {:pipeline_id=>"main", :thread=>"#<Thread:0x77d5c9b5 run>"}
 [2019-03-19T08:56:10,034][INFO ][org.logstash.beats.Server] Starting server on port: 5044
-
 ```
 
 #### 5、修改 filebeat.yaml的output参数，将其输出指向Logstash
@@ -188,9 +191,7 @@ items:
       output.logstash:
         hosts: ["elk-log-pipeline:5044"]
      ...
-
 ```
-
 
 ### 四、收集应用日志
 
@@ -199,7 +200,6 @@ items:
 #### 1、部署nginx应用
 
 创建一个Nginx的部署和LoadBalancer服务，这样可以通过eip访问Nginx。配置文件请参考[nginx.yaml](https://github.com/UCloudDocs/uk8s/blob/master/yaml/log/nginx.yaml)，我们将Nginx访问日志的输出路径以hostPath的形式挂载到宿主的/var/log/nginx/路径下。
-
 
 ```
 bash-4.4# kubectl apply -f nginx.yaml
@@ -212,8 +212,6 @@ bash-4.4# kubectl get po -n elk -l app=nginx
 NAME                                READY   STATUS    RESTARTS   AGE
 nginx-deployment-6c858858d5-7tcbx   1/1     Running   0          36m
 nginx-deployment-6c858858d5-9xzh8   1/1     Running   0          36m
-
-
 ```
 
 #### 2、Filebeat配置
@@ -221,21 +219,21 @@ nginx-deployment-6c858858d5-9xzh8   1/1     Running   0          36m
 在之前部署Filebeat时，由于我们已经将/var/log/nginx/加入到inputs.paths中，Filebeat已经可以对nginx的日志实现监控采集。
 
 ```
- filebeat.modules:
-      - module: system
-      filebeat.inputs:
-      - type: log
-        paths:
-          - /var/log/containers/*.log
-          - /var/log/messages
-          - /var/log/nginx/*.log
-          - /var/log/*
-        symlinks: true
-        include_lines: ['hyperkube']
-      output.logstash:
-        hosts: ["elk-log-pipeline:5044"]
-      logging.level: info
-      index: filebeat-
+filebeat.modules:
+     - module: system
+     filebeat.inputs:
+     - type: log
+       paths:
+         - /var/log/containers/*.log
+         - /var/log/messages
+         - /var/log/nginx/*.log
+         - /var/log/*
+       symlinks: true
+       include_lines: ['hyperkube']
+     output.logstash:
+       hosts: ["elk-log-pipeline:5044"]
+     logging.level: info
+     index: filebeat-
 ```
 
 #### 3、通过公网访问nginx服务，产生访问日志
@@ -245,10 +243,3 @@ nginx-deployment-6c858858d5-9xzh8   1/1     Running   0          36m
 #### 4、通过Kibana验证日志的采集情况
 
 ![](/images/log/kibana.png)
-
-
-
-
-
-
-

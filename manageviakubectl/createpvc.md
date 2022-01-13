@@ -1,20 +1,18 @@
-
 ## 创建PVC
 
 当前存储卷支持SSD、SATA类型的UDisk以及UFS，详见：
 
-* [在UK8S中使用UDisk](uk8s/volume/udisk)
-* [在UK8S中使用UFS](uk8s/volume/ufs)
-
+- [在UK8S中使用UDisk](uk8s/volume/udisk)
+- [在UK8S中使用UFS](uk8s/volume/ufs)
 
 ### 创建StorageClass
 
 在创建持久化存储卷（persistentVolume）之前，你需要先创建StorageClass，然后在PVC中使用StorageClassName。
 
-
 UK8S集群默认创建了两个StorageClass，你也可以创建一个新的StorageClass，示例及说明如下：
 
 #### 1、CSI版本（2019年9月17日之后创建的UK8S集群）
+
 ```yaml
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -32,9 +30,11 @@ mountOptions:
   - debug
   - rw
 ```
-备注：1.15之前的Kubernetes版本，mountOptions无法正常使用，请勿填写，详见[Issue80191](https://github.com/kubernetes/kubernetes/pull/80191) 
+
+备注：1.15之前的Kubernetes版本，mountOptions无法正常使用，请勿填写，详见[Issue80191](https://github.com/kubernetes/kubernetes/pull/80191)
 
 #### 2、flexVolume版本(2019年9月17日之前创建的UK8S集群)
+
 ```yaml
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
@@ -51,8 +51,6 @@ reclaimPolicy: Retain
 **parameters.type:** UDisk的存储介质类型，支持ssd和sata，默认为ssd。
 
 **reclaimPolicy:** 回收策略，支持Delete和Retain，默认为Delete。
-
-
 
 ### 创建一个存储卷声明并Mount到Pod
 

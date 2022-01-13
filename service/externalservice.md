@@ -1,11 +1,11 @@
 # 通过外网ULB访问Service
 
-
 ## 1. 使用提醒
 
 1. 请勿修改由UK8S创建的ULB及Vserver的名称和备注，否则会导致Service异常无法访问。
 
-2. 如 ULB 为 UK8S 在创建 Service 时同步创建，删除 Service 时 ULB 会同步删除，请勿将 ULB 关联其他 Vserver，如需多个 Service 共用 ULB，可先创建 ULB，并在创建 Service 时关联已有 ULB，详情请见[使用已有 ULB](/uk8s/service/ulb_designation)。
+2. 如 ULB 为 UK8S 在创建 Service 时同步创建，删除 Service 时 ULB 会同步删除，请勿将 ULB 关联其他 Vserver，如需多个 Service 共用
+   ULB，可先创建 ULB，并在创建 Service 时关联已有 ULB，详情请见[使用已有 ULB](/uk8s/service/ulb_designation)。
 
 3. 除外网EIP外，ULB相关参数目前均不支持Update，如不确认如何填写，请咨询UCloud 技术支持。
 
@@ -13,7 +13,8 @@
 
 1. 目前ULB4针对UDP协议的健康检查支持ping和port两种模式，默认为ping，强烈推荐改为port；
 
-2. port健康检查的后端实现是对UDP端口发送UDP报文( "Health Check" 字符串)和针对RS IP发送ICMP Ping报文。 如果超时时间内回复了UDP报文则认为健康；如果超时时间没收到UDP回包，则以Ping的探测结果为准。因此您的应用程序需要响应UDP健康检查报文。
+2. port健康检查的后端实现是对UDP端口发送UDP报文( "Health Check" 字符串)和针对RS IP发送ICMP Ping报文。
+   如果超时时间内回复了UDP报文则认为健康；如果超时时间没收到UDP回包，则以Ping的探测结果为准。因此您的应用程序需要响应UDP健康检查报文。
 
 3. **需要注意的是UDP回包长度不要超过1440，以避免可能的分片导致ULB4无法收到健康检查响应，导致健康检查失败。**
 
@@ -110,7 +111,7 @@ spec:
     ports:
     - name: udp
       containerPort: 53
-      protocol: UDP 
+      protocol: UDP
 ```
 
 <!--## 5. 重要说明
@@ -176,11 +177,10 @@ spec:
     - containerPort: 80
 ```
 
-
 ### 通过外网ULB7暴露服务(cloudprovider-ucloud version>=19.05.3)-->
 
-
-19.05.3 以后的 CloudProvider 插件，外网ULB7同时支持HTTP和HTTPS两种协议，下文示例中，对外暴露了三个端口，其中80端口使用HTTP协议，443和8443使用HTTPS协议。
+19.05.3 以后的 CloudProvider
+插件，外网ULB7同时支持HTTP和HTTPS两种协议，下文示例中，对外暴露了三个端口，其中80端口使用HTTP协议，443和8443使用HTTPS协议。
 
 负载均衡所使用的 SSL 证书的管理，请参见 ULB 文档：[添加证书](/ulb/guide/certificate/addcertificate)
 
@@ -251,7 +251,7 @@ metadata:
     # 表示Verser的协议类型，此处为https，则所有的service端口对应的Vserver protocol 都为https，反之亦然。
     "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "https"
     # 声明要绑定的SSL证书Id，需要先将证书上传至UCloud；
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert": "ssl-b103etqy"    
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert": "ssl-b103etqy"
 spec:
   type: LoadBalancer
   ports:
@@ -280,7 +280,6 @@ spec:
     - containerPort: 80
 ```
 
-
 ### HTTPS支持(cloudprovider-ucloud version>=19.05.3)
 
 ### 5.1 HTTPS 支持
@@ -292,7 +291,6 @@ spec:
 如果某个ServicePort 被指定为HTTPS服务端口，并且已提交TLS证书ID，则该ServicePort所对应的VServer协议为HTTPS。
 
 使用ULB7的HTTPS协议模式时，Pod内的服务程序不需要实现HTTPS协议服务，只需要提供HTTP服务即可，ULB7发往后端的报文为解密后的HTTP协议报文。
-
 
 ```yaml
 apiVersion: v1
@@ -309,7 +307,7 @@ metadata:
     # 声明要绑定的SSL证书Id，需要先将证书上传至UCloud；
     "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert": "ssl-b103etqy"
     # 声明使用SSL协议的Service端口，多个用","分隔；
-    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port": "443"    
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port": "443"
 spec:
   type: LoadBalancer
   ports:
@@ -359,4 +357,3 @@ spec:
 #### 5. 如果Loadbalancer创建外网ULB后，用户在ULB控制台页面绑定了新的EIP，会被删除吗？
 
 只有访问SVC的ExternalIP才能把流量导入后端Pod，访问其他EIP无效。删除SVC时，所有EIP都会被删除。
-

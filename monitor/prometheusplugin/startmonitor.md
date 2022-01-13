@@ -6,8 +6,8 @@
 
 2. 至少有3个Node节点的可用资源大于Alertmanager的容器配置。（建议可用资源大于1C2G）
 
-3. 由于Prometheus和Alertmanager均需要持久性存储，因此会产生额外的UDisk费用。其中Prometheus为2块100G UDisk，Alertmanager为3块 UDisk。
-
+3. 由于Prometheus和Alertmanager均需要持久性存储，因此会产生额外的UDisk费用。其中Prometheus为2块100G UDisk，Alertmanager为3块
+   UDisk。
 
 ### 开启监控
 

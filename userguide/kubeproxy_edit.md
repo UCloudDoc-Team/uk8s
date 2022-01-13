@@ -2,7 +2,6 @@
 
 在UK8S集群创建时我们会对集群创建生成默认的kube-proxy模式，在集群中新增的Node节点都会依赖这个集群默认kube-proxy模式进行新增，您可以参考以下操作进行集群kube-proxy模式的切换。
 
-
 ### kube-proxy模式切换操作
 
 1. UK8S集群是您通过UCloud控制台创建的独立的集群，UK8S集群创建时会根据您选择的kube-proxy模式进行创建。已如下集群为例，集群kube-proxy模式默认是IPVS。
@@ -22,8 +21,6 @@
 4. 切换集群节点的kube-proxy模式我们采用新增新节点，新节点ready后删除一个老节点的循环操作进行集群全部Node节点的kube-proxy模式切换。切换过程中老节点的Pod会调度到新的节点上。循环操作直至集群全部节点替换完成。
 
 ![](/images/userguide/kubeproxy-new.png)
-
-
 
 ### 注意事项
 

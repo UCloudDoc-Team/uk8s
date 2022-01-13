@@ -6,7 +6,8 @@
 
 ## 1. 安装插件
 
-> ⚠️ 在安装 Calico 网络隔离插件之前，请务必确认 CNI 版本大于等于 19.12.1，否则会删除Node上原有的网络配置，导致 Pod 网络不通。CNI 版本查询及升级请参考：[CNI 网络插件升级](/uk8s/network/cni_update)。
+> ⚠️ 在安装 Calico 网络隔离插件之前，请务必确认 CNI 版本大于等于 19.12.1，否则会删除Node上原有的网络配置，导致 Pod 网络不通。CNI
+> 版本查询及升级请参考：[CNI 网络插件升级](/uk8s/network/cni_update)。
 
 为了在 UK8S 中实现网络隔离，需要部署 Calico 的 Felix 和 Typha 组件，组件模块已容器化，直接在 UK8S 通过 kubectl 命令安装即可.
 
@@ -53,18 +54,23 @@ spec:
     ports:
     - protocol: TCP
       port: 5978
-
 ```
 
 下面简要描述下各个参数的作用：
 
-* **spec.podSelector**: 这个参数的意义用于决定该NetworkPolicy的作用域，即对那些Pod有效。上面的示例表示对default namespace下携带了role=db 标签(label)的pod生效。这里要说明下，NetworkPolicy是namespace级别的资源对象。
+- **spec.podSelector**: 这个参数的意义用于决定该NetworkPolicy的作用域，即对那些Pod有效。上面的示例表示对default namespace下携带了role=db
+  标签(label)的pod生效。这里要说明下，NetworkPolicy是namespace级别的资源对象。
 
-* **spec.ingress.from**: 入向请求访问控制，即接受哪些源的请求。支持IP、namespace、pod三种控制模式，上面的示例表示放行源地址为172.17/16中除172.17.1/24 之外的请求、或任何携带了标签projcet=myproject的namespace下的所有pod、或Default namespace里携带了role=frontend标签的pod。from中的多组规则是或逻辑，满足上述三个条件中的一个即放行。 其中namespaceSelector这个字段，用于筛选来自多个namespace下的请求源。
+- **spec.ingress.from**:
+  入向请求访问控制，即接受哪些源的请求。支持IP、namespace、pod三种控制模式，上面的示例表示放行源地址为172.17/16中除172.17.1/24
+  之外的请求、或任何携带了标签projcet=myproject的namespace下的所有pod、或Default
+  namespace里携带了role=frontend标签的pod。from中的多组规则是或逻辑，满足上述三个条件中的一个即放行。
+  其中namespaceSelector这个字段，用于筛选来自多个namespace下的请求源。
 
-* **spec.ingress.ports**: 声明开放访问的端口，如果不填写则默认开放所有。上面的示例表示只允许访问6379端口。from和ports是与逻辑，即指允许上述from规则下放行的源访问6379端口（TCP）。
+- **spec.ingress.ports**:
+  声明开放访问的端口，如果不填写则默认开放所有。上面的示例表示只允许访问6379端口。from和ports是与逻辑，即指允许上述from规则下放行的源访问6379端口（TCP）。
 
-* **spec.egress**: 声明允许访问的目的地址，与from类似。上面的示例表示只允许请求IP为10.0.0.0/24网段的地址，并且只允许访问该网段地址的5978端口（TCP）。
+- **spec.egress**: 声明允许访问的目的地址，与from类似。上面的示例表示只允许请求IP为10.0.0.0/24网段的地址，并且只允许访问该网段地址的5978端口（TCP）。
 
 通过上面的描述，我们应该清楚，NetworkPolicy是一个白名单机制，即一旦开启NetworkPolicy，除非显式指定，否则一概拒绝。
 
@@ -73,7 +79,6 @@ spec:
 ### 3.1 限制一组Pod只允许访问VPC内部的资源(不能访问外网)
 
 ```yaml
-
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:

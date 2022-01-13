@@ -1,13 +1,13 @@
 # 使用须知
 
-
 ## 1. 集群
 
 1. 使用UK8S服务，必须通过UCloud实名认证服务；
 2. 集群中master节点为管理节点，不建议服务调度到管理集群运行；
 3. 单个UK8S集群最多添加5000个Node节点，生产集群建议不超过1000个；
 4. 支持的Kubernetes版本会落后社区2个版本，具体以产品页面为准；
-5. 如果的云账户开启了[API白名单](https://console.ucloud.cn/uaccount/userinfo)，请在控制台**账号安全**页面**访问限制**栏中，将 10.10.10.10/32 网段将入允许 API 访问的列表。
+5. 如果的云账户开启了[API白名单](https://console.ucloud.cn/uaccount/userinfo)，请在控制台**账号安全**页面**访问限制**栏中，将
+   10.10.10.10/32 网段将入允许 API 访问的列表。
 
 ## 2. 节点
 
@@ -20,18 +20,18 @@
 
 1. 当前支持SATA、SSD UDisk以及UFS；
 
-    [在UK8S中使用UDisk](uk8s/volume/udisk)
+   [在UK8S中使用UDisk](uk8s/volume/udisk)
 
-    [在UK8S中使用UFS](uk8s/volume/ufs)
+   [在UK8S中使用UFS](uk8s/volume/ufs)
 
-    [在UK8S中使用UFile](uk8s/volume/ufile)
+   [在UK8S中使用UFile](uk8s/volume/ufile)
 
 2. 当前支持共享存储的地域：
 
-|产品|地域|
-|--|--|
-|UDisk|北京、上海、广州、台北、东京、首尔、曼谷、新加坡、雅加达、胡志明、洛杉矶、华盛顿|
-|UFS|北京、上海、广州|
+| 产品    | 地域                                       |
+| ----- | ---------------------------------------- |
+| UDisk | 北京、上海、广州、台北、东京、首尔、曼谷、新加坡、雅加达、胡志明、洛杉矶、华盛顿 |
+| UFS   | 北京、上海、广州                                 |
 
 ## 4. 其他
 
@@ -43,13 +43,15 @@
 
 1.2 uk8s-xxxxxxxx-master-ulb4 / uk8s-xxxxxxxx-master-ulb4-external 为内外网 ULB 名称，作为 ApiServer 的内外网入口；
 
-1.3 system_udisk_uk8s-xxxxxxxx-n-xxxxx / data_udisk_uk8s-xxxxxxxx-n-xxxxx 为 UDisk 名称，作为集群节点的系统盘 / 数据盘。
+1.3 system_udisk_uk8s-xxxxxxxx-n-xxxxx / data_udisk_uk8s-xxxxxxxx-n-xxxxx 为 UDisk 名称，作为集群节点的系统盘 /
+数据盘。
 
 #### 2. 由UK8S插件创建的资源，其命名规范如下：
 
-2.1 ULB名称为ingress-nginx.ingress.svc.uk8s-xy7udsa的，由UK8S的ULB插件创建，用于LoadBalancer类型的Service，且其备注为UID-xx-xxx，实为Service在UK8S中的uuid。其命名规范为svc-name.namespace.svc.uk8s-id。
+2.1
+ULB名称为ingress-nginx.ingress.svc.uk8s-xy7udsa的，由UK8S的ULB插件创建，用于LoadBalancer类型的Service，且其备注为UID-xx-xxx，实为Service在UK8S中的uuid。其命名规范为svc-name.namespace.svc.uk8s-id。
 
-2.2 Vserver名称为TCP_443_xxx-xxxxx的，由UK8S的ULB插件创建，对应LoadBalancer类型的Service中不同的端口。其命名规范为service-protocol_service-port_service_uuid。
+2.2
+Vserver名称为TCP_443_xxx-xxxxx的，由UK8S的ULB插件创建，对应LoadBalancer类型的Service中不同的端口。其命名规范为service-protocol_service-port_service_uuid。
 
 2.3 UDisk名称为pvc-9393f66f-c0b5-11e9-bd6d-5254001935f2的，由UK8S的存储插件创建，对应UK8S中的PVC。其命名规范为pvc-pvc_uuid。
-

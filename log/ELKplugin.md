@@ -8,14 +8,14 @@ ELK 插件安装需要挂载 UDisk，UK8S 支持挂载 UDisk 的地域请查看[
 
 ## 1. ELK日志插件
 
-**插件-日志ELK**是UK8S基于ELK打造的一站式日志服务，包括Elasticsearch（可选）、Logstash、Filebeat 和 Kibana（可选）多个组件，实现了集群内日志的自动采集、过滤和存储，并内置了日志检索功能。
+**插件-日志ELK**是UK8S基于ELK打造的一站式日志服务，包括Elasticsearch（可选）、Logstash、Filebeat 和
+Kibana（可选）多个组件，实现了集群内日志的自动采集、过滤和存储，并内置了日志检索功能。
 
 关于 ELK 组件介绍请参考[ELK日志解决方案](uk8s/log/elastic_filebeat_kibana_solution)
 
 用户进入集群后可以选择为集群安装完整的一套ELK组件或者安装Filebeat等组件关联用户所使用的UES，通过UK8S插件部署的完整ELK组件可以在UCloud页面进行统一化日志查询展示。
 
 ![](../images/log/plugin_ELK.png)
-
 
 ## 2. 安装完整ELK日志组件
 
@@ -25,13 +25,14 @@ ELK 插件安装需要挂载 UDisk，UK8S 支持挂载 UDisk 的地域请查看[
 
 可选项：
 
-* Elasticsearch
+- Elasticsearch
 
 这里 Elasticsearch 我们选择新建，将在 UK8S 集群中进行 Elasticsearch 的部署，选择关联则是进行外挂ES（UES）进行关联，这里我们默认进行集群内安装。
 
-* Kibana
+- Kibana
 
-用户可以根据自己的需要进行安装 Kibana 的安装，安装后将可以通过应用中查看对外暴露的 Kibana 进行日志查看，提供了 EIP 和 Ingress 两种方式对外暴露，如集群内部没有安装 Ingress Controller 服务的话 Ingress 方式将无法正常提供外部访问。用户可以不进行安装在 UCloud 控制台进行日志查看，这里我们默认选择安装。
+用户可以根据自己的需要进行安装 Kibana 的安装，安装后将可以通过应用中查看对外暴露的 Kibana 进行日志查看，提供了 EIP 和 Ingress 两种方式对外暴露，如集群内部没有安装
+Ingress Controller 服务的话 Ingress 方式将无法正常提供外部访问。用户可以不进行安装在 UCloud 控制台进行日志查看，这里我们默认选择安装。
 
 > 注意：请确保集群中 Node 节点大于 3 台，单台 Node 节点空余资源大于 4C8G，确保足够资源进行安装ELK服务。
 
@@ -53,7 +54,6 @@ ELK 插件安装需要挂载 UDisk，UK8S 支持挂载 UDisk 的地域请查看[
 
 ![](../images/log/UES_list.png)
 
-
 2. 用户在插件页中，点击安装插件进行选择关联UES安装ELK，在安装过程中用户可以对以下选项进行选择。
 
 ![](../images/log/UES_ELK.png)
@@ -63,4 +63,3 @@ ELK 插件安装需要挂载 UDisk，UK8S 支持挂载 UDisk 的地域请查看[
 3. 安装完成后可以在UK8S中进行集群内部日志查询，UES集群其他日志查询请至UES集群提供的Kibana进行查询。
 
 ![](../images/log/installedUES.png)
-

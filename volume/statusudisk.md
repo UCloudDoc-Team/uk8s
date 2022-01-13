@@ -1,6 +1,5 @@
 # 在UK8S中使用已有UDisk
 
-
 已创建UDisk云盘如图显示，其中资源ID、和类型，在集群中挂载时需要使用。
 
 ![](/images/volume/have_udisk.png)
@@ -44,16 +43,11 @@ parameters:
 reclaimPolicy: Retain
 ```
 
-
-
 ### 2.创建PV
-
 
 > 注意将StorageClass修改为你自己创建的名称。CSI版本与FlexVolume版本差别很大，请务必注意，否则无法创建成功。
 
-
 #### CSI版本
-
 
 ```yaml
 apiVersion: v1
@@ -78,7 +72,6 @@ spec:
 
 创建pv对象使其对应使用已有UDisk硬盘，其中**spec.flexVolume.options.diskId** 需要和用户已有云盘资源ID相对应。
 
-
 ```yaml
 apiVersion: v1
 kind: PersistentVolume
@@ -96,8 +89,6 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: udisk-ssd-test
 ```
-
-
 
 ### 3.创建PVC
 
@@ -117,7 +108,9 @@ spec:
       storage: 20Gi
   volumeName: flexv-existing-udisk
 ```
+
 如下操作命令可以发现，上一步创建的pv flexv-existing-udisk已经被绑定到了新的pvc。
+
 ```bash
 [root@10-9-63-194 statuspv]# kubectl apply -f pv.yaml 
 persistentvolume/flexv-existing-udisk created
