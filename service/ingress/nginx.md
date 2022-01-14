@@ -1,5 +1,7 @@
 ## Nginx Ingress
 
+**本文适用于的 K8S 版本为 1.13 ~ 1.18**
+
 ### 什么是Ingress
 
 Ingress 是从Kubernetes集群外部访问集群内部服务的入口，同时为集群内的Service提供七层负载均衡能力。
@@ -35,14 +37,14 @@ lua实现了upstream的动态配置。
 另外，在这个yaml文件中，我们还看到定义了ConfigMap，nginx-ingress-controller可以通过ConfigMap对象来对Nginx配置文件进行定制，示例如下：
 
 ```
- kind: ConfigMap
- apiVersion: v1
- metadata:
-     name: nginx-configuration
-     namespace: ingress-nginx
-     labels:
-         app.kubernetes.io/name: ingress-nginx
-         app.kubernetes.io/part-of: ingress-nginx
+kind: ConfigMap
+apiVersion: v1
+metadata:
+    name: nginx-configuration
+    namespace: ingress-nginx
+    labels:
+        app.kubernetes.io/name: ingress-nginx
+        app.kubernetes.io/part-of: ingress-nginx
 data:
   map-hash-bucket-size: "128"
   ssl-protocols: SSLv2
