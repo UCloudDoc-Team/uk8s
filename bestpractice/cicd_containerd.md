@@ -167,7 +167,7 @@ Kubernetes 和 Jenkins 配置信息。
 
 ### 五、为kaniko配置凭证
 
-创建一个配置kaniko推送到uhub镜像的凭证，找一台有安装docker的环境，登录一次uhub：
+创建一个配置kaniko推送到uhub镜像的凭证，找一台有安装docker的云主机，登录一次uhub：
 
 ```bash
 docker login uhub.service.ucloud.cn -u user@ucloud.cn
