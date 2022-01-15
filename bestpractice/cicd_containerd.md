@@ -124,7 +124,8 @@ kubectl -n jenkins logs jenkins-deployment-xxxxxxx
 
 ![](/images/bestpractice/passget.png)
 
-3、 进入安装插件页面，在配置之前，先开启代理兼容，访问 `http://exter-ip:8080/configureSecurity/` ，勾选启用代理兼容。这一步可能会出现报错，多尝试几次即可。
+3、 进入安装插件页面，在配置之前，先开启代理兼容，访问 `http://exter-ip:8080/configureSecurity/` ，勾选
+**启用代理兼容**。这一步可能会出现报错，多尝试几次即可。
 
 ![](/images/bestpractice/agent.png)
 
@@ -147,15 +148,15 @@ Kubernetes 和 Jenkins 配置信息。
 
 1、 输入UK8S Apiserver地址，以及服务证书key。
 
-以上两个参数信息，可以在[UK8S集群详情页](https://console.ucloud.cn/uk8s/manage)的内网或外网集群凭证中获取。"服务证书key"为集群凭证中的certificate-authority-data字段内容，进行base64解码，将解码后的内容复制到输入框即可。
+以上两个参数信息，可以在[UK8S集群详情页](https://console.ucloud.cn/uk8s/manage)的**内网凭证**中获取。"服务证书key"为集群凭证中的certificate-authority-data字段内容，进行base64解码，将解码后的内容复制到输入框即可。
 
 ![](/images/bestpractice/certificate.png)
 
 2、 填写集群Namespace、上传凭据、Jenkins地址
 
 - Namespace此处填写之前创建Namespace即可，此处为jenkins。
-- 凭证处，点击”Add“，凭证类型选择"Secret
-  file"，将[UK8S集群详情页](https://console.ucloud.cn/uk8s/manage)全部内容复制下来，保存为kubeconfig上传。
+- 凭证处，点击”Add“，凭证类型选择"Secret file"，将[UK8S集群详情页](https://console.ucloud.cn/uk8s/manage)
+  **内网凭证**内容复制下来，保存为kubeconfig上传。
 - Jenkins地址为 `kubectl -n jenkins get svc` 获取到的地址。
 
 ![](/images/bestpractice/pinju.png)
