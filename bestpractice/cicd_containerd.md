@@ -175,8 +175,8 @@ docker login uhub.service.ucloud.cn -u user@ucloud.cn
 
 登入成功之后，会生成一个config.json的文件，使用该文件创建一个secret供kaniko容器使用。
 
-- centos环境文件位置是`/root/.docker/config.json`
-- ubuntu环境文件位置是`/home/ubuntu/.docker/config.json`
+- centos环境中文件位置：`/root/.docker/config.json`
+- ubuntu环境中文件位置：`/home/ubuntu/.docker/config.json`
 
 把config.json拷贝到master节点根目录执行以下命令创建secret
 
