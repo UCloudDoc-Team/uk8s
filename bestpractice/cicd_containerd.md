@@ -155,7 +155,7 @@ Kubernetes 和 Jenkins 配置信息。
 
 - Namespace此处填写之前创建Namespace即可，此处为jenkins。
 - 凭证处，点击”Add“，凭证类型选择"Secret
-file"，将[UK8S集群详情页](https://console.ucloud.cn/uk8s/manage)全部内容复制下来，保存为kubeconfig上传。
+  file"，将[UK8S集群详情页](https://console.ucloud.cn/uk8s/manage)全部内容复制下来，保存为kubeconfig上传。
 - Jenkins地址为 `kubectl -n jenkins get svc` 获取到的地址。
 
 ![](/images/bestpractice/pinju.png)
@@ -173,12 +173,14 @@ docker login uhub.service.ucloud.cn -u user@ucloud.cn
 ```
 
 登入成功之后，会生成一个config.json的文件，使用该文件创建一个secret供kaniko容器使用。
+
 - centos环境文件位置是`/root/.docker/config.json`
 - ubuntu环境文件位置是`/home/ubuntu/.docker/config.json`
 
 把config.json拷贝到master节点根目录执行以下命令创建secret
+
 ```bash
-kubectl -n jenkins create secret generic regcred --from-file=config.json 
+kubectl -n jenkins create secret generic regcred --from-file=config.json
 ```
 
 到此配置结束。
@@ -187,7 +189,8 @@ kubectl -n jenkins create secret generic regcred --from-file=config.json
 
 Kubernetes 插件的配置工作完成了，接下来我们就来添加一个 Job 任务，看是否能够在 Slave Pod 中执行，任务执行完成后看 Pod 是否会被销毁。
 
-为了方便使用，我们提供了一个golang项目的ci/cd [jenkins-kaniko-cicd](https://github.com/ucloud/uk8s-demo/tree/jenkins-kaniko-cicd)
+为了方便使用，我们提供了一个golang项目的ci/cd
+[jenkins-kaniko-cicd](https://github.com/ucloud/uk8s-demo/tree/jenkins-kaniko-cicd)
 里面包含了完整的编译，构建镜像，部署流程。原方案中关于Slave Pod以及CICD的配置信息都配置在Jenkinsfile中，你可以根据项目自身需求更改Jenkinsfile文件。
 
 1、 在 Jenkins 首页点击create new jobs，创建一个测试的任务，输入任务名称，然后我们选择“流水线”类型的任务，点击OK。
