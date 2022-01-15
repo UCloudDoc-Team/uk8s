@@ -19,13 +19,13 @@ kubectl create namespace jenkins
 
 2、 声明一个PVC对象，后面我们要将Jenkins容器的 /var/jenkins_home 目录挂载到了这个名为PVC对象上面。
 
-- 如果您使用的k8s版本大于等于1.14，且没有使用快杰云主机，请部署。
+- 如果您使用的k8s版本大于等于1.14，且使用SSD云盘作为存储，请部署。
 
 ```
 kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins-pvc.yaml
 ```
 
-- 如果您使用的k8s版本大于等于1.14，且使用快杰云主机，请部署。
+- 如果您使用的k8s版本大于等于1.14，且使用RSSD云盘作为存储，请部署。
 
 ```
 kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins-pvc-rssd.yaml
@@ -59,12 +59,12 @@ spec:
         fsGroup: 1000
       containers:
       - name: jenkins
-        image: uhub.service.ucloud.cn/uk8s/jenkins:2.295-centos
-        resources:
-          limits:
-            memory: "8G"
-          requests:
-            memory: "4G"
+        image: uhub.service.ucloud.cn/ucloud/jenkins:2.326
+        env:
+        - name: JENKINS_UC
+          value: https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/
+        - name: JENKINS_UC_DOWNLOAD
+          value: https://mirrors.tuna.tsinghua.edu.cn/jenkins/
         ports:
         - containerPort: 8080
           name: web
@@ -124,7 +124,7 @@ kubectl -n jenkins logs jenkins-deployment-xxxxxxx
 
 ![](/images/bestpractice/passget.png)
 
-3、 进入安装插件页面，在配置之前，先开启代理兼容，访问"http://exter-ip:8080/configureSecurity/"，勾选启用代理兼容。这一步可能会出现报错，多尝试几次即可。
+3、 进入安装插件页面，在配置之前，先开启代理兼容，访问 `http://exter-ip:8080/configureSecurity/` ，勾选启用代理兼容。这一步可能会出现报错，多尝试几次即可。
 
 ![](/images/bestpractice/agent.png)
 
@@ -153,8 +153,10 @@ Kubernetes 和 Jenkins 配置信息。
 
 2、 填写集群Namespace、上传凭据、Jenkins地址
 
-Namespace此处填写之前创建Namespace即可，此处为jenkins。凭证处，点击”Add“，凭证类型选择"Secret
+- Namespace此处填写之前创建Namespace即可，此处为jenkins。
+- 凭证处，点击”Add“，凭证类型选择"Secret
 file"，将[UK8S集群详情页](https://console.ucloud.cn/uk8s/manage)全部内容复制下来，保存为kubeconfig上传。
+- Jenkins地址为 `kubectl -n jenkins get svc` 获取到的地址。
 
 ![](/images/bestpractice/pinju.png)
 
@@ -164,16 +166,19 @@ file"，将[UK8S集群详情页](https://console.ucloud.cn/uk8s/manage)全部内
 
 ### 五、为kaniko配置凭证
 
-创建一个配置kaniko推送到uhub镜像的凭证，找一台有安装docker的镜像，登录一次uhub：
+创建一个配置kaniko推送到uhub镜像的凭证，找一台有安装docker的环境，登录一次uhub：
 
 ```bash
 docker login uhub.service.ucloud.cn -u user@ucloud.cn
 ```
 
-登入成功之后，在Home目录会有一个 .docker/config.json，将文件内内容复制进uk8s集群中，创建一个secret供kaniko容器使用。
+登入成功之后，会生成一个config.json的文件，使用该文件创建一个secret供kaniko容器使用。
+- centos环境文件位置是`/root/.docker/config.json`
+- ubuntu环境文件位置是`/home/ubuntu/.docker/config.json`
 
+把config.json拷贝到master节点根目录执行以下命令创建secret
 ```bash
-kubectl create secret generic regcred --from-file=/home/ubuntu/.docker/config.json -n jenkins
+kubectl -n jenkins create secret generic regcred --from-file=config.json 
 ```
 
 到此配置结束。
@@ -182,8 +187,8 @@ kubectl create secret generic regcred --from-file=/home/ubuntu/.docker/config.js
 
 Kubernetes 插件的配置工作完成了，接下来我们就来添加一个 Job 任务，看是否能够在 Slave Pod 中执行，任务执行完成后看 Pod 是否会被销毁。
 
-为了方便使用，我们提供了一个golang项目的ci/cd demo(https://github.com/DragonTwoYang/kankio-test.git)，
-里面包含了完整的编译，构建镜像，部署流程。原方案中关于Slave Pod以及CICD的配置信息都配置在.jenkinsfile中，你可以根据项目自身需求更改jenkinsfile文件。
+为了方便使用，我们提供了一个golang项目的ci/cd [jenkins-kaniko-cicd](https://github.com/ucloud/uk8s-demo/tree/jenkins-kaniko-cicd)
+里面包含了完整的编译，构建镜像，部署流程。原方案中关于Slave Pod以及CICD的配置信息都配置在Jenkinsfile中，你可以根据项目自身需求更改Jenkinsfile文件。
 
 1、 在 Jenkins 首页点击create new jobs，创建一个测试的任务，输入任务名称，然后我们选择“流水线”类型的任务，点击OK。
 
