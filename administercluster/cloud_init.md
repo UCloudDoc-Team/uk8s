@@ -18,7 +18,6 @@
 使用初始化脚本修改 `/etc/sysctl.conf` 时，请勿修改以下参数，会影响创建的集群正常使用。
 
 ```
-net.ipv4.ip_local_port_range = 12000 65535
 net.ipv4.tcp_tw_reuse = 1
 net.ipv4.conf.eth0.proxy_arp = 1
 net.ipv4.ip_forward = 1
@@ -48,6 +47,6 @@ net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.conf.all.arp_ignore = 0
 net.netfilter.nf_conntrack_tcp_timeout_syn_sent = 6
 kernel.pid_max = 1024000
-net.ipv4.ip_local_port_range = 12000 65535
+net.ipv4.ip_local_port_range = 32768 60999
 net.ipv4.tcp_tw_reuse = 1
 ```
