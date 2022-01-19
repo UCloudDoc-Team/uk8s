@@ -44,4 +44,4 @@ UK8S使用VPC网络实现内网互通，拉取Uhub镜像不受影响，拉取外
 3. 针对Containerd节点，按照如下步骤临时允许忽略检查，注意此方案仅可作为临时方案使用。   
 3.1 修改 `/usr/lib/systemd/system/containerd.service` 在 [Service] 结构下面增加 `Environment=GODEBUG=x509ignoreCN=0`   
 3.2 执行 `systemctl daemon-reload`   
-3.3 执行 `systemctl restart containerd`   
+3.3 执行 `systemctl restart containerd`    
