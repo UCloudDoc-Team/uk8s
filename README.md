@@ -105,6 +105,10 @@
   - [RBAC 权限管理实践](/uk8s/bestpractice/rbac_practice)
   - [亲和性实践](/uk8s/bestpractice/affinity)
   - [Pod 容忍节点异常时间调整](/uk8s/bestpractice/taint_base_eviction)
+- 漏洞跟踪
+  - [CVE-2019-5736](/uk8s/vulnerability/cve-2019-5736.md)
+  - [CVE-2019-9512-9514](/uk8s/vulnerability/cve-2019-9512-9514.md)
+  - [CVE-2021-30465](/uk8s/vulnerability/cve-2021-30465.md)
 - [产品价格](/uk8s/price)
 
 <!--* 应用商店

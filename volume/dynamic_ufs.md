@@ -1,16 +1,16 @@
-## 动态PV 使用UFS
+# 动态PV 使用UFS
 
-### 一、背景
+## 背景
 
 前面我们描述了通过创建静态PV的方式在UK8S中使用UFS，但这种方式存在两个问题，一是每次都需要手动创建PV和PVC，非常不便；二是无法自动在UFS创建子目录，需要预先配置。
 
 下面我们介绍一个名为nfs-client-provisioner的开源项目，其项目地址为[nfs-client-provisioner](https://github.com/kubernetes-incubator/external-storage/tree/master/nfs-client)，通过此工具，可实现在业务需要UFS存储资源时，只需要创建PVC，nfs-client-provisioner会自动创建PV，并在UFS下创建一个名为{namespace-pvcname}的子目录。
 
-### 二、工作原理
+## 工作原理
 
 我们需要将创建的UFS系统相关参数通过ENV传入到nfs-client-provisioner，这个nfs-provisioner是通过Deployment控制器来运行一个Pod来实现的，服务启动后，需要再创建一个StorageClass，其provisioner与nfs-provisioner服务内的provisioner-name一致即可。nfs-client-provisioner会watch集群内的PVC对象，并为其提供适配PV的服务，并且会在NFS根目录下创建对应的目录。这些官方文档的描述已经比较详细了，不再赘述，下面说下在UK8S中使用这个组件操作UFS需要做的改动。
 
-### 三、操作指南
+## 操作指南
 
 1、克隆项目，这里我们只需要关注三个文件，分别是class.yaml,deployment.yaml,rbac.yaml。
 
