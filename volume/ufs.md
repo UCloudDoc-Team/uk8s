@@ -1,8 +1,8 @@
-## 在UK8S中使用UFS
+# 在UK8S中使用UFS
 
 本文档介绍如何在UK8S集群中，使用UFS作为K8S底层的存储支持，UFS为共享存储，可以同时为多个Pod提供服务。
 
-### 一、前置条件
+## 前置条件
 
 - 在[UFS产品页面](https://console.ucloud.cn/ufs/ufs)购买UFS实例并设置好挂载点，操作完毕后，您会得到UFS挂载地址和目录，类似10.19.255.192:/
 
@@ -10,7 +10,7 @@
 
 - UFS与UK8S集群必须处于同一VPC，否则文件系统无法成功挂载。
 
-### 二、创建PV
+## 创建PV
 
 需要在集群内手动创建持久化存储卷，yaml示例如下两种：
 
@@ -71,7 +71,7 @@ spec.nfs.server 此处填写UFS挂载地址
 persistentvolume/ufspv created
 ```
 
-### 三、创建PVC
+## 创建PVC
 
 yaml示例如下：
 
@@ -96,7 +96,7 @@ NAME   CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM              ST
 ufspv   8Gi        RWX            Retain           Bound    default/ufsclaim
 ```
 
-### 四、在Pod中挂载UFS
+## 在Pod中挂载UFS
 
 ```
 apiVersion: v1

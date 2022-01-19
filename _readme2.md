@@ -159,3 +159,13 @@ UK8S提供了关于CICD的建立、K8S的权限管理、K8S的亲和性、弹性
 - [Kubernetes弹性伸缩](/uk8s/administercluster/autoscaling/README)
 
 ##### [返回顶部](#UK8S概览)
+
+### 漏洞跟踪
+
+UK8S相关漏洞跟踪及修复记录。
+
+- [CVE-2019-5736](/uk8s/vulnerability/cve-2019-5736.md)
+- [CVE-2019-9512-9514](/uk8s/vulnerability/cve-2019-9512-9514.md)
+- [CVE-2021-30465](/uk8s/vulnerability/cve-2021-30465.md)
+
+##### [返回顶部](#UK8S概览)
