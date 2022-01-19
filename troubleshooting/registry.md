@@ -30,12 +30,12 @@ UK8S使用VPC网络实现内网互通，拉取Uhub镜像不受影响，拉取外
 4. 在拉镜像节点执行`iftop -i any -f 'host <uhub-ip>'`命令，同时尝试拉取 UHub 镜像，查看命令输出（uhub-ip替换为步骤1中得到的ip）
 5. 对于公网拉镜像的用户，还需要在 Console 页面查看外网访问是否开启
 
-## 拉取私有镜像库证书错误
-升级为新版Docker之后，可能会遇到私有镜像库签名的问题。具体报错信息为`x509: certificate relies on legacy Common Name field, use SANs or temporarily enable Common Name matching with GODEBUG=x509ignoreCN=0`
+## 拉取自建镜像库证书错误
+升级为新版Docker之后，可能会遇到自建镜像库签名证书的问题。具体报错信息为`x509: certificate relies on legacy Common Name field, use SANs or temporarily enable Common Name matching with GODEBUG=x509ignoreCN=0`
 
-该报错为go版本在1.11引入的一个新特性，表明自签名的镜像仓库不符合SANs标准，目前解决方案有以下，该特性在1.15版本默认启用，而GODEBUG=x509ignoreCN=0 标志也在1.17版本被正式移除。
+该报错为go在1.11版本引入的一个新特性，表明https证书不符合SANs标准，该特性在1.15版本默认启用，而GODEBUG=x509ignoreCN=0 标志也在1.17版本被正式移除。
 
-遇到相同的报错，可以按照如下方案进行处理
+如果遇到相同的报错，可以按照如下方案进行处理
 1. 更换符合标准的签名证书，此方案为推荐方案，并且go版本升级为1.17之后，该方案为唯一可行方案。   
 2. 针对Docker节点，按照如下步骤临时允许忽略检查，注意此方案仅可作为临时方案使用。    
 2.1 修改 `/usr/lib/systemd/system/docker.service` 在 [Service] 结构下面增加 `Environment=GODEBUG=x509ignoreCN=0`   
