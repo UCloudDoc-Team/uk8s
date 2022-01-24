@@ -10,6 +10,17 @@ US3对象存储适合用户上传、下载静态数据文件，如视频，图�
 
 如果您的业务对于读写性能有很高的需求，如实时快速写入日志，推荐使用UDisk或者UFS作为UK8S集群的持久化存储，US3不能提供像本地文件系统一样的功能。
 
+### 手动部署CSI
+
+> 对于没有预装US3 csi的集群，请执行以下命令来部署
+
+```
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile.21.11.2/csi-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile.21.11.2/csi-node.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile.21.11.2/rbac-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile.21.11.2/rbac-node.yml
+```
+
 ## 已支持UK8S挂载US3的地域（持续更新）
 
 UK8S已经支持挂载US3，具体支持地域请查看
@@ -45,7 +56,8 @@ accessKeyID: US3公钥
 
 secretAccessKey: US3私钥
 
-endpoint: 对应地域接入S3服务URL，具体请查看[US3接入域名](https://docs.ucloud.cn/ufile/s3/s3_introduction?id=%E6%8E%A5%E5%85%A5%E5%9F%9F%E5%90%8D%EF%BC%88endpoint%EF%BC%89)
+endpoint:
+对应地域接入S3服务URL，具体请查看[US3接入域名](https://docs.ucloud.cn/ufile/s3/s3_introduction?id=%E6%8E%A5%E5%85%A5%E5%9F%9F%E5%90%8D%EF%BC%88endpoint%EF%BC%89)
 
 > 对应地域服务URL参考已支持UK8S挂载US3的地域（持续更新）章节，推荐使用内网地址。
 

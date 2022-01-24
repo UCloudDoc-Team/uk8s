@@ -31,17 +31,21 @@ UK8S使用VPC网络实现内网互通，拉取Uhub镜像不受影响，拉取外
 5. 对于公网拉镜像的用户，还需要在 Console 页面查看外网访问是否开启
 
 ## 拉取自建镜像库证书错误
+
 升级为新版Docker之后，可能会遇到自建镜像库签名证书的问题。具体报错信息为`x509: certificate relies on legacy Common Name field, use SANs or temporarily enable Common Name matching with GODEBUG=x509ignoreCN=0`
 
 该报错为go在1.11版本引入的一个新特性，表明https证书不符合SANs标准，该特性在1.15版本默认启用，而GODEBUG=x509ignoreCN=0 标志也在1.17版本被正式移除。
 
 如果遇到相同的报错，可以按照如下方案进行处理
-1. 更换符合标准的签名证书，此方案为推荐方案，并且go版本升级为1.17之后，该方案为唯一可行方案。   
-2. 针对Docker节点，按照如下步骤临时允许忽略检查，注意此方案仅可作为临时方案使用。    
-  2.1 修改 `/usr/lib/systemd/system/docker.service` 在 [Service] 结构下面增加 `Environment=GODEBUG=x509ignoreCN=0`   
-  2.2 执行 `systemctl daemon-reload`   
-  2.3 执行 `systemctl restart docker`   
-3. 针对Containerd节点，按照如下步骤临时允许忽略检查，注意此方案仅可作为临时方案使用。   
-  3.1 修改 `/usr/lib/systemd/system/containerd.service` 在 [Service] 结构下面增加 `Environment=GODEBUG=x509ignoreCN=0`   
-  3.2 执行 `systemctl daemon-reload`   
-  3.3 执行 `systemctl restart containerd`    
+
+1. 更换符合标准的签名证书，此方案为推荐方案，并且go版本升级为1.17之后，该方案为唯一可行方案。
+2. 针对Docker节点，按照如下步骤临时允许忽略检查，注意此方案仅可作为临时方案使用。\
+   2.1 修改 `/usr/lib/systemd/system/docker.service` 在 [Service] 结构下面增加
+   `Environment=GODEBUG=x509ignoreCN=0`\
+   2.2 执行 `systemctl daemon-reload`\
+   2.3 执行 `systemctl restart docker`
+3. 针对Containerd节点，按照如下步骤临时允许忽略检查，注意此方案仅可作为临时方案使用。\
+   3.1 修改 `/usr/lib/systemd/system/containerd.service` 在 [Service] 结构下面增加
+   `Environment=GODEBUG=x509ignoreCN=0`\
+   3.2 执行 `systemctl daemon-reload`\
+   3.3 执行 `systemctl restart containerd`
