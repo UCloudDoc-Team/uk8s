@@ -15,10 +15,10 @@ US3对象存储适合用户上传、下载静态数据文件，如视频，图�
 > 对于没有预装US3 csi的集群，请执行以下命令来部署
 
 ```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile.21.11.2/csi-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile.21.11.2/csi-node.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile.21.11.2/rbac-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/ufile.21.11.2/rbac-node.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2/csi-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2/csi-node.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2/rbac-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2/rbac-node.yml
 ```
 
 ## 已支持UK8S挂载US3的地域（持续更新）
