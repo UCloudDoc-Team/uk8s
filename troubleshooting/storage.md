@@ -245,5 +245,5 @@ UK8S提供的csi-udisk插件，依赖K8S提供的CSI插件能力，帮助用户�
 - 清理旧Pod，完成UDisk从旧节点上清理卸载工作
 - 创建新Pod
 - K8S调度器会按照PV中的`spec.nodeAffinity`字段，校验节点是否可以调度
-- 如果所有节点都不满足磁盘调度要求，会上报`had volume node affinity conflict`类型的EVENT，重复上一步流程
+- 如果所有节点都不满足磁盘调度要求，会记录`had volume node affinity conflict`类型的EVENT到Pod，并重复上一步流程
 - K8S调度器按照上一步过滤的结果，在可调度的节点范围内，继续按照普通Pod调度流程进行调度
