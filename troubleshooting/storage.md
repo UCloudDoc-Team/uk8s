@@ -250,15 +250,17 @@ UK8S提供的csi-udisk插件，依赖K8S提供的CSI插件能力，帮助用户�
 
 ## CSI组件工作原理
 CSI是K8S定义的[标准存储接口](https://kubernetes.io/zh/docs/concepts/storage/volumes/#csi)，可以对接云厂商的多种存储。 
-UCloud目前实现了UDisk以及UFile/US3的CSI插件。CSI组件分为两大类，分别为Controller以及Daemonset。
+UCloud目前实现了UDisk以及UFile/US3的CSI插件。
 
-目前所有csi组件的pod均默认运行在`kube-system`下面，可以通过执行`kubectl get pods -n kube-system -o wide |grep csi` 进行查看。如果遇到存储挂载问题，可以优先查看CSI controller是否工作正常，以及节点上是否存在对应CSI的Daemonset类型的Pod。
+CSI组件分为两大类，分别为Controller以及Daemonset。目前所有csi组件的pod均默认运行在`kube-system`下面，可以通过执行`kubectl get pods -n kube-system -o wide |grep csi` 进行查看。  
+如果遇到存储挂载问题，可以优先查看CSI Controller是否工作正常，以及节点上是否存在对应CSI Daemonset的Pod。
 
 接下来对CSI组件进行简要介绍。
 
-### CSI controller
-CSI controller 负责的是全局资源的管理，通过list/watch k8s资源信息，执行对应的操作。    
-其中UDisk CSI controller 会负责磁盘创建和删除，磁盘到云主机的卸载及挂载操作。而US3 CSI controller 由于无需处理挂载操作，仅仅负责校验一些StorageClass中的基础信息。    
+### CSI Controller
+CSI Controller 负责的是全局资源的管理，通过list/watch k8s中的相关资源，执行对应操作。    
+UDisk CSI Controller 会负责磁盘创建和删除，磁盘到云主机的卸载及挂载操作。   
+US3 CSI Controller 由于无需处理挂载操作，仅仅负责校验一些StorageClass中的基础信息。    
 ### CSI Daemonset
 CSI Daemonset组件调度到各个节点上，负责单个节点的一些工作。与Controller模式不同，CSI Daemonset通过unix socket地址与kubelet进行通信，接收kubelet请求信息执行对应的操作。
 通常CSI unix socket地址为`/var/lib/kubelet/plugins/csi-name/csi.sock`   
