@@ -40,13 +40,10 @@ spec:
       priorityClassName: system-node-critical
       containers:
         - name: csi-provisioner
-          image: uhub.service.ucloud.cn/uk8s/csi-provisioner:v1.5.0
+          image: uhub.service.ucloud.cn/uk8s/csi-provisioner:v3.0.0
           args:
             - "--csi-address=$(ADDRESS)"
-            - "--enable-leader-election"
-            - "--connection-timeout=30s"
             - "--v=5"
-            - "--timeout=600s"
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -62,7 +59,7 @@ spec:
             - name: socket-dir
               mountPath: /csi
         - name: csi-attacher
-          image: uhub.service.ucloud.cn/uk8s/csi-attacher:v1.2.1
+          image: uhub.service.ucloud.cn/uk8s/csi-attacher:v3.4.0
           args:
             - "--csi-address=$(ADDRESS)"
             - "--leader-election=true"
@@ -87,21 +84,6 @@ spec:
           volumeMounts:
             - name: socket-dir
               mountPath: /csi
-        - name: cluster-registrar
-          image: uhub.service.ucloud.cn/uk8s/csi-cluster-driver-registrar:v1.0.1
-          args:
-            - "--csi-address=/csi/csi.sock"
-            - "--pod-info-mount-version=v1"
-          volumeMounts:
-            - name: socket-dir
-              mountPath: /csi
-          resources:
-            requests:
-              memory: "256Mi"
-              cpu: "125m"
-            limits:
-              memory: "512Mi"
-              cpu: "250m"
         - name: csi-ufile
           image: uhub.service.ucloud.cn/uk8s/csi-uk8s:21.11.2
           imagePullPolicy: "Always"

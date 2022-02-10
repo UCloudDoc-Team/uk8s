@@ -50,7 +50,7 @@ spec:
               mountPath: /sys/fs/cgroup/
       containers:
         - name: node-registrar
-          image: uhub.service.ucloud.cn/uk8s/csi-node-driver-registrar:v1.1.0
+          image: uhub.service.ucloud.cn/uk8s/csi-node-driver-registrar:v2.4.0
           imagePullPolicy: "Always"
           args:
             - "--v=5"
