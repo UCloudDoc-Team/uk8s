@@ -218,14 +218,18 @@ UDisk不支持多点读写，如需要多点读写请使用UFS。
 - RSSD云盘挂载要求与云主机处于相同RDMA区域（RDMA区域范围小于可用区）
 - RSSD云盘仅可以挂载到快杰云主机
 
-> ⚠️ **RSSD UDisk调度要求同一个RDMA区域，RDMA区域范围小于可用区，而主机目前不支持指定RDMA区域创建机器。因此使用RSSD UDisk，在Pod漂移的情况下，有可能出现Pod无法调度的问题。请您使用前务必确认可以接受该风险。**
+> ⚠️ **RSSD UDisk调度要求同一个RDMA区域，RDMA区域范围小于可用区，而主机目前不支持指定RDMA区域创建机器。因此使用RSSD
+> UDisk，在Pod漂移的情况下，有可能出现Pod无法调度的问题。请您使用前务必确认可以接受该风险。**
 
 UDisk挂载限制在实际UK8S的使用中主要体现到以下两个方面
+
 - 自动创建PV的过程中，如何判定创建哪个可用区/RDMA区域的云盘
 - 当Pod需要重新调度时，如何保证新调度的节点满足云盘挂载的要求
 
 UK8S提供的csi-udisk插件，依赖K8S提供的CSI插件能力，帮助用户实现了尽可能少的介入，下面以SSD UDisk为例进行讲解。
+
 ### 9.1 创建PVC时自动创建UDisk
+
 从上面的文档中可以了解到，当PVC创建完成时，CSI会自动创建PV以及UDisk，并完成绑定工作。但是创建哪个可用区的UDisk呢，如果随意选择，则会导致后续Pod调度完成后无法挂载云盘。
 
 为此K8S提供了`WaitForFirstConsumer`机制。当`StorageClass`中指定了`volumeBindingMode: WaitForFirstConsumer`参数时，CSI不会立刻创建PV及云盘，以下为`WaitForFirstConsumer`模式下的工作流程。
@@ -240,6 +244,7 @@ UK8S提供的csi-udisk插件，依赖K8S提供的CSI插件能力，帮助用户�
 按照以上逻辑，可以保证Pod调度后创建的云盘顺利挂载到对应主机
 
 ### 9.2 Pod重建后调度流程
+
 首次运行后，如果遇到服务更新，或者节点故障等原因触发Pod重建，会进行重新调度，以下为调度流程
 
 - 清理旧Pod，完成UDisk从旧节点上清理卸载工作
@@ -249,22 +254,30 @@ UK8S提供的csi-udisk插件，依赖K8S提供的CSI插件能力，帮助用户�
 - K8S调度器按照上一步过滤的结果，在可调度的节点范围内，继续按照普通Pod调度流程进行调度
 
 ## CSI组件工作原理
-CSI是K8S定义的[容器存储接口](https://kubernetes.io/zh/docs/concepts/storage/volumes/#csi)，可以对接云厂商的多种存储。 
+
+CSI是K8S定义的[容器存储接口](https://kubernetes.io/zh/docs/concepts/storage/volumes/#csi)，可以对接云厂商的多种存储。
 UCloud目前实现了UDisk以及UFile/US3的CSI插件。
 
-CSI组件分为两大类，分别为Controller以及Daemonset。目前所有csi组件的pod均默认运行在`kube-system`下面，可以通过执行`kubectl get pods -n kube-system -o wide |grep csi` 进行查看。  
+CSI组件分为两大类，分别为Controller以及Daemonset。目前所有csi组件的pod均默认运行在`kube-system`下面，可以通过执行`kubectl get pods -n kube-system -o wide |grep csi`
+进行查看。\
 如果遇到存储挂载问题，可以优先查看CSI Controller是否工作正常，以及节点上是否存在对应CSI Daemonset的Pod。
 
 接下来对CSI组件进行简要介绍。
 
 ### CSI Controller
-CSI Controller 负责的是全局资源的管理，通过list/watch k8s中的相关资源，执行对应操作。    
-UDisk CSI Controller 会负责磁盘创建和删除，磁盘到云主机的卸载及挂载操作。   
-US3 CSI Controller 由于无需处理挂载操作，仅仅负责校验一些StorageClass中的基础信息。    
+
+CSI Controller 负责的是全局资源的管理，通过list/watch k8s中的相关资源，执行对应操作。\
+UDisk CSI Controller 会负责磁盘创建和删除，磁盘到云主机的卸载及挂载操作。\
+US3 CSI Controller 由于无需处理挂载操作，仅仅负责校验一些StorageClass中的基础信息。
+
 ### CSI Daemonset
-CSI Daemonset组件调度到各个节点上，负责单个节点的一些工作。与Controller模式不同，CSI Daemonset通过unix socket地址与kubelet进行通信，接收kubelet请求信息执行对应的操作。
-通常CSI unix socket地址为`/var/lib/kubelet/csi-plugins/csi-name/csi.sock`   
-UDisk/US3 CSI Daemonset 主要负责存储的Mount以及Umount操作   
+
+CSI Daemonset组件调度到各个节点上，负责单个节点的一些工作。与Controller模式不同，CSI Daemonset通过unix
+socket地址与kubelet进行通信，接收kubelet请求信息执行对应的操作。 通常CSI unix
+socket地址为`/var/lib/kubelet/csi-plugins/csi-name/csi.sock`\
+UDisk/US3 CSI Daemonset 主要负责存储的Mount以及Umount操作
 
 ### 其它功能
-在基础的存储管理以及挂载功能外，CSI还提供了多种其它能力。目前CSI UDisk 则实现了磁盘动态扩容（需要Controller与Daemonset）以及磁盘Metrics信息收集(需要CSI Daemonset)。
+
+在基础的存储管理以及挂载功能外，CSI还提供了多种其它能力。目前CSI UDisk 则实现了磁盘动态扩容（需要Controller与Daemonset）以及磁盘Metrics信息收集(需要CSI
+Daemonset)。

@@ -3,7 +3,8 @@
 RSSD UDisk最高IOPS可达120万、延时低于0.1ms，数据持久性为99.999999%，最大容量32000G，适用于数据库、Elastic
 Search等需要低延时的IO密集型业务。UK8S支持将RSSD UDisk作为容器的持久化存储卷，但前提是集群中必须有快杰机型的节点(当前仅快杰云主机支持挂载RSSD UDisk)。
 
-> ⚠️  **RSSD UDisk调度要求同一个RDMA区域，RDMA区域范围小于可用区，主机目前不支持指定RDMA区域创建机器。因此使用RSSD UDisk，在Pod漂移的情况下，有可能出现Pod无法调度的问题。请您使用前务必确认可以接受该风险。**
+> ⚠️ **RSSD UDisk调度要求同一个RDMA区域，RDMA区域范围小于可用区，主机目前不支持指定RDMA区域创建机器。因此使用RSSD
+> UDisk，在Pod漂移的情况下，有可能出现Pod无法调度的问题。请您使用前务必确认可以接受该风险。**
 
 下面演示下如何在UK8S集群中使用RSSD UDisk。
 

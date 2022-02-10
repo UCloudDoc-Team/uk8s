@@ -10,17 +10,29 @@ US3对象存储适合用户上传、下载静态数据文件，如视频，图�
 
 如果您的业务对于读写性能有很高的需求，如实时快速写入日志，推荐使用UDisk或者UFS作为UK8S集群的持久化存储，US3不能提供像本地文件系统一样的功能。
 
-> ⚠️ 21.09.1 版本之前的CSI UFile，当CSI Pod异常重启时，会造成所在节点上使用US3/UFile的pod挂载点失效，如果您的业务使用US3/UFile，请务必确认当前版本，并按照[CSI升级文档](uk8s/volume/CSI_update)尽快升级。如有疑问，请与我们技术支持联系。
+> ⚠️ 21.09.1 版本之前的CSI UFile，当CSI
+> Pod异常重启时，会造成所在节点上使用US3/UFile的pod挂载点失效，如果您的业务使用US3/UFile，请务必确认当前版本，并按照[CSI升级文档](uk8s/volume/CSI_update)尽快升级。如有疑问，请与我们技术支持联系。
 
 ### 手动部署CSI
 
 > 对于没有预装US3 csi的集群，请执行以下命令来部署
+
+#### 集群版本 1.14~1.20
 
 ```
 kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2/csi-controller.yml
 kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2/csi-node.yml
 kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2/rbac-controller.yml
 kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2/rbac-node.yml
+```
+
+#### 集群版本 1.22
+
+```
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2_v1.22/csi-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2_v1.22/csi-node.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2_v1.22/rbac-controller.yml
+kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2_v1.22/rbac-node.yml
 ```
 
 ## 已支持UK8S挂载US3的地域（持续更新）
