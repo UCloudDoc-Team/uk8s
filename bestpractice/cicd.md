@@ -1,5 +1,7 @@
 ## 基于Jenkins的CI/CD实践
 
+- 适用集群版本 1.14~1.18
+
 ### 一、概要
 
 提到K8S环境下的CI/CD，可以使用的工具有很多，比如Jenkins、Gitlab CI、新兴的drone等，考虑到大多公司在VM环境下都采用 Jenkins 集群来搭建符合需求的 CI/CD
@@ -43,12 +45,6 @@ kubectl create namespace jenkins
 
 ```
 kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins-pvc.yaml
-```
-
-- 如果您使用的k8s版本大于等于1.14，且使用快杰云主机，请部署。
-
-```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins-pvc-rssd.yaml
 ```
 
 - 如果您使用的k8s版本小于1.14，请部署。
