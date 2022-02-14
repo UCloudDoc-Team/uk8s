@@ -1,5 +1,7 @@
 ## 基于Jenkins的CI/CD实践(containerd版本)
 
+- 适用集群版本 1.14~1.22
+
 ### 前言
 
 在之前的方案中，我们介绍了Docker+Jenkins实现容器镜像构建、业务部署的方案，该方案需要直接挂载docker socket文件到Jenkins slave容器中。由于UK8S
@@ -19,22 +21,10 @@ kubectl create namespace jenkins
 
 2、 声明一个PVC对象，后面我们要将Jenkins容器的 /var/jenkins_home 目录挂载到了这个名为PVC对象上面。
 
-- 如果您使用的k8s版本大于等于1.14，且使用SSD云盘作为存储，请部署。
+- 使用SSD云盘作为存储，请部署。
 
 ```
 kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins-pvc.yaml
-```
-
-- 如果您使用的k8s版本大于等于1.14，且使用RSSD云盘作为存储，请部署。
-
-```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins-pvc-rssd.yaml
-```
-
-- 如果您使用的k8s版本小于1.14，请部署。
-
-```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins-pvc-1.13.yaml
 ```
 
 3、 以Deployment方式部署Jenkins master,为了演示方便，我们还使用LoadBalancer类型的service将其暴露到外网。
