@@ -138,11 +138,11 @@ K8S 处理挂盘和卸盘的实现中，单个 Node 可以选择由 kubelet 和 
 为了解决该问题，需要将由 kubelet 负责挂盘的节点改为由 controller-manager 负责挂盘。UK8S 添加的节点已经默认使用 controller-manager
 负责挂盘，后续添加节点无需再手动更改
 
-### 6.1 规避方法
+### 6.1 手动修改节点为controller-manager挂盘
 
 #### 检查 Kubelet 配置
 
-**在升级前**，检查所有节点的 `/etc/kubernetes/kubelet.conf` 的配置。如果 `enableControllerAttachDetach` 的值为 `false`
+检查节点的 `/etc/kubernetes/kubelet.conf` 的配置。如果 `enableControllerAttachDetach` 的值为 `false`
 则需要把该值修改为 `true`。
 
 然后执行命令 `systemctl restart kubelet` 重启 Kubelet。
@@ -253,7 +253,7 @@ UK8S提供的csi-udisk插件，依赖K8S提供的CSI插件能力，帮助用户�
 - 如果所有节点都不满足磁盘调度要求，会记录`had volume node affinity conflict`类型的EVENT到Pod，并重复上一步流程
 - K8S调度器按照上一步过滤的结果，在可调度的节点范围内，继续按照普通Pod调度流程进行调度
 
-## CSI组件工作原理
+## 10. CSI组件工作原理
 
 CSI是K8S定义的[容器存储接口](https://kubernetes.io/zh/docs/concepts/storage/volumes/#csi)，可以对接云厂商的多种存储。
 UCloud目前实现了UDisk以及UFile/US3的CSI插件。
@@ -264,20 +264,60 @@ CSI组件分为两大类，分别为Controller以及Daemonset。目前所有csi�
 
 接下来对CSI组件进行简要介绍。
 
-### CSI Controller
+### 10.1 CSI Controller
 
 CSI Controller 负责的是全局资源的管理，通过list/watch k8s中的相关资源，执行对应操作。\
 UDisk CSI Controller 会负责磁盘创建和删除，磁盘到云主机的卸载及挂载操作。\
 US3 CSI Controller 由于无需处理挂载操作，仅仅负责校验一些StorageClass中的基础信息。
 
-### CSI Daemonset
+### 10.2 CSI Daemonset
 
 CSI Daemonset组件调度到各个节点上，负责单个节点的一些工作。与Controller模式不同，CSI Daemonset通过unix
 socket地址与kubelet进行通信，接收kubelet请求信息执行对应的操作。 通常CSI unix
 socket地址为`/var/lib/kubelet/csi-plugins/csi-name/csi.sock`\
 UDisk/US3 CSI Daemonset 主要负责存储的Mount以及Umount操作
 
-### 其它功能
+### 10.3 其它功能
 
 在基础的存储管理以及挂载功能外，CSI还提供了多种其它能力。目前CSI UDisk 则实现了磁盘动态扩容（需要Controller与Daemonset）以及磁盘Metrics信息收集(需要CSI
 Daemonset)。
+
+## 11 CSI常见问题排查流程
+本节会以UDisk-CSI为例，从创建pvc之后每一步可能出错的点进行分析，并给出处理建议。另外本节内容仅涉及Pod创建过程中的相关内容。并基于一个假设，即上一个使用该PVC的Pod已经销毁，并且中间的所有操作及资源已经清理干净。如果上一个Pod使用的资源没有清理干净，也可以依赖本文档反推确认清理方案。
+1. 通过 `kubectl get pods -n kube-system -o wide` 确认csi的controller及目标节点上Daemonset组件均工作正常
+1. 确认PV是否创建成功，如果没有，请查看 11.1 小节
+1. PV创建完成后，需要确保Pod成功调度。使用了udisk的Pod在普通调度规则上，会有额外的调度要求，具体可以看第 9 节
+1. 如果磁盘挂载失败，请查看 11.2 小节
+1. 当确认磁盘已经挂载到目标主机后，需要确认mount成功，如果mount失败，请查看11.3小节
+### 11.1 PV没有创建成功
+如果PV没有创建成功，需要确保有Pod在使用该PVC。具体原因请查看第9.1节。
+
+如果已有Pod在使用该PVC，则通过`kubectl logs csi-udisk-controller-0 -n kube-system csi-udisk` 查看controller日志，确认是否存在创建udisk失败的日志。
+
+通过`kubectl get pv <pv-name> -o yaml` 记录下PV对应的udisk名称，并在控制台中查看对应的udisk存在。
+
+一般自动创建的pv名字格式是pvc-xxxxxxxxx，这里比较容易混淆。
+
+### 11.2 磁盘挂载失败
+#### 11.2.1 确保`volumeattachment`资源存在
+为了能成功挂盘，首先需要确保`volumeattachment`资源存在，并且查看node的信息，确认当前是由kubelet还是controller-manager负责挂盘。
+
+1. kubelet挂盘方式存在缺陷，目前k8s推荐使用`controller-manager`进行挂盘，具体查看及转换方式可以对照本文档6.1小节
+1. 如果kubelet负责挂盘，并且pod日志中显示类似`volumeattachment`资源不存在的情况，则需要按照文档[VolumeAttachment 的作用](#2-volumeattachment-的作用)中提供的yaml文件，重新补一个同名的 volumeAttachment。
+1. 如果是controller-manager负责挂盘，则需要确认k8s版本是否为1.17.1-1.17.7或1.18.1-1.18.4，这些版本controller-manager挂盘存在[性能问题](https://github.com/kubernetes-sigs/vsphere-csi-driver/blob/master/docs/book/known_issues.md#performance-regression-in-kubernetes-117-and-118)。
+1. controller-manager日志查看方式，登录到三台master节点，执行`journalctl -fu kube-controller-manager`查看，注意三台master中仅有一台Master中的controller-manager为leader，即实际工作状态。
+1. kubelet日志查看方式，需要登录到目标节点，执行`journalctl -fu kubelet`
+
+#### 11.2.2 确保磁盘挂载成功
+1. 首先需要确认`volumeattachment`资源状态为true。
+1. 如果状态不为true，可以查看csi-controller是否挂载过程中存在报错。
+1. 如果状态为true，需要在控制台确认udisk确实挂载到了目标主机，如果确认有问题，可以联系技术支持。
+1. 另外，此时需要确认，仅有一个对应的`volumeattachment`。因为udisk仅允许单点挂载，而us3由于允许多点挂载，并没有此限制。
+
+### 11.3 磁盘Mount问题
+1. 首先需要确认磁盘对应的盘符，udisk挂载由于实现原理的限制。在某些特殊情况下，页面看到的盘符和真实盘符可能不一致，盘符对应信息可以从`/sys/block/vdx/serial` 文件中查看到。udisk-csi已经实现了该逻辑，不会有错误挂盘的出现，但是手动排查问题需要了解此情况。
+1. 确认好磁盘对应的盘符之后，可以通过`mount |grep pv-name` 查看挂载路径。
+1. udisk根据csi标准实现了globalmount及pod mount路径，因此一个udisk正常情况下会看到两个挂载路径，一个以globalmount结尾，一个以mount结尾。
+1. us3仅实现了pod mount路径，因此仅能看到一个挂载路径，且us3也不需要确认盘符。
+#### fsGroup导致的磁盘mount缓慢
+很多用户会遇到一个磁盘mount缓慢的问题。此时需要首先确认是否设置了fsGroup，且磁盘中的是否存在大量小文件，如果两个条件均满足，则很可能导致挂载缓慢，具体可以查看[k8s官方文档](https://kubernetes.io/zh/docs/tasks/configure-pod-container/security-context/#%E4%B8%BA-pod-%E9%85%8D%E7%BD%AE%E5%8D%B7%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90%E5%92%8C%E5%B1%9E%E4%B8%BB%E5%8F%98%E6%9B%B4%E7%AD%96%E7%95%A5)
