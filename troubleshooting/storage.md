@@ -287,8 +287,8 @@ Daemonset)。
 1. 通过 `kubectl get pods -n kube-system -o wide` 确认csi的controller及目标节点上Daemonset组件均工作正常
 1. 确认PV是否创建成功，如果没有，请查看 11.1 小节
 1. PV创建完成后，需要确保Pod成功调度。使用了udisk的Pod在普通调度规则上，会有额外的调度要求，具体可以看第 9 节
-1. 如果挂盘失败，请查看 11.2 小节
-1. 当确认磁盘已经挂载到目标主机后，需要确认Mount成功，如果mount失败，请查看11.3小节
+1. 如果磁盘挂载失败，请查看 11.2 小节
+1. 当确认磁盘已经挂载到目标主机后，需要确认mount成功，如果mount失败，请查看11.3小节
 ### 11.1 PV没有创建成功
 如果PV没有创建成功，需要确保有Pod在使用该PVC。具体原因请查看第9.1节。
 
@@ -298,12 +298,12 @@ Daemonset)。
 
 一般自动创建的pv名字格式是pvc-xxxxxxxxx，这里比较容易混淆。
 
-### 11.2 挂载磁盘失败
+### 11.2 磁盘挂载失败
 #### 11.2.1 确保`volumeattachment`资源存在
 为了能成功挂盘，首先需要确保`volumeattachment`资源存在，并且查看node的信息，确认当前是由kubelet还是controller-manager负责挂盘。
 
 1. kubelet挂盘方式存在缺陷，目前k8s推荐使用`controller-manager`进行挂盘，具体查看及转换方式可以对照本文档6.1小节
-1. 如果kubelet负责挂盘，并且pod日志中显示类似`volumeattachment`资源不存在的情况，则需要按照文档[VolumeAttachment 的作用](#2-volumeattachment-的作用)中提供的yaml文件，重新补一个同名的 VolumeAttachment。
+1. 如果kubelet负责挂盘，并且pod日志中显示类似`volumeattachment`资源不存在的情况，则需要按照文档[VolumeAttachment 的作用](#2-volumeattachment-的作用)中提供的yaml文件，重新补一个同名的 volumeAttachment。
 1. 如果是controller-manager负责挂盘，则需要确认k8s版本是否为1.17.1-1.17.7或1.18.1-1.18.4，这些版本controller-manager挂盘存在[性能问题](https://github.com/kubernetes-sigs/vsphere-csi-driver/blob/master/docs/book/known_issues.md#performance-regression-in-kubernetes-117-and-118)。
 1. controller-manager日志查看方式，登录到三台master节点，执行`journalctl -fu kube-controller-manager`查看，注意三台master中仅有一台Master中的controller-manager为leader，即实际工作状态。
 1. kubelet日志查看方式，需要登录到目标节点，执行`journalctl -fu kubelet`
@@ -316,8 +316,8 @@ Daemonset)。
 
 ### 11.3 磁盘Mount问题
 1. 首先需要确认磁盘对应的盘符，udisk挂载由于实现原理的限制。在某些特殊情况下，页面看到的盘符和真实盘符可能不一致，盘符对应信息可以从`/sys/block/vdx/serial` 文件中查看到。udisk-csi已经实现了该逻辑，不会有错误挂盘的出现，但是手动排查问题需要了解此情况。
-1. 确认好磁盘对应的盘符之后，可以通过`mount |grep pv-name` 查看挂载路径
-1. udisk根据csi标准实现了globalmount及pod mount路径，因此一个udisk正常情况下会看到两个挂载路径，一个以globalmount结尾，一个以mount结尾
-1. us3仅实现了pod mount路径，因此仅能看到一个挂载路径，且us3也不需要确认盘符
+1. 确认好磁盘对应的盘符之后，可以通过`mount |grep pv-name` 查看挂载路径。
+1. udisk根据csi标准实现了globalmount及pod mount路径，因此一个udisk正常情况下会看到两个挂载路径，一个以globalmount结尾，一个以mount结尾。
+1. us3仅实现了pod mount路径，因此仅能看到一个挂载路径，且us3也不需要确认盘符。
 #### fsGroup导致的磁盘mount缓慢
 很多用户会遇到一个磁盘mount缓慢的问题。此时需要首先确认是否设置了fsGroup，且磁盘中的是否存在大量小文件，如果两个条件均满足，则很可能导致挂载缓慢，具体可以查看[k8s官方文档](https://kubernetes.io/zh/docs/tasks/configure-pod-container/security-context/#%E4%B8%BA-pod-%E9%85%8D%E7%BD%AE%E5%8D%B7%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90%E5%92%8C%E5%B1%9E%E4%B8%BB%E5%8F%98%E6%9B%B4%E7%AD%96%E7%95%A5)
