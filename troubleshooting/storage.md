@@ -290,7 +290,7 @@ Daemonset)。
 1. 如果挂盘失败，请查看 11.2 小节
 1. 当确认磁盘已经挂载到目标主机后，需要确认Mount成功，如果mount失败，请查看11.3小节
 ### 11.1 PV没有创建成功
-如果PV没有创建成功，需要确保有Pod在使用该PVC。具体原因请搜索`WaitForFirstConsumer`查看。
+如果PV没有创建成功，需要确保有Pod在使用该PVC。具体原因请查看第9.1节。
 
 如果已有Pod在使用该PVC，则通过`kubectl logs csi-udisk-controller-0 -n kube-system csi-udisk` 查看controller日志，确认是否存在创建udisk失败的日志。
 
@@ -305,7 +305,7 @@ Daemonset)。
 1. kubelet挂盘方式存在缺陷，目前k8s推荐使用`controller-manager`进行挂盘，具体查看及转换方式可以对照本文档6.1小节
 1. 如果kubelet负责挂盘，并且pod日志中显示类似`volumeattachment`资源不存在的情况，则需要按照文档[VolumeAttachment 的作用](#2-volumeattachment-的作用)中提供的yaml文件，重新补一个同名的 VolumeAttachment。
 1. 如果是controller-manager负责挂盘，则需要确认k8s版本是否为1.17.1-1.17.7或1.18.1-1.18.4，这些版本controller-manager挂盘存在[性能问题](https://github.com/kubernetes-sigs/vsphere-csi-driver/blob/master/docs/book/known_issues.md#performance-regression-in-kubernetes-117-and-118)。
-1. controller-manager日志查看方式，登录到三台master节点，执行`journalctl -fu kube-controller-manager`
+1. controller-manager日志查看方式，登录到三台master节点，执行`journalctl -fu kube-controller-manager`查看，注意三台master中仅有一台Master中的controller-manager为leader，即实际工作状态。
 1. kubelet日志查看方式，需要登录到目标节点，执行`journalctl -fu kubelet`
 
 #### 11.2.2 确保磁盘挂载成功
@@ -315,8 +315,8 @@ Daemonset)。
 1. 另外，此时需要确认，仅有一个对应的`volumeattachment`。因为udisk仅允许单点挂载，而us3由于允许多点挂载，并没有此限制。
 
 ### 11.3 磁盘Mount问题
-1. 首先需要确认磁盘对应的盘符，udisk挂载由于实现原理的限制。在某些特殊情况下，页面看到的盘符和真实盘符可能不一致，盘符对应信息可以从/sys/block/vdx/serial 文件中查看到。udisk-csi已经实现了该逻辑，不会有错误挂盘的出现，但是手动排查问题需要了解此情况。
-1. 确认好磁盘对应的盘符之后，可以通过mount |grep pv-name 查看挂载路径
+1. 首先需要确认磁盘对应的盘符，udisk挂载由于实现原理的限制。在某些特殊情况下，页面看到的盘符和真实盘符可能不一致，盘符对应信息可以从`/sys/block/vdx/serial` 文件中查看到。udisk-csi已经实现了该逻辑，不会有错误挂盘的出现，但是手动排查问题需要了解此情况。
+1. 确认好磁盘对应的盘符之后，可以通过`mount |grep pv-name` 查看挂载路径
 1. udisk根据csi标准实现了globalmount及pod mount路径，因此一个udisk正常情况下会看到两个挂载路径，一个以globalmount结尾，一个以mount结尾
 1. us3仅实现了pod mount路径，因此仅能看到一个挂载路径，且us3也不需要确认盘符
 #### fsGroup导致的磁盘mount缓慢
