@@ -29,7 +29,7 @@ spec:
 1. Statefulset 控制器中的 pvctemplate 字段，可以设置 K8S 集群在对应 pvc 不存在时自动创建pvc，使得上述流程更加自动化(pvc和pv均由UK8S来建)。
 2. Statefulset 只负责创建不负责删除 pvc，因此对应多余的 pvc 需要手动删除
 
-## <span id="2">2. VolumeAttachment 的作用</span>
+## 2. VolumeAttachment 的作用
 
 VolumeAttachment 并不由用户自己创建，因此很多用户并不清楚它的作用，但是在 pvc 的使用过程中，VolumeAttachment 有着很重要的作用
 
@@ -37,7 +37,7 @@ VolumeAttachment 并不由用户自己创建，因此很多用户并不清楚�
    的挂载关系。可以执行`kubectl get volumeattachment |grep pv-name` 进行查看
 2. 这个挂载关系和 UDisk 与云主机的挂载关系往往是一致的，但是有时可能会出现不一致的情况。
 3. 不一致的情况多见于 UDisk 已经从云主机卸载，但是 VolumeAttachment 记录中仍然存在，UDisk
-   是否挂载在云主机上，可以通过[如何查看 PVC 对应的 UDisk 实际挂载情况](?id=span-id33-如何查看-pvc-对应的-udisk-实际挂载情况)来查看
+   是否挂载在云主机上，可以通过[如何查看 PVC 对应的 UDisk 实际挂载情况](#3-如何查看-pvc-对应的-udisk-实际挂载情况)来查看
 4. 对于不一致的情况，可用选择手动删除对应的 VolumeAttachment 字段，并新建一个相同的 VolumeAttachment（新建后 ATTACHED 状态为 false）
 5. 如果不能删除，可以通过`kubectl logs csi-udisk-controller-0 -n kube-system csi-udisk` 查看 csi-controller
    日志定位原因
@@ -48,7 +48,7 @@ VolumeAttachment 并不由用户自己创建，因此很多用户并不清楚�
 NAME                                                                   ATTACHER              PV                                         NODE           ATTACHED   AGE
 csi-1d52d5a7b4c5c172de7cfc17df71c312059cf8a2d7800e05f46e04876a0eb50e   udisk.csi.ucloud.cn   pvc-e51b694f-ffac-4d23-af5e-304a948a155a   10.9.184.108   true       2d2h
 ```
-### <span id="2.1">2.1 VolumeAttachment 文件示例</span>
+### 2.1 VolumeAttachment 文件示例
 ```yaml
 apiVersion: storage.k8s.io/v1
 kind: VolumeAttachment
@@ -65,7 +65,7 @@ spec:
     persistentVolumeName: pvc-e51b694f-ffac-4d23-af5e-304a948a155a # 绑定的pv，填写pod使用的pv
 ```
 
-## <span id="3">3. 如何查看 PVC 对应的 UDisk 实际挂载情况</span>
+## 3. 如何查看 PVC 对应的 UDisk 实际挂载情况
 
 对应关系表
 
@@ -93,19 +93,19 @@ spec:
 
 ## 4. 磁盘挂载的错误处理
 
-1. 由于磁盘内容多流程长，建议在出现问题时，首先确定当前状态[如何查看 PVC 对应的 UDisk 实际挂载情况](?id=span-id33-如何查看-pvc-对应的-udisk-实际挂载情况)
+1. 由于磁盘内容多流程长，建议在出现问题时，首先确定当前状态[如何查看 PVC 对应的 UDisk 实际挂载情况](#3-如何查看-pvc-对应的-udisk-实际挂载情况)
 2. 如果有UK8S中状态和主机状态不一致的情况，首先进行清理，删除掉不一致的资源，之后走正常流程进行恢复 
 
 ### 4.1 PV 和 PVC 一直卡在 terminating/磁盘卸载失败怎么办
 
-1. 通过[如何查看 PVC 对应的 UDisk 实际挂载情况](?id=span-id33-如何查看-pvc-对应的-udisk-实际挂载情况)确定当前 pv 和 pvc 的实际挂载状态
+1. 通过[如何查看 PVC 对应的 UDisk 实际挂载情况](#3-如何查看-pvc-对应的-udisk-实际挂载情况)确定当前 pv 和 pvc 的实际挂载状态
 2. 手动按照自己的需求进行处理，首先清理所有使用该 pv 和 pvc 的所有 pod（如果 pvc 已经成功删除，则不需要这一步）
 3. 如果删除 pvc 卡在 terminating，则手动 umount 掉对应的挂载路径
 4. 如果删除 VolumeAttachment 卡在 terminating，则手动在控制台卸载掉磁盘（如果卡在卸载中找主机处理）
 5. 如果删除 pv 卡在 terminating，则手动在控制台删除掉磁盘（删除 pv 前需要确保相关的 VolumeAttachment 已经删除完成）
 6. 确保手动释放完成对应的资源后，可以通过`kubectl edit` 对应的资源,删除掉其中的 finalizers 字段，此时资源就会成功释放掉
 7. 删除 VolumeAttachment 后，如果 pod
-   挂载报错，按照[VolumeAttachment 文件示例](?id=span-id2121-volumeattachment-文件示例)中提供的yaml文件，重新补一个同名的 VolumeAttachment 即可
+   挂载报错，按照[VolumeAttachment 文件示例](#21-volumeattachment-文件示例)中提供的yaml文件，重新补一个同名的 VolumeAttachment 即可
 
 ### 4.2 Pod 的 PVC 一直挂载不上怎么办？
 
@@ -138,7 +138,7 @@ K8S 处理挂盘和卸盘的实现中，单个 Node 可以选择由 kubelet 和 
 为了解决该问题，需要将由 kubelet 负责挂盘的节点改为由 controller-manager 负责挂盘。UK8S 添加的节点已经默认使用 controller-manager
 负责挂盘，后续添加节点无需再手动更改
 
-### <span id="6.1">6.1 手动修改节点为controller-manager挂盘</span>
+### 6.1 手动修改节点为controller-manager挂盘
 
 #### 检查 Kubelet 配置
 
@@ -210,7 +210,7 @@ UDisk不支持多点读写，如需要多点读写请使用UFS。
 
 可以使用静态创建PV的方法进行原有云盘绑定的方法进行复用原有云盘，详见[在UK8S中使用已有UDISK](/uk8s/volume/udisk#22-使用已有-UDisk)
 
-## <span id="9">9. 挂载Udisk的Pod调度问题</span>
+## 9. 挂载Udisk的Pod调度问题
 
 相较于普通Pod，使用Udisk的Pod调度涉及到了UDisk自身挂载规则的限制，更为复杂。具体限制如下
 
@@ -228,7 +228,7 @@ UDisk挂载限制在实际UK8S的使用中主要体现到以下两个方面
 
 UK8S提供的csi-udisk插件，依赖K8S提供的CSI插件能力，帮助用户实现了尽可能少的介入，下面以SSD UDisk为例进行讲解。
 
-### <span id="9.1">9.1 创建PVC时自动创建UDisk</span>
+### 9.1 创建PVC时自动创建UDisk
 
 从上面的文档中可以了解到，当PVC创建完成时，CSI会自动创建PV以及UDisk，并完成绑定工作。但是创建哪个可用区的UDisk呢，如果随意选择，则会导致后续Pod调度完成后无法挂载云盘。
 
@@ -286,11 +286,11 @@ Daemonset)。
 本节会以UDisk-CSI为例，从创建pvc之后每一步可能出错的点进行分析，并给出处理建议。另外本节内容仅涉及Pod创建过程中的相关内容。并基于一个假设，即上一个使用该PVC的Pod已经销毁，并且中间的所有操作及资源已经清理干净。如果上一个Pod使用的资源没有清理干净，也可以依赖本文档反推确认清理方案。
 1. 通过 `kubectl get pods -n kube-system -o wide` 确认csi的controller及目标节点上Daemonset组件均工作正常
 1. 确认PV是否创建成功，如果没有，请查看 11.1 小节
-1. PV创建完成后，需要确保Pod成功调度。使用了udisk的Pod在普通调度规则上，会有额外的调度要求，具体可以看[第9节](?id=span-id99-挂载udisk的pod调度问题)
+1. PV创建完成后，需要确保Pod成功调度。使用了udisk的Pod在普通调度规则上，会有额外的调度要求，具体可以看[第9节](#9-挂载udisk的pod调度问题)
 1. 如果磁盘挂载失败，请查看 11.2 小节
 1. 当确认磁盘已经挂载到目标主机后，需要确认mount成功，如果mount失败，请查看11.3小节
 ### 11.1 PV没有创建成功
-如果PV没有创建成功，需要确保有Pod在使用该PVC。具体原因请查看[第9.1节](?id=span-id9191-创建pvc时自动创建udisk)。
+如果PV没有创建成功，需要确保有Pod在使用该PVC。具体原因请查看[第9.1节](#91-创建pvc时自动创建udisk)。
 
 如果已有Pod在使用该PVC，则通过`kubectl logs csi-udisk-controller-0 -n kube-system csi-udisk` 查看controller日志，确认是否存在创建udisk失败的日志。
 
@@ -302,8 +302,8 @@ Daemonset)。
 #### 11.2.1 确保`volumeattachment`资源存在
 为了能成功挂盘，首先需要确保`volumeattachment`资源存在，并且查看node的信息，确认当前是由kubelet还是controller-manager负责挂盘。
 
-1. kubelet挂盘方式存在缺陷，目前k8s推荐使用`controller-manager`进行挂盘，具体查看及转换方式可以对照本文档[6.1小节](?id=span-id6161-手动修改节点为controller-manager挂盘)
-1. 如果kubelet负责挂盘，并且pod日志中显示类似`volumeattachment`资源不存在的情况，则需要按照文档[VolumeAttachment 文件示例](?id=span-id2121-volumeattachment-文件示例)中提供的yaml文件，重新补一个同名的 volumeAttachment。
+1. kubelet挂盘方式存在缺陷，目前k8s推荐使用`controller-manager`进行挂盘，具体查看及转换方式可以对照本文档[6.1小节](#61-手动修改节点为controller-manager挂盘)
+1. 如果kubelet负责挂盘，并且pod日志中显示类似`volumeattachment`资源不存在的情况，则需要按照文档[VolumeAttachment 文件示例](#21-volumeattachment-文件示例)中提供的yaml文件，重新补一个同名的 volumeAttachment。
 1. 如果是controller-manager负责挂盘，则需要确认k8s版本是否为1.17.1-1.17.7或1.18.1-1.18.4，这些版本controller-manager挂盘存在[性能问题](https://github.com/kubernetes-sigs/vsphere-csi-driver/blob/master/docs/book/known_issues.md#performance-regression-in-kubernetes-117-and-118)。
 1. controller-manager日志查看方式，登录到三台master节点，执行`journalctl -fu kube-controller-manager`查看，注意三台master中仅有一台Master中的controller-manager为leader，即实际工作状态。
 1. kubelet日志查看方式，需要登录到目标节点，执行`journalctl -fu kubelet`
