@@ -1,4 +1,4 @@
-## 基于Jenkins的CI/CD实践(containerd版本)
+## 基于Jenkins的CI/CD实践(kaniko版本)
 
 - 适用集群版本 1.14~1.22
 
