@@ -138,7 +138,7 @@ K8S 处理挂盘和卸盘的实现中，单个 Node 可以选择由 kubelet 和 
 为了解决该问题，需要将由 kubelet 负责挂盘的节点改为由 controller-manager 负责挂盘。UK8S 添加的节点已经默认使用 controller-manager
 负责挂盘，后续添加节点无需再手动更改
 
-### 6.1 kubelet手动转为controller-manager挂盘
+### 6.1 手动修改节点为controller-manager挂盘
 
 #### 检查 Kubelet 配置
 
