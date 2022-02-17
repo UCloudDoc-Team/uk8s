@@ -2,14 +2,7 @@
 
 ## 如何在 UK8S 中 Build 镜像？
 
-1. UK8S的1.12.7和1.13.5两个版本，目前Master节点没有安装Docker服务，不支持在Master节点Build镜像。
-2. UK8S的Node节点有安装Docker服务，可以登陆到Node节点进行Build镜像，Node节点Build镜像时需要使用--network=host参数，例如：
-
-```
-docker build -f Dockerfile -t ucloud/tomcat:v1.0.0 . --network=host
-```
-
-> 还可以在 UHost 中安装docker服务进行Build镜像
+UK8S节点Docker配置文件经过修改，且1.19及以上集群默认安装containerd，因此不推荐在UK8S中直接Build镜像。可以通过[部署CI/CD](https://docs.ucloud.cn/uk8s/bestpractice/cicd_containerd)，或者在集群外 UHost 中安装docker进行Build镜像。
 
 ## 怎么在UK8S集群中拉取Uhub以外的镜像？
 
