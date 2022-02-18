@@ -223,5 +223,5 @@ root       10421   10386  0 11:12 ?        00:00:00 /coredns -conf /etc/coredns/
 root       12822   12398  0 11:17 pts/0    00:00:00 grep --color=auto 10386
 ```
 ## 20. 1.19.5 集群kubelet连接containerd失败
-在1.19.5集群中，有可能出现节点not ready的情况，查看kubelet日志，发现有大量`Error while dialing dial unix:///run/containerd/containerd.sock`相关的日志。这是1.19.5版本中一个已知bug，当遇到containerd重启的情况下，kubelet会失去与containerd的连接，只有重启kublet才能恢复。具体可以查看[k8s官方issue]。(https://github.com/kubernetes/kubernetes/issues/95727)  
+在1.19.5集群中，有可能出现节点not ready的情况，查看kubelet日志，发现有大量`Error while dialing dial unix:///run/containerd/containerd.sock`相关的日志。这是1.19.5版本中一个已知bug，当遇到containerd重启的情况下，kubelet会失去与containerd的连接，只有重启kublet才能恢复。具体可以查看[k8s官方issue](https://github.com/kubernetes/kubernetes/issues/95727)。   
 如果您遇到此问题，重启kubelet即可恢复。同时目前uk8s集群已经不支持创建1.19.5版本的集群，如果您的集群版本为1.19.5，可以通过升级集群的方式，升级到1.19.10。  
