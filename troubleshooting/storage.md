@@ -48,6 +48,7 @@ VolumeAttachment 并不由用户自己创建，因此很多用户并不清楚�
 NAME                                                                   ATTACHER              PV                                         NODE           ATTACHED   AGE
 csi-1d52d5a7b4c5c172de7cfc17df71c312059cf8a2d7800e05f46e04876a0eb50e   udisk.csi.ucloud.cn   pvc-e51b694f-ffac-4d23-af5e-304a948a155a   10.9.184.108   true       2d2h
 ```
+
 ### 2.1 VolumeAttachment 文件示例
 ```yaml
 apiVersion: storage.k8s.io/v1
@@ -244,6 +245,7 @@ UK8S提供的csi-udisk插件，依赖K8S提供的CSI插件能力，帮助用户�
 按照以上逻辑，可以保证Pod调度后创建的云盘顺利挂载到对应主机
 
 但是有一个特殊情况，RSSD盘仅能挂载到快杰机型上，如果Pod首次调度到了非快杰机型上，那么后续创建云盘就会失败，因此如果您选择了RSSD盘，请确保Pod首次调度到快杰机型上。
+
 ### 9.2 Pod重建后调度流程
 
 首次运行后，如果遇到服务更新，或者节点故障等原因触发Pod重建，会进行重新调度，以下为调度流程
@@ -290,6 +292,7 @@ Daemonset)。
 1. PV创建完成后，需要确保Pod成功调度。使用了udisk的Pod在普通调度规则上，会有额外的调度要求，具体可以看[第9节](#_9-挂载udisk的pod调度问题)
 1. 如果磁盘挂载失败，请查看 11.2 小节
 1. 当确认磁盘已经挂载到目标主机后，需要确认mount成功，如果mount失败，请查看11.3小节
+
 ### 11.1 PV没有创建成功
 如果PV没有创建成功，需要确保有Pod在使用该PVC。具体原因请查看[第9.1节](#_91-创建pvc时自动创建udisk)。
 
@@ -320,5 +323,6 @@ Daemonset)。
 1. 确认好磁盘对应的盘符之后，可以通过`mount |grep pv-name` 查看挂载路径。
 1. udisk根据csi标准实现了globalmount及pod mount路径，因此一个udisk正常情况下会看到两个挂载路径，一个以globalmount结尾，一个以mount结尾。
 1. us3仅实现了pod mount路径，因此仅能看到一个挂载路径，且us3也不需要确认盘符。
+
 #### fsGroup导致的磁盘mount缓慢
 很多用户会遇到一个磁盘mount缓慢的问题。此时需要首先确认是否设置了fsGroup，且磁盘中的是否存在大量小文件，如果两个条件均满足，则很可能导致挂载缓慢，具体可以查看[k8s官方文档](https://kubernetes.io/zh/docs/tasks/configure-pod-container/security-context/#%E4%B8%BA-pod-%E9%85%8D%E7%BD%AE%E5%8D%B7%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90%E5%92%8C%E5%B1%9E%E4%B8%BB%E5%8F%98%E6%9B%B4%E7%AD%96%E7%95%A5)
