@@ -208,7 +208,7 @@ UDisk不支持多点读写，如需要多点读写请使用UFS。
 
 ### 8.2 Pod删除后，如何复用原先的云盘？
 
-可以使用静态创建PV的方法进行原有云盘绑定的方法进行复用原有云盘，详见[在UK8S中使用已有UDISK](/uk8s/volume/udisk#22-使用已有-UDisk)
+可以使用静态创建PV的方法进行原有云盘绑定的方法进行复用原有云盘，详见[在UK8S中使用已有UDISK](/uk8s/volume/udisk#_22-使用已有-udisk)
 
 ## 9. 挂载Udisk的Pod调度问题
 
@@ -218,7 +218,7 @@ UDisk不支持多点读写，如需要多点读写请使用UFS。
 - RSSD云盘挂载要求与云主机处于相同RDMA区域（RDMA区域范围小于可用区）
 - RSSD云盘仅可以挂载到快杰云主机
 
-> ⚠️ **RSSD UDisk调度要求同一个RDMA区域，RDMA区域范围小于可用区，而主机目前不支持指定RDMA区域创建机器。因此使用RSSD
+> ⚠️ **RSSD UDisk调度要求同一个RDMA区域的快杰型云主机，RDMA区域范围小于可用区，而主机目前不支持指定RDMA区域创建机器。因此使用RSSD
 > UDisk，在Pod漂移的情况下，有可能出现Pod无法调度的问题。请您使用前务必确认可以接受该风险。**
 
 UDisk挂载限制在实际UK8S的使用中主要体现到以下两个方面
@@ -236,13 +236,14 @@ UK8S提供的csi-udisk插件，依赖K8S提供的CSI插件能力，帮助用户�
 
 - 手动创建PVC
 - 创建Pod，并且在Pod绑定上一步中定义的PVC
-- 等待Pod进行调度完成
-- CSI查询Pod所在云主机的可用区，创建相同可用区的云盘，并创建相应PV进行绑定
+- 等待Pod进行调度，此时k8s会在PVC的Annotations中增加一个字段`volume.kubernetes.io/selected-node`,用以记录Pod预计调度到的Node。注意此时查看Pod状态仍然为Pending。
+- CSI查询Node云主机的可用区，创建相同可用区的云盘，并创建相应PV进行绑定
 - CSI更新PV中的`spec.csi.volumeHandle`字段，记录创建的云盘ID
 - CSI更新PV中的`spec.nodeAffinity`字段，记录云盘所在的可用区等信息
 
 按照以上逻辑，可以保证Pod调度后创建的云盘顺利挂载到对应主机
 
+但是有一个特殊情况，RSSD盘仅能挂载到快杰机型上，如果Pod首次调度到了非快杰机型上，那么后续创建云盘就会失败，因此如果您选择了RSSD盘，请确保Pod首次调度到快杰机型上。
 ### 9.2 Pod重建后调度流程
 
 首次运行后，如果遇到服务更新，或者节点故障等原因触发Pod重建，会进行重新调度，以下为调度流程

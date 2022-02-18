@@ -15,7 +15,7 @@ UK8S支持直接在集群中使用UDisk作为持久化存储卷。
 
 5. 同一个 Pod 如果挂载多块 UDisk，则必须确保 UDisk 处于同一可用区，否则容器无法启动。
 
-> ⚠️ **RSSD UDisk调度要求同一个RDMA区域，RDMA 区域范围小于可用区，主机目前不支持指定RDMA区域创建机器。因此使用RSSD
+> ⚠️ **RSSD UDisk调度要求同一个RDMA区域的快杰型云主机，RDMA 区域范围小于可用区，主机目前不支持指定RDMA区域创建机器。因此使用RSSD
 > UDisk，在Pod漂移的情况下，有可能出现Pod无法调度的问题。请您使用前务必确认可以接受该风险。**
 
 ## 1. 存储类 StorageClass
@@ -87,10 +87,13 @@ spec:
     volumeAttributes:
       type: ssd # 磁盘类型，枚举值为ssd,sata,rssd
     volumeHandle: bs-qg55w254 # 请修改为自己的UDiskId
+#  nodeAffinity：强烈建议添加此字段
   persistentVolumeReclaimPolicy: Retain
-## storageClassName必须与上文创建的 StorageClass 的name一致
+#  storageClassName必须与上文创建的 StorageClass 的name一致
   storageClassName: udisk-ssd-test
 ```
+
+注意：根据[使用UDisk的Pod调度策略](/uk8s/troubleshooting/storage#_9-挂载udisk的pod调度问题)，为了保证后续调度可以顺利执行，强烈建议您创建时为PV添加`nodeAffinity`字段。由于不同版本以及不同Storage Class本部分的内容不尽相同，可以参照相同Storage Class CSI自动自动创建出来PV的对应字段。
 
 #### 2.3 创建 PVC 并与 PV 关联
 
