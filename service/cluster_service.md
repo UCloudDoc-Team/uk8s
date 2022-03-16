@@ -30,7 +30,7 @@ curl http://access.prj-foo.svc.cluster.local:8080/
 
 #### 2. tcp 服务访问
 
-同理，在 tcp 服务中，我们使用服务地址作为我们访问时的 host 来访问服务。
+同理，在 tcp 服务中，我们使用服务地址作为我们访问时的 host，服务的端口，作为访问时的 port。
 
 比如说 access 是一个 grpc server
 
