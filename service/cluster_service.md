@@ -5,7 +5,7 @@
 ## 一、获取服务地址
 ![](/images/service/cluster_svc.png)
 
-当我们服务访问的发起端(我们称为 client，这里以 api-pod-3 为例) 和 服务的接收端 (这里我们称为 server，这里以 access 为例) 同时运行在 UK8S 中时，一般使用 k8s 域名访问 server 服务，svc 会根据创建时的规则，自动将流量分发到对应的 pod 中。
+当我们服务访问的发起端(我们称为 client，这里以 api-pod-3 为例) 和 服务的接收端 (这里我们称为 server，这里以 access 为例) 同时运行在 UK8S 中时，一般使用 k8s 域名访问 server 服务，k8s 会自动将流量转发到对应的 pod 中。
 
 访问的地址如下：
 
