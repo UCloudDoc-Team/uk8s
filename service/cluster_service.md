@@ -15,7 +15,7 @@
 
 - servicename： 服务的名字，比如上面的 access
 - namespace：服务所在的命名空间，上面对应 access 的命名空间 prj-foo
-- resourcetype: 资源类型，访问类型为 service 值统一为 svc
+- resourcetype: 资源类型，访问类型为 service 时值统一为 svc
 - clusterdomain： 集群域名，在控制台，具体某一个 k8s 实例的详情中获取，`概览`->`基本信息`中的`集群本地域名`可以获取具体的值，一般为 `cluster.local`
 
 ## 二、服务访问示例
