@@ -54,8 +54,8 @@ kubectl get pod -n kube-system |grep node-problem-detector
 不会， node-problem-detector 的作用是检查 node 节点是否存在异常，修改 node-problem-detector 不会影响应用服务
 
 
-### 2. 那些集群需要修改？
+### 2. 哪些集群需要修改？
 
-我们已经在近期的发布中修改了该问题，如果集群是在 2022 年 3月 12 日之前创建的集群，都有可能出现这个问题。
+如果集群是在 2022 年 3月 12 日之前创建的，且在集群的 `应用中心` -> `NPD节点监控` 开启了Node-Problem-Detector节点监控插件，就有可能出现这个问题。
 
-新后面新创建的集群不会出现。
+我们已经在近期的发布中修改了该问题，后面新创建的集群不会出现。
