@@ -55,6 +55,7 @@
   - [Flexvolume 升级 CSI](/uk8s/volume/flexv_csi)
 - 服务发现
   - [Service 介绍](/uk8s/service/intro)
+  - [集群内访问 Service](/uk8s/service/cluster_service)
   - [通过内网ULB访问Service](/uk8s/service/internalservice)
   - [通过外网ULB访问Service](/uk8s/service/externalservice)
   - [使用已有的ULB](/uk8s/service/ulb_designation)
@@ -94,6 +95,7 @@
   <!--* [容器常见问题](/uk8s/q/container) -->
   - [集群ULB误删处理](/uk8s/troubleshooting/ulb_undelete)
   - [集群日志组件常见问题](/uk8s/troubleshooting/log_elk_summary.md)
+  - [修改 npd 配置说明](/uk8s/troubleshooting/npd.md)
 - 最佳实践
   - [API Server 审计功能](/uk8s/bestpractice/apiserver_audit)
   - [NodePort 相关参数修改](/uk8s/bestpractice/modify_nodeport)
