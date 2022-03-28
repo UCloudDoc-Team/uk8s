@@ -125,7 +125,7 @@ token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9/....
 
 ## 5. 通过 kubectl 管理集群
 
-由于我们还需要支持 kubectl 命令行管理 NS，因此还需要为 mingpianwang 生成kubecofnig，一个用户还好，多个用户就很麻烦了，因此这里我们使用一个自动生成
+由于我们还需要支持 kubectl 命令行管理 NS，因此还需要为 mingpianwang 生成kubeconfig，一个用户还好，多个用户就很麻烦了，因此这里我们使用一个自动生成
 kubeconfig 的脚本，代码如下：
 
 ```
