@@ -55,6 +55,7 @@
   - [Flexvolume 升级 CSI](/uk8s/volume/flexv_csi)
 - 服务发现
   - [Service 介绍](/uk8s/service/intro)
+  - [集群内访问 Service](/uk8s/service/cluster_service)
   - [通过内网ULB访问Service](/uk8s/service/internalservice)
   - [通过外网ULB访问Service](/uk8s/service/externalservice)
   - [使用已有的ULB](/uk8s/service/ulb_designation)
