@@ -113,7 +113,7 @@ spec:
       hostPID: true
       containers:
         - name: cni-vpc-ipamd
-          image: uhub.service.ucloud.cn/uk8s/cni-vpc-ipamd:21.12.2
+          image: uhub.service.ucloud.cn/uk8s/cni-vpc-ipamd:22.04.1
           resources:
             limits:
               cpu: 200m 
@@ -202,7 +202,7 @@ spec:
       priorityClassName: system-node-critical
       containers:
         - name: vip-controller
-          image: uhub.service.ucloud.cn/uk8s/vip-controller:21.12.2
+          image: uhub.service.ucloud.cn/uk8s/vip-controller:22.04.1
           args:
             - "--static-ip-gc-interval=1h"
           resources:
