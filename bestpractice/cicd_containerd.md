@@ -24,7 +24,7 @@ kubectl create namespace jenkins
 - 使用SSD云盘作为存储，请部署。
 
 ```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins-pvc.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cicd/yaml_jenkins_jenkins-pvc.yaml
 ```
 
 3、 以Deployment方式部署Jenkins master,为了演示方便，我们还使用LoadBalancer类型的service将其暴露到外网。

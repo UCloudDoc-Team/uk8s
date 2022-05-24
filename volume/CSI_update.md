@@ -42,19 +42,19 @@ data:
 #### 更新 UDisk CSI 插件
 
 ```bash
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk.21.11.1/csi-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk.21.11.1/csi-node.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk.21.11.1/rbac-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/udisk.21.11.1/rbac-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/udisk.21.11.1/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/udisk.21.11.1/csi-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/udisk.21.11.1/rbac-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/udisk.21.11.1/rbac-node.yml
 ```
 
 #### 更新 US3 CSI 插件
 
 ```bash
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.1/csi-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.1/csi-node.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.1/rbac-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.1/rbac-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.1/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.1/csi-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.1/rbac-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.1/rbac-node.yml
 ```
 -->
 

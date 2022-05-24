@@ -104,7 +104,7 @@ echo "source <(helm completion bash)" >> ~/.bashrc
 1. 安装Tiller服务端
 
 ```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/helm/tiller.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/helm/tiller.yaml
 ```
 
 2. 通过Helm客户端进行关联

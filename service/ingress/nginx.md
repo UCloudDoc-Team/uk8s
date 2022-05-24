@@ -26,7 +26,7 @@ Controller则需要自行部署，Kubernetes社区提供了以下Ingress Control
 这里我们选择Nginx作为Ingress Controller，部署Nginx Ingress Controller非常简单，执行以下指定即可。
 
 ```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/ingress_nginx/mandatory.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/ingress_nginx/mandatory.yaml
 ```
 
 在mandatory.yaml这个文件里，正是Nginx官方为你维护的Ingress Controller的定义，我们可以把yaml文件下载到本地仔细研读下。这里简要简述下部分yaml字段的意义。
