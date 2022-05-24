@@ -19,7 +19,7 @@ kubectl delete ds -n kube-system nvidia-device-plugin-daemonset
 ### 3. 执行kubectl进行GPU-Share插件安装，安装完成
 
 ```bash
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/gpu-share/1.0.0.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/1.0.0.yaml
 ```
 
 ### 测试GPU共享
@@ -34,9 +34,9 @@ kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/gpu-share/1.0.0.yam
 
 ```bash
 # 运行test-gpushare1
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/gpu-share/test-gpushare1.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/test-gpushare1.yaml
 # 运行test-gpushare2
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/gpu-share/test-gpushare2.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/test-gpushare2.yaml
 ```
 
 以test-gpushare1为例。
@@ -85,6 +85,6 @@ kubectl get pod |grep test-gpushare
 请在master节点执行以下命令
 
 ```bash
-kubectl delete -f https://gitee.com/uk8s/uk8s/raw/master/yaml/gpu-share/1.0.0.yaml
+kubectl delete -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/1.0.0.yaml
 kubectl apply -f /etc/kubernetes/yaml/nvidia-device-plugin.yaml
 ```

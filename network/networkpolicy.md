@@ -12,7 +12,7 @@
 为了在 UK8S 中实现网络隔离，需要部署 Calico 的 Felix 和 Typha 组件，组件模块已容器化，直接在 UK8S 通过 kubectl 命令安装即可.
 
 ```bash
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/policy_calico-policy-only.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/policy_calico-policy-only.yaml
 ```
 
 ## 2. NetworkPolicy 规则解析

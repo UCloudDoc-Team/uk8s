@@ -32,7 +32,6 @@
 
 对于使用 UK8S 遇到的本文档未涉及的问题，如果需要人工支持，请提供主机的 uhost-id，并添加公钥信任，将下面内容添加到ssh配置文件authorized_keys中。
 
-
 ```
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGIFVUtrp+jAnIu1fBvyLx/4L4GNsX+6v8RodxM+t3G7gCgaG+kHqs1xkLBWQNNMVQz2c/vA1gMNYASnvK/aQJmI9NxuOoaoqbL/yrZ58caJG82TrDKGgByvAYcT5yJkJqGRuLlF3XL1p2C0P8nxf2dzfjQgy5LGvZ1awEsIeoSdEuicaxFoxkxzTH/OM2WSLuJ+VbFg8Xl0j3F5kP9sT/no1Gau15zSHxQmjmpGJSjiTpjSBCm4sMaJQ0upruK8RuuLAzGwNw8qRXJ4qY7Tvg36lu39KHwZ22w/VZT1cNZq1mQXvsR54Piaix163YoXfS7jke6j8L6Nm2xtY4inqd uk8s-tech-support
 ```
@@ -176,15 +175,21 @@ spec:
 如果容器之前已经创建了，只需要在 yaml 文件中加上 `volumeMounts` 及 `volumes` 参数，再使用 `kubectl apply` 命令更新即可。
 
 ## 18. kubectl top 命令报错
+
 该情况一般有以下两种可能
+
 1. kube-system下面metrics-server Pod没有正常工作，可以通过`kubectl get pods -n kube-system`进行查看
-2. `metrics.k8s.io` API地址被错误重定向，可以执行`kubectl get apiservice v1beta1.metrics.k8s.io`查看重定向到的service名称，并确认service当前是否可用及是否对外暴露了`v1beta1.metrics.k8s.io`接口。默认重定向地址为`kube-system/metrics-server`   
+2. `metrics.k8s.io`
+   API地址被错误重定向，可以执行`kubectl get apiservice v1beta1.metrics.k8s.io`查看重定向到的service名称，并确认service当前是否可用及是否对外暴露了`v1beta1.metrics.k8s.io`接口。默认重定向地址为`kube-system/metrics-server`
 
 情况二一般出现在部署prometheus，且prometheus提供的接口不支持v1beta1.metrics.k8s.io时。如果不需要自定义HPA指标，其实不需要此重定向操作。如果属于情况二，可以按照下面步骤操作。
 
-1. 确认配置中的的prometheus service可用，并根据需要[自定义HPA指标](/uk8s/monitor/prometheus/autoscale_on_custom_metrics#启用custommetricsk8sio服务)
+1. 确认配置中的的prometheus
+   service可用，并根据需要[自定义HPA指标](/uk8s/monitor/prometheus/autoscale_on_custom_metrics#启用custommetricsk8sio服务)
 2. 重新部署执行下面yaml文件，回退到普通metrics server，Grafana等不依赖此api。
-3. 注意，如果您之前已经使用了自定义HPA指标，且处于线上环境，建议您仅确认prometheus service可用即可。回退到普通metrics server可能导致之前的自定义HPA指标失效，请谨慎操作。
+3. 注意，如果您之前已经使用了自定义HPA指标，且处于线上环境，建议您仅确认prometheus service可用即可。回退到普通metrics
+   server可能导致之前的自定义HPA指标失效，请谨慎操作。
+
 ```
 apiVersion: apiregistration.k8s.io/v1beta1
 kind: APIService
@@ -202,14 +207,17 @@ spec:
 ```
 
 ## 19. containerd-shim进程泄露
+
 - 目前发现使用docker的k8s集群，有可能会遇到containerd-shim进程泄露，尤其是在频繁创建删除Pod或者Pod频繁重启的情况下。
-- 此时甚至有可能导致docker inspect某个容器卡住进一步导致kubelet PLEG timeout 异常。
-此时以coredns Pod为例，说明如何查看是否存在containerd-shim进程泄露。如下示例，正常情况下，一个containerd-shim进程会有一个实际工作的子进程。子进程消失时，containerd-shim进程会自动退出。如果containerd-shim进程没有子进程，则说明存在进程泄露。
+- 此时甚至有可能导致docker inspect某个容器卡住进一步导致kubelet PLEG timeout 异常。 此时以coredns
+  Pod为例，说明如何查看是否存在containerd-shim进程泄露。如下示例，正常情况下，一个containerd-shim进程会有一个实际工作的子进程。子进程消失时，containerd-shim进程会自动退出。如果containerd-shim进程没有子进程，则说明存在进程泄露。
 
 遇到containerd-shim进程泄露的情况，可以按照如下方式进行处理
+
 - 确认泄露的进程id，执行`kill pid`。注意，此时无需加`-9`参数，一般情况下简单的kill就可以处理。
 - 确认containerd-shim进程退出后，可以观察docker及kubelet是否恢复正常。
 - 注意，由于kubelet此时可能被docker卡住，阻挡了很多操作的执行，当docker恢复后，可能会有大量操作同时执行，导致节点负载瞬时升高，可以在操作前后分别重启一遍kubelet及docker。
+
 ```sh
 [root@xxxx ~]# docker ps |grep coredns-8f7c8b477-snmpq
 ee404991798d   uhub.service.ucloud.cn/uk8s/coredns                        "/coredns -conf /etc…"   4 minutes ago   Up 4 minutes             k8s_coredns_coredns-8f7c8b477-snmpq_kube-system_26da4954-3d8e-4f67-902d-28689c45de37_0
@@ -222,6 +230,9 @@ root       10386       1  0 11:12 ?        00:00:00 /usr/bin/containerd-shim-run
 root       10421   10386  0 11:12 ?        00:00:00 /coredns -conf /etc/coredns/Corefile
 root       12822   12398  0 11:17 pts/0    00:00:00 grep --color=auto 10386
 ```
+
 ## 20. 1.19.5 集群kubelet连接containerd失败
-在1.19.5集群中，有可能出现节点not ready的情况，查看kubelet日志，发现有大量`Error while dialing dial unix:///run/containerd/containerd.sock`相关的日志。这是1.19.5版本中一个已知bug，当遇到containerd重启的情况下，kubelet会失去与containerd的连接，只有重启kublet才能恢复。具体可以查看[k8s官方issue](https://github.com/kubernetes/kubernetes/issues/95727)。   
-如果您遇到此问题，重启kubelet即可恢复。同时目前uk8s集群已经不支持创建1.19.5版本的集群，如果您的集群版本为1.19.5，可以通过升级集群的方式，升级到1.19.10。  
+
+在1.19.5集群中，有可能出现节点not
+ready的情况，查看kubelet日志，发现有大量`Error while dialing dial unix:///run/containerd/containerd.sock`相关的日志。这是1.19.5版本中一个已知bug，当遇到containerd重启的情况下，kubelet会失去与containerd的连接，只有重启kublet才能恢复。具体可以查看[k8s官方issue](https://github.com/kubernetes/kubernetes/issues/95727)。\
+如果您遇到此问题，重启kubelet即可恢复。同时目前uk8s集群已经不支持创建1.19.5版本的集群，如果您的集群版本为1.19.5，可以通过升级集群的方式，升级到1.19.10。

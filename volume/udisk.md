@@ -93,7 +93,8 @@ spec:
   storageClassName: udisk-ssd-test
 ```
 
-注意：根据[使用UDisk的Pod调度策略](/uk8s/troubleshooting/storage#_9-挂载udisk的pod调度问题)，为了保证后续调度可以顺利执行，强烈建议您创建时为PV添加`nodeAffinity`字段。由于不同版本以及不同Storage Class本部分的内容不尽相同，可以参照相同Storage Class CSI自动自动创建出来PV的对应字段。
+注意：根据[使用UDisk的Pod调度策略](/uk8s/troubleshooting/storage#_9-挂载udisk的pod调度问题)，为了保证后续调度可以顺利执行，强烈建议您创建时为PV添加`nodeAffinity`字段。由于不同版本以及不同Storage
+Class本部分的内容不尽相同，可以参照相同Storage Class CSI自动自动创建出来PV的对应字段。
 
 #### 2.3 创建 PVC 并与 PV 关联
 

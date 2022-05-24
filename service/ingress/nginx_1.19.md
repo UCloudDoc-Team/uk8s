@@ -29,7 +29,7 @@ Controller 供选择，分别如下：
 这里我们选择 Nginx 作为Ingress Controller，部署 Nginx Ingress Controller非常简单，执行以下指定即可。
 
 ```bash
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/ingress_nginx/mandatory_1.19.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/ingress_nginx/mandatory_1.19.yaml
 ```
 
 在 `mandatory.yaml` 这个文件里，正是 Kubernetes 官方为你维护的 Ingress Controller 的定义，我们可以把 yaml

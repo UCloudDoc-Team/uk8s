@@ -44,19 +44,19 @@ kubectl create namespace jenkins
 - 如果您使用的k8s版本大于等于1.14，且没有使用快杰云主机，请部署。
 
 ```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins-pvc.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cicd/yaml_jenkins_jenkins-pvc.yaml
 ```
 
 - 如果您使用的k8s版本小于1.14，请部署。
 
 ```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins-pvc-1.13.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cicd/yaml_jenkins_jenkins-pvc-1.13.yaml
 ```
 
 3、 以Deployment方式部署Jenkins master,为了演示方便，我们还使用LoadBalancer类型的service将其暴露到外网。
 
 ```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cicd/yaml_jenkins_jenkins.yaml
 ```
 
 4、 等到服务启动成功后，我们就可以根据LoadBalancer的IP（即EXTERNAL-IP），访问 jenkins 服务了，并根据提示信息进行安装配置。
@@ -70,7 +70,7 @@ jenkins   LoadBalancer   172.17.201.210   106.75.98.80   8080:33651/TCP,50000:43
 5、 创建一个名为jenkins2的ServiceAccount，并且为其赋予特定的权限，后面配置Jenkins-Slave我们会用到。
 
 ```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/cicd/yaml_jenkins_jenkins-rbac.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cicd/yaml_jenkins_jenkins-rbac.yaml
 ```
 
 ### 三、安装Kubernetes插件

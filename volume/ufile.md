@@ -20,19 +20,19 @@ US3对象存储适合用户上传、下载静态数据文件，如视频，图�
 #### 集群版本 1.14~1.20
 
 ```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2/csi-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2/csi-node.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2/rbac-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2/rbac-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/csi-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/rbac-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/rbac-node.yml
 ```
 
 #### 集群版本 1.22
 
 ```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2_v1.22/csi-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2_v1.22/csi-node.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2_v1.22/rbac-controller.yml
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/volume/us3.21.11.2_v1.22/rbac-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2_v1.22/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2_v1.22/csi-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2_v1.22/rbac-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2_v1.22/rbac-node.yml
 ```
 
 ## 已支持UK8S挂载US3的地域（持续更新）

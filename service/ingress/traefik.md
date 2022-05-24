@@ -22,7 +22,7 @@ Consul, Etcd, …) 来自动化、动态的应用它的配置文件设置。
 这里我们选择Traefik作为Ingress Controller，部署Traefik Ingress Controller非常简单，执行一下指令即可。
 
 ```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/ingress_traefik/mandatory.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/ingress_traefik/mandatory.yaml
 ```
 
 在mandatory.yaml这个文件里，正是Traefik官方提供的安装文件[traefik-rbac.yaml](https://github.com/containous/traefik/blob/v1.7/examples/k8s/traefik-rbac.yaml)和[traefik-deployment.yaml](https://github.com/containous/traefik/blob/v1.7/examples/k8s/traefik-deployment.yaml)，我们可以把yaml文件下载到本地仔细研读下，从执行结果来看大家可以看出，我们在这里创建了ClusterRole、ClusterRoleBinding、pod、serviceaccount。
@@ -40,7 +40,7 @@ deployment.extensions/traefik-ingress-controller created
 controller，但这个ingress服务只能在集群内部可达，为了在集群外部可达，我们还需要为此创建一个外部可达的Service，这里我们选择创建一个LoadBalancer类型的Service，并将其暴露到外网。
 
 ```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/ingress_traefik/Service.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/ingress_traefik/Service.yaml
 ```
 
 ```
@@ -73,7 +73,7 @@ spec:
 traefik dashboard是官方提供的一个管理界面，也是traefik ingress暴露的第一个服务。
 
 ```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/ingress_traefik/ui.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/ingress_traefik/ui.yaml
 ```
 
 可以研读一下这个yaml文件，这个yaml中包含两段，第一段是将traefik的dashboard创建一个service提供服务，暴露的服务同<EIP>:8080；然后第二段定义了一个ingress对象，这里的spec.rules.host=traefik-ui.minikube是我们的URL地址，spec.rules.http.paths.backend下定义了绑定的服务。

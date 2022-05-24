@@ -11,7 +11,7 @@ UK8S集群没有默认安装Dashboard，如果你希望体验社区原生Dashboa
 推荐kubernetes1.12及以下版本使用
 
 ```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/service/dashboard.v1.10.0.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/service/dashboard.v1.10.0.yaml
 ```
 
 官方兼容性提示
@@ -29,7 +29,7 @@ kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/service/dashboard.v
 推荐kubernetes1.13及以上版本使用
 
 ```
-kubectl apply -f https://gitee.com/uk8s/uk8s/raw/master/yaml/service/dashboard.v2.0.0-rc1.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/service/dashboard.v2.0.0-rc1.yaml
 ```
 
 官方兼容性提示
