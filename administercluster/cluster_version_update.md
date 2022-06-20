@@ -24,7 +24,7 @@
 
 ![](/images/administercluster/cluster_update2.png)
 
-点击【版本升级】后进入`UK8S 版本升级`界面：
+点击【版本升级】后进入【UK8S 版本升级】界面：
 ![](/images/administercluster/cluster-upgrade-form.png)
 
 在此界面中，您可以设置升级的目标版本、升级策略，并提供 SSH 账号及密码，是否强制升级等。
@@ -48,9 +48,9 @@
 
 ## 升级暂停
 
-为了支持大规模集群升级操作过程中需要暂时停止升级，UK8S 控制台提供了`停止升级`的功能，
+为了支持大规模集群升级操作过程中需要暂时停止升级，UK8S 控制台提供了【停止升级】的功能，
 给用户提供了更多手段控制复杂的集群升级操作。
-您可在升级过程中按下图所示的界面，点击`停止升级`按钮，暂停 UK8S 集群升级操作：
+您可在升级过程中按下图所示的界面，点击【停止升级】按钮，暂停 UK8S 集群升级操作：
 
 ![](/images/administercluster/cluster-upgrade-pause1.png)
 
@@ -58,7 +58,7 @@
 
 ![](/images/administercluster/cluster-upgrade-pause2.png)
 
-如果确实需要停止升级操作，请按`确定`按钮。系统将在当前批次的节点完成升级操作后，停止升级其它未开始的节点。
+如果确实需要停止升级操作，请按【确定】按钮。系统将在当前批次的节点完成升级操作后，停止升级其它未开始的节点。
 下图是集群升级停止后的界面展示样例：
 
 ![](/images/administercluster/cluster-upgrade-pause3.png)
