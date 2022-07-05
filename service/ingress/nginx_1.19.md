@@ -2,7 +2,7 @@
 
 **本文适用于的 K8S 版本为 1.19+**
 
-### 什么是Ingress
+### 什么是 Ingress
 
 Ingress 是从 Kubernetes 集群外部访问集群内部服务的入口，同时为集群内的 Service 提供七层负载均衡能力。
 
@@ -26,13 +26,13 @@ Controller 供选择，分别如下：
 3. Envoy
 4. Traefik
 
-这里我们选择 Nginx 作为Ingress Controller，部署 Nginx Ingress Controller非常简单，执行以下指定即可。
+这里我们选择 Nginx 作为 Ingress Controller，部署 Nginx Ingress Controller 非常简单，执行以下指定即可。
 
 ```bash
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/ingress_nginx/mandatory_1.19.yaml
 ```
 
-在 `mandatory.yaml` 这个文件里，正是 Kubernetes 官方为你维护的 Ingress Controller 的定义，我们可以把 yaml
+在 `mandatory_1.19.yaml` 这个文件里，是 Ingress Controller 的定义，我们可以把 yaml
 文件下载到本地仔细研读下。这里简要简述下部分 yaml 字段的意义。
 
 这个 yaml 定义了一个使用 ingress-nginx-controller 作为镜像的 pod 副本集，这个 Pod 主要功能就是监听 Ingress 对象以及它所代理的后端 Service
@@ -47,11 +47,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   labels:
-    helm.sh/chart: ingress-nginx-4.0.10
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx
-    app.kubernetes.io/version: 1.1.0
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 1.2.1
     app.kubernetes.io/component: controller
   name: ingress-nginx-controller
   namespace: ingress-nginx
@@ -67,7 +65,7 @@ data:
 本质上，这个 ingress-nginx-controller 是一个可以根据 Ingress 对象和被代理后端 Service 的变化，自动进行更新的 Nginx 负载均衡器。
 
 容器默认使用 UTC
-时间，如果要使用宿主机时区，参见[Pod时区问题](https://docs.ucloud.cn/uk8s/troubleshooting/k8s_debug_summary?id=_17-pod-%e7%9a%84%e6%97%b6%e5%8c%ba%e9%97%ae%e9%a2%98)
+时间，如果要使用宿主机时区，参见 [Pod 时区问题](https://docs.ucloud.cn/uk8s/troubleshooting/k8s_debug_summary?id=_17-pod-%e7%9a%84%e6%97%b6%e5%8c%ba%e9%97%ae%e9%a2%98)
 
 ### 二、集群外部访问 nginx ingress
 
@@ -81,11 +79,9 @@ metadata:
   annotations:
     "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"
   labels:
-    helm.sh/chart: ingress-nginx-4.0.10
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx
-    app.kubernetes.io/version: 1.1.0
-    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: 1.2.1
     app.kubernetes.io/component: controller
   name: ingress-nginx-controller
   namespace: ingress-nginx
@@ -122,11 +118,11 @@ ingress-nginx-controller   LoadBalancer   172.30.48.77   xxx.yy.xxx.yy   80:3005
 ......
 ```
 
-部署完 Ingress Controller 和它所需要的 Service 后，我们就可以使用通过它来将集群内部的其他Service代理出去了。
+部署完 Ingress Controller 和它所需要的 Service 后，我们就可以使用通过它来将集群内部的其他 Service 代理出去了。
 
 ### 三、创建两个应用
 
-在下面的 yaml 中，我们定义了2个镜像名为 echo-nginx 的应用，主要是输出 nginx 应用自身的一些全局变量。
+在下面的 yaml 中，我们定义了 2 个镜像名为 echo-nginx 的应用，主要是输出 nginx 应用自身的一些全局变量。
 
 ```yaml
 apiVersion: apps/v1
@@ -201,7 +197,7 @@ spec:
     app: demo-app-2
 ```
 
-我们将上述yaml保存为 `demo-app.yaml`，并执行如下命令创建应用。
+我们将上述 yaml 保存为 `demo-app.yaml`，并执行如下命令创建应用。
 
 ```bash
 kubectl apply -f demo-app.yaml
@@ -253,7 +249,7 @@ spec:
 这两个 Deployment 的 Service（即：demo-app-1-svc 和 demo-app-2-svc）。
 
 每条 http 规则包含以下信息：一个 host 配置项（比如`demo-app.example.com`），path 列表（比如：`/demo-app-1`和`/demo-app-2`），每个
-path 都关联一个 backend（比如：`demo-app-1-svc`的 80 端口)。在 LoadBalancer 将流量转发到 backend 之前，所有的入站请求都要先匹配 host 和
+path 都关联一个 backend（比如：`demo-app-1-svc`的 80 端口）。在 LoadBalancer 将流量转发到 backend 之前，所有的入站请求都要先匹配 host 和
 path。
 
 当没有匹配到规则中的任意一组 host 和 path 时，`ingress.spec.defaultBackend` 中定义的默认 backend 将会生效，将不匹配 host 和 path
@@ -265,7 +261,7 @@ path。
 kubectl apply -f ingress.yaml
 ```
 
-接下来，我们可以查看这个ingress对象
+接下来，我们可以查看这个 ingress 对象
 
 ```bash
 $ kubectl get ingresses.networking.k8s.io
@@ -314,11 +310,11 @@ URI: /demo-app-2
 Request ID: ba34c07f5cc78e74629041df5568977a
 ```
 
-### 五、TLS支持
+### 五、TLS 支持
 
 在上述的 ingress 对象中，我们没有给 Host 指定 TLS 证书，ingress controller 支持通过指定一个包含 TLS 私钥以及证书的 secret 来加密站点。
 
-我们先创建一个包含 tls.crt 以及 tls.key 的 secret，在生成证书的时候，需要确保证书的 CN 包含`demo-app.example.com`，并将证书内容使用base64
+我们先创建一个包含 tls.crt 以及 tls.key 的 secret，在生成证书的时候，需要确保证书的 CN 包含`demo-app.example.com`，并将证书内容使用 base64
 编码。
 
 ```bash
