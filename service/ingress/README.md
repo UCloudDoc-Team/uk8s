@@ -5,3 +5,5 @@
 如果您的 Kubernetes 版本 1.19 及以上，请参考 [Nginx Ingress](/uk8s/service/ingress/nginx_1.19)。
 如果您的 Kubernetes 版本 1.13 ~ 1.18，请参考 [Nginx Ingress](/uk8s/service/ingress/nginx)。
 如果您想了解 ingress 的高级用法，请参考 [ingress 高级用法](/uk8s/service/ingress/multiple_ingress)
+
+
