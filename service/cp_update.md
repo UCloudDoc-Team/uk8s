@@ -77,6 +77,23 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 ## 2. 变更记录
 
+### 更新版本：22.06.2
+
+更新时间：2022 年 6 月 28 日
+
+更新内容：
+
+- 修复当 service 的 externalTrafficPolicy 属性为 Local，缺少 ULB ID 信息注入的缺陷
+
+### 更新版本：22.06.1
+
+更新时间：2022 年 6 月 10 日
+
+更新内容：
+
+- 更新依赖的 cloud provider 框架更新至v0.20.15，以引入kubernetes/cloud-provider#38 使得节点状态更新能够尽快的通知到cloud provider
+master、unready 以及具有 "node.kubernetes.io/exclude-from-external-load-balancers" label的节点不会加入到 lb 的 rs 中，而不再根据SchedulingDisabled 状态（k8s cloud provider 框架升级带来行为变化）
+
 ### 更新版本：21.10.2
 
 更新时间：2021 年 11 月 4 日
