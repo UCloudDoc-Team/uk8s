@@ -267,9 +267,6 @@ metadata:
 spec:
   type: LoadBalancer
   externalTrafficPolicy: Local
-  ipFamilyPolicy: SingleStack
-  ipFamilies: 
-    - IPv4
   ports:
     - name: http
       port: 80
