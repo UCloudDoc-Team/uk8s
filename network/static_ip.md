@@ -133,3 +133,4 @@ kubectl get vpcIpClaims -l attached=false -o=json | jq '.items[]|.metadata.name 
 VpcIP 后，在 UK8S 控制台移除节点。
 
 最后，再次执行 `kubectl patch sts web-test -p '{"spec":{"replicas":<new-replicas>}}'`，将 Sts 副本数调整为期望值。
+
