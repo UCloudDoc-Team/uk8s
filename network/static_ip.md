@@ -7,9 +7,9 @@ IP 模式**。
 
 固定 IP 仅支持 **StatefulSet 形式的资源控制器**。
 
-## 1. 固定 IP 插件安装
+## 1. 固定 IP 插件安装和升级
 
-请在您的 UK8S 集群中执行以下命令，安装固定 IP 功能组件，后续版本将支持通过控制台安装相关组件：
+请在您的 UK8S 集群中执行以下命令，安装固定 IP 功能组件，如果已经安装，再次执行会将其升级到最新版本，后续版本将支持通过控制台安装相关组件：
 
 ```
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/network/cni-vpc-ipamd.yml
