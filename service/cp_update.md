@@ -77,6 +77,15 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 ## 2. 变更记录
 
+### 更新版本：22.07.1
+
+更新时间：2022 年 7 月 15 日
+
+更新内容：
+
+- 优化ULB的查询逻辑，提高修改、删除Service的速度。
+- 增加通过EIP进行ULB匹配的兜底逻辑。从而防止因为用户手动修改了ULB名称或备注导致Service无法正确跟ULB匹配而发生ULB重建的问题。
+
 ### 更新版本：22.06.2
 
 更新时间：2022 年 6 月 28 日
