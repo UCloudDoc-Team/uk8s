@@ -6,27 +6,27 @@
 
 1. UK8S Node 节点实例的创建时间必须晚于 2020 年 5 月，不满足此条件的节点，则必须先对 Node 节点进行先关机，再开机操作。
 
-2. Kubernetes版本不低于 1.14，如集群版本是 1.14 及 1.15，必须在三台 Master 节点 `/etc/kubernetes/apiserver` 文件中配置
+2. Kubernetes 版本不低于 1.14，如集群版本是 1.14 及 1.15，必须在三台 Master 节点 `/etc/kubernetes/apiserver` 文件中配置
    `--feature-gates=ExpandCSIVolumes=true`，并通过 `systemctl restart kube-apiserver` 重启
-   APIServer。并需要在node节点中修改`/etc/kubernetes/kubelet`
+   APIServer。并需要在 node 节点中修改`/etc/kubernetes/kubelet`
    文件中配置，增加`--feature-gates=ExpandCSIVolumes=true`，执行`systemctl restart kubelet` 重启 kubelet。对于 1.14
-   版本的集群，如果需要在线扩容(pod 不重启)，需要同时配置 `ExpandInUsePersistentVolumes=true`的特性开关。1.13 及以下版本不支持该特性，1.16
-   及以上版本无需配置;
+   版本的集群，如果需要在线扩容 (pod 不重启），需要同时配置 `ExpandInUsePersistentVolumes=true`的特性开关。1.13 及以下版本不支持该特性，1.16
+   及以上版本无需配置；
 
-3. CSI-UDisk版本不低于 20.08.1，CSI 版本更新及升级请查看：[CSI 更新记录及升级指南](/uk8s/volume/csi_update);
+3. CSI-UDisk 版本不低于 20.08.1，CSI 版本更新及升级请查看：[CSI 更新记录及升级指南](/uk8s/volume/CSI_update);
 
 4. 扩容时声明的期望容量大小必须是 10 的整数倍，单位为 Gi;
 
-5. 只支持动态创建的 PVC 扩容，且 storageClass 必须显示声明可扩容(见后文)；
+5. 只支持动态创建的 PVC 扩容，且 storageClass 必须显示声明可扩容（见后文）；
 
 <!--
 ## 2. 准备操作
 
-#### 2.1 升级CSI-UDisk版本
+#### 2.1 升级 CSI-UDisk 版本
 
-2.1.1. 检查CSI-UDisk版本，确认是否要升级
+2.1.1. 检查 CSI-UDisk 版本，确认是否要升级
 
-如下所示，如果CSI-UDisk的版本低于20.08.1,则需要升级CSI-UDisk版本。
+如下所示，如果 CSI-UDisk 的版本低于 20.08.1, 则需要升级 CSI-UDisk 版本。
 
 ```bash
 
@@ -36,7 +36,7 @@
 
 ```
 
-2.2.2. 升级CSI-UDisk到20.08.1
+2.2.2. 升级 CSI-UDisk 到 20.08.1
 
 ```bash
 
@@ -50,15 +50,15 @@
 
 ```
 
-#### 2.2 UK8S开启ExpnadCSIVolumes=true特性
+#### 2.2 UK8S 开启 ExpnadCSIVolumes=true 特性
 
-仅1.14和1.15两个K8S版本中需要开启，1.16及以上已默认开启，1.13及以下版本不支持该特性。
+仅 1.14 和 1.15 两个 K8S 版本中需要开启，1.16 及以上已默认开启，1.13 及以下版本不支持该特性。
 
-#### 2.3 检查UK8S Node节点创建时间
+#### 2.3 检查 UK8S Node 节点创建时间
 
-如果节点创建时间早于2020年5月，该节点可能不支持在线扩容UDisk，此时需要先将该节点关机，再执行开机。
+如果节点创建时间早于 2020 年 5 月，该节点可能不支持在线扩容 UDisk，此时需要先将该节点关机，再执行开机。
 
-为了避免运行在节点上的业务受到影响，建议关机之前先执行Drain命令。
+为了避免运行在节点上的业务受到影响，建议关机之前先执行 Drain 命令。
 
 ```bash
 
@@ -67,9 +67,9 @@
 ```
 -->
 
-## 2. 扩容UDisk演示
+## 2. 扩容 UDisk 演示
 
-### 2.1 创建UDisk存储类，显式声明可扩容
+### 2.1 创建 UDisk 存储类，显式声明可扩容
 
 ```yaml
 apiVersion: storage.k8s.io/v1
@@ -78,14 +78,14 @@ metadata:
   name: csi-udisk-ssd
 provisioner: udisk.csi.ucloud.cn # provisioner 必须为 udisk.csi.ucloud.cn
 parameters:
-  type: "ssd" 
-  fsType: "ext4" 
-reclaimPolicy: Delete 
+  type: "ssd"
+  fsType: "ext4"
+reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true  # 必须声明该存储类支持可扩容特性
 ```
 
-### 2.2 通过该存储类创建PVC，并挂载到Pod
+### 2.2 通过该存储类创建 PVC，并挂载到 Pod
 
 ```yaml
 kind: PersistentVolumeClaim
@@ -109,7 +109,7 @@ metadata:
 spec:
   containers:
   - name: http
-    image: uhub.service.ucloud.cn/ucloud/nginx:1.17.10-alpine 
+    image: uhub.service.ucloud.cn/ucloud/nginx:1.17.10-alpine
     imagePullPolicy: Always
     ports:
     - containerPort: 8080
@@ -122,7 +122,7 @@ spec:
       claimName: udisk-volume-expand
 ```
 
-Pod启动后，我们分别查看下 PV、PVC 以及容器内的文件系统大小，可以发现，目前都是10Gi
+Pod 启动后，我们分别查看下 PV、PVC 以及容器内的文件系统大小，可以发现，目前都是 10Gi
 
 ```bash
 # kubectl  get pv
@@ -159,14 +159,14 @@ Filesystem      Size  Used Avail Use% Mounted on
 ...
 ```
 
-同时登录UDisk控制台，发现 UDisk 展示容量也增大到了 20Gi。这样我们完成了Pod不重启，服务不停机的数据卷在线扩容。
+同时登录 UDisk 控制台，发现 UDisk 展示容量也增大到了 20Gi。这样我们完成了 Pod 不重启，服务不停机的数据卷在线扩容。
 
 ### 2.4 离线扩容 PVC（推荐）
 
 在上面的示例中，我们完成了数据卷的在线扩容。但在高 IO 的场景下，Pod
 不重启进行数据卷扩容，有小概率导致文件系统异常。最稳定的扩容方案是先停止应用层服务、解除挂载目录，再进行数据卷扩容。下面我们演示下如何进行停服操作。
 
-上文步骤 2.3完成的时候，我们有一个 Pod 且挂载了一个 20Gi 的数据卷，现在我们需要对数据卷进行停服扩容。
+上文步骤 2.3 完成的时候，我们有一个 Pod 且挂载了一个 20Gi 的数据卷，现在我们需要对数据卷进行停服扩容。
 
 1. 基于上文的示例 yaml，去掉 PVC 相关的内容，单独创建一个名为 udisk-expand-test 的 yaml，只保留 Pod 的相关信息。然后删除 Pod，但保留 PVC 和 PV。
 
@@ -179,8 +179,8 @@ pod "udisk-expand-test" deleted
 
 2. 修改 PVC 信息，将 spec.resource.requests.storage 改成 30Gi, 保存并退出。
 
-等待一分钟左右后，执行 `kubectl get pv`，当 PV 的容量增长到 30Gi后，重建 Pod。需要注意的是，此时执行 `kubectl get pvc` 的时候，返回的 PVC
-容量依然是 20Gi，这是因为文件系统尚未扩容完毕，PVC 处于FileSystemResizePending 状态。
+等待一分钟左右后，执行 `kubectl get pv`，当 PV 的容量增长到 30Gi 后，重建 Pod。需要注意的是，此时执行 `kubectl get pvc` 的时候，返回的 PVC
+容量依然是 20Gi，这是因为文件系统尚未扩容完毕，PVC 处于 FileSystemResizePending 状态。
 
 ```bash
 # kubectl edit pvc udisk-volume-expand
