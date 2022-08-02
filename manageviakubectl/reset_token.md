@@ -1,6 +1,6 @@
 ## 集群更新凭证
 
-UK8S 支持用户通过 kubectl 工具连接 kubernetes 集群，详见[使用 kubectl 操作集群](https://docs.ucloud.cn/uk8s/manageviakubectl/intro_of_kubectl)
+UK8S 支持用户通过 kubectl 工具连接 kubernetes 集群，详见[使用 kubectl 操作集群](/uk8s/manageviakubectl/intro_of_kubectl)
 
 ### 更新新 Token 访问集群
 
