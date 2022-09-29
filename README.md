@@ -47,6 +47,7 @@
 - 集群存储
   - [Volume 介绍](/uk8s/volume/intro)
   - [在UK8S中使用UDISK](/uk8s/volume/udisk)
+  - [在UK8S中使用RSSD UDisk](/uk8s/volume/rssdudisk)
   - [UDisk 动态扩容](/uk8s/volume/expandvolume)
   <!-- * [在UK8S中使用已有UDISK](/uk8s/volume/statusudisk) -->
   - [在UK8S中使用UFS](/uk8s/volume/ufs)
@@ -91,6 +92,7 @@
     <!--* [概述](/uk8s/troubleshooting/node_debug_summary)
       * [预防OOM](/uk8s/troubleshooting/prevent_oom)-->
   - [存储常见问题](/uk8s/troubleshooting/storage)
+  - [RSSD云盘挂载问题](/uk8s/troubleshooting/rssd_attachment)
   - [镜像及镜像仓库常见问题](/uk8s/troubleshooting/registry)
   <!--* [容器常见问题](/uk8s/q/container) -->
   - [集群ULB误删处理](/uk8s/troubleshooting/ulb_undelete)
