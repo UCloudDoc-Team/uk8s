@@ -98,6 +98,7 @@
   - [集群ULB误删处理](/uk8s/troubleshooting/ulb_undelete)
   - [集群日志组件常见问题](/uk8s/troubleshooting/log_elk_summary.md)
   - [修改 npd 配置说明](/uk8s/troubleshooting/npd.md)
+  - [在节点宕机时恢复挂载了云盘的Pod](/uk8s/troubleshooting/recover_udisk_pod_when_node_crash.md)
 - 最佳实践
   - [API Server 审计功能](/uk8s/bestpractice/apiserver_audit)
   - [NodePort 相关参数修改](/uk8s/bestpractice/modify_nodeport)
