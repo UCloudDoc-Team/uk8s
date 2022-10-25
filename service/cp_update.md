@@ -77,6 +77,15 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 ## 2. 变更记录
 
+### 更新版本：22.10.1
+
+更新时间：2022 年 10 月 25 日
+
+更新内容：
+
+- 优化 ULB Backend 添加逻辑，加快 LoadBalancer 类型的 Service 获取 external IP 的速度
+- 优化外网 ULB 绑定的 EIP 的默认带宽配置，如果没有在 Service 中明确指定带宽，将不会更新已有 EIP 的带宽值，对于由 Cloud Provider 新创建的 EIP，仍使用默认带宽。
+
 ### 更新版本：22.07.1
 
 更新时间：2022 年 7 月 15 日
