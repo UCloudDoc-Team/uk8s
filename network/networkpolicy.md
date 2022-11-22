@@ -106,7 +106,7 @@ metadata:
     app: ucloud-nginx
 spec: 
   type: LoadBalancer
-  externalTrafficPolicy: local
+  externalTrafficPolicy: Local
   ports: 
     - protocol: TCP
       port: 80
