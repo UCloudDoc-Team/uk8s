@@ -39,6 +39,7 @@
   - [制作自定义镜像](/uk8s/administercluster/custom_image)
   - [自定义数据及初始化脚本](/uk8s/administercluster/cloud_init)
   - [GPU共享插件](/uk8s/administercluster/gpu-share)
+  - [手动增加外网凭证](/uk8s/administercluster/add-external-certificate)
 - 集群网络
   - [集群网络](/uk8s/network/uk8s_network)
   - [网络隔离](/uk8s/network/networkpolicy)
