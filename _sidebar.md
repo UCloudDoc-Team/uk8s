@@ -1,3 +1,5 @@
+
+
 - 产品简介
   - [产品概念](/uk8s/introduction/whatisuk8s)
   - [使用须知](/uk8s/introduction/restriction)
@@ -11,30 +13,30 @@
   - [查看集群](/uk8s/userguide/describecluster)
   - [添加节点](/uk8s/userguide/addnode)
   - kube-proxy 相关
-    - [kube-proxy模式选择](/uk8s/userguide/kubeproxy_mode)
-    - [kube-proxy模式切换](/uk8s/userguide/kubeproxy_edit)
+    - [kube-proxy 模式选择](/uk8s/userguide/kubeproxy_mode)
+    - [kube-proxy 模式切换](/uk8s/userguide/kubeproxy_edit)
   - [Docker VS Containerd](/uk8s/userguide/docker_vs_containerd)
 - 集群管理
   - 通过 Kubectl 管理集群
-    - [kubectl命令行简介](/uk8s/manageviakubectl/intro_of_kubectl)
-    - [安装及配置kubectl](/uk8s/manageviakubectl/connectviakubectl)
-    - [使用web kubectl](/uk8s/manageviakubectl/webterminal)
+    - [kubectl 命令行简介](/uk8s/manageviakubectl/intro_of_kubectl)
+    - [安装及配置 kubectl](/uk8s/manageviakubectl/connectviakubectl)
+    - [使用 web kubectl](/uk8s/manageviakubectl/webterminal)
     - [集群更新凭证](/uk8s/manageviakubectl/reset_token)
-    - [创建PVC](/uk8s/manageviakubectl/createpvc)
-    - [创建Service](/uk8s/manageviakubectl/createservice)
-    - [StatefulSet示例](/uk8s/manageviakubectl/sts_example)
+    - [创建 PVC](/uk8s/manageviakubectl/createpvc)
+    - [创建 Service](/uk8s/manageviakubectl/createservice)
+    - [StatefulSet 示例](/uk8s/manageviakubectl/sts_example)
   - [集群版本升级](/uk8s/administercluster/cluster_version_update)
-  - Kubernetes弹性伸缩
+  - Kubernetes 弹性伸缩
     - [概述](/uk8s/administercluster/autoscaling/intro)
     - [弹性伸缩（HPA）](/uk8s/administercluster/autoscaling/hpa)
     - [定时伸缩（CronHPA）](/uk8s/administercluster/autoscaling/cronhpa)
     - [集群伸缩（CA）](/uk8s/administercluster/autoscaling/ca)
-  - [配置自定义DNS服务](/uk8s/administercluster/custom_dns_service)
+  - [配置自定义 DNS 服务](/uk8s/administercluster/custom_dns_service)
   - [ETCD 备份及恢复](/uk8s/administercluster/etcd_backup)
   - [UK8S 核心组件故障恢复](/uk8s/administercluster/k8splugin_restore)
   - [制作自定义镜像](/uk8s/administercluster/custom_image)
   - [自定义数据及初始化脚本](/uk8s/administercluster/cloud_init)
-  - [GPU共享插件](/uk8s/administercluster/gpu-share)
+  - [GPU 共享插件](/uk8s/administercluster/gpu-share)
   - [手动增加外网凭证](/uk8s/administercluster/add-external-certificate)
 - 集群网络
   - [集群网络](/uk8s/network/uk8s_network)
@@ -43,35 +45,35 @@
   - [CNI 网络插件升级](/uk8s/network/cni_update)
 - 集群存储
   - [Volume 介绍](/uk8s/volume/intro)
-  - [在UK8S中使用UDISK](/uk8s/volume/udisk)
-  - [在UK8S中使用RSSD UDisk](/uk8s/volume/rssdudisk)
+  - [在 UK8S 中使用 UDISK](/uk8s/volume/udisk)
+  - [在 UK8S 中使用 RSSD UDisk](/uk8s/volume/rssdudisk)
   - [UDisk 动态扩容](/uk8s/volume/expandvolume)
   <!-- * [在UK8S中使用已有UDISK](/uk8s/volume/statusudisk) -->
-  - [在UK8S中使用UFS](/uk8s/volume/ufs)
+  - [在 UK8S 中使用 UFS](/uk8s/volume/ufs)
   <!-- * [动态PV使用UFS](/uk8s/volume/dynamic_ufs)-->
-  - [在UK8S中使用US3](/uk8s/volume/ufile)
+  - [在 UK8S 中使用 US3](/uk8s/volume/ufile)
   - [CSI 存储插件升级](/uk8s/volume/CSI_update)
   - [Flexvolume 升级 CSI](/uk8s/volume/flexv_csi)
 - 服务发现
   - [Service 介绍](/uk8s/service/intro)
   - [集群内访问 Service](/uk8s/service/cluster_service)
-  - [通过内网ULB访问Service](/uk8s/service/internalservice)
-  - [通过外网ULB访问Service](/uk8s/service/externalservice)
-  - [使用已有的ULB](/uk8s/service/ulb_designation)
-  - [ULB参数说明](/uk8s/service/annotations)
+  - [通过内网 ULB 访问 Service](/uk8s/service/internalservice)
+  - [通过外网 ULB 访问 Service](/uk8s/service/externalservice)
+  - [使用已有的 ULB](/uk8s/service/ulb_designation)
+  - [ULB 参数说明](/uk8s/service/annotations)
   <!-- * [ULB属性修改的处理方法](/uk8s/service/change_ulb_name)-->
-  - [获取真实客户端IP](/uk8s/service/getresourceip)
-  - [通过ULB暴露Dashboard](/uk8s/service/dashboard)
-  - [CloudProvider插件升级](/uk8s/service/cp_update)
-  - [Ingress支持](/uk8s/service/ingress/README)
+  - [获取真实客户端 IP](/uk8s/service/getresourceip)
+  - [通过 ULB 暴露 Dashboard](/uk8s/service/dashboard)
+  - [CloudProvider 插件升级](/uk8s/service/cp_update)
+  - [Ingress 支持](/uk8s/service/ingress/README)
 - 日志监控方案
-  - [使用ELK自建UK8S日志解决方案](/uk8s/log/elastic_filebeat_kibana_solution)
-  - [使用UK8S日志插件功能](/uk8s/log/ELKplugin)
-  - Prometheus监控方案
-    - [什么是Prometheus](/uk8s/monitor/prometheus/intro)
+  - [使用 ELK 自建 UK8S 日志解决方案](/uk8s/log/elastic_filebeat_kibana_solution)
+  - [使用 UK8S 日志插件功能](/uk8s/log/ELKplugin)
+  - Prometheus 监控方案
+    - [什么是 Prometheus](/uk8s/monitor/prometheus/intro)
     - [核心概念](/uk8s/monitor/prometheus/concept)
-    - [部署Prometheus](/uk8s/monitor/prometheus/installprometheus)
-    - [基于自定义指标伸缩Pod](/uk8s/monitor/prometheus/autoscale_on_custom_metrics.md)
+    - [部署 Prometheus](/uk8s/monitor/prometheus/installprometheus)
+    - [基于自定义指标伸缩 Pod](/uk8s/monitor/prometheus/autoscale_on_custom_metrics.md)
   - 监控中心操作指南
     - [概述](/uk8s/monitor/prometheusplugin/intro.md)
     - [开启监控](/uk8s/monitor/prometheusplugin/startmonitor.md)
@@ -79,7 +81,7 @@
     - [添加接收人](/uk8s/monitor/prometheusplugin/addreceiver.md)
 - 镜像仓库
   - [概述](/uk8s/dockerhub/outline)
-  - [在UK8S中使用UHub](/uk8s/dockerhub/using_uhub_in_uk8s)
+  - [在 UK8S 中使用 UHub](/uk8s/dockerhub/using_uhub_in_uk8s)
 - 常见问题及排障指南
   - [入门必读](/uk8s/troubleshooting/startguide)
   - [UK8S 集群常见问题](/uk8s/troubleshooting/k8s_debug_summary)
@@ -90,13 +92,13 @@
     <!--* [概述](/uk8s/troubleshooting/node_debug_summary)
       * [预防OOM](/uk8s/troubleshooting/prevent_oom)-->
   - [存储常见问题](/uk8s/troubleshooting/storage)
-  - [RSSD云盘挂载问题](/uk8s/troubleshooting/rssd_attachment)
+  - [RSSD 云盘挂载问题](/uk8s/troubleshooting/rssd_attachment)
   - [镜像及镜像仓库常见问题](/uk8s/troubleshooting/registry)
   <!--* [容器常见问题](/uk8s/q/container) -->
-  - [集群ULB误删处理](/uk8s/troubleshooting/ulb_undelete)
+  - [集群 ULB 误删处理](/uk8s/troubleshooting/ulb_undelete)
   - [集群日志组件常见问题](/uk8s/troubleshooting/log_elk_summary.md)
   - [修改 npd 配置说明](/uk8s/troubleshooting/npd.md)
-  - [在节点宕机时恢复挂载了云盘的Pod](/uk8s/troubleshooting/recover_udisk_pod_when_node_crash.md)
+  - [在节点宕机时恢复挂载了云盘的 Pod](/uk8s/troubleshooting/recover_udisk_pod_when_node_crash.md)
 - 最佳实践
   - [API Server 审计功能](/uk8s/bestpractice/apiserver_audit)
   - [NodePort 相关参数修改](/uk8s/bestpractice/modify_nodeport)
