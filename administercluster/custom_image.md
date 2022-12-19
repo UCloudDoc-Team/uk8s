@@ -143,8 +143,6 @@ brew install ansible
 | sg           | sg-02(10028)           | uimage-2qkirw   | CentOS        | 7.6   | 是        |
 | sg           | sg-02(10028)           | uimage-r52fqi   | Ubuntu        | 20.04 | 是        |
 | sg           | sg-02(10028)           | uimage-5yeoyz   | Anolis        | 8.6   | 否        |
-| th-bkk       | th-bkk-01(10003)       | uimage-s2w523   | CentOS        | 7.6   | 是        |
-| th-bkk       | th-bkk-01(10003)       | uimage-qdhhdc   | Ubuntu        | 20.04 | 是        |
 | tw-tp        | tw-tp-01(10009)        | uimage-jswkmh   | CentOS        | 7.6   | 是        |
 | tw-tp        | tw-tp-01(10009)        | uimage-v2a10d   | Ubuntu        | 20.04 | 是        |
 | tw-tp        | tw-tp-01(10009)        | uimage-o41ux4   | Anolis        | 8.6   | 否        |
