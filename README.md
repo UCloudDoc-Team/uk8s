@@ -45,7 +45,7 @@
   - [网络隔离](/uk8s/network/networkpolicy)
   - [固定 IP 使用方法](/uk8s/network/static_ip)
   - [CNI 网络插件升级](/uk8s/network/cni_update)
-  - [ipamd](/uk8s/network/ipamd)
+  - [IPAMD](/uk8s/network/ipamd)
 - 集群存储
   - [Volume 介绍](/uk8s/volume/intro)
   - [在UK8S中使用UDISK](/uk8s/volume/udisk)
