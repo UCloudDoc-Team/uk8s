@@ -13,12 +13,15 @@ metadata:
   labels:
     app: "cni-vpc-ipamd"
 rules:
-  - apiGroups: [""]
-    resources: ["nodes"]
-    verbs: ["get"]
-  - apiGroups: [""]
-    resources: ["pods"]
-    verbs: ["get", "list","update"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get","list", "update"]
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get"]
+- apiGroups: ["vpc.uk8s.ucloud.cn"]
+  resources: ["vpcipclaims", "ipamds"]
+  verbs: ["get", "create","delete","update","list"]
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -57,29 +60,29 @@ spec:
       - key: dedicated
         operator: Exists
       - effect: NoSchedule
-        key: node-role.kubernetes.io/master
-      - effect: NoSchedule
         key: node.cloudprovider.kubernetes.io/uninitialized
         value: "true"
       serviceAccount: cni-vpc-ipamd
       hostNetwork: true
+      priorityClassName: system-node-critical
       hostPID: true
-      initContainers:
-      - name: init-sqlite3-file
-        image: uhub.service.ucloud.cn/uk8s/cni-db-update:19.11.1
-        volumeMounts:
-          - name: host-cni
-            mountPath: /opt/cni/
-          - name: host-sysconfig
-            mountPath: /etc/sysconfig/
       containers:
         - name: cni-vpc-ipamd
-          image: uhub.service.ucloud.cn/uk8s/cni-vpc-ipamd:20.05.1
+          image: uhub.service.ucloud.cn/uk8s/cni-vpc-ipamd:1.0.1
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
           securityContext:
             privileged: true
           args:
-            - "--availablePodIPLowWatermark=5"
-            - "--secondaryIPWarmingSeconds=10"
+            - "--availablePodIPLowWatermark=3"
+            - "--availablePodIPHighWatermark=50"
+            - "--calicoPolicyFlag=true"
+            - "--cooldownPeriodSeconds=30"
           imagePullPolicy: "Always"
           lifecycle:
             preStop:
@@ -93,22 +96,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          livenessProbe:
-            exec:
-              command:
-              - /opt/cni/bin/cnivpc
-              - version
-            periodSeconds: 10
-            initialDelaySeconds: 5
-            failureThreshold: 5
-          readinessProbe:
-            exec:
-              command:
-              - /opt/cni/bin/cnivpc
-              - version
-            periodSeconds: 10
-            initialDelaySeconds: 5
-            failureThreshold: 5
           volumeMounts:
             - name: user-config
               mountPath: /etc/uk8s/
@@ -120,6 +107,9 @@ spec:
               mountPath: /opt/cni/
             - name: device-plugin-path
               mountPath: /var/lib/kubelet/device-plugins
+            - name: var-run-ns
+              mountPath: /var/run/netns/
+              mountPropagation: "Bidirectional"
             - name: host-data
               mountPath: /etc/kubernetes
               readOnly: true
@@ -134,9 +124,9 @@ spec:
           hostPath:
             path: /var/lib/kubelet/device-plugins
             type: "Directory"
-        - name: host-sysconfig
+        - name: var-run-ns
           hostPath:
-            path: /etc/sysconfig/
+            path: /var/run/netns/
         - name: host-cni
           hostPath:
             path: /opt/cni/
@@ -146,3 +136,44 @@ spec:
         - name: host-data
           hostPath:
             path: /etc/kubernetes
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: ipamds.vpc.uk8s.ucloud.cn
+spec:
+  group: vpc.uk8s.ucloud.cn
+  versions:
+    - name: v1beta1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                node:
+                  type: string
+                addr:
+                  type: string
+                subnet:
+                  type: string
+            status:
+              type: object
+              properties:
+                current:
+                  type: integer
+                high:
+                  type: integer
+                low:
+                  type: integer
+                status:
+                  type: string
+  scope: Namespaced
+  names:
+    plural: ipamds
+    singular: ipamd
+    kind: Ipamd
+
