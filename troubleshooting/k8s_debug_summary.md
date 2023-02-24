@@ -23,7 +23,8 @@
 * [为什么在 K8S 节点 Docker 直接起容器网络不通](#为什么在-k8s-节点-docker-直接起容器网络不通)
 * [使用 ULB4 时 Vserver 为什么会有健康检查失效](#使用-ulb4-时-vserver-为什么会有健康检查失效)
 * [ULB4 对应的端口为什么不是 NodePort 的端口](#ulb4-对应的端口为什么不是-nodeport-的端口)
-* [更改报文转发ULB的EIP之后在uk8s不生效](#更改报文转发ULB的EIP之后在uk8s不生效)-->
+* [更改报文转发ULB的EIP之后在uk8s不生效](#更改报文转发ULB的EIP之后在uk8s不生效)
+* [Service换绑后原ULB无法重新绑定](#Service换绑后原ULB无法重新绑定)-->
 
 ## 1. UK8S 完全兼容原生 Kubernetes API吗？
 
@@ -251,3 +252,13 @@ kubectl -n kube-system rollout restart deploy cloudprovider-ucloud
 ```
 
 注意，在重启之后，可能需要2分钟左右的时间生效。
+
+## 22. Service换绑后原ULB无法重新绑定
+
+当Service换绑ULB之后，原来的ULB会有vserver残留，这时候别的Service绑定原来ULB会报类似如下的错误：
+
+```
+Error syncing load balancer: failed to ensure load balancer: vserver(s) have already been created for one or more ports
+```
+
+如果遇到，需要手动将原来ULB中的vserver清理掉。
