@@ -22,7 +22,8 @@
 * [UDisk-PVC 使用注意事项](#udisk-pvc-使用注意事项)
 * [为什么在 K8S 节点 Docker 直接起容器网络不通](#为什么在-k8s-节点-docker-直接起容器网络不通)
 * [使用 ULB4 时 Vserver 为什么会有健康检查失效](#使用-ulb4-时-vserver-为什么会有健康检查失效)
-* [ULB4 对应的端口为什么不是 NodePort 的端口](#ulb4-对应的端口为什么不是-nodeport-的端口)-->
+* [ULB4 对应的端口为什么不是 NodePort 的端口](#ulb4-对应的端口为什么不是-nodeport-的端口)
+* [更改报文转发ULB的EIP之后在uk8s不生效](#更改报文转发ULB的EIP之后在uk8s不生效)-->
 
 ## 1. UK8S 完全兼容原生 Kubernetes API吗？
 
@@ -236,3 +237,17 @@ root       12822   12398  0 11:17 pts/0    00:00:00 grep --color=auto 10386
 在1.19.5集群中，有可能出现节点not
 ready的情况，查看kubelet日志，发现有大量`Error while dialing dial unix:///run/containerd/containerd.sock`相关的日志。这是1.19.5版本中一个已知bug，当遇到containerd重启的情况下，kubelet会失去与containerd的连接，只有重启kublet才能恢复。具体可以查看[k8s官方issue](https://github.com/kubernetes/kubernetes/issues/95727)。\
 如果您遇到此问题，重启kubelet即可恢复。同时目前uk8s集群已经不支持创建1.19.5版本的集群，如果您的集群版本为1.19.5，可以通过升级集群的方式，升级到1.19.10。
+
+## 21. 更改报文转发ULB的EIP之后在uk8s不生效
+
+如果uk8s中某个Service绑定了报文转发类型的ULB，而用户手动更改了ULB的EIP，会发现无法通过新的EIP来访问Service。
+
+这是因为cloudprovider组件无法监听到ULB的变动，没有触发对账流程将新的EIP写入iptables以实现转发。
+
+如果您遇到该问题，可以在修改EIP之后使用下面的命令重启cloudprovider以强制触发对账流程：
+
+```bash
+kubectl -n kube-system rollout restart deploy cloudprovider-ucloud
+```
+
+注意，在重启之后，可能需要2分钟左右的时间生效。
