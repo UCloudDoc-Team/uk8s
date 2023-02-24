@@ -130,3 +130,47 @@ spec:
     persistentVolumeClaim:
       claimName: test-pvc-claim
 ```
+
+## 4. 使用StatefulSet
+
+如果有部署多副本有状态应用的需求，建议使用StatefulSet而不是Deployment，因为Deployment中多个pod会共享同一个磁盘，如果pod在不同节点就会导致问题。而StatefulSet能让多个pod使用自己的磁盘。
+
+一般会使用StatefulSet来为每个pod动态创建pvc和udisk磁盘，下面的yaml可以作为参考：
+
+```yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: web
+spec:
+  selector:
+    matchLabels:
+      app: nginx # has to match .spec.template.metadata.labels
+  serviceName: "nginx"
+  replicas: 4 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: nginx # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: nginx
+        image: uhub.service.ucloud.cn/ucloud/nginx:latest
+        ports:
+        - containerPort: 80
+          name: web
+        volumeMounts:
+        - name: www
+          mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "test-pvc-claim"
+      resources:
+        requests:
+          storage: 20Gi
+```
+
