@@ -1,0 +1,511 @@
+# Source: uk8s-gpushare/templates/device-plugin-rbac.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: uk8s-device-plugin
+  namespace: kube-system
+---
+# Source: uk8s-gpushare/templates/gpushare-schd-extender.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: uk8s-device-plugin-scheduler
+  namespace: kube-system
+---
+# Source: uk8s-gpushare/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: uk8s-gpushare-serviceaccount
+  namespace: kube-system
+---
+# Source: uk8s-gpushare/templates/policy-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: uk8s-policy-cfg
+  namespace: kube-system
+data:
+  policy.cfg: |
+    {
+      "kind": "Policy",
+      "apiVersion": "v1",
+      "predicates": [
+        {"name": "MatchNodeSelector"},
+        {"name": "PodFitsResources"}
+      ],
+      "priorities": [
+        {
+          "name": "MostRequestedPriority",
+          "weight": 2
+        }
+      ],
+      "extenders": [
+        {
+          "urlPrefix": "http://uk8s-device-plugin-scheduler:12345/gpushare-scheduler",
+          "filterVerb": "filter",
+          "bindVerb":   "bind",
+          "enableHttps": false,
+          "nodeCacheCapable": true,
+          "managedResources": [
+            {
+              "name": "ucloud.cn/gpu-mem",
+              "ignoredByScheduler": false
+            }
+          ],
+          "ignorable": false
+        }
+      ]
+    }
+---
+# Source: uk8s-gpushare/templates/scheduler-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scheduler-config
+  namespace: kube-system
+data:
+  scheduler-config.yaml: |
+    apiVersion: kubescheduler.config.k8s.io/v1alpha1
+    kind: KubeSchedulerConfiguration
+    schedulerName: gpushare-scheduler
+    algorithmSource:
+      policy:
+        configMap:
+          name: uk8s-policy-cfg
+          namespace: kube-system
+    leaderElection:
+      leaderElect: true
+      lockObjectName: gpushare-scheduler
+      lockObjectNamespace: kube-system
+---
+# Source: uk8s-gpushare/templates/device-plugin-rbac.yaml
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: uk8s-device-plugin
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - update
+      - patch
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - nodes/status
+    verbs:
+      - patch
+      - update
+---
+# Source: uk8s-gpushare/templates/gpushare-schd-extender.yaml
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: uk8s-device-plugin-scheduler
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - update
+      - patch
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - bindings
+      - pods/binding
+    verbs:
+      - create
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+---
+# Source: uk8s-gpushare/templates/serviceaccount.yaml
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: uk8s-gpushare-cr
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+      - events
+    verbs:
+      - create
+      - get
+      - update
+  - apiGroups:
+      - ""
+    resourceNames:
+      - gpushare-scheduler
+    resources:
+      - endpoints
+    verbs:
+      - delete
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - delete
+      - get
+      - list
+      - watch
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - bindings
+      - pods/binding
+    verbs:
+      - create
+  - apiGroups:
+      - ""
+    resources:
+      - pods/status
+    verbs:
+      - patch
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - replicationcontrollers
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - apps
+      - extensions
+    resources:
+      - replicasets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - statefulsets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - policy
+    resources:
+      - poddisruptionbudgets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - persistentvolumeclaims
+      - persistentvolumes
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - "storage.k8s.io"
+    resources:
+      - storageclasses
+      - csinodes
+    verbs:
+      - watch
+      - list
+      - get
+  - apiGroups:
+      - "coordination.k8s.io"
+    resources:
+      - leases
+    verbs:
+      - create
+      - get
+      - list
+      - update
+  - apiGroups:
+      - "events.k8s.io"
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+      - update
+---
+# Source: uk8s-gpushare/templates/device-plugin-rbac.yaml
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: uk8s-device-plugin
+  namespace: kube-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: uk8s-device-plugin
+subjects:
+  - kind: ServiceAccount
+    name: uk8s-device-plugin
+    namespace: kube-system
+---
+# Source: uk8s-gpushare/templates/gpushare-schd-extender.yaml
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: uk8s-device-plugin-scheduler
+  namespace: kube-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: uk8s-device-plugin-scheduler
+subjects:
+  - kind: ServiceAccount
+    name: uk8s-device-plugin-scheduler
+    namespace: kube-system
+
+# deployment yaml
+---
+# Source: uk8s-gpushare/templates/serviceaccount.yaml
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: uk8s-gpushare-crb
+  namespace: kube-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: uk8s-gpushare-cr
+subjects:
+  - kind: ServiceAccount
+    name: uk8s-gpushare-serviceaccount
+    namespace: kube-system
+---
+# Source: uk8s-gpushare/templates/gpushare-schd-extender.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: uk8s-device-plugin-scheduler
+  namespace: kube-system
+  labels:
+    app: gpushare
+    component: uk8s-device-plugin-scheduler
+spec:
+  type: NodePort
+  ports:
+    - port: 12345
+      name: http
+      targetPort: 12345
+      nodePort: 32766
+  selector:
+    # select app=ingress-nginx pods
+    app: gpushare
+    component: uk8s-device-plugin-scheduler
+---
+# Source: uk8s-gpushare/templates/device-plugin-daemonset.yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: uk8s-device-plugin-ds
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      component: uk8s-device-plugin
+      app: gpushare
+      name: uk8s-device-plugin-ds
+  template:
+    metadata:
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ""
+      labels:
+        component: uk8s-device-plugin
+        app: gpushare
+        name: uk8s-device-plugin-ds
+    spec:
+      serviceAccount: uk8s-device-plugin
+      hostNetwork: true
+      nodeSelector:
+        nodeShareGPU: "true"
+      containers:
+        - image: "uhub.service.ucloud.cn/uk8s/uk8s-device-plugin:v1.1.0"
+          name: gpushare
+          # Make this pod as Guaranteed pod which will never be evicted because of node's resource consumption.
+          command:
+            - uk8s-device-plugin
+            - -logtostderr
+            - --v=5
+            - --memory-unit=GiB
+          resources:
+            limits:
+              memory: "300Mi"
+              cpu: "1"
+            requests:
+              memory: "300Mi"
+              cpu: "1"
+          env:
+            - name: KUBECONFIG
+              value: /etc/kubernetes/kubelet.conf
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: device-plugin
+              mountPath: /var/lib/kubelet/device-plugins
+      volumes:
+        - name: device-plugin
+          hostPath:
+            path: /var/lib/kubelet/device-plugins
+---
+# Source: uk8s-gpushare/templates/gpushare-schd-extender.yaml
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: uk8s-device-plugin-scheduler
+  namespace: kube-system
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: gpushare
+      component: uk8s-device-plugin-scheduler
+  template:
+    metadata:
+      labels:
+        app: gpushare
+        component: uk8s-device-plugin-scheduler
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+    spec:
+      hostNetwork: true
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
+          key: node-role.kubernetes.io/master
+        - effect: NoSchedule
+          operator: Exists
+          key: node.cloudprovider.kubernetes.io/uninitialized
+      serviceAccount: uk8s-device-plugin-scheduler
+      containers:
+        - name: uk8s-device-plugin-scheduler
+          image: "uhub.service.ucloud.cn/uk8s/uk8s-device-plugin-scheduler:v1.1.0"
+          env:
+            - name: LOG_LEVEL
+              value: "info"
+            - name: PORT
+              value: "12345"
+
+# service.yaml
+---
+# Source: uk8s-gpushare/templates/scheduler-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gpushare-scheduler
+  namespace: kube-system
+  labels:
+    component: gpushare-scheduler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: gpushare-scheduler
+  template:
+    metadata:
+      labels:
+        component: gpushare-scheduler
+    spec:
+      serviceAccount: uk8s-gpushare-serviceaccount
+      volumes:
+        - name: scheduler-config
+          configMap:
+            name: scheduler-config
+      containers:
+        - name: k8s-gpushare-scheduler
+          image: "uhub.service.ucloud.cn/uk8s/kube-scheduler:v1.17.4"
+          imagePullPolicy: Always
+          args:
+            - kube-scheduler
+            - --v=6
+            - --config=/scheduler/scheduler-config.yaml
+            - --scheduler-name=kube-scheduler
+          resources:
+            requests:
+              cpu: "500m"
+          volumeMounts:
+            - name: scheduler-config
+              mountPath: /scheduler
