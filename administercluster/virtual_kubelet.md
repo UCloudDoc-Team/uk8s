@@ -91,7 +91,7 @@ automountServiceAccountToken: false
 
 以default sa为例:  
    
-如果是1.24及更高版本的集群，由于创建 service account 时没有自动生成相应的token，首先需要创建一个secret。
+如果是1.24及更高版本的集群，由于创建 service account 时没有自动生成相应的token，首先需要创建一个secret：
 ```yaml
 apiVersion: v1
 kind: Secret
@@ -102,7 +102,7 @@ metadata:
 type: kubernetes.io/service-account-token
 ```
 
-1.22版本不需要以上步骤，执行 `kubectl get secret` 找到 `default` service account 对应的 secret名称即可。
+> 1.22版本不需要以上步骤，执行 `kubectl get secret` 找到 `default` service account 对应的 secret名称即可。
 
 创建deployment时，显式指定service account、volume 和 mount:
 ```yaml
