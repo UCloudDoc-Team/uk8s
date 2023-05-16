@@ -35,21 +35,35 @@ VK 节点与普通 Node 节点一样，是 UK8S 集群当中的一个 Node 对�
 通过 VK 节点创建 Cube 实例的方式，与普通 Pod 资源类似，但需要在 yaml 文件 Pod spec 中添加 nodeName 或 nodeSelector 指定 VK 节点并添加污点容忍。支持直接创建 Pod，或通过 Deployment 及 StatefulSet 等控制器进行 Pod 的管理。
 
 ```yaml
-# 如pod无需和api server通信，则可以不挂载token。在pod spec中加入以下字段跳过挂载
-automountServiceAccountToken: false
-# 通过指定 nodeName 调度到 VK 节点
-nodeName: uk8s-xxxxxxxx-vk-xxxxx           
-# 通过 nodeSelector 调度到 VK 节点，nodeName 及 nodeSelector 只需配置一项
-# 如以 Deploy 及 Sts 形式创建，请务必使用 nodeSelector
-# 虚拟节点创建后，也可为虚拟节点添加指定标签，用于 Pod 调度的管理
-nodeSelector:
-  type: virtual-kubelet                    
-# 添加节点容忍
-tolerations:                               
-- effect: NoSchedule
-  key: virtual-kubelet.io/provider
-  operator: Equal
-  value: ucloud
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  # 如pod无需和api server通信，则建议不挂载token。在pod spec中加入以下字段跳过挂载
+  # 如果必须使用service account token, 参考下方关于 「1.22版本service account token自动挂载问题」 的说明
+  automountServiceAccountToken: false
+  # 通过 nodeSelector 调度到 VK 节点，nodeName 及 nodeSelector 只需配置一项
+  # 如以 Deploy 及 Sts 形式创建，请务必使用 nodeSelector
+  # 虚拟节点创建后，也可为虚拟节点添加指定标签，用于 Pod 调度的管理
+  nodeSelector:
+    type: virtual-kubelet
+  # 通过指定 nodeName 调度到 VK 节点
+  # nodeName: uk8s-xxxxxxxx-vk-xxxxx
+  # 添加节点容忍
+  tolerations:
+  - key: virtual-kubelet.io/provider
+    operator: Equal
+    value: ucloud
+    effect: NoSchedule
+  containers:
+  - name: nginx
+    image: uhub.service.ucloud.cn/ucloud/nginx:latest
+    # 通过以下参数指定Pod资源配置 (如果不使用默认配置)，具体支持规格参考下方
+    resources:
+      requests:
+        cpu: "2"
+        memory: 2048Mi
 ```
 创建 Cube 实例时，需注意特定 CPU / 内存规格有一定的比例及限制，VK 支持创建 Cube 规格配置如下：
 
