@@ -226,3 +226,60 @@ spec:
     persistentVolumeClaim:
       claimName: logdisk-claim
 ```
+   
+## 使用自建镜像仓库   
+虚拟节点支持自建Hub，可以通过annotation指定Hub地址；如下：   
+### 1. 创建自建镜像仓库   
+以自建hub地址 `myhub.ucloud.cn` 为例，需要额外提供的信息包括镜像仓库ip地址和所在vpc。用户名和密码非必填。   
+参考 https://docs.ucloud.cn/cube/userguide/self_repository
+```bash
+cat > .dockerconfigjson <<EOF
+{
+  "auths": {
+    "myhub.ucloud.cn": {
+      "username": "user-xxx",
+      "password": "passwd-yyy",
+      "registryaddr": "10.x.y.z",
+      "vpcid": "uvnet-xxx"
+    }
+  }
+}
+EOF
+kubectl create secret docker-registry myhub --from-file=.dockerconfigjson
+```
+### 2. 创建pod时指定 `imagePullSecret` 
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-myhub-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      automountServiceAccountToken: false
+      nodeSelector:
+        type: virtual-kubelet
+      tolerations:
+      - key: virtual-kubelet.io/provider
+        operator: "Equal"
+        value: ucloud
+        effect: NoSchedule
+      containers:
+      - name: nginx
+        image: myhub.ucloud.cn/test/nginx:latest
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: myhub
+
+```
+
