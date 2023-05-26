@@ -228,7 +228,6 @@ spec:
 ```
    
 ## 使用自建镜像仓库   
-虚拟节点支持自建Hub，可以通过annotation指定Hub地址；如下：   
 ### 1. 创建自建镜像仓库   
 以自建hub地址 `myhub.ucloud.cn` 为例，需要额外提供的信息包括镜像仓库ip地址和所在vpc。用户名和密码非必填。   
 参考 https://docs.ucloud.cn/cube/userguide/self_repository
