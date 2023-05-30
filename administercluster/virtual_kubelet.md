@@ -3,6 +3,21 @@
 
 [Virtual Kubelet](https://virtual-kubelet.io/) 是 Kubernetes 社区的重要开源项目，基于 Virtual Kubelet 虚拟节点组件，可以实现 UCloud 两大容器产品 UK8S 和 Cube 的无缝对接，用户在 UK8S 集群中可通过 VK 组件创建 [Cube 容器实例](/cube/README)，每个 Cube 实例被视为 VK 节点上的一个Pod。
 
+## 使用需知
+#### 虚拟节点是Serverless的，背后由UCloud海量物理机资源(即Cube)支撑，因此无法登陆虚拟节点，或是查看虚拟节点本身监控，但可查看虚拟节点上面Pod的监控
+#### 新建虚拟节点不会收取费用，会对虚拟节点上运行的Pod收取实时费用
+#### 虚拟节点上Pod使用注意事项：
+##### 网络
+支持使用VPC，与云主机同级；不支持自定义 `hostNetwork` 、CNI、Calico Policy等功能。
+##### Pod存储
+容器支持10GiB的临时存储空间，对临时存储的修改在Pod重启后会丢失，如有需要推荐挂载持久化存储。   
+持久化存储：支持挂载UDisk、NFS、ConfigMap、Secret，不支持其他类型的volume，例如 `hostPath` , `projected volume` 等。注意：挂载ConfigMap时，总配置大小不能超过30MiB。
+##### 镜像仓库
+支持拉去UHub以及同地域下的自建镜像仓库(仅使用UHost自建仓库)，不支持拉去外网镜像，如DockerHub；并且镜像大小不能超过10GiB。
+##### 其他功能
+支持日志， `exec` ，监控等基本功能；可以使用Deployment、StatefulSet等Kubernetes控制器进行控制。   
+其他与Kubernetes原生Pod兼容性一致。
+
 ## 添加虚拟节点
 
 在集群节点列表页，点击「添加虚拟节点」按钮，为 UK8S 集群添加虚拟节点，当前一个 UK8S 集群支持最多添加 8 个虚拟节点，所添加的虚拟节点名称为 **uk8s-xxxxxxxx-vk-xxxxx**，该名称将被注册为虚拟节点的 **spec.nodeName**，其中 **uk8s-xxxxxxxx** 为 UK8S 集群 ID，末五位为随机生成的数字字母组合。
