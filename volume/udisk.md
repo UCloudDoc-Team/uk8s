@@ -32,7 +32,7 @@ parameters:
   quantity: "1" # 购买时长，dynamic无需填写，可购买1-9个月，或1-10年
 reclaimPolicy: Delete  # PV回收策略，支持Delete和Retain，默认为Delete，非必填
 volumeBindingMode: WaitForFirstConsumer   # 强烈建议配置该参数
-mountOptions:   
+mountOptions:
   - debug
   - rw
 ```
@@ -145,13 +145,13 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: nginx # has to match .spec.template.metadata.labels
+      app: nginx
   serviceName: "nginx"
-  replicas: 4 # by default is 1
+  replicas: 4
   template:
     metadata:
       labels:
-        app: nginx # has to match .spec.selector.matchLabels
+        app: nginx
     spec:
       terminationGracePeriodSeconds: 10
       containers:
@@ -162,15 +162,16 @@ spec:
           name: web
         volumeMounts:
         - name: www
+          # 云盘挂载的目录
           mountPath: /usr/share/nginx/html
   volumeClaimTemplates:
   - metadata:
       name: www
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "test-pvc-claim"
+      # 要使用的StorageClass，表明要创建什么类型的磁盘
+      storageClassName: "udisk-ssd-test"
       resources:
         requests:
           storage: 20Gi
 ```
-
