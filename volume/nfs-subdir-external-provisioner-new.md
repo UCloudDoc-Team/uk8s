@@ -2,16 +2,15 @@
 
 ## 背景
 
-前面我们描述了通过创建静态 PV 的方式在 UK8S 中使用 UFS，但这种方式存在两个问题，一是每次都需要手动创建 PV 和 PVC，非常不便；二是无法自动在 UFS 创建子目录，需要预先配置。
+前面我们描述了通过创建静态 PV 的方式在 UK8S 中使用 UFS，但这种方式存在两个问题：一是每次都需要手动创建 PV 和 PVC，非常不便；二是无法自动在 UFS 创建子目录，需要预先配置。   
 
-下面我们介绍一个名为`nfs-subdir-external-provisioner`的开源项目，其项目地址为 [nfs-subdir-external-provisioner](https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner)。   
-此项目可以为我们提供一个基于 UFS 的`StorageClass`：在业务需要 UFS 存储资源时，只需要创建 PVC，`nfs-client-provisioner`就会自动创建 PV，并在 UFS 下创建一个名为`${namespace}-${pvcName}-${pvName}`的子目录。
+下面介绍一个名为`nfs-subdir-external-provisioner`的开源项目，项目地址为 [nfs-subdir-external-provisioner](https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner)。此项目可以为我们提供一个基于 UFS 的`StorageClass`：在业务需要 UFS 存储资源时，只需要创建 PVC，`nfs-client-provisioner`就会自动创建 PV，并在 UFS 下创建一个名为`${namespace}-${pvcName}-${pvName}`的子目录。
 
 ## 工作原理
 
-我们将 nfs 相关参数通过环境变量传入到`nfs-client-provisioner`，这个 provisioner 通过 Deployment 控制器运行一个 Pod 来管理 nfs 的存储空间。   
-服务启动后，我们再创建一个`StorageClass`，其 provisioner 与`nfs-client-provisioner`服务内的`provisioner-name`一致。`nfs-client-provisioner`会 watch 集群内的 PVC 对象，为其提供适配 PV 的服务，并且会在 nfs 根目录下创建对应的目录。   
-这些官方文档的描述已经比较详细了，不再赘述。以下说明如何在 UK8S 中使用这个服务来管理 UFS。
+我们将 nfs 相关参数通过环境变量传入到`nfs-client-provisioner`，这个 provisioner 通过 Deployment 控制器运行一个 Pod 来管理 nfs 的存储空间。服务启动后，我们再创建一个`StorageClass`，其 provisioner 与`nfs-client-provisioner`服务内的`provisioner-name`一致。`nfs-client-provisioner`会 watch 集群内的 PVC 对象，为其提供适配 PV 的服务，并且会在 nfs 根目录下创建对应的目录。 这些官方文档的描述已经比较详细了，不再赘述。  
+   
+以下说明如何在 UK8S 中使用这个服务来管理 UFS。
 
 ## 操作指南
 
@@ -115,7 +114,7 @@ spec:
     - nfsvers=4.0
 ```
 
-3、修改`class.yaml`
+4、修改`class.yaml`
 
 最后需要修改的是`StorageClass`的定义文件 `class.yaml`。   
 主要是新增了`mountOption`参数，这个值会传递给`nfs-client-provisioner`; 如果不加的话，挂载UFS的时候会失败。
@@ -142,7 +141,7 @@ mountOptions:
 | `archiveOnDelete` | `"true"`: 归档, 目录会被重命名为`archived-<volume.Name>`<br> `"false"`: 删除目录 | `"true"` |
 
 
-4、执行部署
+5、执行部署
 
 依次执行
 
@@ -152,7 +151,7 @@ mountOptions:
 # kubectl create -f class.yaml
 ```
 
-5、验证
+6、验证
 
 创建`test-nfs-sc.yaml`
 
@@ -198,6 +197,6 @@ spec:
 # kubectl create -f test-nfs-sc.yaml
 # kubectl exec test-pod -- /bin/sh -c 'ls /mnt/ && cat /mnt/*'
 SUCCESS
-
+1
 # kubectl delete -f test-nfs-sc.yaml
 ```
