@@ -11,14 +11,14 @@ shell 编程或 [Ansible][2] 使用经验。
 
 由于香港可用区到国内和全球其它可用区的网速较快，进行镜像复制时可以减少耗时。
 本文介绍的方法是在香港地域进行镜像构建，然后复制到其它可用区。
-请保证你在香港可用区有足够的云主机配额。
+请保证在香港可用区有足够的云主机配额。
 
 ## 二、制作自定义镜像流程
 
 1. 安装 Packer
 
 安装 [Packer][1]
-工具，使用该工具可以方便地创建并分发自定义镜像到你需要的可用区。
+工具，使用该工具可以方便地创建并分发自定义镜像到你需要的可用区。下面介绍了MacOS 安装方式，其他环境请参考[Packer官方文档](https://developer.hashicorp.com/packer/downloads?product_intent=packer)
 
 MacOS 用户可以通过以下命令安装 Packer：
 
@@ -27,7 +27,7 @@ brew install packer
 ```
 
 Packer 只负责创建云主机，在云主机中安装配置软件需要使用命令行脚本或 Ansible。
-本文档给的示例使用 Ansile，你也可以转换成其它等价工具。所以建议安装以下 Ansible。
+本文档给的示例使用 Ansible，也可以转换成其它等价工具。下面介绍了Ansible 的MacOS 安装方式，其他环境请参考[Ansible 官方文档](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#managed-node-requirements)。
 
 MacOS 用户可以通过以下命令安装 Ansible：
 
@@ -86,7 +86,7 @@ brew install ansible
 
 请先将上述例子中尖括号中的内容替换成实际的值。
 下表是香港可用区下 UK8S 支持的操作系统及版本对应的基础镜像 ID。
-请按你的需要选择合适的镜像，并用镜像 ID 栏对应的值替代`<REPLACE_THE_UK8S_BASE_IMAGE_ID_HERE>`：
+请按需要选择合适的镜像，并用镜像 ID 栏对应的值替代`<REPLACE_THE_UK8S_BASE_IMAGE_ID_HERE>`：
 
 | 地域         | 可用区                 | 镜像 ID         | 操作系统      | 版本  | 支持 GPU  |
 | ------------ | ---------------------- | --------------- | ------------- | ----- | --------- |
@@ -95,10 +95,10 @@ brew install ansible
 | hk           | hk-02(3002)            | uimage-yjoh5a   | Anolis        | 8.6   | 否        |
 
 
-如果你需要将制作完成的镜像拷贝到其它地域及可用区，可在上述文件的`image_copy_to_mappings`中设置目标可用区，可以同时指定多个。
+如果需要将制作完成的镜像拷贝到其它地域及可用区，可在上述文件的`image_copy_to_mappings`中设置目标[可用区](https://docs.ucloud.cn/api/summary/regionlist)，可以同时指定多个。
 如果不需要复制的话，请将该属性删除即可。
 
-接下来你需要编写安装配置自定义镜像的脚本。本文档给了一个使用 Ansible 的示例供参考。对应的 playbook.yml 如下：
+接下来需要编写安装配置自定义镜像的脚本。本文档给了一个使用 Ansible 的示例供参考。Packer还有其他的类型的provisioners，请参考[Packer官方文档](https://developer.hashicorp.com/packer/docs/provisioners)。Ansible对应的 playbook.yml 如下：
 
     - hosts: all
       become: true
@@ -112,13 +112,24 @@ brew install ansible
         - role: custom-setup
 
 上述例子中的 playbook 会关闭 swap，并执行命名`custom-setup`的 role 做进一步设置。
-请注意这个仅仅是示例，关闭 swap 实际上已经在 UK8S 的基础镜像中完成，你无需再做此操作。
+请注意这个仅仅是示例，关闭 swap 实际上已经在 UK8S 的基础镜像中完成，无需再做此操作。
 
 4. 运行 Packer
 
 首次运行 Pakcer 时请在包含上述 `custom.json` 文件的目录下运行：
 
     packer init .
+
+如果上述命令运行有问题，请在运行路径下配置config.pkr.hcl文件，文件内容如下
+
+    packer {
+      required_plugins {
+        ucloud = {
+          version = ">= 1.0.8"
+          source  = "github.com/ucloud/ucloud"
+        }
+      }
+    }
 
 然后再运行以下命令：
 
