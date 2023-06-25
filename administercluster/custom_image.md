@@ -18,18 +18,18 @@ shell 编程或 [Ansible][2] 使用经验。
 1. 安装 Packer
 
 安装 [Packer][1]
-工具，使用该工具可以方便地创建并分发自定义镜像到你需要的可用区。下面介绍了MacOS 安装方式，其他环境请参考[Packer官方文档](https://developer.hashicorp.com/packer/downloads?product_intent=packer)
+工具，使用该工具可以方便地创建并分发自定义镜像到你需要的可用区。下面介绍了macOS 安装方式，其他环境请参考[Packer官方文档](https://developer.hashicorp.com/packer/downloads?product_intent=packer)
 
-MacOS 用户可以通过以下命令安装 Packer：
+macOS 用户可以通过以下命令安装 Packer：
 
 ```bash
 brew install packer
 ```
 
 Packer 只负责创建云主机，在云主机中安装配置软件需要使用命令行脚本或 Ansible。
-本文档给的示例使用 Ansible，也可以转换成其它等价工具。下面介绍了Ansible 的MacOS 安装方式，其他环境请参考[Ansible 官方文档](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#managed-node-requirements)。
+本文档给的示例使用 Ansible，也可以转换成其它等价工具。下面介绍了Ansible 的macOS 安装方式，其他环境请参考[Ansible 官方文档](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#managed-node-requirements)。
 
-MacOS 用户可以通过以下命令安装 Ansible：
+macOS 用户可以通过以下命令安装 Ansible：
 
 ```bash
 brew install ansible
