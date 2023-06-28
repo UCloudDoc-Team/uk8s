@@ -9,7 +9,14 @@
 > ⚠️ 在安装 Calico 网络隔离插件之前，请务必确认 CNI 版本大于等于 19.12.1，否则会删除Node上原有的网络配置，导致 Pod 网络不通。CNI
 > 版本查询及升级请参考：[CNI 网络插件升级](/uk8s/network/cni_update)。
 
-确认组件IPamd是否开启Calico网络策略支持，使用如下命令查看参数`--calicoPolicyFlag`是否为`true`：
+确认集群中是否使用组件ipamd：
+```
+kubectl -n kube-system get ds cni-vpc-ipamd
+```
+
+如果没有使用，可以忽略下面检查； 
+如果已经使用ipamd，确认ipamd是否开启Calico网络策略支持；
+使用如下命令查看参数`--calicoPolicyFlag`是否为`true`：
 ```
 kubectl -n kube-system get ds cni-vpc-ipamd -o=jsonpath='{.spec.template.spec.containers[0].args}{"\t"}{"\n"}'
 
