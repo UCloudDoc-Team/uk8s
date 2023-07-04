@@ -26,7 +26,7 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/rbac-contro
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/rbac-node.yml
 ```
 
-#### 集群版本 1.22
+#### 集群版本 1.22及以上
 
 ```
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2_v1.22/csi-controller.yml
