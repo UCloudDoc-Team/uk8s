@@ -102,12 +102,12 @@ spec:
 #### 如pod无需和api server通信，则可以不挂载token；在pod spec中加入以下字段跳过挂载
 ```yaml
 automountServiceAccountToken: false
-```   
+```
 
 #### 如果pod的运行依赖service account token, 则可以显式指定以secret的方式挂载
 
 以default sa为例:  
-   
+
 如果是1.24及更高版本的集群，由于创建 service account 时没有自动生成相应的token，首先需要创建一个secret：
 ```yaml
 apiVersion: v1
@@ -229,7 +229,7 @@ spec:
     persistentVolumeClaim:
       claimName: logdisk-claim
 ```
-   
+
 ## 使用自建镜像仓库   
 ### 1. 创建自建镜像仓库   
 以自建hub地址 `myhub.ucloud.cn` 为例，需要额外提供的信息包括镜像仓库ip地址和所在vpc。用户名和密码非必填。   
@@ -286,14 +286,15 @@ spec:
 ```
 
 ## 虚拟节点能力限制
- 
+
 ### 网络
-支持使用VPC，与云主机同级；不支持自定义 `hostNetwork` 、CNI、Calico Policy等功能。
+支持使用VPC，与云主机同级；不支持 `hostNetwork` 、CNI、Calico Policy等功能。
 ### Pod存储
 容器支持10GiB的临时存储空间，对临时存储的修改在Pod重启后会丢失，如有需要推荐挂载持久化存储。   
-持久化存储：支持挂载UDisk、NFS、ConfigMap、Secret，不支持其他类型的volume，例如 `hostPath` , `projected volume` 等。注意：挂载ConfigMap时，总配置大小不能超过30MiB。
+持久化存储：支持挂载UDisk、NFS、ConfigMap、Secret，不支持其他类型的volume，例如 `hostPath` , `projected volume` 等。注意：挂载ConfigMap和Secret时，总配置大小不能超过30MiB。
+
 ### 镜像仓库
-支持拉去UHub以及同地域下的自建镜像仓库(仅使用UHost自建仓库)，不支持拉去外网镜像，如DockerHub；并且镜像大小不能超过10GiB。
+支持拉取UHub以及同地域下的自建镜像仓库(仅使用UHost自建仓库)，不支持拉取外网镜像，如DockerHub；并且镜像大小不能超过10GiB。
 ### 其他功能
 支持日志， `exec` ，监控等基本功能；可以使用Deployment、StatefulSet等Kubernetes控制器进行控制。   
 其他与Kubernetes原生Pod兼容性一致。
