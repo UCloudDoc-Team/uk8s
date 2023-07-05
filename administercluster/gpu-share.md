@@ -4,6 +4,8 @@
 
 ## 安装使用GPU共享插件
 
+ ⚠️ 安装前请检查kubernetes版本，要求kubernetes版本 >=1.17.4
+
 ### 1. 在需要共享GPU的节点打上label
 
 ```bash
