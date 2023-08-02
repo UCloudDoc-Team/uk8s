@@ -1,31 +1,5 @@
 # UK8S 集群常见问题
 
-<!--* [UK8S 人工支持](#uk8s-人工支持)
-* [为什么我的容器一起来就退出了？](#为什么我的容器一起来就退出了)
-* [Docker 如何调整日志等级](#docker-如何调整日志等级)
-* [为什么节点已经异常了，但是 Pod 还处在 Running 状态](#为什么节点已经异常了但是-pod-还处在-running-状态)
-* [节点宕机了 Pod 一直卡在 Terminating 怎么办](#节点宕机了-pod-一直卡在-Terminating-怎么办)
-* [Pod 异常退出了怎么办？](#pod-异常退出了怎么办)
-* [CNI 插件升级为什么失败了？](#cni-插件升级为什么失败了)
-* [UK8S 页面概览页一直刷新不出来？](#uk8s-页面概览页一直刷新不出来)
-* [UK8S 节点 NotReady 了怎么办](#uk8s-节点-notready-了怎么办)
-* [为什么我的集群连不上外网?](#为什么我的集群连不上外网)
-* [为什么我的 UHub 登陆失败了?](#为什么我的-uhub-登陆失败了)
-* [UHub 下载失败（慢）](#uhub-下载失败慢)
-* [PV PVC StorageClass 以及 UDisk 的各种关系？](#pv-pvc-storageclass-以及-udisk-的各种关系)
-  - [Statefulset 中使用 pvc](#statefulset-中使用-pvc)
-* [VolumeAttachment 的作用](#volumeattachment-的作用)
-* [如何查看 PVC 对应的 UDisk 实际挂载情况](#如何查看-pvc-对应的-udisk-实际挂载情况)
-* [磁盘挂载的错误处理](#磁盘挂载的错误处理)
-  - [PV 和 PVC 一直卡在 terminating/磁盘卸载失败怎么办](#pv-和-pvc-一直卡在-terminating磁盘卸载失败怎么办)
-  - [Pod 的 PVC 一直挂载不上怎么办？](#pod-的-pvc-一直挂载不上怎么办)
-* [UDisk-PVC 使用注意事项](#udisk-pvc-使用注意事项)
-* [为什么在 K8S 节点 Docker 直接起容器网络不通](#为什么在-k8s-节点-docker-直接起容器网络不通)
-* [使用 ULB4 时 Vserver 为什么会有健康检查失效](#使用-ulb4-时-vserver-为什么会有健康检查失效)
-* [ULB4 对应的端口为什么不是 NodePort 的端口](#ulb4-对应的端口为什么不是-nodeport-的端口)
-* [更改报文转发ULB的EIP之后在uk8s不生效](#更改报文转发ULB的EIP之后在uk8s不生效)
-* [Service换绑后原ULB无法重新绑定](#Service换绑后原ULB无法重新绑定)-->
-
 ## 1. UK8S 完全兼容原生 Kubernetes API吗？
 
 完全兼容。
