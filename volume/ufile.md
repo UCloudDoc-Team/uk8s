@@ -119,7 +119,7 @@ metadata:
 spec:
   containers:
   - name: nginx
-    image: nginx 
+    image: uhub.service.ucloud.cn/ucloud/nginx:latest 
     ports:
     - containerPort: 80
     volumeMounts:
