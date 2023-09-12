@@ -14,7 +14,7 @@
   - [删除集群](/uk8s/userguide/deletecluster)
   - [查看集群](/uk8s/userguide/describecluster)
   - [添加节点](/uk8s/userguide/addnode)
-  - [添加已有GPU裸金属节点](/uk8s/userguide/addUPHostNode)
+  - [添加已有裸金属节点](/uk8s/userguide/addUPHostNode)
   - kube-proxy 相关
     - [kube-proxy模式选择](/uk8s/userguide/kubeproxy_mode)
     - [kube-proxy模式切换](/uk8s/userguide/kubeproxy_edit)
