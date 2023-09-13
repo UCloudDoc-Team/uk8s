@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: csi-ufile-node
+  namespace: kube-system
+  labels:
+    app: "csi-ufile"
+    role: "node"
+    owner: "ucloud"
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: csi-ufile-node
+  labels:
+    app: "csi-ufile"
+    role: "node"
+    owner: "ucloud"
+rules:
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["create", "list", "watch", "delete"]
+  - apiGroups: ["csi.storage.k8s.io"]
+    resources: ["csidrivers"]
+    verbs: ["create", "list", "watch", "delete"]
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list", "watch"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: csi-ufile-node
+  labels:
+    app: "csi-ufile"
+    role: "node"
+    owner: "ucloud"
+subjects:
+  - kind: ServiceAccount
+    name: csi-ufile-node
+    namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: csi-ufile-node
+  apiGroup: rbac.authorization.k8s.io
