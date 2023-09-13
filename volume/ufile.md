@@ -20,19 +20,19 @@ US3对象存储适合用户上传、下载静态数据文件，如视频，图�
 #### 集群版本 1.14~1.20
 
 ```
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/csi-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/csi-node.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/rbac-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/rbac-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.23.09.12/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.23.09.12/csi-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.23.09.12/rbac-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.23.09.12/rbac-node.yml
 ```
 
 #### 集群版本 1.22及以上
 
 ```
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2_v1.22/csi-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2_v1.22/csi-node.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2_v1.22/rbac-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2_v1.22/rbac-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.23.09.12_v1.22/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.23.09.12_v1.22/csi-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.23.09.12_v1.22/rbac-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.23.09.12_v1.22/rbac-node.yml
 ```
 
 ## 已支持UK8S挂载US3的地域（持续更新）
@@ -87,6 +87,7 @@ metadata:
 provisioner: ufile.csi.ucloud.cn
 parameters:
   bucket: csis3-bucketname  # 事先申请好的US3 Bucket
+  path: /csis3-dirname/  # 表示挂载时相对Bucket根文件的目录结构，默认为/（23.09.12及之后版本支持）。
   csi.storage.k8s.io/node-publish-secret-name: us3-secret # 关联前一步创建的Secret
   csi.storage.k8s.io/node-publish-secret-namespace: kube-system
 ```
