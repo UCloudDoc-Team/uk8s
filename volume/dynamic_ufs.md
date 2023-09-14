@@ -200,3 +200,34 @@ SUCCESS
 1
 # kubectl delete -f test-nfs-sc.yaml
 ```
+
+## `external-storage`升级指南
+> 从旧版[`external-storage`](https://github.com/kubernetes-incubator/external-storage/tree/master/nfs-client) 到新版[`nfs-subdir-external-provisioner`](https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner)的升级流程指南
+
+### 升级背景
+旧版provisioner能支持的最新k8s版本为1.23, 其中1.20及以上需要在apiserver上添加`--feature-gates=RemoveSelfLink=false`支持。   
+1.24及更新的k8s版本必须使用新版provisioner(因为已经不支持该apiserver参数)。
+
+### 对存量pvc和pod的影响
+使用旧版provisioner (即`managed-nfs-storage` storage class) 申请的pvc，升级完成后可以继续挂载使用，pod内的挂载不受影响，pod重启后仍然可以挂载。pod和pvc删除后不会清理ufs上对应的文件，如需释放空间应手动删除文件。
+
+### 升级流程
+结合新版provisioner部署文档（见本文前部分）进行升级。
+
+#### rbac
+确认`rbac.yaml`中指定的namespace与原nfs-client-provisioner ServiceAccount所在namespace相同，比如同为default或同为kube-system, 修改完成后执行`kubectl apply -f rbac.yaml`升级
+
+#### deployment
+1. 确认namespace与上面rbac部署的namespace相同
+2. 删除原来的deployment: kubectl delete deploy nfs-client-provisioner
+3. apply新的`deployment.yaml`。因为创建静态pvc和pv的部分和原来相同, 这一步apply的结果应如下所示
+```
+deployment.apps/nfs-client-provisioner configured
+persistentvolumeclaim/nfs-client-root unchanged
+persistentvolume/nfs-client-root unchanged
+```
+
+#### storage class
+直接`apply -f class.yaml`即可。（老的storage class `managed-nfs-storage` 可以不删除）。
+
+
