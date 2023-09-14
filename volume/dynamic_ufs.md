@@ -201,8 +201,8 @@ SUCCESS
 # kubectl delete -f test-nfs-sc.yaml
 ```
 
-## `external-storage`升级指南
-> 从旧版[`external-storage`](https://github.com/kubernetes-incubator/external-storage/tree/master/nfs-client) 到新版[`nfs-subdir-external-provisioner`](https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner)的升级流程指南
+## 升级指南
+从旧版[`external-storage`](https://github.com/kubernetes-incubator/external-storage/tree/master/nfs-client) 到新版[`nfs-subdir-external-provisioner`](https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner)的升级流程指南
 
 ### 升级背景
 旧版provisioner能支持的最新k8s版本为1.23, 其中1.20及以上需要在apiserver上添加`--feature-gates=RemoveSelfLink=false`支持。   
