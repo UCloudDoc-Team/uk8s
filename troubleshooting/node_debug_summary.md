@@ -39,9 +39,9 @@ UK8S 集群默认为 3 台 Master 节点，K8S 核心组件在 3 台 Master 节�
 Master 节点），并通过以下命令来查看节点中组件状态是否正常、错误原因是什么，及对异常组件进行重启：
 
 ```bash
-system status ${PLUGIN_NAME}
+systemctl status ${PLUGIN_NAME}
 journalctl -u ${PLUGIN_NAME}
-system restart ${PLUGIN_NAME}
+systemctl restart ${PLUGIN_NAME}
 ```
 
 UK8S 核心组件及名称：
