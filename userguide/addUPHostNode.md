@@ -14,13 +14,12 @@
 ## 操作指引
 
 ### 一、在集群列表页点击详情，进入集群详情页
-<img width="1434" alt="image" src="https://github.com/UCloudDoc-Team/uk8s/assets/124045035/f569021d-d766-43de-a722-d7b7288661e4">
-
+![](/images/userguide/添加已有节点1.png)
 ### 二、进入集群节点页
-<img width="1432" alt="image" src="https://github.com/UCloudDoc-Team/uk8s/assets/124045035/9a22256c-6eee-4b15-917e-d7b5a555b541">
+![](/images/userguide/添加已有节点2.png)
 
 ### 三、点击`添加已有主机`
 选择UPHost，勾选目标裸金属资源，确认提交即可。    
+![](/images/userguide/添加已有节点3.png)
 
-<img width="572" alt="image" src="https://github.com/UCloudDoc-Team/uk8s/assets/124045035/6532840c-6e38-4d20-acad-0548f0d621ef">
 
