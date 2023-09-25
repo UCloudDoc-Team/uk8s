@@ -3,7 +3,7 @@
 一个监控目标可理解为Prometheus中的一个Target或Job. 原生Prometheus既支持静态配置监控目标，也支持动态服务发现。
 
 由于K8S的Pod被设置非永久性的资源，为了正确地抓取到每个应用对应的Pod监控数据，Prometheus Operator引入了Service
-Monitor机制，通过监听Service后面的EP（可认为是健康的Pod）来实现监控数据的采集。
+Monitor机制，通过监听Service后面的Endpoint（可认为是健康的Pod）来实现监控数据的采集。
 
 因此，为了抓取一组Pod的监控数据，我们必须为这组Pod创建一个对应的Service，并暴露对应的Metrics端口。
 
@@ -62,6 +62,11 @@ spec:
 我们在UK8S的监控中心-->监控目标页面，直接选中该Service，端口名称选择“metrics”，抓取路径一般默认填写“/metrics”，如果监控指标的路径是自定义请咨询业务方。
 
 ![](images/prometheus/addtarget.jpg)
+
+- 命名空间：kubernetes集群上部署server的namespace名称
+- 服务名称：kubenetes集群上要获取metric的service的名称
+- 端口名称：获取metric的service上的端口名称
+- 路径：获取metric的service访问路径
 
 #### 3、查看监控目标
 
