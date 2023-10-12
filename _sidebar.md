@@ -17,6 +17,7 @@
     - [kube-proxy 模式选择](/uk8s/userguide/kubeproxy_mode)
     - [kube-proxy 模式切换](/uk8s/userguide/kubeproxy_edit)
   - [Docker VS Containerd](/uk8s/userguide/docker_vs_containerd)
+  - [安全组支持](/uk8s/userguide/SupportSecurityGroup.md)
 - 集群管理
   - 通过 Kubectl 管理集群
     - [kubectl 命令行简介](/uk8s/manageviakubectl/intro_of_kubectl)
