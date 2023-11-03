@@ -50,6 +50,7 @@ HPA 对象的添加、查看和删除，可在 UK8S 集群管理控制台**集�
 **HPA API对象详解**
 
 UK8S 控制台通过 **autoscaling/v2beta2** 版本 Kubernetes API 进行 HPA 对象的创建。
+> 注意：集群版本1.26之前请使用`autoscaling/v2beta2`，集群版本1.26开始请使用`autoscaling/v2`
 
 ```yaml
 apiVersion: autoscaling/v2beta2
