@@ -41,37 +41,37 @@
 
 由于监控中心配置了一条watchdog告警规则，只要企业微信的信息填写正确，一般10分钟以内均可从企业微信中获取到告警信息。
 
-## 4. 配置钉钉接收人
+## 4. 配置webhook接收人(钉钉/企业微信机器人方式)
 
-#### 4.1 创建钉钉机器人，获取 Webhook 地址
+#### 4.1 创建钉钉/企业微信机器人，获取 Webhook 地址
 
-在使用钉钉接收人之前，我们必须在钉钉管理后台创建自定义机器人，并获取其 Webhook 地址，详情参考钉钉相关文档。
+在使用webhook接收人(钉钉/企业微信机器人方式)之前，我们必须在钉钉/企业微信管理后台创建自定义机器人，并获取其 Webhook 地址，详情参考钉钉/企业微信相关文档。
 
 #### 4.2 部署配置文件
 
-AlertManager 不支持直接接入钉钉告警，需要进行适配转换，以下是参考社区的示例部署 yaml 文件。
+AlertManager 不支持直接接入钉钉/企业微信告警，需要进行适配转换，以下是参考社区的示例部署 yaml 文件。
 
 ```yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: alertmanager-webhook-dingtalk
+  name: alertmanager-webhook
   namespace: uk8s-monitor
 data:
   config.yaml: |-
      targets:
       webhook1:  
-        # 请替换为您的钉钉机器人 Webhook 地址
+        # 请替换为您的钉钉/企业微信机器人 Webhook 地址
         url: https://oapi.dingtalk.com/robot/send?access_token=xxxxxx
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: alertmanager-webhook-dingtalk
+  name: alertmanager-webhook
   namespace: uk8s-monitor
 spec:
   selector:
-    k8s-app: webhook-dingtalk
+    k8s-app: webhook
   ports:
     - name: http
       port: 80
@@ -80,24 +80,25 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: alertmanager-webhook-dingtalk
+  name: alertmanager-webhook
   namespace: uk8s-monitor
 spec:
   replicas: 2
   selector:
     matchLabels:
-      k8s-app: webhook-dingtalk
+      k8s-app: webhook
   template:
     metadata:
       labels:
-        k8s-app: webhook-dingtalk
+        k8s-app: webhook
     spec:
       volumes:
         - name: config
           configMap:
-            name: alertmanager-webhook-dingtalk
+            name: alertmanager-webhook
       containers:
-        - name: alertmanager-webhook-dingtalk
+        - name: alertmanager-webhook
+          # 企业微信机器人的情况需将如下的image值改为uhub.service.ucloud.cn/uk8s/prometheus-webhook-wechat:v2.0.0
           image: uhub.service.ucloud.cn/uk8s/prometheus-webhook-dingtalk:v2.0.0
           args:
             - --web.listen-address=:8060
@@ -116,5 +117,8 @@ spec:
 
 #### 4.3 添加接收人
 
-在控制台「收发设置」页面「接收人」版面点击「添加」，在 Webhook 地址栏中填写
-http://alertmanager-webhook-dingtalk.uk8s-monitor.svc/dingtalk/webhook1/send
+在控制台「收发设置」页面「接收人」版面点击「添加」，根据类型在 Webhook 地址栏中填写
+
+钉钉机器人: http://alertmanager-webhook.uk8s-monitor.svc/dingtalk/webhook1/send
+
+企业微信机器人: http://alertmanager-webhook.uk8s-monitor.svc/wechat/webhook/send
