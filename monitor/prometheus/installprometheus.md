@@ -1,10 +1,13 @@
 ## 部署Prometheus
+<br>  
+
+> ⚠️ 该文档仅适用于1.22以下版本集群部署参考；1.22及以上版本集群，请通过控制台-集群详情-监控中心使用。   
 
 ### 前言
 
 对于一套Kubernetes集群而言，需要监控的对象大致可以分为以下几类：
 
-- **Kubernetes系统组件：**Kubernetes内置的系统组件一般有apiserver、controller-manager、etcd、kubelet等，为了保证集群正常运行，我们需要实时知晓其当前的运行状态。
+- **Kubernetes系统组件：** Kubernetes内置的系统组件一般有apiserver、controller-manager、etcd、kubelet等，为了保证集群正常运行，我们需要实时知晓其当前的运行状态。
 
 - **底层基础设施：** Node节点(虚拟机或物理机)的资源状态、内核事件等。
 
