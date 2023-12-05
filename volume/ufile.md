@@ -20,10 +20,10 @@ US3对象存储适合用户上传、下载静态数据文件，如视频，图�
 #### 集群版本 1.14~1.20
 
 ```
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.23.09.12/csi-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.23.09.12/csi-node.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.23.09.12/rbac-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.23.09.12/rbac-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/csi-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/rbac-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/rbac-node.yml
 ```
 
 #### 集群版本 1.22及以上
