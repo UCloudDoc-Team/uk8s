@@ -24,7 +24,7 @@
 
 ## 3. 配置企业微信接收人
 
-在使用微信接收人之前，我们必须在微信管理后台创建一个应用并获取应用ID、企业ID、应用秘钥、部门ID、企业微信用户ID等信息，需要咨询您的企业微信负责人或者管理员方可获取相关信息。
+在使用微信接收人之前，我们必须在微信管理后台创建一个应用并获取应用ID、企业ID、应用秘钥、部门ID、企业微信用户ID等信息，需要咨询您的企业微信负责人或者管理员方可获取相关信息。详细alertmanager配置的官方文档请参考[这里](https://prometheus.io/docs/alerting/latest/configuration/#wechat_config)
 
 ![](images/prometheus/addwechat.jpg)
 
@@ -40,6 +40,14 @@
 ![](images/prometheus/weixinsetting.jpg)
 
 由于监控中心配置了一条watchdog告警规则，只要企业微信的信息填写正确，一般10分钟以内均可从企业微信中获取到告警信息。
+
+> 企业微信如果收不到告警信息，还需要设置可信任IP，可参考企业微信[官方文档](https://developer.work.weixin.qq.com/devtool/query?e=60020)。管理员登录企业微信web页面，在“应用管理”中点击自建的应用进入详情页；找到“企业可信IP”进行配置。填写的IP为访问企业微信的IP（一般为集群关联的NAT网关的外网弹性IP）。
+
+
+![](images/prometheus/weixinerrcode.png)
+
+
+
 
 ## 4. 配置钉钉接收人
 
