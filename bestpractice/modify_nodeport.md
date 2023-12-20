@@ -9,7 +9,7 @@ UK8S 集群中，APIServer 相关参数，保存在 Master 节点 `/etc/kubernet
 ```
 KUBE_API_ARGS=" --... \
                 --... \
-                --service-node-port-range=300000-32767 \
+                --service-node-port-range=30000-32767 \
                 --... \
                 --..."
 ```
