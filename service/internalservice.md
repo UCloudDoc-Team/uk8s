@@ -159,3 +159,55 @@ spec:
     ports:
     - containerPort: 80
 ```
+
+### 3.4 通过内网ALB对外暴露服务
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ucloud-nginx-out-tcp-new
+  labels:
+    app: ucloud-nginx-out-tcp-new
+  annotations:
+    # 代表ULB类型，outer为外网，inner为内网；outer为默认值，此处可省略。
+    "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"
+    # 表示使用ALB
+    "service.beta.kubernetes.io/ucloud-load-balancer-listentype": "application"
+    # 表示ULB协议类型，http与https等价，表示ULB7；
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "https"
+    # 声明要绑定的SSL证书Id，需要先将证书上传至UCloud；
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert": "ssl-qsmo0c7o9y1"
+    # 声明使用SSL协议的Service端口，多个用","分隔；
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port": "443,8443"    
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 80
+      name: https
+    - protocol: TCP
+      port: 8443
+      targetPort: 80
+      name: ssl
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      name: http
+  selector:
+    app: ucloud-nginx-out-tcp-new
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-nginx-out-tcp
+  labels:
+    app: ucloud-nginx-out-tcp-new
+spec:
+  containers:
+  - name: nginx
+    image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
+    ports:
+    - containerPort: 80
+```

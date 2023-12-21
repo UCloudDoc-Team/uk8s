@@ -92,3 +92,33 @@ spec:
   selector:
     app: tcp
 ```
+
+### 使用已有ALB
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: https
+  labels:
+    app: https
+  annotations:
+    "service.beta.kubernetes.io/ucloud-load-balancer-id": "alb-rpfirtgx4l4" # 替换为自己的alb id
+    # 申明使用alb
+    "service.beta.kubernetes.io/ucloud-load-balancer-listentype": "application"
+    # 申明使用http协议
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "http"
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 8080
+      name: https
+    - protocol: TCP
+      name: http
+      port: 80
+      targetPort: 8080
+  selector:
+    app: https
+```

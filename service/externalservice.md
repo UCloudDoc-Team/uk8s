@@ -332,7 +332,59 @@ spec:
 ```
 -->
 
-## 6. 常见问题
+6. 通过外网访问ALB
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ucloud-nginx-out-tcp-new
+  labels:
+    app: ucloud-nginx-out-tcp-new
+  annotations:
+    # 代表ULB类型，outer为外网，inner为内网；outer为默认值，此处可省略。
+    "service.beta.kubernetes.io/ucloud-load-balancer-type": "outer"
+    # 表示使用ALB
+    "service.beta.kubernetes.io/ucloud-load-balancer-listentype": "application"
+    # 表示ULB协议类型，http与https等价，表示ULB7或者LB；
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "https"
+    # 声明要绑定的SSL证书Id，需要先将证书上传至UCloud；
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert": "ssl-qsmo0c7o9y1"
+    # 声明使用SSL协议的Service端口，多个用","分隔；
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port": "443,8443"
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 80
+      name: https
+    - protocol: TCP
+      port: 8443
+      targetPort: 80
+      name: ssl
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      name: http
+  selector:
+    app: ucloud-nginx-out-tcp-new
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-nginx-out-tcp
+  labels:
+    app: ucloud-nginx-out-tcp-new
+spec:
+  containers:
+  - name: nginx
+    image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
+    ports:
+    - containerPort: 80
+```
+
+## 7. 常见问题
 
 #### 1. 如何区别使用ULB4还是ULB7？
 
@@ -357,3 +409,7 @@ spec:
 #### 5. 如果Loadbalancer创建外网ULB后，用户在ULB控制台页面绑定了新的EIP，会被删除吗？
 
 只有访问SVC的ExternalIP才能把流量导入后端Pod，访问其他EIP无效。删除SVC时，所有EIP都会被删除。
+
+#### 6. 如何区别是不是ALB
+
+通过查看service.metadata.annotations中service.beta.kubernetes.io/ucloud-load-balancer-listentype是否为application来确定是alb
