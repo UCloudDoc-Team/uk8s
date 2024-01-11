@@ -20,7 +20,7 @@ UK8S 专有版集群默认需要创建三个 Master 节点以保证生产环境�
 | 集群所属 VPC   | 设置节点及 Pod 所处的 VPC 网络                                                                            |
 | 集群所属子网     | 设置初始节点及 Pod 所处的子网，集群中 Node 可处于同一 VPC 下的不同子网                                                     |
 | Service 网段 | 设置集群 Service 网段，Service 网段不能与节点网段重复                                                             |
-| 节点镜像       | 设置集群节点的 UHost 镜像，您可以选择自定义镜像，但必须基于 UK8S 标准镜像制作，请参考[制作自定义镜像](uk8s/administercluster/custom_image) |
+| 节点镜像       | 设置集群节点的 UHost 镜像，您可以选择自定义镜像，但必须基于 UK8S 标准镜像制作，请参考[制作自定义镜像](uk8s/administercluster/custom_image) <br> 若您要使用GPU节点，需手动选择对应GPU类型的镜像，现已提供`Ubuntu 20.04-高性价比`镜像，可用于高性价比显卡3和高性价比显卡6节点|
 
 #### Master/Node 节点配置
 
