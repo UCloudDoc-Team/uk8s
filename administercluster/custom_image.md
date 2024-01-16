@@ -91,7 +91,7 @@ brew install ansible
 | 地域         | 可用区                 | 镜像 ID         | 操作系统      | 版本  | 支持 GPU  |
 | ------------ | ---------------------- | --------------- | ------------- | ----- | --------- |
 | hk           | hk-02(3002)            | uimage-puxm0l   | CentOS        | 7.6   | 是        |
-| hk           | hk-02(3002)            | uimage-vareox   | Ubuntu        | 20.04 | 是        |
+| hk           | hk-02(3002)            | uimage-rccvz4l9itr   | Ubuntu        | 20.04 | 是        |
 | hk           | hk-02(3002)            | uimage-yjoh5a   | Anolis        | 8.6   | 否        |
 
 
