@@ -11,7 +11,7 @@
 1. 目前尚不支持TLS，因此请勿填写TLS端口；
 2. 密码建议为客户端密码，填写邮箱登录密码可能无法发送邮件。
 
-![](/images/prometheus/fajianren.jpg)
+![](/images/monitor/prometheus/编辑发件服务器.png)
 
 ## 2. 配置邮件接收人
 
