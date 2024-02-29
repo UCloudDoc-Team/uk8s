@@ -56,3 +56,22 @@ UK8S 核心组件及名称：
 | KubeProxy          | kube-proxy              |
 
 例如，查看 APIServer 组件状态，需要执行 `systemctl status kube-apiserver`。
+
+## 4. UK8S 页面概览页一直刷新不出来？
+
+1. api-server 对应的 ulb4 是否被删除（`uk8s-xxxxxx-master-ulb4`）
+2. UK8S 集群的三台 master 主机是否被删了或者关机等
+3. 登陆到 UK8S 三台 master 节点，检查 etcd 和 kube-apiserver 服务是否正常，如果异常，尝试重启服务
+
+- 3.1 `systemctl status etcd`  / `systemctl restart etcd` 如果单个 etcd 重启失败，请尝试三台节点的 etcd 同时重启
+- 3.2 `systemctl status kube-apiserver`  / `systemctl restart kube-apiserver`
+
+## 5. UK8S 节点 NotReady 了怎么办
+
+1. `kubectl describe node node-name` 查看节点 notReady 的原因，也可以直接在 console 页面上查看节点详情。
+2. 如果可以登陆节点，`journalctl -u kubelet` 查看 kubelet 的日志， `system status kubelet`查看 kubelet 工作是否正常。
+3. 对于节点已经登陆不了的情况，如果希望快速恢复可以在控制台找到对应主机断电重启。
+4. 查看主机监控，或登陆主机执行`sar`命令，如果发现磁盘 cpu 和磁盘使用率突然上涨, 且内存使用率也高，一般情况下是内存 oom
+   导致的。关于内存占用过高导致节点宕机，由于内存占用过高，磁盘缓存量很少，会导致磁盘读写频繁，进一步增加系统负载，打高cpu的恶性循环
+5. 内存 oom 的情况需要客户自查是进程的内存情况，k8s 建议 request 和 limit 设置的值不宜相差过大，如果相差较大，比较容易导致节点宕机。
+6. 如果对节点 notready 原因有疑问，请按照[UK8S人工支持](#uk8s-人工支持)联系人工支持

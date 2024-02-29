@@ -1,6 +1,6 @@
 ## Nginx Ingress
 
-**本文适用于的 K8S 版本为 1.19+**
+**本文适用于的 K8S 版本为 1.19+，对于1.19以下版本，请参考：[低版本 kubernetes Nginx Ingress 安装配置说明](/uk8s/service/ingress/nginx)**
 
 ### 什么是 Ingress
 
