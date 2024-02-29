@@ -28,21 +28,21 @@
   - [集群版本升级](/uk8s/administercluster/cluster_version_update)
 - 节点管理
   - [集群节点配置推荐](/uk8s/introduction/node_requirements)
+  - [节点池](/uk8s/administercluster/node_group)
   - [添加节点](/uk8s/userguide/addnode)
+  - [虚拟节点](/uk8s/administercluster/virtual_kubelet)
   - [添加已有裸金属节点](/uk8s/userguide/addUPHostNode)
   - [安全组支持](/uk8s/userguide/SupportSecurityGroup.md)
-  - [虚拟节点](/uk8s/administercluster/virtual_kubelet)
   - [制作自定义节点镜像](/uk8s/administercluster/custom_image)
   - [自定义节点数据及初始化脚本](/uk8s/administercluster/cloud_init)
-  - [节点池](/uk8s/administercluster/node_group)
   - [节点常见问题](/uk8s/troubleshooting/node_debug_summary)
 - 集群弹性伸缩
   - [概述](/uk8s/administercluster/autoscaling/intro)
   - [弹性伸缩（HPA）](/uk8s/administercluster/autoscaling/hpa)
-  - [基于自定义指标伸缩 Pod](/uk8s/monitor/prometheus/autoscale_on_custom_metrics.md)
   - [垂直伸缩（VPA）](/uk8s/administercluster/autoscaling/vpa)
   - [定时伸缩（CronHPA）](/uk8s/administercluster/autoscaling/cronhpa)
   - [集群伸缩（CA）](/uk8s/administercluster/autoscaling/ca)
+  - [基于自定义指标伸缩 Pod](/uk8s/monitor/prometheus/autoscale_on_custom_metrics.md)
 - 集群网络
   - 基于 UVPC 的 underlay 网络
     - [集群网络](/uk8s/network/uk8s_network)
