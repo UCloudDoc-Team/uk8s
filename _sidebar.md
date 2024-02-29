@@ -22,6 +22,7 @@
     - [创建 PVC](/uk8s/manageviakubectl/createpvc)
     - [创建 Service](/uk8s/manageviakubectl/createservice)
     - [StatefulSet 示例](/uk8s/manageviakubectl/sts_example)
+    - [kubectl 常见问题](/uk8s/troubleshooting/kubectl)
   - [手动增加外网凭证](/uk8s/administercluster/add-external-certificate)
   - [集群版本升级](/uk8s/administercluster/cluster_version_update)
 - 节点管理
@@ -32,8 +33,8 @@
   - [虚拟节点](/uk8s/administercluster/virtual_kubelet)
   - [制作自定义节点镜像](/uk8s/administercluster/custom_image)
   - [自定义节点数据及初始化脚本](/uk8s/administercluster/cloud_init)
-  - [节点常见故障处理](/uk8s/troubleshooting/node_debug_summary)
   - [节点池](/uk8s/administercluster/node_group)
+  - [节点常见问题](/uk8s/troubleshooting/node_debug_summary)
 - 集群弹性伸缩
   - [概述](/uk8s/administercluster/autoscaling/intro)
   - [弹性伸缩（HPA）](/uk8s/administercluster/autoscaling/hpa)
@@ -48,6 +49,7 @@
     - [固定 IP 使用方法](/uk8s/network/static_ip)
     - [CNI 网络插件升级](/uk8s/network/cni_update)
     - [IPAMD](/uk8s/network/ipamd)
+    - [CNI 常见问题](/uk8s/troubleshooting/cni)
 - 服务发现
   - Service 管理
     - [Service 介绍](/uk8s/service/intro)
@@ -59,8 +61,11 @@
     - [获取真实客户端 IP](/uk8s/service/getresourceip)
     - [通过 ULB 暴露 Dashboard](/uk8s/service/dashboard)
     - [集群 ULB 误删处理](/uk8s/troubleshooting/ulb_undelete)
+    - [ULB 常见问题](/uk8s/troubleshooting/ulb)
   - Ingress 管理
-    - [Ingress 支持](/uk8s/service/ingress/README)
+    - [概述](/uk8s/service/ingress/README)
+    - [Nginx Ingress](/uk8s/service/ingress/nginx_1.19)
+    - [Ingress 高级用法](/uk8s/service/ingress/multiple_ingress)
   - [CloudProvider 插件升级](/uk8s/service/cp_update)
 - 集群存储
   - [Volume 介绍](/uk8s/volume/intro)
@@ -101,12 +106,12 @@
     - [配置自定义 DNS 服务](/uk8s/administercluster/custom_dns_service)
   - Containerd
     - [Docker VS Containerd](/uk8s/userguide/docker_vs_containerd)
+    - [Containerd 常见问题](/uk8s/troubleshooting/containerd)
   - kube-proxy
     - [kube-proxy 模式选择](/uk8s/userguide/kubeproxy_mode)
     - [kube-proxy 模式切换](/uk8s/userguide/kubeproxy_edit)
   - node-problem-detector
     - [修改 npd 配置说明](/uk8s/troubleshooting/npd.md)
-  - [UK8S 集群常见问题](/uk8s/troubleshooting/k8s_debug_summary)
   - [UK8S 核心组件故障恢复](/uk8s/administercluster/k8splugin_restore)
 - 镜像仓库
   - [概述](/uk8s/dockerhub/outline)
