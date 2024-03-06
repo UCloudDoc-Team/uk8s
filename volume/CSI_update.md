@@ -8,6 +8,7 @@
 - **切勿自行通过修改CSI的image的方式进行升级，否则CSI将无法工作。**请一定在控制台完成CSI的升级。
 - **如果要使用RSSD云盘，请将CSI升级到`22.09.1`或以上的版本**，详情见[RSSD云盘挂载问题](/uk8s/troubleshooting/rssd_attachment)。
 - 21.09.1 版本之前的CSI进行升级，会造成使用US3/UFile的pod挂载点失效，如果您的业务使用了US3/UFile，请务必确认当前版本，如有疑问，请与我们技术支持联系。
+- 因为版本兼容问题，目前只支持Kubernetes版本 >= 1.20版本的自动化升级。
 
 ## 2. 版本查看及插件升级
 
@@ -18,7 +19,20 @@
 
 当所有节点都升级成功后，可关闭插件升级服务，后续有升级需求时再开启。
 
-## 3. 变更记录
+## 3. 手动升级
+
+如果集群版本不在我们的维护版本之内，控制台将无法直接进行升级，参见：[UK8S版本维护说明](/uk8s/version/maintain.md)。
+
+这时候，您可以手动升级csi，请执行下面的命令(仅能升级到旧版本，不建议用RSSD云盘)：
+
+```bash
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/udisk.21.11.2/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/udisk.21.11.2/csi-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/csi-node.yml
+```
+
+## 4. 变更记录
 
 | 版本        | 更新时间   | 更新内容                                                     |
 | ----------- | ---------- | ------------------------------------------------------------ |

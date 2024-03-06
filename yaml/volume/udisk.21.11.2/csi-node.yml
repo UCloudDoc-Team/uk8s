@@ -1,0 +1,146 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: csi-udisk
+  namespace: kube-system
+  labels:
+    app: "csi-udisk"
+    role: "node"
+    owner: "ucloud"
+spec:
+  selector:
+    matchLabels:
+      app: "csi-udisk"
+      role: "node"
+      owner: "ucloud"
+  template:
+    metadata:
+      labels:
+        app: "csi-udisk"
+        role: "node"
+        owner: "ucloud"
+    spec:
+      serviceAccount: csi-udisk-node
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key:  node.uk8s.ucloud.cn/instance_type
+                  operator: In
+                  values:
+                    - uhost
+                    - bmhost
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - key: dedicated
+        operator: Exists
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
+      - effect: NoSchedule
+        key: node.cloudprovider.kubernetes.io/uninitialized
+        value: "true"
+      hostNetwork: true
+      hostPID: true
+      priorityClassName: system-node-critical
+      containers:
+        - name: node-registrar
+          image:  uhub.service.ucloud.cn/uk8s/csi-node-driver-registrar:v1.1.0
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "125m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
+          imagePullPolicy: "Always"
+          args:
+            - "--v=5"
+            - "--csi-address=/csi/csi.sock"
+            - "--kubelet-registration-path=/var/lib/kubelet/csi-plugins/udisk.csi.ucloud.cn/csi.sock"
+          env:
+            - name: ADDRESS
+              value: unix://csi/csi.sock
+            - name: KUBE_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          volumeMounts:
+            - name: plugin-dir
+              mountPath: /csi
+            - name: registration-dir
+              mountPath: /registration
+        - name: csi-udisk
+          securityContext:
+            privileged: true
+          # CAP_SYS_ADMIN is required for mount() syscall.
+            capabilities:
+              add: ["SYS_ADMIN"]
+            allowPrivilegeEscalation: true
+          image: uhub.service.ucloud.cn/uk8s/csi-uk8s:21.11.2
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "125m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
+          args :
+            - "--hostname=$(KUBE_NODE_NAME)"
+            - "--endpoint=$(CSI_ENDPOINT)"
+            - "--v=7"
+            - "--maxvolume=20"
+            - "--drivername=udisk.csi.ucloud.cn"
+            - "--alsologtostderr=true"
+            - "--plugin-dir=/var/lib/kubelet/csi-plugins/udisk.csi.ucloud.cn/"
+          imagePullPolicy: "Always"
+          envFrom:
+          - configMapRef:
+              name: uk8sconfig
+          env:
+            - name: KUBE_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: CSI_ENDPOINT
+              value: unix://var/lib/kubelet/csi-plugins/udisk.csi.ucloud.cn/csi.sock
+          volumeMounts:
+            - name: plugin-dir
+              mountPath: /var/lib/kubelet/csi-plugins/udisk.csi.ucloud.cn
+            - name: user-config
+              mountPath: /etc/uk8s/
+            - name: pods-mount-dir
+              mountPath: /var/lib/kubelet/
+              mountPropagation: "Bidirectional"
+            - name: host-log
+              mountPath: /var/log/ucloud/
+            - name: host-sys
+              mountPath: /sys/
+            - name: host-dev
+              mountPath: /dev
+              mountPropagation: "HostToContainer"
+      volumes:
+        - name: plugin-dir
+          hostPath:
+            path: /var/lib/kubelet/csi-plugins/udisk.csi.ucloud.cn/
+            type: DirectoryOrCreate
+        - name: registration-dir
+          hostPath:
+            path: /var/lib/kubelet/plugins_registry/
+        - name: pods-mount-dir
+          hostPath:
+            path: /var/lib/kubelet/
+            type: Directory
+        - name: host-dev
+          hostPath:
+            path: /dev
+        - name: host-sys
+          hostPath:
+            path: /sys
+        - name: host-log
+          hostPath:
+            path: /var/log/ucloud/
+        - name: user-config
+          configMap:
+            name: uk8sconfig

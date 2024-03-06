@@ -11,7 +11,7 @@
 1. 目前尚不支持TLS，因此请勿填写TLS端口；
 2. 密码建议为客户端密码，填写邮箱登录密码可能无法发送邮件。
 
-![](/images/prometheus/fajianren.jpg)
+![](/images/monitor/prometheus/编辑发件服务器.png)
 
 ## 2. 配置邮件接收人
 
@@ -23,6 +23,8 @@
 - 邮箱地址： 收件的邮箱地址
 
 ## 3. 配置企业微信接收人
+
+> 注：企业微信机器人类型请参考 '配置webhook接收人(钉钉/企业微信机器人方式)' 方式
 
 在使用微信接收人之前，我们必须在微信管理后台创建一个应用并获取应用ID、企业ID、应用秘钥、部门ID、企业微信用户ID等信息，需要咨询您的企业微信负责人或者管理员方可获取相关信息。详细alertmanager配置的官方文档请参考[这里](https://prometheus.io/docs/alerting/latest/configuration/#wechat_config)
 
@@ -44,42 +46,41 @@
 > 企业微信如果收不到告警信息，还需要设置可信任IP，可参考企业微信[官方文档](https://developer.work.weixin.qq.com/devtool/query?e=60020)。管理员登录企业微信web页面，在“应用管理”中点击自建的应用进入详情页；找到“企业可信IP”进行配置。填写的IP为访问企业微信的IP（一般为集群关联的NAT网关的外网弹性IP）。
 
 
-![](images/prometheus/weixinerrcode.png)
+![](/images/prometheus/weixinerrcode.png)
 
+## 4. 配置webhook接收人(钉钉/企业微信机器人方式)
 
+#### 4.1 创建钉钉/企业微信机器人，获取 Webhook 地址
 
-
-## 4. 配置钉钉接收人
-
-#### 4.1 创建钉钉机器人，获取 Webhook 地址
-
-在使用钉钉接收人之前，我们必须在钉钉管理后台创建自定义机器人，并获取其 Webhook 地址，详情参考钉钉相关文档。
+在使用webhook接收人(钉钉/企业微信机器人方式)之前，我们必须在钉钉/企业微信管理后台创建自定义机器人，并获取其 Webhook 地址，详情参考钉钉/企业微信相关文档。
 
 #### 4.2 部署配置文件
 
-AlertManager 不支持直接接入钉钉告警，需要进行适配转换，以下是参考社区的示例部署 yaml 文件。
+AlertManager 不支持直接接入钉钉/企业微信告警，需要进行适配转换，以下是参考社区的示例部署 yaml 文件。
+
+> 请根据yaml中的提示，结合自身场景来替换yaml中的webhook地址以及image
 
 ```yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: alertmanager-webhook-dingtalk
+  name: alertmanager-webhook
   namespace: uk8s-monitor
 data:
   config.yaml: |-
      targets:
       webhook1:  
-        # 请替换为您的钉钉机器人 Webhook 地址
+        # 请替换为您的钉钉/企业微信机器人 Webhook 地址
         url: https://oapi.dingtalk.com/robot/send?access_token=xxxxxx
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: alertmanager-webhook-dingtalk
+  name: alertmanager-webhook
   namespace: uk8s-monitor
 spec:
   selector:
-    k8s-app: webhook-dingtalk
+    k8s-app: webhook
   ports:
     - name: http
       port: 80
@@ -88,25 +89,28 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: alertmanager-webhook-dingtalk
+  name: alertmanager-webhook
   namespace: uk8s-monitor
 spec:
   replicas: 2
   selector:
     matchLabels:
-      k8s-app: webhook-dingtalk
+      k8s-app: webhook
   template:
     metadata:
       labels:
-        k8s-app: webhook-dingtalk
+        k8s-app: webhook
     spec:
       volumes:
         - name: config
           configMap:
-            name: alertmanager-webhook-dingtalk
+            name: alertmanager-webhook
       containers:
-        - name: alertmanager-webhook-dingtalk
-          image: uhub.service.ucloud.cn/uk8s/prometheus-webhook-dingtalk:v2.0.0
+        - name: alertmanager-webhook
+          # 替换image值:
+          # 企业微信机器人: uhub.service.ucloud.cn/uk8s/prometheus-webhook-wechat:v2.0.0
+          # 钉钉机器人: uhub.service.ucloud.cn/uk8s/prometheus-webhook-dingtalk:v2.0.0
+          image: xxx:xxx
           args:
             - --web.listen-address=:8060
             - --config.file=/config/config.yaml
@@ -124,5 +128,8 @@ spec:
 
 #### 4.3 添加接收人
 
-在控制台「收发设置」页面「接收人」版面点击「添加」，在 Webhook 地址栏中填写
-http://alertmanager-webhook-dingtalk.uk8s-monitor.svc/dingtalk/webhook1/send
+在控制台「收发设置」页面「接收人」版面点击「添加」，根据类型在 Webhook 地址栏中填写
+
+钉钉机器人: http://alertmanager-webhook.uk8s-monitor.svc/dingtalk/webhook1/send
+
+企业微信机器人: http://alertmanager-webhook.uk8s-monitor.svc/wechat/webhook/send
