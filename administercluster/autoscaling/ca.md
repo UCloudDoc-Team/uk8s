@@ -42,3 +42,21 @@ Autoscaler的工作原理很简单，其扩容触发条件为**存在因为集�
 创建完伸缩组后，我们之后还需要开启伸缩组，点击开启操作后，你的UK8S集群会出现一个Cluster-Autoscaler的Deployment，如果手动删除该Deployment，会导致集群伸缩无法正常工作，您需要在集群伸缩页面先关闭，再开启以触发重新创建。
 
 ![](/images/administercluster/autoscaling/4.png)
+
+### CA参数说明
+
+CA本身有很多命令参数，可以调整伸缩的一些行为。可以通过更改CA deployment的`args`参数来调整。
+
+下面是一些CA参数以及说明：
+
+| 参数                          | 类型     | 默认值          | 说明                                   |
+| ----------------------------- | -------- | --------------- | -------------------------------------- |
+| scale-down-delay-after-add    | Duration | 10min           | 扩容后进行缩容的延迟。                 |
+| scale-down-delay-after-delete | Duration | 同scan-interval | 删除节点后进行缩容的延迟。             |
+| scale-down-unneeded-time      | Duration | 10min           | 节点标记为unneeded之后，多久进行缩容。 |
+| node-deletion-delay-timeout   | Duration | 2min            | CA等待节点删除完成的超时时间。         |
+| scan-interval                 | Duration | 10s             | 多久进行一次扩缩容扫描。               |
+| max-nodes-total               | int      | 0               | 最大扩容节点数量。                     |
+| cores-total                   | String   | [0:32E+04]      | 集群的CPU核心扩缩容范围。              |
+| memory-total                  | String   | [0:64E+05]      | 集群的内存扩缩容范围。                 |
+

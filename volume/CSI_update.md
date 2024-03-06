@@ -19,7 +19,20 @@
 
 当所有节点都升级成功后，可关闭插件升级服务，后续有升级需求时再开启。
 
-## 3. 变更记录
+## 3. 手动升级
+
+如果集群版本不在我们的维护版本之内，控制台将无法直接进行升级，参见：[UK8S版本维护说明](/uk8s/version/maintain.md)。
+
+这时候，您可以手动升级csi，请执行下面的命令(仅能升级到旧版本，不建议用RSSD云盘)：
+
+```bash
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/udisk.21.11.2/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/udisk.21.11.2/csi-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/csi-node.yml
+```
+
+## 4. 变更记录
 
 | 版本        | 更新时间   | 更新内容                                                     |
 | ----------- | ---------- | ------------------------------------------------------------ |

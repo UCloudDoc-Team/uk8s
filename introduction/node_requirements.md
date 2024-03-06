@@ -15,7 +15,7 @@ Master 规格跟集群规模有关，集群规模越大，所需要的 Master �
 
 UK8S Master 节点系统盘默认 40G（最小值），用于储存 ETCD 信息及相关配置文件等。
 
-如随着集群规模提升，有升级 Master 节点规格配置需求，请在云主机节点管理页面，**逐台进行更改配置**。
+如随着集群规模提升，有升级 Master 节点规格配置需求，请在云主机节点管理页面，**逐台进行更改配置（每一台都要升级到相同配置）**。
 
 在升级下一台 Master 节点前，**请确保其它两台 Master 节点已处于 Ready 状态**，且 Master 节点上 Kubernetes 相关核心组件状态均处于 **active**
 状态。Master 节点核心组件排障方法请参考：[Node 常见故障处理](/uk8s/troubleshooting/node_debug_summary)
