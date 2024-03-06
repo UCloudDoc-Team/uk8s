@@ -41,3 +41,9 @@ Error syncing load balancer: failed to ensure load balancer: vserver(s) have alr
 ```
 
 如果遇到，需要手动将原来ULB中的vserver清理掉。
+
+## 6. 如何手动更改Service绑定ULB的EIP
+
+1. 在控制台的ULB管理页面，手动变更对应ULB的EIP。
+2. 在Service中，增加`service.beta.kubernetes.io/ucloud-load-balancer-id`字段，设置为对应的ULB ID。
+3. 等待一段时间，观察Serivce中的EIP相关Annotation是否更新。

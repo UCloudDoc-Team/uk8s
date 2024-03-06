@@ -64,7 +64,7 @@ kubectl apply -f userdata.yaml
 #### 4. 请执行部署 CloudProvider
 
 ```
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cloudprovider/21.05.2.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cloudprovider/22.07.1.yml
 ```
 
 #### 5. 检查是否部署成功
@@ -73,6 +73,16 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cloudprovider/21.05.2.yml
 
 ```
 kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
+```
+
+### 1.3 手动升级
+
+如果集群版本不在我们的维护版本之内，控制台将无法直接进行升级，参见：[UK8S版本维护说明](/uk8s/version/maintain.md)。
+
+这时候，您可以手动升级cloudprovider，请执行下面的命令：
+
+```bash
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cloudprovider/22.07.1.yml
 ```
 
 ## 2. 变更记录
