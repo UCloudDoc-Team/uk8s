@@ -87,6 +87,10 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cloudprovider/22.07.1.yml
 
 ## 2. 变更记录
 
+### 更新版本：24.03.13
+
+- 支持alb
+
 ### 更新版本：22.10.1
 
 更新时间：2022 年 10 月 25 日
