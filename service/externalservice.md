@@ -114,6 +114,58 @@ spec:
       protocol: UDP
 ```
 
+### 4.3 通过外网ULB4暴露服务（同时支持TCP和UDP协议）
+
+24.03.5以后的 CloudProvider 插件，当"service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol"为tcp/udp或省略时,外网ULB4同时支持TCP和UDP两种协议。下文示例中，对外暴露了两个端口，其中80端口使用TCP协议，53端口使用UDP协议。
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ucloud-nginx-out-tcp-new
+  labels:
+    app: ucloud-nginx-out-tcp-new
+  annotations:
+    # 代表ULB网络类型，outer为外网，inner为内网；outer为默认值，此处可省略。
+    "service.beta.kubernetes.io/ucloud-load-balancer-type": "outer"
+    # 表示ULB协议类型，tcp、udp与tcp/udp等价，表示ULB4；使用tcp/udp或省略时时，同时支持TCP和UDP协议
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "tcp/udp"
+    # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-type": "port"    
+spec:
+  type: LoadBalancer
+  ports:
+    - name: tcp-default
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: udp
+      protocol: UDP
+      port: 53
+      targetPort: 53 
+  selector:
+    app: ucloud-nginx-out-tcp-new
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-nginx-out-tcp1
+  labels:
+    app: ucloud-nginx-out-tcp-new
+spec:
+  containers:
+  - name: nginx
+    image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
+    ports:
+    - containerPort: 80
+      protocol: TCP
+  - name: dns
+    image:  uhub.service.ucloud.cn/library/coredns:1.4.0
+    ports:
+    - name: udp
+      containerPort: 53
+      protocol: UDP
+```
 <!--## 5. 重要说明
 
 UK8S的cloudprovider 插件做一个大更新，大于等于19.05.3的版本支持多端口，指定ULB-id等功能，你可以通过如下命令查看cloudprovider的版本：
@@ -404,7 +456,7 @@ spec:
 
 #### 4. UK8S的LoadBalancer类型的Service是否支持UDP？
 
-已支持，但暂不支持UDP与TCP混用。
+已支持，且24.03.5后支持UDP与TCP混用。
 
 #### 5. 如果Loadbalancer创建外网ULB后，用户在ULB控制台页面绑定了新的EIP，会被删除吗？
 
