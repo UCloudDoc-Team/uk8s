@@ -97,6 +97,7 @@
   - [使用 UK8S 日志插件功能](/uk8s/log/ELKplugin)
   - [集群日志组件常见问题](/uk8s/troubleshooting/log_elk_summary.md)
 - GPU
+  - [GPU 节点](/uk8s/administercluster/gpu-node)
   - [GPU 共享插件](/uk8s/administercluster/gpu-share)
 - 集群组件管理
   - Master 组件管理
