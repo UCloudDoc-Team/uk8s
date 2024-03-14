@@ -1,17 +1,69 @@
 # 使用gpu节点
 
-uk8s提供的标准镜像中，已安装nvidia驱动，并在集群中预先安装nvidia-device-plugin，所以客户使用uk8s集群时可直接使用gpu节点。
+可通过以下方式在uk8s中使用GPU云主机作为集群节点:
+- [创建集群](#创建集群)
+- [新增Node节点](#新增Node节点)
+- [添加已有主机](#添加已有主机)
 
-## 注意事项
+
+## 创建集群
+创建集群时，在Node节点配置中，选择机型为“GPU型G”，然后选择具体的GPU卡型及配置。
+  ![](/images/gpu/image.png)
+注：如果选择了高性价比显卡，需要在节点镜像中使用标准镜像`Ubuntu 20.04-高性价比`
+  ![](/images/gpu/image-0.png)
+## 新增Node节点
+在已有集群中新增Node节点时，选择机型为“GPU型G”，然后选择具体的GPU卡型及配置。
+![](/images/gpu/image-1.png)
+## 添加已有主机
+将已创建的GPU云主机添加进已有集群，选择合适的节点镜像。
+![](/images/gpu/image-2.png)
+
+## 使用说明
 1. 默认情况下，容器之间不共享 GPU，每个容器可以请求一个或多个 GPU。无法请求 GPU 的一小部分。
-2. 集群的 Master 节点暂不支持设置为 GPU 机型。
-3. 使用高性价比显卡的云主机机型（如高性价比显卡3、高性价比显卡5、高性价比显卡6）作为节点时，需使用标准镜像`Ubuntu 20.04-高性价比`
-    - 创建集群
-      ![](/images/gpu/image-0.png)
-      ![](/images/gpu/image-1.png)
-    - 新增Node节点
-      ![](/images/gpu/image-2.png)
-    - 支持可用区
+2. 集群的 Master 节点暂不支持 GPU 机型。
+3. uk8s提供的标准镜像中，已安装nvidia驱动，并且，集群中默认安装了`nvidia-device-plugin`组件, gpu资源添加到集群后可以被自动识别和注册。
+4. 使用高性价比显卡的云主机机型（如高性价比显卡3、高性价比显卡5、高性价比显卡6）作为节点时，需使用标准镜像`Ubuntu 20.04-高性价比`
+    - 高性价比显卡支持可用区
         - 华北二A
         - 上海二B
         - 北京二B
+        
+| 显卡                              | 镜像                      |
+| ------------------------------- | ----------------------- |
+| 高性价比显卡（高性价比显卡3、高性价比显卡5、高性价比显卡6） | Ubuntu 20.04-高性价比       |
+| 非高性价比显卡（如T4、V100S、P40等）         | Centos 7.6、Ubuntu 20.04 |
+
+5. 如何验证GPU节点的正常使用
+    1. 查看节点是否具有`nvidia.com/gpu`的资源
+![](image-3.png)
+    2. 运行如下示例使用`nvidia.com/gpu`资源类型请求 NVIDIA GPU,并查看日志结果是否正确。
+    ```bash
+    $ cat <<EOF | kubectl apply -f -
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: gpu-pod
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: cuda-container
+          image: uhub.service.ucloud.cn/uk8s/cuda-sample:vectoradd-cuda10.2
+          resources:
+            limits:
+              nvidia.com/gpu: 1 # requesting 1 GPU
+      tolerations:
+      - key: nvidia.com/gpu
+        operator: Exists
+        effect: NoSchedule
+    EOF
+    ```
+    ```bash
+    $ kubectl logs gpu-pod
+    [Vector addition of 50000 elements]
+    Copy input data from the host memory to the CUDA device
+    CUDA kernel launch with 196 blocks of 256 threads
+    Copy output data from the CUDA device to the host memory
+    Test PASSED
+    Done
+    ```
+
