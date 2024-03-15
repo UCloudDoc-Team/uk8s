@@ -103,6 +103,14 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cloudprovider/22.07.1.yml
 
 - 支持ULB4的tcp和udp协议混用
 
+### 更新版本：23.04.2
+
+更新时间：2023 年 7 月 6 日
+
+更新内容：
+
+- 减少telemetry超时时间，避免telemetry超时影响ULB的正常使用
+
 ### 更新版本：22.10.1
 
 更新时间：2022 年 10 月 25 日
