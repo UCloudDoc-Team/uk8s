@@ -2,7 +2,7 @@
 
 ## 1. 使用提醒
 
-1. 请勿修改由UK8S创建的ULB及Vserver的名称和备注，否则会导致Service异常无法访问。
+1. 如果您的cloudprovider版本低于`22.07.1`，请勿修改由UK8S创建的ULB及Vserver的名称和备注，否则会导致Service异常无法访问。如果版本等于或高于`22.07.1`，则允许修改ULB的名称和备注（注意Vserver的依然不可更改）。如果您有修改ULB名称和备注的需求，请升级您的cloudprovider到最新版本，详见[CloudProvider 插件更新](/uk8s/service/cp_update)。
 
 2. 如 ULB 为 UK8S 在创建 Service 时同步创建，删除 Service 时 ULB 会同步删除，请勿将 ULB 关联其他 Vserver，如需多个 Service 共用
    ULB，可先创建 ULB，并在创建 Service 时关联已有 ULB，详情请见[使用已有 ULB](/uk8s/service/ulb_designation)。
