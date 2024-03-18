@@ -79,7 +79,7 @@
     - [在节点宕机时恢复挂载了云盘的 Pod](/uk8s/troubleshooting/recover_udisk_pod_when_node_crash.md)
   - 文件存储
     - [在 UK8S 中使用 UFS](/uk8s/volume/ufs)
-    - [动态PV使用UFS](https://docs.ucloud.cn/uk8s/volume/dynamic_ufs)
+    - [动态PV使用UFS](/uk8s/volume/dynamic_ufs)
   - 对象存储
     - [在 UK8S 中使用 US3](/uk8s/volume/ufile)
   - [CSI 存储插件升级](/uk8s/volume/CSI_update)
