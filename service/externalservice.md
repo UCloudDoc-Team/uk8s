@@ -13,7 +13,7 @@
 
 1. 目前ULB4针对UDP协议的健康检查支持ping和port两种模式，默认为ping，强烈推荐改为port；
 
-2. ping检查的后端实现是发送目标为ulb-ip的ping报文到后端节点。在UK8S的实现中，后端节点仅配置了针对UDP端口的网络包转发，而没有在网卡上配置ulb-ip，因此无法响应以上ping报文，默认情况下ping健康检查会失败。如果需要使用ping健康检查，请参考 [ULB文档 - 报文转发模式服务节点配置](https://docs.ucloud.cn/ulb/guide/realserver/editrealserver)为后端节点绑定ulb-ip;   
+2. ping检查会发送目标IP为ulb-ip的ICMP Ping报文到后端节点。在UK8S的实现中，后端节点仅配置了针对UDP端口的网络包转发规则，而没有在网卡上绑定ulb-ip，因此无法响应以上ping报文，默认情况下ping健康检查会失败。如果需要使用ping健康检查，请参考 [ULB文档 - 报文转发模式服务节点配置](https://docs.ucloud.cn/ulb/guide/realserver/editrealserver)为后端节点绑定ulb-ip;   
 
 3. port健康检查的后端实现是对UDP端口发送UDP报文( "Health Check" 字符串)和针对RS IP发送ICMP Ping报文。
    如果超时时间内回复了UDP报文则认为健康；如果超时时间没收到UDP回包，则以Ping的探测结果为准。因此您的应用程序需要响应UDP健康检查报文。
