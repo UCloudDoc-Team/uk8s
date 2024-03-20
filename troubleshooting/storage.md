@@ -335,3 +335,7 @@ Daemonset)。
 #### fsGroup导致的磁盘mount缓慢
 
 很多用户会遇到一个磁盘mount缓慢的问题。此时需要首先确认是否设置了fsGroup，且磁盘中的是否存在大量小文件，如果两个条件均满足，则很可能导致挂载缓慢，具体可以查看[k8s官方文档](https://kubernetes.io/zh/docs/tasks/configure-pod-container/security-context/#%E4%B8%BA-pod-%E9%85%8D%E7%BD%AE%E5%8D%B7%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90%E5%92%8C%E5%B1%9E%E4%B8%BB%E5%8F%98%E6%9B%B4%E7%AD%96%E7%95%A5)
+
+### 11.3 挂载的目录权限拒绝
+
+1. pod在设置了`securityContext.fsGroup`之后如果存储类中没有`fsType`(默认有)则会导致kubelet无法正确的设置权限，出现`permission denied`错误
