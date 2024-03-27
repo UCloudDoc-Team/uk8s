@@ -25,6 +25,7 @@
     - [kubectl 常见问题](/uk8s/troubleshooting/kubectl)
   - [手动增加外网凭证](/uk8s/administercluster/add-external-certificate)
   - [集群版本升级](/uk8s/administercluster/cluster_version_update)
+  - [集群常见问题](/uk8s/troubleshooting/cluster_summary.md)
 - 节点管理
   - [集群节点配置推荐](/uk8s/introduction/node_requirements)
   - [节点池](/uk8s/administercluster/node_group)
