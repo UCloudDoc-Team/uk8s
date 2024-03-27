@@ -5,10 +5,10 @@
 ![](/images/troubleshooting/apiserver证书过期提示.png)
 
 ### 过期的是什么证书
-`apiserver-loopback-client` 证书, 用于 `kube-scheduler`、`kube-controller-manager` 等管理组件和 `kube-apiserver` 之间的同节点通信。
+`apiserver-loopback-client` 证书, 用于 `kube-scheduler`、`kube-controller-manager` 等管理组件和 `kube-apiserver` 之间的同节点通信。证书过期会影响管理组件之间的通信，可能导致无法正常创建Pod等问题。   
 
-### 证书过期有什么影响
-影响管理组件之间的通信，可能会无法正常创建Pod。
+可参考[k8s社区官方对这个问题的解释](https://github.com/kubernetes/kubernetes/issues/86552)   
+
 
 ### 如何查看证书
 `apiserver-loopback-client` 存放于 `kube-apiserver` 的内存中，在服务启动时自动生成，没有写入到文件中。查看证书的方法如下:
