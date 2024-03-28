@@ -21,6 +21,17 @@ spec:
         owner: "ucloud"
     spec:
       serviceAccount: csi-ufile-node
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key:  node.uk8s.ucloud.cn/instance_type
+                    operator: In
+                    values:
+                      - uhost
+                      - uphost
+                      - bmhost
       tolerations:
         - key: CriticalAddonsOnly
           operator: Exists
