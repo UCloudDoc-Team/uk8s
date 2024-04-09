@@ -36,18 +36,18 @@ curl -sfL https://docs.ucloud.cn/uk8s/yaml/vpa/gencerts.sh | sh -
 
 **1.22及版本以上**
 ```sh
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/vpa/vpa.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/vpa/vpa.yaml
 ```
 
 **1.22以下**
 ```sh
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/vpa/vpa-less-1.22.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/vpa/vpa-less-1.22.yaml
 ```
 
 ### 2.4. 部署一个 VPA 对象
 
 ```sh
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/vpa/deployment.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/vpa/deployment.yaml
 ```
 
 ## 3. 查看 VPA 对象
