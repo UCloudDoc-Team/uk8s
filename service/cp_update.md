@@ -2,8 +2,17 @@
 
 UK8S 通过 CloudProvider 插件，实现集群中 LoadBalancer 类型服务（SVC）与 UCloud ULB 产品的创建和绑定。
 
+#### 版本问题
+
+* < 20.10.1版本
+
 20.10.1 以前版本存在 bug，会在 Service 重启时发生误判，导致重复创建 ULB 实例并写入集群，造成集群相应 Service 的不可用。为此我们对 CloudProvider
 插件进行了优化，完善 ULB 相关接口的调用逻辑，避免了上述问题的出现。
+
+* >= 24.03.13版本
+
+24.03.13 支持了应用型负载均衡ALB(/ulb/alb/intro/whatisalb)，针对7层代理请选择应用型负载均衡，目前传统型负载均衡针对7层代理做了[限制](/ulb/alb/intro/limit)，在使用过程可能会造成服务问题。
+
 
 如您集群 CloudProvider 版本为相关版本，请您务必及时按照文档更新，避免影响业务。升级过程不影响线上业务，但仍建议您在业务闲时进行更新，如有问题请及时与我们联系。
 
@@ -11,7 +20,7 @@ UK8S 通过 CloudProvider 插件，实现集群中 LoadBalancer 类型服务（S
 
 ### 1.1 控制台操作
 
-较新版本（Kubernetes 1.14 以后版本）在 UK8S 集群控制台管理页面「插件-CloudProvider」页面，开启 CloudProvider 插件升级功能，开启
+针对[维护版本]((/uk8s/version/maintain.md))之内UK8S 集群可以在控制台管理页面「插件-CloudProvider」页面，开启 CloudProvider 插件升级功能，开启
 CloudProvider 插件升级功能会在集群中执⾏ CloudProvider 插件查询任务，⼤约需要 3 分钟，在此过程中请不要操作集群。升级功能开启后，即可看到 CloudProvider
 插件版本信息，点击「升级 CloudProvider」即可进行升级。
 
@@ -19,9 +28,19 @@ CloudProvider 插件升级功能会在集群中执⾏ CloudProvider 插件查询
 
 > ⚠️ 集群 CloudProvider 插件升级时，请勿进行服务发布等操作
 
-### 1.2 命令行操作
+### 1.2 手动升级
 
-如果版本在 1.14 以前，或者在控制台无法查看到 CloudProvider 版本信息，则需要通过命令行进行升级。
+如果集群版本不在我们的维护版本之内，控制台将无法直接进行升级，参见：[UK8S版本维护说明](/uk8s/version/maintain.md)。
+
+这时候，您可以手动升级cloudprovider，请执行下面的命令：
+
+```bash
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cloudprovider/22.07.1.yml
+```
+
+### 1.3 老版本升级
+
+如果 Kubernetes 版本在 1.14 以前，或者在控制台无法查看到 CloudProvider 版本信息，则需要通过命令行进行升级。
 
 > 登录您集群的 Master 节点，如执行`systemctl status ucloudcp`是运行状态的话，请务必在**3 个 Master 节点**关闭二进制程序ucloudcp并更新。
 
@@ -75,15 +94,6 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cloudprovider/22.07.1.yml
 kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 ```
 
-### 1.3 手动升级
-
-如果集群版本不在我们的维护版本之内，控制台将无法直接进行升级，参见：[UK8S版本维护说明](/uk8s/version/maintain.md)。
-
-这时候，您可以手动升级cloudprovider，请执行下面的命令：
-
-```bash
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cloudprovider/22.07.1.yml
-```
 
 ## 2. 变更记录
 
