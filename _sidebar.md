@@ -55,8 +55,7 @@
   - Service 管理
     - [Service 介绍](/uk8s/service/intro)
     - [集群内访问 Service](/uk8s/service/cluster_service)
-    - [通过内网 ULB 访问 Service](/uk8s/service/internalservice)
-    - [通过外网 ULB 访问 Service](/uk8s/service/externalservice)
+    - [通过ULB 访问 Service](/uk8s/service/internalservice)
     - [使用已有的 ULB](/uk8s/service/ulb_designation)
     - [ULB 参数说明](/uk8s/service/annotations)
     - [获取真实客户端 IP](/uk8s/service/getresourceip)
