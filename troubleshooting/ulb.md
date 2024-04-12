@@ -67,7 +67,7 @@ Error syncing load balancer: failed to ensure load balancer: vserver(s) have alr
 
 ## 10. 是否支持多协议？
 
-目前UK8S CloudProvider 插件版本 >=19.05.3 同时支持HTTP和HTTPS协议，cloudprovider 插件版本>= 24.03.5 也支持UDP和TCP协议混用。
+目前UK8S CloudProvider 插件版本 >= 19.05.3 同时支持HTTP和HTTPS协议，cloudprovider 插件版本 >= 24.03.5 也支持UDP和TCP协议混用。
 
 ## 11. 如果Loadbalancer创建外网ULB后，用户在ULB控制台页面绑定了新的EIP，会被删除吗？
 
