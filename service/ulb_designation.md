@@ -14,7 +14,7 @@ UK8S支持在创建 LoadBalancer 类型的 Service 时，指定使用已有的 U
 
 下面我们来看下如何使用已有的ULB实例。
 
-### 使用已有的内网ULB
+## 使用已有的内网ULB
 
 声明使用已有的内网ULB，需要声明至少两个annotations。
 
@@ -38,7 +38,7 @@ spec:
     app: https
 ```
 
-### 使用已有的外网ULB（7层）
+## 使用已有的外网ULB（7层）
 
 ```
 apiVersion: v1
@@ -67,7 +67,7 @@ spec:
     app: https
 ```
 
-### 使用已有的外网ULB（4层）
+## 使用已有的外网ULB（4层）
 
 ```
 apiVersion: v1
@@ -93,7 +93,7 @@ spec:
     app: tcp
 ```
 
-### 使用已有ALB
+## 使用已有ALB
 
 ```yaml
 apiVersion: v1

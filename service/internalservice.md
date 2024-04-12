@@ -40,7 +40,7 @@ ULB支持“报文转发(ULB4)”及“请求代理（ULB7）”两种转发模�
 
 ## 4. 操作指南
 
-### 4.1 通过ULB7暴露服务（http/https）
+### 4.1 通过ULB7对外暴露服务（http/https）
 
 UK8S在集群内可以直接使用 LoadBalancer 类型的Service，如果需要对外提供http/https协议，建议选择应用型负载均衡ALB；用户可以通过Service的"annotations"来配置ULB类型以及其他参数；更多参数信息可参考[ULB参数说明](/uk8s/service/annotations)。
 
@@ -59,7 +59,7 @@ UK8S在集群内可以直接使用 LoadBalancer 类型的Service，如果需要�
 "service.beta.kubernetes.io/ucloud-load-balancer-eip-quantity": "1"   
 ```
 
-下面时内网ULB7的example：
+下面是内网ULB7的使用例子：
 
 ```yaml
 apiVersion: v1
@@ -157,9 +157,9 @@ spec:
     - containerPort: 80
 ```
 
-#### 4.3 通过ULB4对外暴露服务（UDP）
+### 4.3 通过ULB4对外暴露服务（UDP）
 
-如果你的应用是UDP协议，则务必显式声明健康检查的类型为port(端口检查)，否则默认为ping，可能导致ULB误认为后端业务不正常。如果需要外网暴露请注意修改 ucloud-load-balancer-type 为 outer
+如果你的应用是UDP协议，则务必显式声明健康检查的类型为port（端口检查），否则默认为ping，可能导致ULB误认为后端业务不正常。如果需要外网暴露请注意修改 ucloud-load-balancer-type 为 outer
 
 
 ```yaml
