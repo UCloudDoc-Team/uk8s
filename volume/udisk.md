@@ -16,7 +16,7 @@ UK8S支持直接在集群中使用UDisk作为持久化存储卷。
 
 在创建持久化存储卷（PersistentVolume）之前，你需要先创建 StorageClass，然后在 PVC 中使用 StorageClassName。
 
-UK8S 集群默认创建了两个 StorageClass，你也可以创建一个新的StorageClass，示例及说明如下：
+UK8S 集群默认创建了三个 StorageClass，你也可以创建一个新的StorageClass，示例及说明如下：
 
 ```yaml
 apiVersion: storage.k8s.io/v1
@@ -25,7 +25,7 @@ metadata:
   name: udisk-ssd-test
 provisioner: udisk.csi.ucloud.cn #存储供应方，此处不可更改。
 parameters:
-  type: "ssd"   # 存储介质，支持ssd和sata，必填
+  type: "ssd"   # 存储介质，支持ssd,rssd和sata，必填
   fsType: "ext4"    # 文件系统，必填
   udataArkMode: "no"   # 是否开启方舟模式，默认不开启，非必填
   chargeType: "month" # 付费类型，支持dynamic、month、year,不填默认为按小时。
