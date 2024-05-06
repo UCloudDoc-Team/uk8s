@@ -32,6 +32,7 @@
   - [节点池](/uk8s/administercluster/node_group)
   - [添加节点](/uk8s/userguide/addnode)
   - [虚拟节点](/uk8s/administercluster/virtual_kubelet)
+  - [添加已有虚拟机节点](/uk8s/userguide/addUHostNode)
   - [添加已有裸金属节点](/uk8s/userguide/addUPHostNode)
   - [安全组支持](/uk8s/userguide/SupportSecurityGroup.md)
   - [制作自定义节点镜像](/uk8s/administercluster/custom_image)
