@@ -1,15 +1,15 @@
 # 集群GPU监控
 
 ## 1. 介绍
-uk8s 使用开源组件 [dcgm-exporter](https://github.com/NVIDIA/dcgm-exporter) 用于获取 GPU 相关监控指标，主要包含：
+Uk8s 使用开源组件 [Dcgm-Exporter](https://github.com/NVIDIA/dcgm-exporter) 用于获取 GPU 相关监控指标，主要包含：
 - GPU 卡利用率
 - 容器 GPU 资源利用率
 
 ## 2. 部署
 
-如果你的集群还没有在uk8s的监控中心开启了监控，那么只需开启监控即可在grafana页面查看dashboard `容器 GPU 监控`、`NVIDIA DCGM Exporter Dashboard`。
+如果你的集群还没有在uk8s的监控中心开启了监控，那么只需开启监控即可在 Grafana 页面查看 Dashboard `容器 GPU 监控`、`NVIDIA DCGM Exporter Dashboard`。
 
->  ⚠️ 下面的部署内容适用于 `2024/05/17` 前已经在uk8s的监控中心开启了监控，`2024/05/17`后开启的监控默认自带 Dcgm-exporter 服务和 dashboard:
+>  ⚠️ 下面的部署内容适用于 `2024/05/17` 前已经在 Uk8s 的监控中心开启了监控，`2024/05/17`后开启的监控默认自带 Dcgm-exporter 服务和 Dashboard:
 
 ### 2.1. 部署 Dcgm-Exporter
 ```sh
@@ -23,7 +23,7 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/dcgm-exporter.yaml
 
 ### 2.3. 部署 Uk8s Container GPU Dashboard
 
-> ⚠️ 官方的图表没有容器相关信息，如果你需要查看容器的 GPU 相关信息，需要导入 uk8s 自制的 Dashboard。
+> ⚠️ 官方的图表没有容器相关信息，如果你需要查看容器的 GPU 相关信息，需要导入 Uk8s 自制的 Dashboard。
 
 登陆Grafana后，你需要先 [下载 json 文件](https://docs.ucloud.cn/uk8s/json/grafana/gpu-uk8s-grafana.json) --> `选择左侧导航栏 '+' 号` --> `Import` --> `第二个输入框粘贴下载的 json 内容` --> `Load`
 
@@ -57,12 +57,15 @@ EOF
 
 | Dashboard                      | Grafana图表              | 作用                                          |
 | ------------------------------ | ------------------------ | --------------------------------------------- |
-| NVIDIA DCGM Exporter Dashboard | GPU Temperature          | GPU卡温度                                     |
-| NVIDIA DCGM Exporter Dashboard | GPU Power Usage          | GPU功耗                                       |
-| NVIDIA DCGM Exporter Dashboard | GPU SM Clocks            | GPU时钟频率                                   |
-| NVIDIA DCGM Exporter Dashboard | GPU Utilization          | GPU利用率                                     |
+| NVIDIA DCGM Exporter Dashboard | GPU Temperature          | GPU 卡温度                                     |
+| NVIDIA DCGM Exporter Dashboard | GPU Power Usage          | GPU 功耗                                       |
+| NVIDIA DCGM Exporter Dashboard | GPU SM Clocks            | GPU 时钟频率                                   |
+| NVIDIA DCGM Exporter Dashboard | GPU Utilization          | GPU 利用率                                     |
 | NVIDIA DCGM Exporter Dashboard | Tensor Core Utilization  | Tensor Pipes 平均处于 Active 状态的周期分数。 |
 | NVIDIA DCGM Exporter Dashboard | GPU Framebuffer Mem Used | GPU 显存使用量。                              |
+| Container GPU | GPU Utilization | GPU 利用率                              |
+| Container GPU | GPU Framebuffer Mem | 容器 GPU 显存使用量&剩余量|
+| Container GPU | GPU Memory Usage | GPU 显存使用率|
 
 ## 5. DCGM 常见指标
 
