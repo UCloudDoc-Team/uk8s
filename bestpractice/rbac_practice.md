@@ -5,6 +5,14 @@
 
 如果要更加深入地了解和掌握 RBAC，可以查看[官方文档](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)。
 
+K8S里面有两类用户，
+* Service Account，Kubernetes 中一种用于非人类用户的账号，在 Kubernetes 集群中提供不同的身份标识。详细可参考[官方文档](https://kubernetes.io/docs/concepts/security/service-accounts/)
+* 普通用户(user)，K8S本身不并管理user，而是交由外部独立服务管理，不能通过K8SAPI来创建user;
+
+目前是通过kubectl和Dashboard来管理集群，Service
+account已经足够满足要求，而且可以在Kubernetes中直接管理。因此这里不介绍如何使用user这个对象来管理集群。
+
+
 ## 1. 创建NS
 
 ```
@@ -19,16 +27,13 @@ kubectl create ns pre
 kubectl create sa mingpianwang -n pre
 ```
 
-在pre的命名空间下创建一个名为"mingpianwang"的Service account，给到某个特定的用户使用。这里要说明下，K8S里面有两类用户，一个是Service
-Account，另一个是普通用户(user)。但K8S本身不并管理user，而是交由外部独立服务管理，因此我们不能通过K8S
-API来创建user，考虑到我们只是通过kubectl和Dashboard来管理集群，Service
-account已经足够满足要求，而且可以在Kubernetes中直接管理。因此这里不介绍如何使用user这个对象来管理集群。
+在pre的命名空间下创建一个名为"mingpianwang"的Service account，给到某个特定的用户使用。
 
 ## 3. 赋予权限
 
 由于我们已经预先说明，需要给mingpianwang这个用户赋予pre 这个命名空间下的所有权限，即admin权限。
 
-**重点来了**，RoleBinding对象是可以引用一个ClusterRole对象的，然后这个ClusterRole所拥有的权限只会在这个NS下面有效。这一点允许管理员在整个集群范围内首先定义一组通用的角色，然后再在不同的名字空间中复用这些角色。
+**重点来了**，[RoleBinding]()对象是可以引用一个ClusterRole对象的，然后这个ClusterRole所拥有的权限只会在这个NS下面有效。这一点允许管理员在整个集群范围内首先定义一组通用的角色，然后再在不同的名字空间中复用这些角色。
 
 我们先看下集群内默认的ClusterRole有哪些，执行get
 clusterrole命名可以看到，有admin、cluster-admin、edit等角色，那我们可以直接使用admin这个clusterrole角色，通过rolebinding的方式赋予”mingpianwang“这个用户。
@@ -93,7 +98,10 @@ subjects:
 
 ## 4. 访问Dashboard
 
-这里我们使用token方式来登录Dashboard，那我们就要获取到”mingpianwang“的token，其实就是secret了。这个secret在我们创建的时候，K8S就帮我们自动生成了。通过下面的方式来获取，最后的token复制下来就可以了。
+在 Kubernetes 1.22 之前的版本中，Kubernetes 会以Secret 形式为ServciceAccount 提供一个长期的有效的静态令牌， Kubernetes v1.22 及更高版本中，需要用户自己配置；详细的可参考官方文档[手动获取 ServiceAccount 凭据](https://kubernetes.io/docs/concepts/security/service-accounts/#assign-to-pod)
+
+#### Kubernetes 1.22 之前的版本
+就要获取到”mingpianwang“的token，其实就是secret了。通过下面的方式来获取，最后的token复制下来就可以了。
 
 ```
 bash-4.4# kubectl describe sa/mingpianwang -n pre
@@ -120,6 +128,51 @@ ca.crt:     1359 bytes
 namespace:  5 bytes
 token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9/....
 ```
+
+#### Kubernetes 1.22 之后的版本
+
+如果你需要为 ServiceAccount 获得一个 API 令牌，你可以创建一个新的、带有特殊注解 kubernetes.io/service-account.name 的 Secret 对象。详细可参考官方文档[手动获取一个长久的Token](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#manually-create-a-long-lived-api-token-for-a-serviceaccount)
+
+```
+bash-4.4# kubectl -n pre apply -f - <<EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mingpianwang-secret
+  annotations:
+    kubernetes.io/service-account.name: mingpianwang
+type: kubernetes.io/service-account-token
+EOF
+```
+
+如果你通过下面的命令来查看 Secret：
+```
+bash-4.4# kubectl -n pre describe secrets/mingpianwang-secret
+Name:         mingpianwang-secret
+Namespace:    pre
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name: mingpianwang
+              kubernetes.io/service-account.uid: 0c3e9a16-6962-45ee-9e6e-e7f0107cd9a8
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1359 bytes
+namespace:  3 bytes
+token:     ...
+```
+
+这里将 token 的内容抹去了。当你删除一个与某 Secret 相关联的 ServiceAccount 时，Kubernetes 的控制面会自动清理该 Secret 中长期有效的令牌。
+
+如果你使用以下命令查看 ServiceAccount:
+```
+kubectl get serviceaccount mingpianwang -o yaml
+```
+在 ServiceAccount API 对象中看不到 mingpianwang-secret Secret， .secrets 字段， 因为该字段只会填充自动生成的 Secret。
+
+
+#### 登陆Dashboard
 
 复制到登录框，我们发现可以登录到Dashboard首页，不过需要注意的是，由于这个账号只有pre这个命名空间的权限，而Dashboard默认是default，所以进去之后会报一堆错咯，没关系，只要将左侧的NS改为pre即可。
 

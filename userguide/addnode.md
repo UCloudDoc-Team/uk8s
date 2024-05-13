@@ -7,7 +7,7 @@
 | 所属子网     | 设置初始节点及 Pod 所处的子网，集群中 Node 可处于同一 VPC 下的不同子网                                                                                                                                                   |
 | 类型       | Node 节点类型，支持 UHost 云主机（包括 GPU 云主机）、PHost 物理云主机及裸金属服务器                                                                                                                                         |
 | 可用区      | Master/Node 节点所在可用区，在具有多个可用区的地域可以选择多可用区 UK8S 集群，建议在创建集群时将 Master 节点分布于多个可用区。                                                                                                                  |
-| 节点镜像     | 设置集群节点的 UHost 镜像，您可以选择自定义镜像，但必须基于 UK8S 标准镜像制作，请参考[制作自定义镜像](uk8s/administercluster/custom_image)                                                                                               |
+| 节点镜像     | 设置集群节点的 UHost 镜像，您可以选择自定义镜像，但必须基于 UK8S 标准镜像制作，请参考[制作自定义镜像](uk8s/administercluster/custom_image) <br> 若您要使用GPU节点，镜像选择参考[GPU节点中的镜像说明](/uk8s/administercluster/gpu-node)，CPU机器镜像可选择：`Centos 7.6`,`Ubuntu 20.04`,`Anolis 8.6`镜像中的任意一种。                                                                                               |
 | 节点规格     | 包括机型、CPU 平台、CPU、内存、系统盘类型、数据盘类型、数据盘大小等配置，不同类型机型配置详见：[云主机 UHost](/uhost/introduction/uhost/type_new) / [GPU云主机](/gpu/README) / [物理云主机 UPHost](uphost/README) / [裸金属服务器](/uphost/type/baremetal) |
 | 硬件隔离组    | Master 节点默认位于同一硬件隔离组，硬件隔离组能严格确保组内的每一台云主机都落在不同的物理机上。每个隔离组在单个可用区至多可以添加 7 台云主机，详见[硬件隔离组](uhost/guide/isolationgroup)                                                                             |
 | 最大 Pod 数 | 单个 Node 节点可支持承载的最大 Pod 数量                                                                                                                                                                     |
