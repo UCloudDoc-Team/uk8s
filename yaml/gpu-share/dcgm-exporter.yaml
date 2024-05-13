@@ -79,10 +79,8 @@ spec:
          requiredDuringSchedulingIgnoredDuringExecution:
            nodeSelectorTerms:
            - matchExpressions:
-             - key: node.uk8s.ucloud.cn/machine_type
-               operator: In
-               values:
-               - G
+             - key: accelerator
+               operator: Exists
       dnsPolicy: ClusterFirst
       priorityClassName: system-node-critical
       restartPolicy: Always
@@ -265,3 +263,18 @@ spec:
     app.kubernetes.io/instance: dcgm-exporter
     app.kubernetes.io/name: dcgm-exporter
   type: ClusterIP
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: uk8s-gpu
+  namespace: uk8s-monitor
+spec:
+  groups:
+  - name: uk8s-gpu
+    rules:
+    - alert: GPU_XID_ERROR
+      expr: DCGM_FI_DEV_XID_ERRORS != 0
+      annotations:
+        message: 'GPU {{ $labels.instance }} occur a XID {{ $value }} at Node {{ $labels.device }}'

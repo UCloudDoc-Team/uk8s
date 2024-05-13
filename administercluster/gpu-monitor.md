@@ -9,7 +9,7 @@ Uk8s 使用开源组件 [Dcgm-Exporter](https://github.com/NVIDIA/dcgm-exporter)
 
 如果你的集群还没有在uk8s的监控中心开启了监控，那么只需开启监控即可在 Grafana 页面查看 Dashboard `容器 GPU 监控`、`NVIDIA DCGM Exporter Dashboard`。
 
->  ⚠️ 下面的部署内容适用于 `2024/05/17` 前已经在 Uk8s 的监控中心开启了监控，`2024/05/17`后开启的监控默认自带 Dcgm-exporter 服务和 Dashboard:
+>  ⚠️ 下面的部署内容适用于 `2024/05/17` 前已经在 Uk8s 的监控中心开启了监控，`2024/05/17`后开启的监控默认自带 Dcgm-exporter 服务和 Dashboard，无需进行下面部署。
 
 ### 2.1. 部署 Dcgm-Exporter
 ```sh
@@ -17,7 +17,7 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/dcgm-exporter.yaml
 ```
 
 ### 2.2. 部署 DCGM 官方 Dashboard
->  ⚠️ `12239` 为 [DCGM](https://grafana.com/grafana/dashboards/12239-nvidia-dcgm-exporter-dashboard/) 官方 Dashboard。
+>  ⚠️ `12239` 为 [DCGM](https://grafana.com/grafana/dashboards/12239-nvidia-dcgm-exporter-dashboard/) 官方 Dashboard ID。
 
 登陆Grafana后，`选择左侧导航栏 '+' 号` --> `Import` --> `第一个输入框输入 12239` --> `Load`
 
@@ -67,9 +67,17 @@ EOF
 | Container GPU                  | GPU Framebuffer Mem      | 容器 GPU 显存使用量&剩余量                    |
 | Container GPU                  | GPU Memory Usage         | 容器 GPU 显存使用率                                |
 
-## 5. DCGM 常见指标
+## 5. 监控规则
 
-### 5.1. 利用率
+我们默认配置了 `GPU掉卡` 的告警规则，如果有新增告警规则的需求，可以通过下面命令更改告警规则。
+
+```sh
+kubectl -n uk8s-monitor edit prometheusrule uk8s-gpu
+```
+
+## 6. DCGM 常见指标
+
+### 6.1. 利用率
 
 | 指标名称                  | 指标类型 | 指标单位 | 指标含义             |
 | ------------------------- | -------- | -------- | -------------------- |
@@ -78,7 +86,7 @@ EOF
 | DCGM_FI_DEV_ENC_UTIL      | Gauge    | %        | GPU 编码器利用率。   |
 | DCGM_FI_DEV_DEC_UTIL      | Gauge    | %        | GPU 解码器利用率。   |
 
-### 5.2. 显存
+### 6.2. 显存
 
 > 在 GPU 里，显卡内存（显存）也被称为帧缓存。
 
@@ -87,14 +95,14 @@ EOF
 | DCGM_FI_DEV_FB_FREE | Gauge    | MiB      | GPU 帧缓存剩余量。 |
 | DCGM_FI_DEV_FB_USED | Gauge    | MiB      | GPU 帧缓存剩余量。 |
 
-### 5.3. 频率
+### 6.3. 频率
 
 | 指标名称              | 指标类型 | 指标单位 | 指标含义           |
 | --------------------- | -------- | -------- | ------------------ |
 | DCGM_FI_DEV_SM_CLOCK  | Gauge    | MHz      | GPU SM 时钟频率。  |
 | DCGM_FI_DEV_MEM_CLOCK | Gauge    | MHz      | GPU 内存时钟频率。 |
 
-### 5.4. 剖析
+### 6.4. 剖析
 | 指标名称                           | 指标类型 | 指标单位 | 指标含义                                                                                                                    |
 | ---------------------------------- | -------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
 | DCGM_FI_PROF_GR_ENGINE_ACTIVE      | Gauge    | %        | 在一个时间间隔内，Graphics 或 Compute 引擎处于 Active 的时间占比。                                                          |
@@ -112,7 +120,7 @@ EOF
 | DCGM_FI_DEV_PCIE_REPLAY_COUNTER    | Counter  | 次       | GPU PCIe 总线的重试次数。                                                                                                   |
 | DCGM_FI_DEV_NVLINK_BANDWIDTH_TOTAL | Counter  | -        | GPU 所有通道的 NVLink 带宽计数器总数。                                                                                      |
 
-### 5.5. 温度和功率
+### 6.5. 温度和功率
 
 | 指标名称                             | 指标类型 | 指标单位 | 指标含义             |
 | ------------------------------------ | -------- | -------- | -------------------- |
@@ -121,7 +129,7 @@ EOF
 | DCGM_FI_DEV_POWER_USAGE              | Gauge    | W        | GPU 当前使用功率     |
 | DCGM_FI_DEV_TOTAL_ENERGY_CONSUMPTION | Counter  | mJ       | GPU 启动以来的总能耗 |
 
-### 5.6. XID 错误&违规
+### 6.6. XID 错误&违规
 
 | 指标名称                             | 指标类型 | 指标单位 | 指标含义                                 |
 | ------------------------------------ | -------- | -------- | ---------------------------------------- |
@@ -134,14 +142,14 @@ EOF
 | DCGM_FI_DEV_LOW_UTIL_VIOLATION       | Counter  | μs       | 因低利用率限制导致违规的累积持续时间     |
 | DCGM_FI_DEV_RELIABILITY_VIOLATION    | Counter  | μs       | 因电路板可靠性限制导致违规的累积持续时间 |
 
-### 5.7. 停用的内存页面
+### 6.7. 停用的内存页面
 
 | 指标名称                | 指标类型 | 指标单位 | 指标含义                      |
 | ----------------------- | -------- | -------- | ----------------------------- |
 | DCGM_FI_DEV_RETIRED_SBE | Counter  | 个       | 因单 bit 错误而停用的内存页面 |
 | DCGM_FI_DEV_RETIRED_DBE | Counter  | 个       | 因双 bit 错误而停用的内存页面 |
 
-### 5.8. 其他
+### 6.8. 其他
 
 | 指标名称                                | 指标类型 | 指标单位 | 指标含义                         |
 | --------------------------------------- | -------- | -------- | -------------------------------- |
