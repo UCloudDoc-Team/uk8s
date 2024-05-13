@@ -79,10 +79,8 @@ spec:
          requiredDuringSchedulingIgnoredDuringExecution:
            nodeSelectorTerms:
            - matchExpressions:
-             - key: node.uk8s.ucloud.cn/machine_type
-               operator: In
-               values:
-               - G
+             - key: accelerator
+               operator: Exists
       dnsPolicy: ClusterFirst
       priorityClassName: system-node-critical
       restartPolicy: Always
