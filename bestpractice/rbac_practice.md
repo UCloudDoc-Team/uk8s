@@ -33,7 +33,7 @@ kubectl create sa mingpianwang -n pre
 
 由于我们已经预先说明，需要给mingpianwang这个用户赋予pre 这个命名空间下的所有权限，即admin权限。
 
-**重点来了**，[RoleBinding]()对象是可以引用一个ClusterRole对象的，然后这个ClusterRole所拥有的权限只会在这个NS下面有效。这一点允许管理员在整个集群范围内首先定义一组通用的角色，然后再在不同的名字空间中复用这些角色。
+**重点来了**，[RoleBinding](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding)对象是可以引用一个ClusterRole对象的，然后这个ClusterRole所拥有的权限只会在这个NS下面有效。这一点允许管理员在整个集群范围内首先定义一组通用的角色，然后再在不同的名字空间中复用这些角色。
 
 我们先看下集群内默认的ClusterRole有哪些，执行get
 clusterrole命名可以看到，有admin、cluster-admin、edit等角色，那我们可以直接使用admin这个clusterrole角色，通过rolebinding的方式赋予”mingpianwang“这个用户。
@@ -145,7 +145,7 @@ type: kubernetes.io/service-account-token
 EOF
 ```
 
-如果你通过下面的命令来查看 Secret：
+可以通过下面的命令来查看 Secret：
 ```
 bash-4.4# kubectl -n pre describe secrets/mingpianwang-secret
 Name:         mingpianwang-secret
@@ -165,9 +165,9 @@ token:     ...
 
 这里将 token 的内容抹去了。当你删除一个与某 Secret 相关联的 ServiceAccount 时，Kubernetes 的控制面会自动清理该 Secret 中长期有效的令牌。
 
-如果你使用以下命令查看 ServiceAccount:
+可以使用以下命令查看 ServiceAccount:
 ```
-kubectl get serviceaccount mingpianwang -o yaml
+kubectl -n pre get serviceaccount mingpianwang -o yaml
 ```
 在 ServiceAccount API 对象中看不到 mingpianwang-secret Secret， .secrets 字段， 因为该字段只会填充自动生成的 Secret。
 
