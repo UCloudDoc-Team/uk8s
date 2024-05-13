@@ -57,15 +57,15 @@ EOF
 
 | Dashboard                      | Grafana图表              | 作用                                          |
 | ------------------------------ | ------------------------ | --------------------------------------------- |
-| NVIDIA DCGM Exporter Dashboard | GPU Temperature          | GPU 卡温度                                     |
-| NVIDIA DCGM Exporter Dashboard | GPU Power Usage          | GPU 功耗                                       |
-| NVIDIA DCGM Exporter Dashboard | GPU SM Clocks            | GPU 时钟频率                                   |
-| NVIDIA DCGM Exporter Dashboard | GPU Utilization          | GPU 利用率                                     |
+| NVIDIA DCGM Exporter Dashboard | GPU Temperature          | GPU 卡温度                                    |
+| NVIDIA DCGM Exporter Dashboard | GPU Power Usage          | GPU 功耗                                      |
+| NVIDIA DCGM Exporter Dashboard | GPU SM Clocks            | GPU 时钟频率                                  |
+| NVIDIA DCGM Exporter Dashboard | GPU Utilization          | GPU 利用率                                    |
 | NVIDIA DCGM Exporter Dashboard | Tensor Core Utilization  | Tensor Pipes 平均处于 Active 状态的周期分数。 |
 | NVIDIA DCGM Exporter Dashboard | GPU Framebuffer Mem Used | GPU 显存使用量。                              |
-| Container GPU | GPU Utilization | GPU 利用率                              |
-| Container GPU | GPU Framebuffer Mem | 容器 GPU 显存使用量&剩余量|
-| Container GPU | GPU Memory Usage | GPU 显存使用率|
+| Container GPU                  | GPU Utilization          | 容器 GPU 利用率                                    |
+| Container GPU                  | GPU Framebuffer Mem      | 容器 GPU 显存使用量&剩余量                    |
+| Container GPU                  | GPU Memory Usage         | 容器 GPU 显存使用率                                |
 
 ## 5. DCGM 常见指标
 
