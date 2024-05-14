@@ -13,11 +13,11 @@ Uk8s 使用开源组件 [Dcgm-Exporter](https://github.com/NVIDIA/dcgm-exporter)
 
 ### 2.2. 已开启监控中心
 
->  ⚠️ 如果监控中心版本 `1.0.6 > version >= 1.0.5-3` 或者 `version > 1.0.6` ，默认安装了下面部署文件。请跳过下面部署内容。
+>  ⚠️ 如果监控中心版本 `1.0.6 > version >= 1.0.5-3` 或者 `version > 1.0.6` ，默认安装了下面部署文件，请跳过下面部署内容，否则需要进行下面部署。
 
 #### 2.2.1. 部署 Dcgm-Exporter
-```s h
-kube  ctl apply -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/dcgm-exporter.yaml
+```sh
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/dcgm-exporter.yaml
 ```
 
 #### 2.2.2. 部署 NVIDIA/DCGM/Exporter/Node Dashboard
