@@ -18,7 +18,8 @@
 
 ## 3. 存储卷
 
-1. 当前支持 SATA、SSD UDisk 以及 UFS；
+#### 支持类型
+当前支持 SATA、SSD UDisk 以及 UFS 和 UFile；
 
    [在 UK8S 中使用 UDisk](uk8s/volume/udisk)
 
@@ -26,33 +27,32 @@
 
    [在 UK8S 中使用 UFile](uk8s/volume/ufile)
 
-2. 当前支持存储的地域：
+#### 支持地域
 
 | 产品    | 地域                                       |
 | ----- | ---------------------------------------- |
-| UDisk | 北京、上海、广州、台北、东京、首尔、曼谷、新加坡、雅加达、胡志明、洛杉矶、华盛顿 |
-| UFS   | 北京、上海、广州、台北、东京、首尔、曼谷、新加坡、雅加达、胡志明、洛杉矶、圣保罗、拉各斯 |
+| UDisk | 请参考存储产品[UDisk支持地域](https://docs.ucloud.cn/udisk/introduction/limit) |
+| UFS   | 请参考存储产品[UFS支持地域](https://docs.ucloud.cn/ufs/ufs_manual_instruction/region) |
+| UFile | 请参考存储产品[UFile支持地域](https://docs.ucloud.cn/ufile/introduction/limit) |
 
-## 4. 其他
+## 4. 资源命名规范
 
-当你创建 UK8S 集群后，UK8S 会以你的名义在当前项目下创建 UHost、ULB、UDisk、EIP 等资源，更改配置或删除可能导致集群不可用，请谨慎操作。主要如下：
+当你创建 UK8S 集群后，UK8S 会以你的名义在当前项目下创建 UHost、ULB、UDisk、EIP 等资源，更改配置或删除可能导致集群不可用，请谨慎操作。涉及的资源主要如下：
 
 #### 1. 由 UK8S 管理服务创建的资源，其命名规范如下：
 
-1.1 uk8s-xxxxxxxx-master-m 或 uk8s-xxxxxxxx-n-xxxxx 为 Master / Node 节点的名称，名称，作为集群的 Master 节点；
-
-1.2 uk8s-xxxxxxxx-master-ulb4 / uk8s-xxxxxxxx-master-ulb4-external 为内外网 ULB 名称，作为 ApiServer 的内外网入口；
-
-1.3 system_udisk_uk8s-xxxxxxxx-n-xxxxx / data_udisk_uk8s-xxxxxxxx-n-xxxxx 为 UDisk 名称，作为集群节点的系统盘 /
-数据盘。
+* `uk8s-xxxxxxxx-master-m` 为 Master 节点的名称，作为集群的 Master 节点；
+* `uk8s-xxxxxxxx-n-xxxxx` 为 Node 节点的名称，作为集群的 Node 节点；
+* `uk8s-xxxxxxxx-master-ulb4` 为集群 ApiServer 内网 ULB 名次，作为集群内部入口；
+* `uk8s-xxxxxxxx-master-ulb4-external` 为 ApiServer 外网 ULB 名称，作为集群外部入口；
+* `system_udisk_uk8s-xxxxxxxx-n-xxxxx` 为 UDisk 资源名称，作为集群节点的系统盘；
+* `data_udisk_uk8s-xxxxxxxx-n-xxxxx` 为 UDisk 资源名称，作为集群节点的数据盘。
 
 #### 2. 由 UK8S 插件创建的资源，其命名规范如下：
 
-2.1 ULB 名称为 ingress-nginx.ingress.svc.uk8s-xy7udsa 的，由 UK8S 的 ULB 插件创建，用于 LoadBalancer 类型的
-Service，且其备注为 UID-xx-xxx，实为 Service 在 UK8S 中的 uuid。其命名规范为 svc-name.namespace.svc.uk8s-id。
+* `ingress-nginx.ingress.svc.uk8s-xxxx` 是 ULB 资源名称，由 UK8S 的 ULB 插件创建，用于 LoadBalancer 类型的Service，且其备注为 UID-xx-xxx，实为 Service 在 UK8S 中的 uuid。其命名规范为 `svc-name.namespace.svc.uk8s-id`。
 
-2.2 Vserver 名称为 TCP_443_xxx-xxxxx 的，由 UK8S 的 ULB 插件创建，对应 LoadBalancer 类型的 Service 中不同的端口。其命名规范为
-service-protocol_service-port_service_uuid。
+* `TCP_443_xxx-xxxxx` 为 Vserver 名称，由 UK8S 的 ULB 插件创建，对应 LoadBalancer 类型的 Service 中不同的端口。其命名规范为 `service-protocol_service-port_service_uuid`。
 
-2.3 UDisk 名称为 pvc-9393f66f-c0b5-11e9-bd6d-5254001935f2 的，由 UK8S 的存储插件创建，对应 UK8S 中的 PVC。其命名规范为
-pvc-pvc_uuid。
+* `pvc-9393f66f-c0b5-11e9-bd6d-5254001935f2` 为 UDisk 名称，由 UK8S 的存储插件创建，对应 UK8S 中的 PVC。其命名规范为
+`pvc-pvc_uuid`。
