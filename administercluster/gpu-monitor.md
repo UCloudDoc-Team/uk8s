@@ -7,29 +7,32 @@ Uk8s 使用开源组件 [Dcgm-Exporter](https://github.com/NVIDIA/dcgm-exporter)
 
 ## 2. 部署
 
-如果你的集群还没有在uk8s的监控中心开启了监控，那么只需开启监控即可在 Grafana 页面查看 Dashboard `容器 GPU 监控`、`NVIDIA DCGM Exporter Dashboard`。
+### 2.1. 未开启监控中心
 
->  ⚠️ 下面的部署内容适用于 `2024/05/17` 前已经在 Uk8s 的监控中心开启了监控，`2024/05/17`后开启的监控默认自带 Dcgm-exporter 服务和 Dashboard，无需进行下面部署。
+开启 [监控中心](/uk8s/monitor/prometheusplugin/startmonitor) 即可在 Grafana 页面查看 Dashboard `NVIDIA/DCGM/Exporter/Node`、`NVIDIA/DCGM/Exporter/Container`。
 
-### 2.1. 部署 Dcgm-Exporter
-```sh
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/dcgm-exporter.yaml
+### 2.2. 已开启监控中心
+
+>  ⚠️ 如果监控中心版本 `1.0.6 > version >= 1.0.5-3` 或者 `version > 1.0.6` ，默认安装了下面部署文件。请跳过下面部署内容。
+
+#### 2.2.1. 部署 Dcgm-Exporter
+```s h
+kube  ctl apply -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/dcgm-exporter.yaml
 ```
 
-### 2.2. 部署 DCGM 官方 Dashboard
->  ⚠️ `12239` 为 [DCGM](https://grafana.com/grafana/dashboards/12239-nvidia-dcgm-exporter-dashboard/) 官方 Dashboard ID。
+#### 2.2.2. 部署 NVIDIA/DCGM/Exporter/Node Dashboard
 
-登陆Grafana后，`选择左侧导航栏 '+' 号` --> `Import` --> `第一个输入框输入 12239` --> `Load`
+登陆Grafana后，你需要先 [下载 json 文件](/uk8s/json/grafana/dcgm-gpu-node.json) --> `选择左侧导航栏 '+' 号` --> `Import` --> `第二个输入框粘贴下载的 json 内容` --> `Load`
 
-### 2.3. 部署 Uk8s Container GPU Dashboard
+#### 2.2.3. 部署 NVIDIA/DCGM/Exporter/Container	Dashboard
 
 > ⚠️ 官方的图表没有容器相关信息，如果你需要查看容器的 GPU 相关信息，需要导入 Uk8s 自制的 Dashboard。
 
-登陆Grafana后，你需要先 [下载 json 文件](https://docs.ucloud.cn/uk8s/json/grafana/gpu-uk8s-grafana.json) --> `选择左侧导航栏 '+' 号` --> `Import` --> `第二个输入框粘贴下载的 json 内容` --> `Load`
+登陆Grafana后，你需要先 [下载 json 文件](/uk8s/json/grafana/dcgm-gpu-container.json) --> `选择左侧导航栏 '+' 号` --> `Import` --> `第二个输入框粘贴下载的 json 内容` --> `Load`
 
 ## 3. 测试
 
-你可以通过下面命令快速启动一个 GPU Pod。该 Pod 会运行一段时间结束。随后你可以在 Grafana 的 `Container GPU` Dashboard 中查看该 Pod 的 GPU 使用情况。
+你可以通过下面命令快速启动一个 GPU Pod。该 Pod 会运行一段时间结束。随后你可以在 Grafana 的 `NVIDIA/DCGM/Exporter/Container	` Dashboard 中查看该 Pod 的 GPU 使用情况。
 
 ```sh
 cat << EOF | kubectl create -f -
@@ -57,15 +60,16 @@ EOF
 
 | Dashboard                      | Grafana图表              | 作用                                          |
 | ------------------------------ | ------------------------ | --------------------------------------------- |
-| NVIDIA DCGM Exporter Dashboard | GPU Temperature          | GPU 卡温度                                    |
-| NVIDIA DCGM Exporter Dashboard | GPU Power Usage          | GPU 功耗                                      |
-| NVIDIA DCGM Exporter Dashboard | GPU SM Clocks            | GPU 时钟频率                                  |
-| NVIDIA DCGM Exporter Dashboard | GPU Utilization          | GPU 利用率                                    |
-| NVIDIA DCGM Exporter Dashboard | Tensor Core Utilization  | Tensor Pipes 平均处于 Active 状态的周期分数。 |
-| NVIDIA DCGM Exporter Dashboard | GPU Framebuffer Mem Used | GPU 显存使用量。                              |
-| Container GPU                  | GPU Utilization          | 容器 GPU 利用率                                    |
-| Container GPU                  | GPU Framebuffer Mem      | 容器 GPU 显存使用量&剩余量                    |
-| Container GPU                  | GPU Memory Usage         | 容器 GPU 显存使用率                                |
+| NVIDIA/DCGM/Exporter/Node      | GPU Temperature          | GPU 卡温度                                    |
+| NVIDIA/DCGM/Exporter/Node      | GPU Power Usage          | GPU 功耗                                      |
+| NVIDIA/DCGM/Exporter/Node      | GPU SM Clocks            | GPU 时钟频率                                  |
+| NVIDIA/DCGM/Exporter/Node      | GPU Utilization          | GPU 利用率                                    |
+| NVIDIA/DCGM/Exporter/Node      | Tensor Core Utilization  | Tensor Pipes 平均处于 Active 状态的周期分数 |
+| NVIDIA/DCGM/Exporter/Node      | GPU Framebuffer Mem Used | GPU 显存使用量                              |
+| NVIDIA/DCGM/Exporter/Node      | GPU XID Error            | GPU 掉卡                              |
+| NVIDIA/DCGM/Exporter/Container | GPU Utilization          | 容器 GPU 利用率                               |
+| NVIDIA/DCGM/Exporter/Container | GPU Framebuffer Mem      | 容器 GPU 显存使用量&剩余量                    |
+| NVIDIA/DCGM/Exporter/Container | GPU Memory Usage         | 容器 GPU 显存使用率                           |
 
 ## 5. 监控规则
 

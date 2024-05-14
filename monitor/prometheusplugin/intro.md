@@ -10,6 +10,8 @@ Operator实现，部署在UK8S集群中，包含三大监控模块，分别是Pr
 同时，为了简化监控服务部署的负担，监控中心启动后，会默认安装NodeExporter以抓取Node节点的监控数据，并添加了Scheduler、Controller
 Manager、etcd、kubelet等Target，零配置即可实现UK8S的健康状态监控。
 
+目前，监控中心已支持监控节点、容器GPU相关数据。可以在[GPU监控](/uk8s/monitor/administercluster/gpu-monitor)中查看详情。
+
 ### 功能一览
 
 | 功能点    | 功能说明                      |
