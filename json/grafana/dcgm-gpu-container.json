@@ -417,7 +417,7 @@
     ]
     },
     "timezone": "",
-    "title": "Container GPU",
+    "title": "NVIDIA/DCGM/Exporter/Container",
     "uid": "zPV71hLSk",
     "version": 3
 }
