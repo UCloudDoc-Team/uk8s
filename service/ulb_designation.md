@@ -10,88 +10,9 @@ UK8S支持在创建 LoadBalancer 类型的 Service 时，指定使用已有的 U
 
 3. 指定已有的ULB实例创建LoadBalancer Service，Service被删除后，ULB实例不会被删除，仅删除对应的Vserver。
 
-4. 通过UK8S创建的Vserver命名规范为''Protocol-ServicePort-ServiceUUID''，请勿随意修改，否则可能导致脏数据。
+4. 通过UK8S创建的Vserver命名规范为`Protocol-ServicePort-ServiceUUID`，请勿随意修改，否则可能导致脏数据。
 
 下面我们来看下如何使用已有的ULB实例。
-
-## 使用已有的内网ULB
-
-声明使用已有的内网ULB，需要声明至少两个annotations。
-
-```
-apiVersion: v1
-kind: Service
-metadata:
-  name: https
-  labels:
-    app: https
-  annotations:
-    service.beta.kubernetes.io/ucloud-load-balancer-id: "ulb-ofvmd1o4" #替换成自己的ULB Id
-    service.beta.kubernetes.io/ucloud-load-balancer-type: "inner"
-spec:
-  type: LoadBalancer
-  ports:
-    - protocol: TCP 
-      port: 443
-      targetPort: 8080
-  selector:
-    app: https
-```
-
-## 使用已有的外网ULB（7层）
-
-```
-apiVersion: v1
-kind: Service
-metadata:
-  name: https
-  labels:
-    app: https
-  annotations:
-    service.beta.kubernetes.io/ucloud-load-balancer-id: "ulb-ofvmd1o4"
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: "https" 
-    # http与https等价，均表示使用7层负载均衡
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert: "ssl-b103etqy"
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port: "443"
-    # 443端口启用SSL，80端口依然为HTTP
-spec:
-  type: LoadBalancer
-  ports:
-    - protocol: TCP
-      port: 443
-      targetPort: 8080
-    - protocol: TCP
-      port: 80
-      targetPort: 8080 
-  selector:
-    app: https
-```
-
-## 使用已有的外网ULB（4层）
-
-```
-apiVersion: v1
-kind: Service
-metadata:
-  name: https
-  labels:
-    app: https
-  annotations:
-    service.beta.kubernetes.io/ucloud-load-balancer-id: "ulb-ofvmd1o4"
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: "tcp"
-    # 表示使用4层负载均衡
-spec:
-  type: LoadBalancer
-  ports:
-    - protocol: TCP
-      port: 443
-      targetPort: 8080
-    - protocol: TCP
-      port: 80
-      targetPort: 8080 
-  selector:
-    app: tcp
-```
 
 ## 使用已有ALB
 
@@ -121,4 +42,83 @@ spec:
       targetPort: 8080
   selector:
     app: https
+```
+
+## 使用已有的内网ULB
+
+声明使用已有的内网ULB，需要声明至少两个annotations。
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: https
+  labels:
+    app: https
+  annotations:
+    service.beta.kubernetes.io/ucloud-load-balancer-id: "ulb-ofvmd1o4" #替换成自己的ULB Id
+    service.beta.kubernetes.io/ucloud-load-balancer-type: "inner"
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 8080
+  selector:
+    app: https
+```
+
+## 使用已有的外网ULB（7层）
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: https
+  labels:
+    app: https
+  annotations:
+    service.beta.kubernetes.io/ucloud-load-balancer-id: "ulb-ofvmd1o4"
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: "https"
+    # http与https等价，均表示使用7层负载均衡
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert: "ssl-b103etqy"
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port: "443"
+    # 443端口启用SSL，80端口依然为HTTP
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 8080
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  selector:
+    app: https
+```
+
+## 使用已有的外网ULB（4层）
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: https
+  labels:
+    app: https
+  annotations:
+    service.beta.kubernetes.io/ucloud-load-balancer-id: "ulb-ofvmd1o4"
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: "tcp"
+    # 表示使用4层负载均衡
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 8080
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  selector:
+    app: tcp
 ```
