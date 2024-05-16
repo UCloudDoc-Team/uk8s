@@ -101,7 +101,7 @@
 - GPU
   - [GPU 节点](/uk8s/administercluster/gpu-node)
   - [GPU 共享插件](/uk8s/administercluster/gpu-share)
-  - [GPU 监控](/uk8s/administercluster/gpu-monitor)
+  <!-- - [GPU 监控](/uk8s/administercluster/gpu-monitor) -->
 - 集群组件管理
   - Master 组件管理
     - [NodePort 相关参数修改](/uk8s/bestpractice/modify_nodeport)
