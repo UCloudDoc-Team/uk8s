@@ -16,6 +16,8 @@ UK8S支持在创建 LoadBalancer 类型的 Service 时，指定使用已有的 U
 
 ## 使用已有ALB
 
+> ⚠️ 使用 ALB 需要 [CloudProvider](/uk8s/service/cp_update) 版本 >= 24.03.13。
+
 ```yaml
 apiVersion: v1
 kind: Service
