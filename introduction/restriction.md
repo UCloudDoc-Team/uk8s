@@ -29,11 +29,8 @@
 
 #### 支持地域
 
-| 产品    | 地域                                       |
-| ----- | ---------------------------------------- |
-| UDisk | 请参考存储产品[UDisk支持地域](https://docs.ucloud.cn/udisk/introduction/limit) |
-| UFS   | 请参考存储产品[UFS支持地域](https://docs.ucloud.cn/ufs/ufs_manual_instruction/region) |
-| UFile | 请参考存储产品[UFile支持地域](https://docs.ucloud.cn/ufile/introduction/limit) |
+请参考[存储相关文档说明](uk8s/volume/intro?id=uk8s支持存储挂载的地域)
+
 
 ## 4. 资源命名规范
 
