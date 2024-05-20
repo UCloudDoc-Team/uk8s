@@ -28,7 +28,7 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/dcgm-exporter.yaml
 
 > ⚠️ 官方的图表没有容器相关信息，如果你需要查看容器的 GPU 相关信息，需要导入 Uk8s 自制的 Dashboard。
 
-登陆Grafana后，你需要先 <a href="/json/grafana/dcgm-gpu-container.json" download>下载 json 文件</a> --> `选择左侧导航栏 '+' 号` --> `Import` --> `第二个输入框粘贴下载的 json 内容` --> `Load`
+登陆Grafana后，你需要先 <a href="https://cms-docs.ucloudadmin.com/uk8s/json/grafana/dcgm-gpu-node.json" download>下载 json 文件</a> --> `选择左侧导航栏 '+' 号` --> `Import` --> `第二个输入框粘贴下载的 json 内容` --> `Load`
 
 ## 3. 测试
 
