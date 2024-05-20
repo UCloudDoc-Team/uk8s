@@ -23,7 +23,7 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/dcgm-exporter.yaml
 
 #### 2.2.2. 部署 NVIDIA/DCGM/Exporter/Node Dashboard
 
-登陆Grafana后，你需要先 <a href="https://uk8s-download.cn-bj.ufileos.com/dcgm-gpu-node.json" download>下载 json 文件</a> --> `选择左侧导航栏 '+' 号` --> `Import` --> `第二个输入框粘贴下载的 json 内容` --> `Load`
+登陆Grafana后，你需要先[test](https://uk8s-download.cn-bj.ufileos.com/dcgm-gpu-node.json) <a href="https://uk8s-download.cn-bj.ufileos.com/dcgm-gpu-node.json" download>下载 json 文件</a> --> `选择左侧导航栏 '+' 号` --> `Import` --> `第二个输入框粘贴下载的 json 内容` --> `Load`
 
 #### 2.2.3. 部署 NVIDIA/DCGM/Exporter/Container	Dashboard
 
