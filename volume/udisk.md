@@ -32,6 +32,7 @@ parameters:
   quantity: "1" # 购买时长，dynamic无需填写，可购买1-9个月，或1-10年
 reclaimPolicy: Delete  # PV回收策略，支持Delete和Retain，默认为Delete，非必填
 volumeBindingMode: WaitForFirstConsumer   # 强烈建议配置该参数
+allowVolumeExpansion: true # 声明该存储类支持可扩容特性
 mountOptions:
   - debug
   - rw

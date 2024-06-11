@@ -81,7 +81,7 @@ volumeClaimTemplates:
           storage: 20Gi
 ```
 
-我们看到，需要使用不同的存储介质，只需要在创建PVC时声明不同的storageClassName即可。下面我们介绍下如果创建自定义StorageClass。
+我们看到，需要使用不同的存储介质，只需要在创建PVC时声明不同的storageClassName即可。下面我们介绍下如何创建自定义StorageClass。
 
 3. 声明自定义的StorageClass(UDisk 类型)
 
@@ -98,7 +98,8 @@ parameters:
   chargeType: "month" # 付费类型，支持dynamic、month、year，非必填
   quantity: "1" # 购买时长，dynamic无需填写，可购买1-9个月，或1-10年
 reclaimPolicy: Retain  # PV回收策略，支持Delete和Retain，默认为Delete，非必填
-mountOptions:   
+allowVolumeExpansion: true # 声明该存储类支持可扩容特性
+mountOptions:
   - debug
   - rw
 ```
