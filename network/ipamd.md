@@ -156,7 +156,7 @@ A: 可以通过ipamd程序入口参数--availablePodIPLowWatermark和--available
 ```
       containers:
         - name: cni-vpc-ipamd
-          image: uhub.service.ucloud.cn/uk8s/cni-vpc-ipamd:0.0.1
+          image: uhub.service.ucloud.cn/uk8s/cni-vpc-ipamd:1.2.3
           args:
             - "--availablePodIPLowWatermark=3"
             - "--availablePodIPHighWatermark=50"
