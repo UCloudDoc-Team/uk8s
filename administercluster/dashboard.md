@@ -1,4 +1,4 @@
-# 通过ULB暴露Kubernetes Dashboard
+# 部署Kubernetes Dashboard
 
 Dashboard是Kubernetes社区的一个Web开源项目，你可以通过Dashboard来部署更新应用、排查应用故障以及管理Kubernetes集群资源。另外，Dashboard还提供了集群的状态，以及错误日志等信息。下面我们介绍下如何在UK8S上部署、访问DashBoard。
 
@@ -46,6 +46,28 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/service/dashboard.v2.0.0-rc1.y
 
 Service的访问类型为HTTP，如果您希望使用HTTPS，请先购买SSL证书。
 
+### Dashboard v3.0.0
+
+- http
+
+```shell
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/service/dashboard-http.v3.0.0.yaml
+```
+
+- https
+
+```shell
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/service/dashboard-https.v3.0.0.yaml
+```
+
+| kubernetes版本 | 1.22 | 1.23 | 1.24 | 1.25 | 1.26 |
+| :----------: | :--: | :--: | :--: | :--: | :--: |
+|     兼容性      |  ?   |  ?   |  ?   |  ✓   |  ?   |
+
+- ✓ 完全支持的版本范围。
+- ? 由于Kubernetes API版本之间的存在变化，某些功能可能无法正常使用（测试未覆盖完整）。
+- × 不支持的版本范围。
+
 ## 访问Dashboard
 
 在上面的实例中，我们创建了一个类型为LoadBalancer的service，可直接通过Service 的外网IP（实际为ULB的外网IP）访问Dashboard。
@@ -80,4 +102,36 @@ kubectl get svc -n kubernetes-dashboard | grep kubernetes-dashboard
 
 ```
 kubectl describe secret -n kubernetes-dashboard kubernetes-dashboard-token
+```
+
+### Dashboard v3.0.0
+
+#### http
+
+- http方式只支持本地地址访问
+
+```shell
+kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard 8080:80
+```
+
+查看TOKEN
+
+```shell
+kubectl describe secret -n kubernetes-dashboard kubernetes-dashboard-token
+```
+
+##### 1.24及以上查看token
+
+- 获取访问token，这里使用了kubernetes-dashboard下的sa kubernetes-dashboard创建了token，--duration表示token有效期
+
+```shell
+kubectl -n kubernetes-dashboard create token kubernetes-dashboard --duration=1h
+```
+
+#### https
+
+- 获取外网ulb地址
+
+```shell
+kubectl -n kubernetes-dashboard get svc kubernetes-dashboard --output jsonpath="{.status.loadBalancer.ingress[*]['ip']}"
 ```
