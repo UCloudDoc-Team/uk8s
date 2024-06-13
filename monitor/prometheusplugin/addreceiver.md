@@ -133,3 +133,108 @@ spec:
 钉钉机器人: http://alertmanager-webhook.uk8s-monitor.svc/dingtalk/webhook1/send
 
 企业微信机器人: http://alertmanager-webhook.uk8s-monitor.svc/wechat/webhook/send
+
+## 5. 配置webhook接收人(微信公众号方式)
+
+#### 5.1 创建公众号以及模板，获取公众号的 appid、secret 以及模板的 templateid
+
+该告警方式基于微信公众号的模板消息实现，使用时请遵守模板消息运营规范https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Template_Message_Operation_Specifications.html
+
+模板消息内容可参考如下(模板名称随意)
+```
+告警状态: {{ status.DATA }}
+告警类型: {{ alertname.DATA }}
+告警级别: {{ severity.DATA }}
+告警实例: {{ instance.DATA }}
+告警内容: {{ message.DATA }}
+告警时间: {{ startsat.DATA }}
+```
+
+#### 5.2 部署配置文件
+
+AlertManager 同样不支持直接接入微信公众号告警，需要进行适配转换
+
+> 请根据yaml中的提示，结合自身场景来替换yaml中的webhook地址以及image
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-webhook
+  namespace: uk8s-monitor
+data:
+  config.yaml: |
+    # 请替换为您的微信公众号的appid
+    appid: "xxx"
+    # 请替换为您的微信公众号的secret
+    secret: "xxx"
+    # 请替换为您的微信公众号模板的templateid
+    templateid: "xxx"
+    # 告警组 name为组名，chatids下为该告警组下的用户的openid
+    chatgroups:
+      - name: uk8s
+        chatids:
+          - "openid1"
+      - name: all
+        chatids:
+          - "openid1"
+          - "openid2"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alertmanager-webhook
+  namespace: uk8s-monitor
+spec:
+  selector:
+    k8s-app: webhook
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8060
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alertmanager-webhook
+  namespace: uk8s-monitor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: webhook
+  template:
+    metadata:
+      labels:
+        k8s-app: webhook
+    spec:
+      volumes:
+        - name: config
+          configMap:
+            name: alertmanager-webhook
+      containers:
+        - name: alertmanager-webhook
+          image: uhub.service.ucloud.cn/uk8s/prometheus-webhook-wechat-public:v2.0.0
+          args:
+            - --web.listen-address=:8060
+            - --config.file=/config/config.yaml
+          volumeMounts:
+            - name: config
+              mountPath: /config
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100Mi
+          ports:
+            - name: http
+              containerPort: 8060
+
+```
+
+#### 5.3 添加接收人
+
+在控制台「收发设置」页面「接收人」版面点击「添加」，在 Webhook 地址栏中填写 
+
+http://alertmanager-webhook.uk8s-monitor.svc/wechat/{groupname}/send  
+
+其中{groupname}为config.yaml中对应的chatgroups.name的名称
