@@ -138,7 +138,7 @@ spec:
 
 #### 5.1 创建公众号以及模板，获取公众号的 appid、secret 以及模板的 templateid
 
-该告警方式基于微信公众号的模板消息实现，使用时请遵守模板消息运营规范https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Template_Message_Operation_Specifications.html
+该告警方式基于微信公众号的模板消息实现，使用时请遵守[模板消息运营规范](https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Template_Message_Operation_Specifications.html)
 
 模板消息内容可参考如下(模板名称随意)
 ```
@@ -154,7 +154,7 @@ spec:
 
 AlertManager 同样不支持直接接入微信公众号告警，需要进行适配转换
 
-> 请根据yaml中的提示，结合自身场景来替换yaml中的webhook地址以及image
+> 请根据yaml中的提示，结合自身场景来替换yaml中的配置
 
 ```yaml
 apiVersion: v1
