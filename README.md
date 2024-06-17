@@ -25,6 +25,7 @@
     - [StatefulSet 示例](/uk8s/manageviakubectl/sts_example)
     - [kubectl 常见问题](/uk8s/troubleshooting/kubectl)
   - [手动增加外网凭证](/uk8s/administercluster/add-external-certificate)
+  - [部署Dashboard](/uk8s/administercluster/dashboard)
   - [集群版本升级](/uk8s/administercluster/cluster_version_update)
   - [集群常见问题](/uk8s/troubleshooting/cluster_summary.md)
 - 节点管理
@@ -61,7 +62,6 @@
     - [使用已有的 ULB](/uk8s/service/ulb_designation)
     - [ULB 参数说明](/uk8s/service/annotations)
     - [获取真实客户端 IP](/uk8s/service/getresourceip)
-    - [通过 ULB 暴露 Dashboard](/uk8s/service/dashboard)
     - [集群 ULB 误删处理](/uk8s/troubleshooting/ulb_undelete)
     - [ULB 常见问题](/uk8s/troubleshooting/ulb)
   - Ingress 管理
