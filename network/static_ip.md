@@ -9,11 +9,7 @@ IP 模式**。
 
 ## 1. 固定 IP 插件安装和升级
 
-请在您的 UK8S 集群中执行以下命令，安装固定 IP 功能组件，如果已经安装，再次执行会将其升级到最新版本，后续版本将支持通过控制台安装相关组件：
-
-```
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/network/cni-vpc-ipamd.yml
-```
+请先通过UK8S控制台`应用中心` -> `固定IP管理`功能安装相关插件。后续插件版本更新也可以通过此页面操作。
 
 ## 2. 创建固定 IP 类型的 StatefulSet
 

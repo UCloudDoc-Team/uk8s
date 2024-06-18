@@ -26,7 +26,8 @@ parameters:
   chargeType: "month" # 付费类型，支持dynamic、month、year，默认为month，非必填
   quantity: "1" # 购买时长，dynamic无需填写，可购买1-9个月，或1-10年
 reclaimPolicy: Delete  # PV回收策略，支持Delete和Retain，默认为Delete，非必填
-mountOptions:   
+allowVolumeExpansion: true # 声明该存储类支持可扩容特性
+mountOptions:
   - debug
   - rw
 ```

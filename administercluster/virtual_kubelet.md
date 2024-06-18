@@ -189,6 +189,7 @@ parameters:
 reclaimPolicy: Delete
 ## 如绑定模式设置为 WaitForFirstConsumer，则只能通过 pod.spec.nodeSelector 指定 VK 节点
 volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true # 声明该存储类支持可扩容特性
 ---
 ## 创建持久化存储卷声明 PVC
 ## 不支持 Volume Expansion（存储卷动态扩容）
