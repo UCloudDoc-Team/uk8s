@@ -18,3 +18,7 @@
 3. Grafana配置： 用户名和密码均可自定义；
 
 ![](/images/prometheus/startmonitor.png)
+
+### 监控开启外网
+
+开启外网时通过选择 LB 类型创建 LB 资源或者使用已有资源调用 API 开启外网时，默认使用 CLB7。使用已有资源时，应确保端口没有冲突（监控开启外网会占用80、9090、9093端口）。CLB7 可免费使用，但存在[一定限制](https://cms-docs.ucloudadmin.com/ulb/intro/limit)，推荐使用 ALB，具体可在 [CLB文档](https://cms-docs.ucloudadmin.com/ulb/intro/whatisulb) 和 [ALB文档](https://cms-docs.ucloudadmin.com/ulb/alb/intro/whatisalb) 中查看详情。
