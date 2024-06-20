@@ -93,6 +93,7 @@
     - [监控中心开启](/uk8s/monitor/prometheusplugin/startmonitor.md)
     - [监控中心添加告警目标](/uk8s/monitor/prometheusplugin/addmonitortarget.md)
     - [监控中心添加接收人](/uk8s/monitor/prometheusplugin/addreceiver.md)
+    - [监控相关常见问题](/uk8s/monitor/prometheusplugin/faq.md)
 - 集群日志
   - [使用 ELK 自建 UK8S 日志解决方案](/uk8s/log/elastic_filebeat_kibana_solution)
   - [使用 UK8S 日志插件功能](/uk8s/log/ELKplugin)
