@@ -6,9 +6,10 @@
 
 - 集群进行存储插件升级时，**需要操作k8s关键组件**，请在业务低谷期操作，并且请勿进行服务发布。
 - **切勿自行通过修改CSI的image的方式进行升级，否则CSI将无法工作。**请一定在控制台完成CSI的升级。
-- **如果要使用RSSD云盘，请将CSI升级到`22.09.1`或以上的版本**，详情见[RSSD云盘挂载问题](/uk8s/troubleshooting/rssd_attachment)。
-- 21.09.1 版本之前的CSI进行升级，会造成使用US3/UFile的pod挂载点失效，如果您的业务使用了US3/UFile，请务必确认当前版本，如有疑问，请与我们技术支持联系。
 - 如果集群版本不在我们的维护版本之内，控制台将无法直接进行升级，参见：[UK8S版本维护说明](/uk8s/version/maintain.md)。
+- **22.09.1**： **如果要使用RSSD云盘，请将CSI升级到`22.09.1`或以上的版本**，详情见[RSSD云盘挂载问题](/uk8s/troubleshooting/rssd_attachment)。
+- **21.09.1**： 老版本升级到`21.09.1`或者以上的版本，会造成使用US3/UFile的pod挂载点失效，如果您的业务使用了US3/UFile，请务必确认当前版本，如有疑问，请与我们技术支持联系。
+
 
 ## 2. 版本查看及插件升级
 
@@ -23,9 +24,14 @@
 
 如果集群版本不在我们的维护版本之内，您可以手动升级csi，请执行下面的命令(仅能升级到旧版本，不建议用RSSD云盘)：
 
+#### UDisk CSI升级
 ```bash
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/udisk.21.11.2/csi-controller.yml
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/udisk.21.11.2/csi-node.yml
+```
+
+####  UFile CSI升级
+```bash
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/csi-controller.yml
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/csi-node.yml
 ```
@@ -40,7 +46,7 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/csi-node.ym
 | **22.09.1** | 2022.09.17 | 1. 动态调度RSSD云盘，以解决[RSSD云盘挂载问题](/uk8s/troubleshooting/rssd_attachment) |
 | **21.11.2** | 2021.11.22 | 1. csi udisk支持方舟模式; <br>2. csi udisk支持指定业务组; <br>3. 优化us3 挂载参数 |
 | **21.11.1** | 2021.11.04 | 1. 适配了 s3fs 返回成功而实际挂载失败的情况；<br>2. 修复因 US3 公私钥长度变化导致的挂载失败；<br>3. 始终通过节点 us3lancher 服务操作挂载 |
-| **21.09.1** | 2021.09.07 | 将s3fs挂载操作放在Node上进行                                 |
+| **21.09.1** | 2021.09.07 | 将s3fs挂载操作放在Node上进行，**使用US3/UFile存储注意，升级到此版本会造成使用US3/UFile的pod挂载点失效；**                                |
 | **21.08.1** | 2021.08.12 | 优化 CSI 插件调度机制，避免被驱逐                            |
 | **21.07.1** | 2021.07.05 | 支持云盘裸金属                                               |
 | **21.04.1** | 2021.04.28 | 支持 UDisk 相关参数暴露在 Kubelet Metrics 中                 |
