@@ -44,7 +44,7 @@ mountOptions:
 
 ### 2.1 新建 UDisk
 
-> 使用新建 UDisk，则可直接创建 PVC 对象，CSI 会自动创建 UDisk 并关联。
+> 使用新建 UDisk，则可直接创建 PVC 对象， CSI 会自动创建 UDisk 并关联。如果storageClass中的 [volumeBindingMode](https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode) 设置为 WaitForFirstConsumer，则需要等待Pod使用PVC后才会创建真正的UDisk。
 
 ```yaml
 kind: PersistentVolumeClaim
