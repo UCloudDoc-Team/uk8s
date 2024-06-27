@@ -56,15 +56,15 @@ apiVersion: storage.k8s.io/v1
 kind: VolumeAttachment
 metadata:
   annotations:
-    csi.alpha.kubernetes.io/node-id: 10.9.184.108 # 绑定的节点ip，填写报错pod所在节点
+    csi.alpha.kubernetes.io/node-id: 10.9.184.108 # 绑定的节点ip
   finalizers:
   - external-attacher/udisk-csi-ucloud-cn
-  name: csi-1d52d5a7b4c5c172de7cfc17df71c312059cf8a2d7800e05f46e04876a0eb50e # 名称，按照pod报错名称填写
+  name: csi-1d52d5a7b4c5c172de7cfc17df71c312059cf8a2d7800e05f46e04876a0eb50e #  VolumeAttachment名称
 spec:
   attacher: udisk.csi.ucloud.cn
-  nodeName: 10.9.184.108 #绑定的节点ip，填写报错pod所在节点
+  nodeName: 10.9.184.108 #绑定的节点ip 
   source:
-    persistentVolumeName: pvc-e51b694f-ffac-4d23-af5e-304a948a155a # 绑定的pv，填写pod使用的pv
+    persistentVolumeName: pvc-e51b694f-ffac-4d23-af5e-304a948a155a # 绑定的pv名称
 ```
 
 ## 3. 如何查看 PVC 对应的 UDisk 实际挂载情况
