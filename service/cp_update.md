@@ -35,7 +35,7 @@ CloudProvider 插件升级功能会在集群中执⾏ CloudProvider 插件查询
 这时候，您可以手动升级cloudprovider，请执行下面的命令：
 
 ```bash
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cloudprovider/22.07.1.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cloudprovider/24.06.28.yml
 ```
 
 ### 1.3 老版本升级
@@ -96,6 +96,14 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 
 ## 2. 变更记录
+
+### 更新版本：24.06.28
+
+更新时间：2024 年 6 月 28 日
+
+更新内容：
+
+- 修复了多个svc绑定同一个alb时存在的问题
 
 ### 更新版本：24.03.13
 
