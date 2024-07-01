@@ -34,3 +34,7 @@ UK8S控制台支持的三个版本，提供相应技术支持，如答疑、在�
 
 `CloudProvider`、`CSI`、`CNI`等插件，仅在上述版本的集群中提供插件升级功能。如果您需要使用最新的插件特性，请及时升级集群版本。
 参考[CloudProvider插件更新](/uk8s/service/cp_update)、[CSI存储插件升级](/uk8s/volume/CSI_update)、[CNI网络插件升级](/uk8s/network/cni_update)。
+
+#### 镜像版本
+
+依据CentOS官方公告所知，其将停止维护CentOS Linux项目，UCloud所提供的基础镜像CentOS Linux源于CentOS官方，故在官方停止维护后UCloud也将停止对该基础镜像的维护。详细请参考[CentOS Linux停止维护后的应对方案](/uhost/introduction/image/Regarding_CentOS_EOL)
