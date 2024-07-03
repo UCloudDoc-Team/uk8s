@@ -10,6 +10,9 @@
 
 如 ULB 为 UK8S 在创建 Service 时同步创建，删除 Service 时 ULB 会同步删除，请勿将 ULB 关联其他 Vserver，如需多个 Service 共用 ULB，可先创建 ULB，并在创建 Service 时关联已有 ULB，详情请见[使用已有 ULB](/uk8s/service/ulb_designation)。
 
+* ALB使用
+
+目前请求代理型 CLB 存在[一系列配额限制](/ulb/intro/limit)，可能会在使用过程造成服务问题，因此如有七层代理的需求，推荐您使用[应用型负载均衡ALB](/ulb/alb/intro/whatisalb)。如需使用 ALB 产品，请升级 cloudprovider 版本到 `24.06.28` 及以上，参考[CloudProvider 插件更新](/uk8s/service/cp_update)。
 
 * 参数修改
 
