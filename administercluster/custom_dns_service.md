@@ -180,9 +180,11 @@ docker restart dns-server
 ```
 baidu.com:53{
   errors
+  template ANY AAAA {
+    rcode NOERROR
+  }
   cache 30
-  forward . 10.9.10.8(测试时需修改成你的DNS地址)      
-
+  forward . 10.9.10.8(测试时需修改成你的DNS地址)
  }
 ```
 
