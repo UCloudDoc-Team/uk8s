@@ -66,7 +66,9 @@
     Test PASSED
     Done
     ```
-5. 8卡GPU云主机NCCL TOPO文件透传pod   
+5. GPU云主机NCCL TOPO文件透传pod
+   > 前提：您的node为8卡高性价比显卡6/H800/A800之一的GPU类型
+   
    如果在GPU pod内NCCL性能测试没有达到理想值，考虑从虚机上把topology.xml文件透传到pod内；具体操作如下：   
    1. 确认GPU node `/var/run/nvidia-topologyd/` 路径下是否存在 `virtualTopology.xml`文件
      - 若存在执行第2步
