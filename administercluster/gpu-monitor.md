@@ -44,8 +44,9 @@ cat << EOF | kubectl create -f -
  spec:
    restartPolicy: OnFailure
    containers:
-   - name: dcgmproftester11
-     image: uhub.service.ucloud.cn/uk8s/dcgmproftester
+   - name: dcgmproftester12
+     image: uhub.service.ucloud.cn/uk8s/dcgm:3.3.0
+     command: ["/usr/bin/dcgmproftester12"]
      args: ["--no-dcgm-validation", "-t 1004", "-d 120"]
      resources:
        limits:
