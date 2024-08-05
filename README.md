@@ -1,4 +1,6 @@
+
 # 概览
+
 
 - 产品简介
   - [产品概念](/uk8s/introduction/whatisuk8s)
@@ -23,6 +25,7 @@
     - [创建 PVC](/uk8s/manageviakubectl/createpvc)
     - [创建 Service](/uk8s/manageviakubectl/createservice)
     - [StatefulSet 示例](/uk8s/manageviakubectl/sts_example)
+    - [打散pod](/uk8s/manageviakubectl/pod_affinity.md)
     - [kubectl 常见问题](/uk8s/troubleshooting/kubectl)
   - [手动增加外网凭证](/uk8s/administercluster/add-external-certificate)
   - [部署Dashboard](/uk8s/administercluster/dashboard)

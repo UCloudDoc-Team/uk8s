@@ -4,15 +4,14 @@ UK8S 通过 CloudProvider 插件，实现集群中 LoadBalancer 类型服务（S
 
 ## 版本问题
 
-* < 20.10.1版本
+* 低于`20.10.1`版本
 
-20.10.1 以前版本存在 bug，会在 Service 重启时发生误判，导致重复创建 ULB 实例并写入集群，造成集群相应 Service 的不可用。为此我们对 CloudProvider
+`20.10.1` 之前的版本存在 bug，会在 Service 重启时发生误判，导致重复创建 ULB 实例并写入集群，造成集群相应 Service 的不可用。为此我们对 CloudProvider
 插件进行了优化，完善 ULB 相关接口的调用逻辑，避免了上述问题的出现。
 
-* \>= 24.03.13版本
+* `24.03.13`版本
 
-24.03.13 支持了[应用型负载均衡ALB](/ulb/alb/intro/whatisalb)，针对7层代理请选择应用型负载均衡，目前传统型负载均衡针对7层代理做了[限制](/ulb/alb/intro/limit)，在使用过程可能会造成服务问题。
-
+从 `24.03.13` 版本开始支持了[应用型负载均衡ALB](/ulb/alb/intro/whatisalb)，但是此版本在多个 Service 绑定同一个 ALB 时存在问题，使用此版本的用户建议尽快升级到 `24.06.28`。
 
 如您集群 CloudProvider 版本为相关版本，请您务必及时按照文档更新，避免影响业务。升级过程不影响线上业务，但仍建议您在业务闲时进行更新，如有问题请及时与我们联系。
 
@@ -103,7 +102,7 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 更新内容：
 
-- 修复了多个svc绑定同一个alb时存在的问题
+- 修复了多个svc绑定同一个ALB时存在的问题
 
 ### 更新版本：24.03.13
 
@@ -111,7 +110,7 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 更新内容：
 
-- 支持alb
+- 支持ALB
 
 ### 更新版本：24.03.5
 

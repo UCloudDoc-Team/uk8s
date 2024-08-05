@@ -330,7 +330,7 @@ spec:
       app.kubernetes.io/component: "dcgm-exporter"
   namespaceSelector:
     matchNames:
-    - "default"
+    - "uk8s-monitor"
   endpoints:
   - port: "metrics"
     path: "/metrics"

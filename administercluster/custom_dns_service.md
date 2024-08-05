@@ -11,7 +11,7 @@ CoreDNS是一个模块化、插件式的DNS服务器，其配置文件信息保�
 
 在UK8S中，CoreDNS的默认Corefile配置信息如下:
 
-```
+```yaml
 apiVersion: v1
 kind: ConfigMap
 data:
@@ -19,10 +19,14 @@ data:
     .:53 {
         errors
         health
+        ready
+        template ANY AAAA {
+          rcode NOERROR
+        }
         kubernetes cluster.local in-addr.arpa ip6.arpa {
           pods insecure
-          upstream 
-          fallthrough in-addr.arpa ip6.arpai
+          upstream
+          fallthrough in-addr.arpa ip6.arpa
           ttl 30
         }
         prometheus :9153
@@ -63,6 +67,8 @@ Corefile的配置信息包含以下CoreDNS的插件：
 
 - reload: 允许自动加载变化了的Corefile，建议配置，这样CoreDNS可以实现热更新。
 
+- template: 模版可以使用go的语法编写动态响应，这里我们写死了AAAA类的查询固定返回NOTERROR以规避这个[issues](https://github.com/coredns/coredns/issues/3305)中的问题
+
 其他选项的意义请查看Kubernetes官方文档，下面我们举例说明下如何修改ConfigMap。
 
 ### 示例
@@ -75,6 +81,9 @@ kube-system中添加如下所示的一段规则，这是个独立的**Server Blo
 ```
 ucloudk8s.com:53 {
         errors
+        template ANY AAAA {
+          rcode NOERROR
+        }
         cache 30
         forward . 10.9.10.8
     }
@@ -111,6 +120,9 @@ data:
         }
     ucloudk8s.com:53 {
         errors
+        template ANY AAAA {
+          rcode NOERROR
+        }
         cache 30
         forward . 10.9.10.8
        }
@@ -168,9 +180,11 @@ docker restart dns-server
 ```
 baidu.com:53{
   errors
+  template ANY AAAA {
+    rcode NOERROR
+  }
   cache 30
-  forward . 10.9.10.8(测试时需修改成你的DNS地址)      
-
+  forward . 10.9.10.8(测试时需修改成你的DNS地址)
  }
 ```
 
