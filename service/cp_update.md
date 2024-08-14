@@ -96,6 +96,14 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 ## 2. 变更记录
 
+### 更新版本：24.08.13
+
+更新时间：2024 年 8 月 13 日
+
+更新内容：
+
+- 修复了在集群节点超过20个之后ALB无法使用的问题
+
 ### 更新版本：24.06.28
 
 更新时间：2024 年 6 月 28 日
