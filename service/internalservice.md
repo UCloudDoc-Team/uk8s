@@ -45,7 +45,7 @@ ULB支持“报文转发(ULB4)”及“请求代理（ULB7）”两种转发模�
 
 ### 4.1 通过ULB7对外暴露服务（http/https）
 
-> ⚠️ 使用 ALB 需要 [CloudProvider](/uk8s/service/cp_update) 版本 >= 24.03.13。
+> ⚠️ 使用 ALB 需要 [CloudProvider](/uk8s/service/cp_update) 版本 >= 24.06.28。
 
 UK8S在集群内可以直接使用 LoadBalancer 类型的Service，如果需要对外提供http/https协议，建议选择应用型负载均衡ALB；用户可以通过Service的"annotations"来配置ULB类型以及其他参数；更多参数信息可参考[ULB参数说明](/uk8s/service/annotations)。
 
