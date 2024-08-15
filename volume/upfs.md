@@ -4,19 +4,17 @@
 
 ## UPFS 使用必读
 
-* UPFS产品目前处于测试阶段，仅支持华北二地域
-
-* UPFS不支持跨地域挂载
+* UPFS产品目前仅支持部分地域
 
 * **UPFS的其他限制条件，请见[UPFS产品使用限制](https://docs.ucloud.cn/upfs/upfs_manual_instruction/limit)**
 
 ## 前置条件
 
-- 在[UFS产品页面](https://console.ucloud.cn/upfs/)购买UFS实例并设置好挂载点，操作完毕后，您会得到两个UPFS挂载地址，类似101.66.127.139:10109,101.66.127.139:10109,
+- 在[UFS产品页面](https://console.ucloud.cn/upfs/)购买UFS实例并设置好挂载点，操作完毕后，您会得到两个UPFS挂载地址，类似101.66.127.139:10109,101.66.127.140:10109
 
 ## 手动部署CSI
 
-> 因目前UPFS产品并未全量开放，故UK8S集群默认不会安装UPFS的CSI，需要自行部署
+> 因目前的UK8S版本均不封装UPFS CSI，需要自行部署
 
 ```
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs.24.08.15/csi-controller.yml
@@ -27,13 +25,13 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs.24.08.15/rbac-node
 
 ## 创建存储类StorageClass
 
-接下来进行创建StorageClass操作，一个UPFS实例对应一个StorageClass
+接下来进行创建StorageClass操作
 
 创建StorageClass时需要注意以下两个参数:
 
 * uri：文件系统URL（URL详细规则请见[UPFS主要概念](https://docs.ucloud.cn/upfs/upfs_manual_instruction/concept)中的文件系统URL部分
 
-* path：表示宿主上挂载upfs的目录结构，可自行命名(但需保证如果有用到多个upfs实例，其创建出来的StorageClass中的path不能相同，因为同一upfs不可在同一node上多个目录挂载，需要固定宿主上的挂载目录)，默认为/
+* path：表示宿主上挂载upfs的目录结构，可自行命名，默认为/，一个UPFS实例可以对应多个不同path的StorageClass(同一个UPFS实例即文件系统url，使用相同的path即相同StorageClass的pvc可以实现共享数据，同理，使用不同的path的pvc即可实现数据分离)
 
 ```yaml
 apiVersion: storage.k8s.io/v1
@@ -42,34 +40,9 @@ metadata:
   name: csi-upfs
 provisioner: upfs.csi.ucloud.cn
 parameters:
-  uri: 101.66.127.139:10109,101.66.127.139:10109/upfs-xxxx
+  uri: 101.66.127.139:10109,101.66.127.140:10109/upfs-xxxx
   path: /example
 
-```
-
-## 创建PV
-
-需要在集群内手动创建持久化存储卷，yaml示例如下：
-
-```yaml
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: logupfs-claim
-spec:
-  storageClassName: csi-upfs
-  accessModes:
-  - ReadWriteMany
-  resources:
-    requests:
-      storage: 10Gi # 因实际会将整个UPFS挂载到节点上，故此处的storage可任意配置并不会生效
-```
-
-kubectl创建pv:
-
-```
-# kubectl apply -f upfspv.yml 
-persistentvolume/upfspv created
 ```
 
 ## 创建PVC
@@ -88,6 +61,13 @@ spec:
   resources:
     requests:
       storage: 10Gi # 因实际会将整个UPFS挂载到节点上，故此处的storage可任意配置并不做限制
+```
+
+kubectl创建pvc:
+
+```
+# kubectl apply -f upfspvc.yml 
+persistentvolumeclaim/logupfs-claim created
 ```
 
 创建完PVC后，可以发现PV与PVC已经绑定。
