@@ -114,3 +114,21 @@ Filesystem              Size  Used Avail Use% Mounted on
 UPFS:upfs-xxxx          5.9T  8.5K  5.9T   1% /data
 ...
 ```
+
+## 删除UPFS实例
+
+由于UPFS资源删除需要该UPFS处于未挂载状态，而目前仅删除所有用到该UPFS实例的POD，并不能使UPFS文件系统从云主机侧卸载。
+
+当您不需要使用到UPFS实例想要删除该UPFS实例时，需要从云主机卸载UPFS文件系统。
+
+**K8s集群上卸载UPFS文件系统属高危操作，请确认该文件系统不再被pod或其他服务使用后再执行**
+
+登录到所有使用过该UPFS的pod所在的node上
+
+```
+## 卸载命令
+# umount $(df -h |grep upfs-xxxx | awk '{print $6}')
+
+## 确认该UPFS挂载点是否已经卸载成功
+# df -h |grep upfs-xxxx
+```
