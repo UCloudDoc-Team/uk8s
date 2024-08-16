@@ -123,12 +123,16 @@ UPFS:upfs-xxxx          5.9T  8.5K  5.9T   1% /data
 
 **K8s集群上卸载UPFS文件系统属高危操作，请确认该文件系统不再被pod或其他服务使用后再执行**
 
-登录到所有使用过该UPFS的pod所在的node上
+登录到所有使用过该UPFS的pod所在的node上(或者)执行命令：
 
 ```
-## 卸载命令
-# umount $(df -h |grep upfs-xxxx | awk '{print $6}')
-
-## 确认该UPFS挂载点是否已经卸载成功
+## 查看是否有该UPFS的挂载点
 # df -h |grep upfs-xxxx
+Filesystem              Size  Used Avail Use% Mounted on
+...
+UPFS:upfs-xxxx          5.9T  8.5K  5.9T   1% /data/kubelet/plugins/kubernetes.io/csi/upfs.csi.ucloud.cn/uri/101.66.127.139:10109,101.66.127.140:10109/upfs-xxxx
+
+## 卸载UPFS操作
+# umount /data/kubelet/plugins/kubernetes.io/csi/upfs.csi.ucloud.cn/uri/101.66.127.139:10109,101.66.127.140:10109/upfs-xxxx
+
 ```
