@@ -29,9 +29,9 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs.24.08.15/rbac-node
 
 创建StorageClass时需要注意以下两个参数:
 
-* uri：文件系统URL（URL详细规则请见[UPFS主要概念](https://docs.ucloud.cn/upfs/upfs_manual_instruction/concept)中的文件系统URL部分
+* uri：文件系统URL（URL详细规则请见[UPFS主要概念](https://docs.ucloud.cn/upfs/upfs_manual_instruction/concept)中的文件系统URL部分）
 
-* path：表示宿主上挂载upfs的目录结构，可自行命名，默认为/，一个UPFS实例可以对应多个不同path的StorageClass(同一个UPFS实例即文件系统url，使用相同的path即相同StorageClass的pvc可以实现共享数据，同理，使用不同的path的pvc即可实现数据分离)
+* path：表示宿主上挂载upfs的目录结构，可自行命名，默认值为: `/`，一个UPFS实例可以对应多个不同path的StorageClass(同一个UPFS实例即文件系统url，使用相同的path即相同StorageClass的pvc可以实现共享数据，同理，使用不同的path的pvc即可实现数据分离)
 
 ```yaml
 apiVersion: storage.k8s.io/v1
