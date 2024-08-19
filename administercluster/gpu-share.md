@@ -18,7 +18,15 @@ kubectl label node <nodeip> nodeShareGPU=true
 kubectl delete ds -n kube-system nvidia-device-plugin-daemonset
 ```
 
-### 3. 执行kubectl进行GPU-Share插件安装，安装完成
+### 3. 安装GPU-Share插件
+
+- 1.24及以上版本集群执行
+
+```bash
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/1.2.0.yaml
+```
+
+- 1.17至1.22版本集群执行
 
 ```bash
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/1.1.0.yaml
@@ -72,7 +80,8 @@ spec:
             ucloud.cn/gpu-mem: 1
 ```
 
-在limits下设置了`ucloud.cn/gpu-mem: 1`，同样test-gpushare2也有该设置，则我们可以观察在该集群只有一台单卡GPU的节点时，该GPU同时支持给到2个Pod使用。
+`test-gpushare1`和`test-gpushare2`都在limits下设置了`ucloud.cn/gpu-mem: 1`, 同时指定了`schedulerName: gpushare-scheduler`，
+我们可以观察到两个pod都被调度到了单卡GPU节点，该GPU支持同时分配给两个Pod使用。
 
 ```bash
 kubectl get pod |grep test-gpushare
@@ -87,6 +96,8 @@ kubectl get pod |grep test-gpushare
 请在master节点执行以下命令
 
 ```bash
-kubectl delete -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/1.1.0.yaml
+# 删除对应版本的gpu-share插件
+kubectl delete -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/1.2.0.yaml
+# 重新部署nvidia-device-plugin
 kubectl apply -f /etc/kubernetes/yaml/nvidia-device-plugin.yaml
 ```
