@@ -1,11 +1,9 @@
-## service的extenalTrafficPolicy 和 internalTrafficPolicy 参数
+## Service 流量策略
 
+* Service 的流量策略：外部流量策略和内部流量策略，分别用来控制从外部源路由的流量和控制来自内部源的流量如何被路由; 你可以设置.spec.externalTrafficPolicy和.spec.internalTrafficPolicy 字段来控制 Kubernetes 如何将流量路由到健康（“就绪”）的后端。
+官方文档参考：https://kubernetes.io/zh-cn/docs/reference/networking/virtual-ips/#traffic-policies
 
-
-###  [svc 流量策略](https://kubernetes.io/zh-cn/docs/reference/networking/virtual-ips/#traffic-policies) 
-
-* extenalTrafficPolicy: 
-
+### extenalTrafficPolicy: 
 
 
 ```markdown
@@ -26,7 +24,7 @@
 ```
 
 
-* internalTrafficPolicy：
+### internalTrafficPolicy：
 
 ```markdown
   * 策略： 来控制来自内部源的流量如何被路由，处理来自集群内部的流量
@@ -43,7 +41,7 @@
 ```
 
 
-* 对于uk8s的ULB
+### 对于uk8s的ULB
 
 ```markdown
 1. externalTrafficPolicy: Cluster  
