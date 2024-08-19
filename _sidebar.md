@@ -62,7 +62,7 @@
     - [使用已有的 ULB](/uk8s/service/ulb_designation)
     - [ULB 参数说明](/uk8s/service/annotations)
     - [获取真实客户端 IP](/uk8s/service/getresourceip)
-    - [svc参数extenalTrafficPolicy 和 internalTrafficPolicy](/uk8s/service/service/svc_extenalTrafficPolicy_internalTrafficPolicy.md)
+    - [Service 的流量策略](/uk8s/service/service/svc_extenalTrafficPolicy_internalTrafficPolicy.md)
     - [集群 ULB 误删处理](/uk8s/troubleshooting/ulb_undelete)
     - [ULB 常见问题](/uk8s/troubleshooting/ulb)
   - Ingress 管理
