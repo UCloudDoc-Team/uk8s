@@ -5,6 +5,7 @@ Uk8s 使用开源组件 [Dcgm-Exporter](https://github.com/NVIDIA/dcgm-exporter)
 - GPU 卡利用率
 - 容器 GPU 资源利用率
 
+**GPU监控与当前版本的GPU共享插件存在兼容问题，目前暂不支持同时开启**
 
 ## 2. 部署
 
