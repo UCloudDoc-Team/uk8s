@@ -17,12 +17,12 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: release-name-dcgm-exporter
+  name: uk8s-monitor-dcgm-exporter
   namespace: uk8s-monitor
   labels:
     helm.sh/chart: dcgm-exporter-3.4.1
     app.kubernetes.io/name: dcgm-exporter
-    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/instance: uk8s-monitor
     app.kubernetes.io/version: "3.4.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: "dcgm-exporter"
@@ -123,7 +123,7 @@ metadata:
   labels:
     helm.sh/chart: dcgm-exporter-3.4.1
     app.kubernetes.io/name: dcgm-exporter
-    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/instance: uk8s-monitor
     app.kubernetes.io/version: "3.4.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: "dcgm-exporter"
@@ -137,18 +137,18 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: release-name-dcgm-exporter
+  name: uk8s-monitor-dcgm-exporter
   namespace: uk8s-monitor
   labels:
     helm.sh/chart: dcgm-exporter-3.4.1
     app.kubernetes.io/name: dcgm-exporter
-    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/instance: uk8s-monitor
     app.kubernetes.io/version: "3.4.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: "dcgm-exporter"
 subjects:
 - kind: ServiceAccount
-  name: release-name-dcgm-exporter
+  name: uk8s-monitor-dcgm-exporter
   namespace: uk8s-monitor
 roleRef:
   kind: Role 
@@ -173,12 +173,12 @@ roleRef:
 apiVersion: v1
 kind: Service
 metadata:
-  name: release-name-dcgm-exporter
+  name: uk8s-monitor-dcgm-exporter
   namespace: uk8s-monitor
   labels:
     helm.sh/chart: dcgm-exporter-3.4.1
     app.kubernetes.io/name: dcgm-exporter
-    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/instance: uk8s-monitor
     app.kubernetes.io/version: "3.4.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: "dcgm-exporter"
@@ -191,7 +191,7 @@ spec:
     protocol: TCP
   selector:
     app.kubernetes.io/name: dcgm-exporter
-    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/instance: uk8s-monitor
 ---
 # Source: dcgm-exporter/templates/daemonset.yaml
 # Copyright (c) 2021, NVIDIA CORPORATION.  All rights reserved.
@@ -211,12 +211,12 @@ spec:
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: release-name-dcgm-exporter
+  name: uk8s-monitor-dcgm-exporter
   namespace: uk8s-monitor
   labels:
     helm.sh/chart: dcgm-exporter-3.4.1
     app.kubernetes.io/name: dcgm-exporter
-    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/instance: uk8s-monitor
     app.kubernetes.io/version: "3.4.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: "dcgm-exporter"
@@ -229,17 +229,17 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: dcgm-exporter
-      app.kubernetes.io/instance: release-name
+      app.kubernetes.io/instance: uk8s-monitor
       app.kubernetes.io/component: "dcgm-exporter"
   template:
     metadata:
       labels:
         app.kubernetes.io/name: dcgm-exporter
-        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/instance: uk8s-monitor
         app.kubernetes.io/component: "dcgm-exporter"
     spec:
       priorityClassName: system-node-critical
-      serviceAccountName: release-name-dcgm-exporter
+      serviceAccountName: uk8s-monitor-dcgm-exporter
       volumes:
       - name: "pod-gpu-resources"
         hostPath:
@@ -313,12 +313,12 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: release-name-dcgm-exporter
+  name: uk8s-monitor-dcgm-exporter
   namespace: uk8s-monitor
   labels:
     helm.sh/chart: dcgm-exporter-3.4.1
     app.kubernetes.io/name: dcgm-exporter
-    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/instance: uk8s-monitor
     app.kubernetes.io/version: "3.4.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: "dcgm-exporter"
@@ -326,7 +326,7 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: dcgm-exporter
-      app.kubernetes.io/instance: release-name
+      app.kubernetes.io/instance: uk8s-monitor
       app.kubernetes.io/component: "dcgm-exporter"
   namespaceSelector:
     matchNames:
