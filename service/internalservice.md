@@ -12,7 +12,7 @@
 
 * ALB使用
 
-目前请求代理型 CLB 存在[一系列配额限制](/ulb/intro/limit)，可能会在使用过程造成服务问题，因此如有七层代理的需求，推荐您使用[应用型负载均衡ALB](/ulb/alb/intro/whatisalb)。如需使用 ALB 产品，请升级 cloudprovider 版本到 `24.06.28` 及以上，参考[CloudProvider 插件更新](/uk8s/service/cp_update)。
+目前请求代理型 CLB 存在[一系列配额限制](/ulb/intro/limit)，可能会在使用过程造成服务问题，因此如有七层代理的需求，推荐您使用[应用型负载均衡ALB](/ulb/alb/intro/whatisalb)。如需使用 ALB 产品，请升级 cloudprovider 版本到 `24.08.13` 及以上，参考[CloudProvider 插件更新](/uk8s/service/cp_update)。
 
 * 参数修改
 
@@ -45,7 +45,7 @@ ULB支持“报文转发(ULB4)”及“请求代理（ULB7）”两种转发模�
 
 ### 4.1 通过ULB7对外暴露服务（http/https）
 
-> ⚠️ 使用 ALB 需要 [CloudProvider](/uk8s/service/cp_update) 版本 >= 24.06.28。
+> ⚠️ 使用 ALB 时，推荐升级 [CloudProvider](/uk8s/service/cp_update) 版本到 >= 24.08.13。
 
 UK8S在集群内可以直接使用 LoadBalancer 类型的Service，如果需要对外提供http/https协议，建议选择应用型负载均衡ALB；用户可以通过Service的"annotations"来配置ULB类型以及其他参数；更多参数信息可参考[ULB参数说明](/uk8s/service/annotations)。
 
