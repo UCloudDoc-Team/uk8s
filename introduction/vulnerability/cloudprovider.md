@@ -4,6 +4,8 @@ UK8S 通过 CloudProvider 插件，实现集群中 LoadBalancer 类型服务（S
 
 ## 版本问题
 
+如您集群 CloudProvider 为以下版本，请您务必及时按照文档更新，避免影响业务。升级过程不影响线上业务，但仍建议您在业务闲时进行更新，如有问题请及时与我们联系。
+
 * 低于`20.10.1`版本
 
 `20.10.1` 之前的版本存在 bug，会在 Service 重启时发生误判，导致重复创建 ULB 实例并写入集群，造成集群相应 Service 的不可用。为此我们对 CloudProvider
@@ -11,9 +13,7 @@ UK8S 通过 CloudProvider 插件，实现集群中 LoadBalancer 类型服务（S
 
 * `24.03.13`版本
 
-从 `24.03.13` 版本开始支持了[应用型负载均衡ALB](/ulb/alb/intro/whatisalb)，但是此版本在多个 Service 绑定同一个 ALB 时存在问题，使用此版本的用户建议尽快升级到 `24.06.28`。
-
-如您集群 CloudProvider 版本为相关版本，请您务必及时按照文档更新，避免影响业务。升级过程不影响线上业务，但仍建议您在业务闲时进行更新，如有问题请及时与我们联系。
+从 `24.03.13` 版本开始支持了[应用型负载均衡ALB](/ulb/alb/intro/whatisalb)，后续版本修复了 ALB 使用中的一些问题，推荐升级到 `24.08.13` 版本来使用 ALB。
 
 ## 1. 版本查看及插件升级
 
@@ -34,7 +34,7 @@ CloudProvider 插件升级功能会在集群中执⾏ CloudProvider 插件查询
 这时候，您可以手动升级cloudprovider，请执行下面的命令：
 
 ```bash
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cloudprovider/24.06.28.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cloudprovider/24.08.13.yml
 ```
 
 ### 1.3 老版本升级
