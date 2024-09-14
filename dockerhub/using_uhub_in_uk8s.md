@@ -9,7 +9,7 @@ Kubernetes支持为Pod指定Secret来拉取私有仓库中的镜像，下面我�
 镜像仓库中关于账号与密码的信息是配置在Kuernetes中的Secret资源中，可以创建一个docker-registry类型的Secret保存账号密码；使用以下命令创建Secret，注意将其中的大写字母值替换为你自己的信息；
 * `MYSECRET`：Secret资源名称，改为自己定义名称；这里以mysecret为例
 * `YOUR_UCLOUD_USERNAME@EMAIL.COM`：镜像仓库登陆账号，可以是控制台账号，也可以是镜像仓库独立账号
-* `YOUR_UHUB_PASSWORD`：镜像仓库登陆账号对应的秘密
+* `YOUR_UHUB_PASSWORD`：镜像仓库登陆账号对应的密码
 
 ```
 # kubectl create secret docker-registry <MYSECRET> \
