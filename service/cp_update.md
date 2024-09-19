@@ -13,7 +13,10 @@ UK8S 通过 CloudProvider 插件，实现集群中 LoadBalancer 类型服务（S
 
 * `24.03.13`版本
 
-从 `24.03.13` 版本开始支持了[应用型负载均衡ALB](/ulb/alb/intro/whatisalb)，后续版本修复了 ALB 使用中的一些问题，推荐升级到 `24.08.13` 版本来使用 ALB。
+从 `24.03.13` 版本开始支持了[应用型负载均衡ALB](/ulb/alb/intro/whatisalb)，后续版本修复了 ALB 使用中的一些问题，推荐升级到 `24.09.18` 版本来使用 ALB。
+
+* `24.08.13`版本
+ 该版本创建ALB时，存在service中指定subnet-id无法生效的问题，推荐升级到`24.09.18`修复此问题
 
 ## 1. 版本查看及插件升级
 
@@ -95,6 +98,14 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 
 ## 2. 变更记录
+
+### 更新版本：24.09.18
+
+更新时间： 2024 年 9 月 18 日
+
+更新内容
+
+- 修复了创建ALB时，在service中指定subnet-id无法生效的问题
 
 ### 更新版本：24.08.13
 
