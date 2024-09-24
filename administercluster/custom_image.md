@@ -59,7 +59,7 @@ brew install ansible
       },
 
       "builders": [{
-        "type": "ucloud-uhost",
+        "type": "ucloud-uhost", 
         "public_key": "{{user `ucloud_public_key`}}",
         "private_key": "{{user `ucloud_private_key`}}",
         "project_id": "{{user `ucloud_project_id`}}",
@@ -84,16 +84,21 @@ brew install ansible
 
     }
 
-请先将上述例子中尖括号中的内容替换成实际的值。
+请先将上述例子中尖括号中的内容替换成实际的值。需要注意到`builders`中几个参数：
+* `type`: 这是Packer中对应的插件名称，无需改动。不需要使用`ucloud-uhost`
+* `region`: 表示`REPLACE_THE_UK8S_BASE_IMAGE_ID_HERE`镜像所在地域，这里建议选择香港，如果自制镜像需要下载海外资源，香港机房可直接下载。
+* `availability_zone`: 表示`REPLACE_THE_UK8S_BASE_IMAGE_ID_HERE`镜像所在可用区
+* `instance_type`: 机器类型，可以保持不变，安装GPU驱动也可以使用默认这个机型。
+* `ssh_username`: 如果是ubuntu镜像，请切换成`ubuntu`
+
+
 下表是香港可用区下 UK8S 支持的操作系统及版本对应的基础镜像 ID。
 请按需要选择合适的镜像，并用镜像 ID 栏对应的值替代`<REPLACE_THE_UK8S_BASE_IMAGE_ID_HERE>`：
 
 | 地域         | 可用区                 | 镜像 ID         | 操作系统      | 版本  | 支持 GPU  |
 | ------------ | ---------------------- | --------------- | ------------- | ----- | --------- |
 | hk           | hk-02(3002)            | uimage-puxm0l   | CentOS        | 7.6   | 是        |
-| hk           | hk-02(3002)            | uimage-rccvz4l9itr   | Ubuntu        | 20.04 | 是        |
-| hk           | hk-02(3002)            | uimage-yjoh5a   | Anolis        | 8.6   | 否        |
-
+| hk           | hk-02(3002)            | uimage-x7zezb1gcv5   | Ubuntu        | 20.04 | 是        |
 
 如果需要将制作完成的镜像拷贝到其它地域及可用区，可在上述文件的`image_copy_to_mappings`中设置目标[可用区](https://docs.ucloud.cn/api/summary/regionlist)，可以同时指定多个。
 如果不需要复制的话，请将该属性删除即可。
