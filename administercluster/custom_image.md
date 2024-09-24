@@ -85,7 +85,7 @@ brew install ansible
     }
 
 请先将上述例子中尖括号中的内容替换成实际的值。需要注意到`builders`中几个参数：
-* `type`: 这是Packer中对应的插件名称，无需改动。不需要使用`ucloud-uhost`
+* `type`: 这是Packer中对应的插件名称，无需改动。
 * `region`: 表示`REPLACE_THE_UK8S_BASE_IMAGE_ID_HERE`镜像所在地域，这里建议选择香港，如果自制镜像需要下载海外资源，香港机房可直接下载。
 * `availability_zone`: 表示`REPLACE_THE_UK8S_BASE_IMAGE_ID_HERE`镜像所在可用区
 * `instance_type`: 机器类型，可以保持不变，安装GPU驱动也可以使用默认这个机型。
