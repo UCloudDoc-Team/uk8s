@@ -29,6 +29,25 @@
 将已创建的GPU云主机添加进已有集群，选择合适的节点镜像。
 ![](/images/gpu/image-2.png)
 
+## 插件升级
+将 nvidia-device-plugin 升级到最新版本，以解决 GPU 节点不稳定的情况。
+### 升级方法
+- 方法一：使用 `kubectl set image` 将 `nvidia-device-plugin-daemonset` 的镜像版本更改为 `v0.14.1`：
+    ```bash
+    $ kubectl set image daemonset nvidia-device-plugin-daemonset -n kube-system nvidia-device-plugin-ctr=uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:v0.14.1
+    daemonset.apps/nvidia-device-plugin-daemonset image updated
+    ```
+- 方法二：更改 `nvidia-device-plugin-daemonset` 的 yaml 文件：
+    1. 输入如下指令：
+        ```bash
+        $ kubectl edit daemonset nvidia-device-plugin-daemonset -n kube-system -o yaml
+        ```
+    2. 此时会得到 `nvidia-device-plugin-daemonset` 的配置，找到 `spec.template.spec.containers.image` 后，可以看到此时的镜像信息：
+        ```bash
+        - image: uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:1.0.0-beta4
+        ```
+    3. 更改镜像为 `uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:v0.14.1`，随后保存。
+
 ## 使用说明
 1. 默认情况下，容器之间不共享 GPU，每个容器可以请求一个或多个 GPU。无法请求 GPU 的一小部分。
 2. 集群的 Master 节点暂不支持 GPU 机型。
