@@ -40,10 +40,10 @@
 - 方法二：更改 `nvidia-device-plugin-daemonset` 的 yaml 文件：
     1. 输入如下指令：
         ```bash
-        $ kubectl edit daemonset nvidia-device-plugin-daemonset -n kube-system -o yaml
+        $ kubectl edit daemonset nvidia-device-plugin-daemonset -n kube-system
         ```
-    2. 此时会得到 `nvidia-device-plugin-daemonset` 的配置，找到 `spec.template.spec.containers.image` 后，可以看到此时的镜像信息：
-        ```bash
+    2. 此时会得到 `nvidia-device-plugin-daemonset` 的配置，找到 `spec.template.spec.containers.image` 后，可以看到目前镜像信息：
+        ```yaml
         - image: uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:1.0.0-beta4
         ```
     3. 更改镜像为 `uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:v0.14.1`，随后保存。
