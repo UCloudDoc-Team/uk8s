@@ -65,7 +65,7 @@ data:
 本质上，这个 ingress-nginx-controller 是一个可以根据 Ingress 对象和被代理后端 Service 的变化，自动进行更新的 Nginx 负载均衡器。
 
 容器默认使用 UTC
-时间，如果要使用宿主机时区，参见 [Pod 时区问题](https://docs.ucloud.cn/uclickhouse/developer/timezone_list)
+时间，如果要使用宿主机时区，参见 [Pod 时区问题](https://docs.ucloud.cn/uk8s/troubleshooting/pod_debug_summary?id=_10-pod%e7%9a%84%e6%97%b6%e5%8c%ba%e9%97%ae%e9%a2%98)
 
 ### 二、集群外部访问 nginx ingress
 
