@@ -1,16 +1,6 @@
-# APIServer 审计功能
+# 手动开启 APIServer 审计功能
 
-**审计功能使得集群管理员能够回答以下问题：**
-
-- 发生了什么？
-- 什么时候发生的？
-- 谁触发的？
-- 活动发生在哪个（些）对象上？
-- 在哪观察到的？
-- 它从哪触发的？
-- 活动的后续处理行为是什么？
-
-> 审计日志记录功能会增加 API server 的内存消耗，因为需要为每个请求存储审计所需的某些上下文。 此外，内存消耗取决于审计日志记录的配置。
+> ⚠️ 该文档展示的是如何手动开启审计，如无特殊情况，请使用我们控制台的[集群审计](/uk8s/bestpractice/console_audit)应用。
 
 ## 1. 审计策略
 
@@ -141,7 +131,7 @@ rules:
       - group: "rbac.authorization.k8s.io"
       - group: "scheduling.k8s.io"
       - group: "storage.k8s.io"
-      
+
   # 对已知 Kubernetes API 默认设置为 RequestResponse
   - level: RequestResponse
     resources:
