@@ -1,6 +1,6 @@
 ## Nginx Ingress
 
-**本文适用于的 K8S 版本为 1.19+，对于不同版本，请参考：[Ingress 支持](/uk8s/service/ingress/README)**
+**本文适用于的 K8S 版本为 1.26+，对于不同版本，请参考：[Ingress 支持](/uk8s/service/ingress/README)**
 
 ### 什么是 Ingress
 
@@ -10,7 +10,7 @@ Ingress 是从 Kubernetes 集群外部访问集群内部服务的入口，同时
 类型的 Service 方法，借助于 Kubernetes 提供的扩展接口，UK8S 会创建一个与该 Service 对应的负载均衡服务即 ULB
 来承接外部流量，并路由到集群内部。但在诸如微服务等场景下，一个 Service 对应一个负载均衡器，管理成本明显过高，Ingress 因此应运而生。
 
-我们可以把 Ingress 理解为 Service 提供能力的“Service”，为后端不同 Service 提供代理的负载均衡服务，我们可以在 Ingress 配置可供外部访问
+我们可以把 Ingress 理解为 Service 提供能力的 “Service”，为后端不同 Service 提供代理的负载均衡服务，我们可以在 Ingress 配置可供外部访问
 URL、负载均衡、SSL、基于名称的虚拟主机等。
 
 下面我们通过在 UK8S 中部署 Nginx Ingress Controller，来了解一下 Ingress 的使用过程。
@@ -29,10 +29,10 @@ Controller 供选择，分别如下：
 这里我们选择 Nginx 作为 Ingress Controller，部署 Nginx Ingress Controller 非常简单，执行以下指定即可。
 
 ```bash
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/ingress_nginx/mandatory_1.19.yaml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/ingress_nginx/mandatory_1.26.yaml
 ```
 
-在 `mandatory_1.19.yaml` 这个文件里，是 Ingress Controller 的定义，我们可以把 yaml
+在 `mandatory_1.26.yaml` 这个文件里，是 Ingress Controller 的定义，我们可以把 yaml
 文件下载到本地仔细研读下。这里简要简述下部分 yaml 字段的意义。
 
 这个 yaml 定义了一个使用 ingress-nginx-controller 作为镜像的 pod 副本集，这个 Pod 主要功能就是监听 Ingress 对象以及它所代理的后端 Service
@@ -44,19 +44,18 @@ Service 对象被更新，控制器所管理的 nginx 服务不需要重新加�
 
 ```yaml
 apiVersion: v1
+data:
+  allow-snippet-annotations: "false"
 kind: ConfigMap
 metadata:
   labels:
-    app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/instance: ingress-nginx
-    app.kubernetes.io/version: 1.2.1
     app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/version: 1.10.5
   name: ingress-nginx-controller
   namespace: ingress-nginx
-data:
-  allow-snippet-annotations: 'true'
-  map-hash-bucket-size: "128"
-  ssl-protocols: SSLv2
 ```
 
 需要注意的是，ConfigMap 中的 key 和 value 只支持字符串，因此对于整数等类型，需要使用双引号，例如"100"，详细资料见
@@ -79,30 +78,31 @@ metadata:
   annotations:
     "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"
   labels:
-    app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/instance: ingress-nginx
-    app.kubernetes.io/version: 1.2.1
     app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/version: 1.10.5
   name: ingress-nginx-controller
   namespace: ingress-nginx
 spec:
-  type: LoadBalancer
   externalTrafficPolicy: Local
   ports:
-    - name: http
-      port: 80
-      protocol: TCP
-      targetPort: http
-      appProtocol: http
-    - name: https
-      port: 443
-      protocol: TCP
-      targetPort: https
-      appProtocol: https
+  - appProtocol: http
+    name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - appProtocol: https
+    name: https
+    port: 443
+    protocol: TCP
+    targetPort: https
   selector:
-    app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/name: ingress-nginx
+  type: LoadBalancer
 ```
 
 这个 Service 的唯一工作，就是将所有携带 ingress-nginx 标签的 Pod 的 80 和 433 端口暴露出去，我们可以通过以下方式获取到这个 Service 的外部访问入口。
