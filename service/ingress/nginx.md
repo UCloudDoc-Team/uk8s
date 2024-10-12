@@ -1,6 +1,6 @@
 ## Nginx Ingress
 
-**本文适用于的 K8S 版本为 1.13 ~ 1.18**
+**本文适用于的 K8S 版本为 1.13 ~ 1.18，对于不同版本，请参考：[Ingress 支持](/uk8s/service/ingress/README)**
 
 ### 什么是Ingress
 

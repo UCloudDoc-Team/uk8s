@@ -69,7 +69,7 @@
     - [ULB 常见问题](/uk8s/troubleshooting/ulb)
   - Ingress 管理
     - [概述](/uk8s/service/ingress/README)
-    - [Nginx Ingress](/uk8s/service/ingress/nginx_1.19)
+    - [Nginx Ingress](/uk8s/service/ingress/nginx_1.26)
     - [Ingress 高级用法](/uk8s/service/ingress/multiple_ingress)
   - [CloudProvider 插件升级](/uk8s/service/cp_update)
 - 集群存储
