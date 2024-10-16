@@ -96,11 +96,19 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 ## 2. 变更记录
 
+### 更新版本：24.10.10
+
+更新时间： 2024 年 10 月 10 日
+
+更新内容：
+
+- 修复了使用已有ALB创建svc时会新购EIP的问题
+
 ### 更新版本：24.09.18
 
 更新时间： 2024 年 9 月 18 日
 
-更新内容
+更新内容：
 
 - 修复了创建ALB时，在service中指定subnet-id无法生效的问题
 
