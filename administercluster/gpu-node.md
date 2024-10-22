@@ -30,25 +30,6 @@
 将已创建的GPU云主机添加进已有集群，选择合适的节点镜像。
 ![](/images/gpu/image-2.png)
 
-## 插件升级
-将 nvidia-device-plugin 升级到最新版本，以解决 GPU 节点不稳定的情况。
-### 升级方法
-- 方法一：使用 `kubectl set image` 将 `nvidia-device-plugin-daemonset` 的镜像版本更改为 `v0.14.1`：
-    ```bash
-    $ kubectl set image daemonset nvidia-device-plugin-daemonset -n kube-system nvidia-device-plugin-ctr=uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:v0.14.1
-    daemonset.apps/nvidia-device-plugin-daemonset image updated
-    ```
-- 方法二：更改 `nvidia-device-plugin-daemonset` 的 yaml 文件：
-    1. 输入如下指令：
-        ```bash
-        $ kubectl edit daemonset nvidia-device-plugin-daemonset -n kube-system
-        ```
-    2. 此时会得到 `nvidia-device-plugin-daemonset` 的配置，找到 `spec.template.spec.containers.image` 后，可以看到目前镜像信息：
-        ```yaml
-        - image: uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:1.0.0-beta4
-        ```
-    3. 更改镜像为 `uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:v0.14.1`，随后保存。
-
 ## 使用说明
 1. 默认情况下，容器之间不共享 GPU，每个容器可以请求一个或多个 GPU。无法请求 GPU 的一小部分。
 2. 集群的 Master 节点暂不支持 GPU 机型。
@@ -108,3 +89,129 @@
         path: /var/run/nvidia-topologyd
         type: Directory
     ```
+
+## 插件升级
+将 nvidia-device-plugin 升级到最新版本，以解决 GPU 节点不稳定的情况。
+### 升级方法
+- 方法一：使用 `kubectl set image` 将 `nvidia-device-plugin-daemonset` 的镜像版本更改为 `v0.14.1`：
+    ```bash
+    $ kubectl set image daemonset nvidia-device-plugin-daemonset -n kube-system nvidia-device-plugin-ctr=uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:v0.14.1
+    daemonset.apps/nvidia-device-plugin-daemonset image updated
+    ```
+- 方法二：更改 `nvidia-device-plugin-daemonset` 的 yaml 文件：
+    1. 输入如下指令：
+        ```bash
+        $ kubectl edit daemonset nvidia-device-plugin-daemonset -n kube-system
+        ```
+    2. 此时会得到 `nvidia-device-plugin-daemonset` 的配置，找到 `spec.template.spec.containers.image` 后，可以看到目前镜像信息：
+        ```yaml
+        - image: uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:1.0.0-beta4
+        ```
+    3. 更改镜像为 `uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:v0.14.1`，随后保存。
+
+## 裸金属云主机绑核
+想要让裸金属云主机绑核，需要在主机加入 uk8s 集群前进行一些配置。
+
+### 配置方法
+1. 选择好裸金属云主机后，在【添加已有主机】界面的最底下点击【更多设置】。
+  
+    ![](/images/gpu/image-4.png)
+2. 确保【禁用节点】已开启。
+  
+    ![](/images/gpu/image-5.png)
+3. 在【初始化脚本】的输入框内加入绑核脚本：
+    ```bash
+    #!/bin/bash
+    cp /etc/kubernetes/kubelet /etc/kubernetes/kubelet.backup
+    sed -i 's/^"$/                --cpu-manager-policy=static \\\
+                    --topology-manager-policy=single-numa-node \\\
+    "/' /etc/kubernetes/kubelet
+    rm /var/lib/kubelet/cpu_manager_state
+    systemctl restart kubelet
+
+    sleep 1
+    KUBELET_STATUS=$(systemctl is-active kubelet)
+
+    if [[ "$KUBELET_STATUS" == "activating" ]]; then
+        for i in {1..10}; do
+            sleep 1
+            KUBELET_STATUS=$(systemctl is-active kubelet)
+            if [[ "$KUBELET_STATUS" == "active" ]]; then
+                rm /etc/kubernetes/kubelet.backup
+                break
+            fi
+        done
+    elif [[ "$KUBELET_STATUS" == "active" ]]; then
+        rm /etc/kubernetes/kubelet.backup
+    fi
+
+    if [[ "$KUBELET_STATUS" != "active" ]]; then
+        mv /etc/kubernetes/kubelet.backup /etc/kubernetes/kubelet
+        systemctl restart kubelet
+    fi
+    ```
+    点击确定后，等待节点添加完成。
+
+4. 现在我们可以看到节点状态为 `Ready,SchedulingDisabled`。
+
+    ![](/images/gpu/image-6.png)
+
+    输入指令：`kubectl uncordon <节点名称>` 来让节点处于 `Ready` 的状态。
+
+### 验证绑核成功
+
+1. 创建如下 Pod，以进行测试，确保 `limits` 和 `requests` 是一致的：
+    ```YAML
+     apiVersion: v1
+      kind: Pod
+      metadata:
+        name: dcgmproftester
+      spec:
+        nodeName: "10.60.159.170" # 这里替换为裸金属节点的ip
+        restartPolicy: OnFailure
+        containers:
+        - name: dcgmproftester12-1
+          image: uhub.service.ucloud.cn/uk8s/dcgm:3.3.0
+          command: ["/usr/bin/dcgmproftester12"]
+          args: ["--no-dcgm-validation", "-t 1004", "-d 3600"] # 这里 -d 为运行时间
+          resources:
+            limits:
+                nvidia.com/gpu: 2
+                memory: 10Gi
+                cpu: 10 # 为了便于测试，CPU 数量不要大于单个 NUMA 节点的 CPU 数量
+            requests:
+                nvidia.com/gpu: 2
+                memory: 10Gi
+                cpu: 10
+          securityContext:
+            capabilities:
+                add: ["SYS_ADMIN"]
+    ```
+
+2. 等待 Pod 状态为 `Running` 之后，通过 ssh 进入裸金属节点内。
+
+3. 输入指令 `crictl ps` 来获取当前节点内容器列表。根据创建时间或者容器名称找到我们刚刚创建的容器的 ID。
+
+4. 输入指令 `crictl inspect <容器ID> | grep pid`，获取进程的 pid。
+
+5. 输入指令 `ps -ef | grep <pid>`, 获取刚刚得到的 pid 的子进程：
+    
+    ![](/images/gpu/image-9.png)
+  
+    通过这张图，可以看出我们获取了 pid 为 24147 相关的进程信息。每一行 `root` 后的两个数字，第一个是子进程，第二个是父进程。那么我们就可以知道 24147 进程的子进程有两个：24188 和 24189。
+
+6. 现在输入指令 `nvidia-smi` 来获取 gpu 信息，检查 GPU 亲和性：
+    
+    ![](/images/gpu/image-7.png)
+    
+    下方的 Process 框中记录了哪一个 GPU 在运行哪一个进程，图中为 GPU0 在运行 24188， GPU1 在运行 24189。
+
+7. 我们再通过指令 `nvidia-smi topo -m` 来检查 GPU 和 CPU 是否在同一个 NUMA 节点上：
+    
+    ![](/images/gpu/image-8.png)
+    
+    输入指令 `taskset -c -p <pid>` 来获取 CPU 亲和性信息：
+    
+    ![](/images/gpu/image-10.png)
+    
+    我们可以看出 GPU0 和 GPU1 的 CPU Affinity 为 0-31,64-95。进程的 CPU Affinity list 为 1-20,65-84。这证明了 GPU 和 CPU 对应了同一个 NUMA 节点。
