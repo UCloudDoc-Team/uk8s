@@ -134,7 +134,8 @@
     - [Pod 常见故障处理](/uk8s/troubleshooting/pod_debug_summary)
   - 权限及审计
     - [RBAC 权限管理实践](/uk8s/bestpractice/rbac_practice)
-    - [API Server 审计功能](/uk8s/bestpractice/apiserver_audit)
+    - [API Server 审计功能](/uk8s/bestpractice/console_audit)
+    - [手动开启 API Server 审计功能](/uk8s/bestpractice/apiserver_audit)
   - CI/CD 实践
     - [Docker & Jenkins](/uk8s/bestpractice/cicd)
     - [Kaniko & Jenkins](/uk8s/bestpractice/cicd_containerd)
