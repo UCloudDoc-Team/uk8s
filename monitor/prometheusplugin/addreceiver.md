@@ -4,7 +4,7 @@
 
 ## 1. 配置发件服务器
 
-配置接收人前，需要先设置发件人邮箱信息。目前发送信息是通过邮箱发送。 
+配置接收人前，需要先设置发件人邮箱信息。目前发送信息是通过邮箱发送。
 
 不同的邮件服务提供商对于发件服务器的配置都有较为详细的说明；这里强调两点：
 
@@ -69,7 +69,7 @@ metadata:
 data:
   config.yaml: |-
      targets:
-      webhook1:  
+      webhook1:
         # 请替换为您的钉钉/企业微信机器人 Webhook 地址
         url: https://oapi.dingtalk.com/robot/send?access_token=xxxxxx
 ---
@@ -108,7 +108,7 @@ spec:
       containers:
         - name: alertmanager-webhook
           # 替换image值:
-          # 企业微信机器人: uhub.service.ucloud.cn/uk8s/prometheus-webhook-wechat:v2.0.0
+          # 企业微信机器人: uhub.service.ucloud.cn/uk8s/prometheus-webhook-wechat:v2.0.1
           # 钉钉机器人: uhub.service.ucloud.cn/uk8s/prometheus-webhook-dingtalk:v2.0.0
           image: xxx:xxx
           args:
@@ -233,8 +233,8 @@ spec:
 
 #### 5.3 添加接收人
 
-在控制台「收发设置」页面「接收人」版面点击「添加」，在 Webhook 地址栏中填写 
+在控制台「收发设置」页面「接收人」版面点击「添加」，在 Webhook 地址栏中填写
 
-http://alertmanager-webhook.uk8s-monitor.svc/wechat/{groupname}/send  
+http://alertmanager-webhook.uk8s-monitor.svc/wechat/{groupname}/send
 
 其中{groupname}为config.yaml中对应的chatgroups.name的名称
