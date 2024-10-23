@@ -41,7 +41,7 @@
 
 ![audit4](/images/bestpractice/audit4.png)
 
-点击确定，我们会启动一个异步任务，分别在3各master节点上做下面的事情：
+点击确定，我们会启动一个异步任务，分别在3个master节点上做下面的事情：
 
 - 上传审计策略文件到`/etc/kubernetes/yaml/audit-policy.yaml`。具体策略文件见下一节。
 - 修改APIServer配置文件，增加审计相关参数：
@@ -206,11 +206,9 @@ rules:
   - level: Metadata
 ```
 
-如果您对默认策略不满意，需要手动更改。
+如果您对默认策略不满意，想要手动更改，请将策略文件依次上传到3个master节点的`/etc/kubernetes/yaml/audit-policy.yaml`中，并依次执行`systemctl restart kube-apiserver`重启APIServer服务。
 
 关于如何配置审计策略，请参考文档：[audit policy](https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/#audit-policy)。
-
-要更改审计策略，请将策略文件依次上传到3个master节点的`/etc/kubernetes/yaml/audit-policy.yaml`中，并依次执行`systemctl restart kube-apiserver`重启APIServer服务。
 
 ## 查看审计日志
 
