@@ -41,9 +41,9 @@ else
     echo "Helm is already installed."
 fi
 # Step 2: Download Helm Chart
-echo "Adding hami-charts repository and pulling Helm Chart..."
-helm repo add hami-charts https://project-hami.github.io/HAMi/
-helm pull hami-charts/hami --untar
+wget https://docs.ucloud.cn/uk8s/yaml/gpu-share/hami.tar.gz
+tar -xzf hami.tar.gz
+rm hami.tar.gz
 # Step 3: Modify image sources
 VALUES_FILE="hami/values.yaml"
 if [ -f "$VALUES_FILE" ]; then
@@ -134,7 +134,7 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/dcgm-exporter.yaml
 ![](/images/administercluster/gpu-share-monitor1.png)
 
 ### 3.3 Grafana监控
-在 uk8s 添加监控目标登陆Grafana后，你需要先下载 [json 文件](https://uk8s-download.cn-bj.ufileos.com/hami-dcgm-gpu-share.json) --> 选择左侧导航栏 '+' 号 --> Import --> 第二个输入框粘贴下载的 json 内容 --> Load。
+在 uk8s 添加监控目标登陆Grafana后，你需要先下载 [json 文件](https://docs.ucloud.cn/uk8s/json/grafana/hami-dcgm-gpu-share.json) --> 选择左侧导航栏 '+' 号 --> Import --> 第二个输入框粘贴下载的 json 内容 --> Load。
 
 以下是Grafana监控HAMi的示意图：
 ![](/images/administercluster/gpu-share-monitor2.png)
