@@ -1,7 +1,7 @@
 # GPU插件
 
 ## 1. 介绍
-Uk8s 使用开源组件 [HAMi](https://github.com/Project-HAMi/HAMi) 实现GPU共享，包括：
+UK8S 使用开源组件 [HAMi](https://github.com/Project-HAMi/HAMi) 实现GPU共享，包括：
 - 显存划分
 - 算力划分
 - 错误隔离
