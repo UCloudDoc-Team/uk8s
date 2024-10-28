@@ -172,7 +172,7 @@ gpu-pod   1/1     Running   0          48s
 #### 测试命令
 首先创建 `hami-npod-1gpu.yml`，内容如下，请替换其中的 GPU 节点 IP，用于指定运行的 GPU 节点。
 
-该配置创建了三个 Pod，建议测试完成后手动删除。
+该配置创建了n个 Pod，（通过修改yaml之中的副本数量控制）建议测试完成后手动删除。
 
 ```yaml
 apiVersion: apps/v1
@@ -209,4 +209,6 @@ spec:
             nvidia.com/gpumem: 3000
             nvidia.com/gpucores: 25
 ```
-
+#### 测试结果
+![](/images/administercluster/gpu-share-monitor3.png)
+![](/images/administercluster/gpu-share-monitor4.png)
