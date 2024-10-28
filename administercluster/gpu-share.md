@@ -210,5 +210,6 @@ spec:
             nvidia.com/gpucores: 25
 ```
 #### 测试结果
+通过监控可知，3个pod在长期的平均算力消耗符合限制，短期下存在波动。
+
 ![](/images/administercluster/gpu-share-monitor3.png)
-![](/images/administercluster/gpu-share-monitor4.png)
