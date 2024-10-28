@@ -19,79 +19,29 @@ UK8S 使用开源组件 [HAMi](https://github.com/Project-HAMi/HAMi) 实现GPU�
 kubectl label nodes xxx.xxx.xxx.xxx gpu=on
 ```
 
-### 2.2 运行以下命令，创建安装文件
+### 2.2 helm安装
+ ⚠️ helm版本要求3.0以上，安装后通过以下指令查看helm版本
+```sh
+helm version
+```
 
+### 2.3 获取chart
+下载chart压缩包，并且解压
 ```bash
-cat << 'EOF' > hami_setup.sh
-#!/bin/bash
-set -e
-# Step 1: Install Helm
-if ! command -v helm &> /dev/null
-then
-    echo "Helm not found, installing Helm..."
-    # Add Helm's APT repository
-    curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
-    sudo apt install apt-transport-https --yes
-    echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
-
-    # Update package list and install Helm
-    sudo apt update
-    sudo apt install helm -y
-else
-    echo "Helm is already installed."
-fi
-# Step 2: Download Helm Chart
 wget https://docs.ucloud.cn/uk8s/yaml/gpu-share/hami.tar.gz
 tar -xzf hami.tar.gz
 rm hami.tar.gz
-# Step 3: Modify image sources
-VALUES_FILE="hami/values.yaml"
-if [ -f "$VALUES_FILE" ]; then
-    echo "Modifying image sources in values.yaml..."
-    sed -i 's|registry\.cn-hangzhou\.aliyuncs\.com/google_containers/kube-scheduler|uhub.service.ucloud.cn/gpu-share/kube-scheduler|' $VALUES_FILE
-    sed -i 's|imageTag: \"v1\.20\.0\"|imageTag: \"v1.26.7\"|' $VALUES_FILE
-    sed -i 's|projecthami/hami|uhub.service.ucloud.cn/gpu-share/hami:fac239f|' $VALUES_FILE
-    sed -i 's|liangjw/kube-webhook-certgen:v1.1.1|uhub.service.ucloud.cn/gpu-share/kube-webhook-certgen:v1.1.1|' $VALUES_FILE
-    sed -i 's|projecthami/hami|uhub.service.ucloud.cn/gpu-share/hami:fac239f|' $VALUES_FILE
-else
-    echo "values.yaml not found!"
-    exit 1
-fi
-# Step 4: Modify daemonsetnvidia.yaml
-DAEMONSET_FILE="hami/templates/device-plugin/daemonsetnvidia.yaml"
-if [ -f "$DAEMONSET_FILE" ]; then
-    echo "Modifying daemonsetnvidia.yaml..."
-    sed -i 's|image: {{ .Values.devicePlugin.image }}:{{ .Values.version }}|image: {{ .Values.devicePlugin.image }}|' $DAEMONSET_FILE
-else
-    echo "daemonsetnvidia.yaml not found!"
-    exit 1
-fi
-# Step 5: Modify scheduler deployment
-SCHEDULER_FILE="hami/templates/scheduler/deployment.yaml"
-if [ -f "$SCHEDULER_FILE" ]; then
-    echo "Modifying scheduler deployment.yaml..."
-    sed -i 's|image: {{ .Values.scheduler.extender.image }}:{{ .Values.version }}|image: {{ .Values.scheduler.extender.image }}|' $SCHEDULER_FILE
-else
-    echo "deployment.yaml not found!"
-    exit 1
-fi
-# Step 6: Install HAMi Helm Chart
-echo "Installing HAMi Helm Chart..."
-helm install hami ./hami -n kube-system
-echo "HAMi installation completed. Please check the pod status using 'kubectl get pods -n kube-system'"
-EOF
-
 ```
 
-### 2.3 运行hami_setup.sh文件
+
+### 2.4 安装hami
+
 ```bash
-chmod +x hami_setup.sh
-sudo ./hami_setup.sh
-```
-
-### 2.4 检查安装结果
-```sh
 helm install hami ./hami -n kube-system
+```
+检查安装结果
+```sh
+kubectl get po -A
 ```
 
 安装成功时，以下输出显示 Pod 运行状态：
