@@ -122,6 +122,10 @@
 3. 在【初始化脚本】的输入框内加入绑核脚本：
     ```bash
     #!/bin/bash
+    if grep -q "topology-manager-policy" /etc/kubernetes/kubelet; then
+      exit
+    fi
+
     cp /etc/kubernetes/kubelet /etc/kubernetes/kubelet.backup
     sed -i 's/^"$/                --cpu-manager-policy=static \\\
                     --topology-manager-policy=best-effort \\\
@@ -161,51 +165,11 @@
 ### 验证绑核成功
 
 1. 创建测试 Pod 前，需要注意以下几点：
-    - 确保 `limits` 和 `requests` 是一致的，不一致会导致绑核失败。
-    - 因为 kubelet 预留 1 核 CPU，最多可以申请 `总核数 - 1` 核 CPU。
+    - 确保 `limits` 和 `requests` 中的 CPU、Memory、GPU 数量是一致的，并且 CPU 需要是整数。
     - 可以将 `spec.nodeName` 设置为裸金属云主机的 ip 地址，确保 Pod 被调度到该节点上。
-    - 在配置 Pod 的 CPU 和 GPU 请求大小时，推荐让 GPU 亲和的 numa 节点数量等于 CPU 亲和的 numa 节点数量。这里需要提前了解使用的裸金属配置以决定 Pod 申请 CPU 和 GPU 的参数设置。
-      
-      例如：现在有一台裸金属云主机配置如下：
-
-      | CPU | GPU | 内存 (不影响绑核) | NUMA 节点数量 | 
-      | --- | --- | --- | --- |
-      | 128 | 8 | 1024 | 8 |
-
-      > CPU 和 NUMA 参数可以通过指令 `lscpu` 获取。GPU 参数可以通过指令 `nvidia-smi topo -m` 获取。
-
-      通过指令 `lscpu` 我们可以得知 NUMA 节点和 CPU 核心的关系：
-      ```bash
-      ...
-      NUMA node0 CPU(s):               0-7,64-71
-      NUMA node1 CPU(s):               8-15,72-79
-      NUMA node2 CPU(s):               16-23,80-87
-      NUMA node3 CPU(s):               24-31,88-95
-      NUMA node4 CPU(s):               32-39,96-103
-      NUMA node5 CPU(s):               40-47,104-111
-      NUMA node6 CPU(s):               48-55,112-119
-      NUMA node7 CPU(s):               56-63,120-127
-      ...
-      ```
-
-      通过指令 `nvidia-smi topo -m` 我们可以得知 NUMA 节点和 GPU 的关系：
-
-      ![](/images/gpu/image-11.png)
-
-      可以看出每个 NUMA 节点包含了 16 核 CPU 和 1 个 GPU。为了可以确保 CPU 和 GPU 亲和都亲和相同的 NUMA 节点，我们的配置需要保证 **GPU 亲和的 numa 节点数量等于 CPU 亲和的 numa 节点数量，否则可能导致亲和节点不一致**。下面是几种情况：
-
-      | CPU | GPU | 结果 |
-      | --- | --- | --- |
-      | 1 ~ 16 | 1 | 亲和同节点 |
-      | > 16 | 1 | 亲和不同节点 |
-      | 1 ~ 16 | > 1 | 亲和不同节点 |
-      | (数量 / 16) = (GPU 数量 / 1) | (数量 / 1) = (CPU 数量 / 16) | 亲和同节点 |
-      | (数量 / 16) ≠ (GPU 数量 / 1) | (数量 / 1) ≠ (CPU 数量 / 16) | 亲和不同节点 |
-      > 计算全部向上取整。
-      
-      > 这里的 16 和 1 是根据上文的方法查看配置得到的。不同机器的配置是不一样的，需要自行查看。
 
     现在我们来创建 Pod：
+    
     ```YAML
     apiVersion: v1
     kind: Pod
@@ -219,7 +183,7 @@
         image: uhub.service.ucloud.cn/uk8s/dcgm:3.3.0
         command: ["/usr/bin/dcgmproftester12"]
         args: ["--no-dcgm-validation", "-t 1004", "-d 3600"] # 这里 -d 为运行时间
-        resources: # 这里的数值需要按照上文介绍的方法根据不同机器配置进行修改
+        resources: # 这里的数值需要根据不同机器配置进行修改
           limits:
               nvidia.com/gpu: 1
               memory: 10Gi
@@ -235,28 +199,63 @@
 
 2. 等待 Pod 状态为 `Running` 之后，通过 ssh 进入裸金属节点内。
 
-3. 输入指令 `crictl ps` 来获取当前节点内容器列表。根据创建时间或者容器名称找到我们刚刚创建的容器的 ID。
+3. 输入指令 `crictl ps` 来获取当前节点内容器列表。根据创建时间或者容器名称找到我们刚刚创建的容器的 ID。 然后输入指令 `crictl inspect <容器ID> | grep pid`，获取进程的 pid。
 
-4. 输入指令 `crictl inspect <容器ID> | grep pid`，获取进程的 pid。
+4. 输入指令 `taskset -c -p <pid>` 来获取 CPU 亲和性信息：
 
-5. 如果设置 Pod 请求的 GPU 数量大于 1，输入指令 `ps -ef | grep <pid>`, 获取刚刚得到的 pid 的多个子进程：
-    
     ![](/images/gpu/image-9.png)
-  
-    通过这张图，可以看出我们获取了 pid 为 66917 相关的进程信息。每一行 `root` 后的两个数字，第一个是子进程，第二个是父进程。那么我们就可以知道 24147 进程的子进程有两个：66952 和 66953。
 
-6. 现在输入指令 `nvidia-smi` 来获取 gpu 信息，检查 GPU 亲和性：
+    我们看到 Pod 亲和的 CPU 范围为 `1-5,65-69` 而不是完整的 CPU 列表，证明绑 CPU 成功。
+
+5. 现在输入指令 `nvidia-smi` 来获取 gpu 信息，检查 GPU 亲和性：
 
     ![](/images/gpu/image-7.png)
     
-    下方的 Process 框中记录了哪一个 GPU 在运行，图中为 GPU2 在运行。如果运行的是多 GPU，可以通过对比第 5 步得到的子进程 pid 查看到哪一个 GPU 在运行哪一个子进程。
+    上图中的 Process 框中记录了哪一个 GPU 在运行，图中为 GPU2 在运行。证明绑 GPU 成功。
 
-7. 通过指令 `nvidia-smi topo -m` 来检查 GPU 和 CPU 是否在同一个 NUMA 节点上：
+6. 通过指令 `nvidia-smi topo -m` 来检查 GPU 和 CPU 是否在同一个 NUMA 节点上：
+
+    ![](/images/gpu/image-8.png)
+    
+    我们可以看出 GPU3 的 CPU Affinity 为 `0-7,64-71`。在第 4 步中我们得到进程的 CPU Affinity list 为 `1-5,65-69`。这证明了 GPU 和 CPU 对应了同一个 NUMA 节点。
+
+7. Best-effort 策略补充说明:
+  
+    使用 `best-effort` 策略时，需要提前了解使用的裸金属配置以决定 Pod 申请 CPU 和 GPU 的参数设置。例如现在有一台裸金属云主机配置如下：
+
+    | CPU | GPU | 内存 (不影响绑核) | NUMA 节点数量 | 
+    | --- | --- | --- | --- |
+    | 128 | 8 | 1024 | 8 |
+
+    > CPU 和 NUMA 参数可以通过指令 `lscpu` 获取。GPU 参数可以通过指令 `nvidia-smi topo -m` 获取。
+
+    通过指令 `lscpu` 我们可以得知 NUMA 节点和 CPU 核心的关系：
+    ```bash
+    ...
+    NUMA node0 CPU(s):               0-7,64-71
+    NUMA node1 CPU(s):               8-15,72-79
+    NUMA node2 CPU(s):               16-23,80-87
+    NUMA node3 CPU(s):               24-31,88-95
+    NUMA node4 CPU(s):               32-39,96-103
+    NUMA node5 CPU(s):               40-47,104-111
+    NUMA node6 CPU(s):               48-55,112-119
+    NUMA node7 CPU(s):               56-63,120-127
+    ...
+    ```
+
+    通过指令 `nvidia-smi topo -m` 我们可以得知 NUMA 节点和 GPU 的关系：
 
     ![](/images/gpu/image-8.png)
 
-    输入指令 `taskset -c -p <pid>` 来获取 CPU 亲和性信息：
+    可以看出每个 NUMA 节点包含了 16 核 CPU 和 1 个 GPU。为了可以确保 CPU 和 GPU 都亲和相同的 NUMA 节点，我们的配置需要保证 **GPU 亲和的 NUMA 节点数量等于 CPU 亲和的 NUMA 节点数量，否则可能导致亲和节点不一致**。下面是能够实现亲和的情况：
 
-    ![](/images/gpu/image-10.png)
+    | GPU | CPU |
+    | --- | --- |
+    | 1 | 1 ~ 16 |
+    | n | > 16 * (n-1), 且 ≤ 16 * n |
     
-    我们可以看出 GPU2 的 CPU Affinity 为 `0-7,64-71`。进程的 CPU Affinity list 为 `1-5,65-69`。这证明了 GPU 和 CPU 对应了同一个 NUMA 节点。
+    > 这里的 16 和 1 是根据上文的方法查看配置得到的。不同机器的配置是不一样的，需要自行查看。
+
+    除了以上 GPU/CPU 配比，其他情况均无法达到 NUMA 亲和的效果。
+
+    具体可参考官方文档：https://kubernetes.io/zh-cn/docs/tasks/administer-cluster/topology-manager/
