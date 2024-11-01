@@ -114,10 +114,10 @@
 
 ### 配置方法
 1. 选择好裸金属云主机后，在【添加已有主机】界面的最底下点击【更多设置】。
-  
+
     ![](/images/gpu/image-4.png)
 2. 确保【禁用节点】已开启。
-  
+
     ![](/images/gpu/image-5.png)
 3. 在【初始化脚本】的输入框内加入绑核脚本：
     ```bash
@@ -246,17 +246,17 @@
     通过这张图，可以看出我们获取了 pid 为 66917 相关的进程信息。每一行 `root` 后的两个数字，第一个是子进程，第二个是父进程。那么我们就可以知道 24147 进程的子进程有两个：66952 和 66953。
 
 6. 现在输入指令 `nvidia-smi` 来获取 gpu 信息，检查 GPU 亲和性：
-    
+
     ![](/images/gpu/image-7.png)
     
     下方的 Process 框中记录了哪一个 GPU 在运行，图中为 GPU2 在运行。如果运行的是多 GPU，可以通过对比第 5 步得到的子进程 pid 查看到哪一个 GPU 在运行哪一个子进程。
 
-7. 我们再通过指令 `nvidia-smi topo -m` 来检查 GPU 和 CPU 是否在同一个 NUMA 节点上：
-    
+7. 通过指令 `nvidia-smi topo -m` 来检查 GPU 和 CPU 是否在同一个 NUMA 节点上：
+
     ![](/images/gpu/image-8.png)
-    
+
     输入指令 `taskset -c -p <pid>` 来获取 CPU 亲和性信息：
-    
+
     ![](/images/gpu/image-10.png)
     
     我们可以看出 GPU2 的 CPU Affinity 为 `0-7,64-71`。进程的 CPU Affinity list 为 `1-5,65-69`。这证明了 GPU 和 CPU 对应了同一个 NUMA 节点。

@@ -93,7 +93,7 @@ parameters:
 
   # 如所需挂载的US3 Bucket与所用uk8s集群不在同一项目下，请配置以下两个参数(24.10.08及之后版本支持)
   csi.storage.k8s.io/provisioner-secret-name: us3-secret # 关联前一步创建的Secret
-  csi.storage.k8s.io/provisioner-secret-namespace: kube-system
+  csi.storage.k8s.io/provisioner-secret-namespace: kube-system # 仅支持kube-system
 ```
 
 ## 三、创建持久化存储卷声明（PVC）
