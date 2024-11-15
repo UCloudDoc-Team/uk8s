@@ -30,8 +30,9 @@
 | service.beta.kubernetes.io/ucloud-load-balancer-remove-unscheduled-backend       | true       | 移除不可被调度节点，枚举值 true / false，设置为 false 后节点不可调度时不会自动被 ULB 剔除。<br>仅在 21.04.1 及以后 cloudprovider 版本中支持。                                                                                                                                                                                                                                                           |
 | service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-reqmsg           | /          | UDP 健康检查发出的请求报文，仅在 protocol 设置为 udp 时生效。<br>仅在 21.05.1 及以后 cloudprovider 版本中支持。                                                                                                                                                                                                                                                                             |
 | service.beta.kubernetes.io/ucloud-load-balancer-vserver-monitor-respmsg          | /          | UDP 健康检查请求应收到的响应报文，仅在 protocol 设置为 udp 时生效。<br>仅在 21.05.1 及以后 cloudprovider 版本中支持。                                                                                                                                                                                                                                                                          |
-|service.beta.kubernetes.io/ucloud-load-balancer-paymode | month | alb付费模式，支持 month（按月付费）、year（按年付费）、dynamic（按时付费）。 关于ALB付费相关参见:[ALB 产品定价](/ulb/alb/buy/charge)
-|service.beta.kubernetes.io/ucloud-load-balancer-quantity | 1 | alb付费时长，chargetype 为 dynamic 时无需填写
+|service.beta.kubernetes.io/ucloud-load-balancer-paymode | month | alb付费模式，支持 month（按月付费）、year（按年付费）、dynamic（按时付费）。 关于ALB付费相关参见:[ALB 产品定价](/ulb/alb/buy/charge)|
+|service.beta.kubernetes.io/ucloud-load-balancer-quantity | 1 | alb付费时长，chargetype 为 dynamic 时无需填写|
+|service.beta.kubernetes.io/ucloud-load-balancer-firewall-id | / | 在创建ULB时，绑定防火墙。默认不进行绑定 |
 
 CloudProvider 版本查看及升级请参见：[CloudProvider 插件更新](/uk8s/service/cp_update)
 

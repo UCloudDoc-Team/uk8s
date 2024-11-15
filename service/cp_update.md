@@ -96,6 +96,14 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 ## 2. 变更记录
 
+### 更新版本：24.11.13
+
+更新时间： 2024 年 11 月 13 日
+
+更新内容：
+
+- 支持在创建ULB时指定要绑定的防火墙
+
 ### 更新版本：24.11.05
 
 更新时间： 2024 年 11 月 05 日
