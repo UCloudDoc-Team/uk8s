@@ -215,6 +215,13 @@ UDisk不支持多点读写，如需要多点读写请使用UFS。
 ### 8.3 默认情况下通过原生的 nfs 直接挂载的方式是没有办法如何设置自定义参数？
 不能在 Pod spec 中指定 NFS 挂载可选项。 可以选择设置服务端的挂载可选项，或者使用 /etc/nfsmount.conf。 此外，还可以通过允许设置挂载可选项的持久卷挂载 NFS 卷。详细可参考Kubernetes官方文档[nfs的使用](https://kubernetes.io/zh-cn/docs/concepts/storage/volumes/#nfs)
 
+### 8.4 upfs的pvc挂载pod失败
+
+先确认upfs的csi部署文件是否与[在UK8S中部署UPFS CSI]((/uk8s/volume/upfs#手动部署csi))中一致，如不一致，需要使用该文档中的部署文件部署
+
+因同一个upfs文件系统在一个机器上只能mount一次，所以先检查对应节点上是否存在该upfs实例的挂载点，如果存在，则需要umount后，csi才会执行挂载pvc
+
+
 ## 9. 挂载UDisk云盘的Pod调度问题
 
 > ⚠️ **RSSD云盘挂载涉及到RDMA问题，需要动态调度，涉及内容较多且更加复杂，因此单独在文档[RSSD云盘挂载问题](/uk8s/troubleshooting/rssd_attachment)中讲解，下面只涉及到非RSSD云盘静态调度的场景。**
