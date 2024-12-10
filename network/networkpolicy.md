@@ -9,7 +9,7 @@
 > ⚠️ 在安装 Calico 网络隔离插件之前，请务必确认 CNI 版本大于等于 19.12.1，否则会删除Node上原有的网络配置，导致 Pod 网络不通。CNI
 > 版本查询及升级请参考：[CNI 网络插件升级](/uk8s/network/cni_update)。
 
-检查kubernetes版本 <=1.24.12，且>= 1.16.4，并且集群需要通外网[拉取Uhub以外的镜像](/uk8s/troubleshooting/registry)。 
+检查kubernetes版本 <=1.26.7，且>= 1.16.4，并且集群需要通外网[拉取Uhub以外的镜像](/uk8s/troubleshooting/registry)。 
 
 确认集群中是否使用组件ipamd：
 ```
@@ -21,12 +21,12 @@ kubectl -n kube-system get ds cni-vpc-ipamd
 使用如下命令查看参数`--calicoPolicyFlag`是否为`true`：
 ```
 kubectl -n kube-system get ds cni-vpc-ipamd -o=jsonpath='{.spec.template.spec.containers[0].args}{"\t"}{"\n"}'
+```
+> ["--availablePodIPLowWatermark=3","--availablePodIPHighWatermark=50","--calicoPolicyFlag=true","--cooldownPeriodSeconds=30"]
 
-["--availablePodIPLowWatermark=3","--availablePodIPHighWatermark=50","--calicoPolicyFlag=true","--cooldownPeriodSeconds=30"]
+如果`--calicoPolicyFlag`参数不为`true`，需要使用如下命令开启：
 ```
-如果参数不为`true`，需要使用如下命令开启：
-```
-kubectl -n kube-system patch ds cni-vpc-ipamd -p '{"spec":{"template":{"spec":{"containers":[{"name":"cni-vpc-ipamd","args":["--availablePodIPLowWatermark=3","--availablePodIPHighWatermark=50","--calicoPolicyFlag=true","--cooldownPeriodSeconds=30"]}]}}}}'
+kubectl -n kube-system patch ds cni-vpc-ipamd \ -p '{"spec":{"template":{"spec":{"containers":[{"name":"cni-vpc-ipamd","args":["--availablePodIPLowWatermark=3","--availablePodIPHighWatermark=50","--calicoPolicyFlag=true","--cooldownPeriodSeconds=30"]}]}}}}'
 ```
 
 
@@ -34,9 +34,18 @@ kubectl -n kube-system patch ds cni-vpc-ipamd -p '{"spec":{"template":{"spec":{"
 
 为了在 UK8S 中实现网络隔离，需要部署 Calico 的 Felix 和 Typha 组件，组件模块已容器化，直接在 UK8S 通过 kubectl 命令安装即可.
 
+uk8s提供了两种版本的calico组件来实现networkpolicy，分别兼容以下uk8s版本，您可以自行选择
+
+|  uk8s version   | calico version  |
+| :----: | :----: |
+| <=1.24.12 | 3.10.0 |
+| >=1.22.5  | 3.25.2 |
+
 ```bash
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/policy_calico-policy-only.yaml
+calico_version="3.25.0" && kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/${calico_version}-calico-policy-only.yaml
 ```
+
+
 
 ## 2. NetworkPolicy 规则解析
 
