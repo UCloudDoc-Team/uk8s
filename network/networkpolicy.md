@@ -34,9 +34,9 @@ kubectl -n kube-system patch ds cni-vpc-ipamd -p '{"spec":{"template":{"spec":{"
 
 为了在 UK8S 中实现网络隔离，需要部署 Calico 的 Felix 和 Typha 组件，组件模块已容器化，直接在 UK8S 通过 kubectl 命令安装即可.
 
-uk8s提供了两种版本的calico组件来实现networkpolicy，分别兼容以下uk8s版本，您可以自行选择
+UK8S 提供了两种版本的 Calico 组件来实现网络隔离，分别兼容以下 UK8S 版本，请自行选择.
 
-|  uk8s version   | calico version  |
+|  UK8S version   | Calico version  |
 | :----: | :----: |
 | <=1.24.12 | 3.10.0 |
 | 1.26.7  | 3.25.2 |
