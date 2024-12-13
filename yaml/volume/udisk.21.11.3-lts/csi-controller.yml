@@ -1,0 +1,158 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: csi-udisk-controller
+  namespace: kube-system
+  labels:
+    app: "csi-udisk"
+    role: "controller"
+    owner: "ucloud"
+spec:
+  selector:
+    app: "csi-udisk"
+    role: "controller"
+    owner: "ucloud"
+  ports:
+    - name: dummy
+      port: 12345
+---
+
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: csi-udisk-controller
+  namespace: kube-system
+spec:
+  serviceName: "csi-udisk-controller"
+  replicas: 1
+  selector:
+    matchLabels:
+      app:  "csi-udisk"
+      role: "controller"
+      owner: "ucloud"
+  template:
+    metadata:
+      labels:
+        app:  "csi-udisk"
+        role: "controller"
+        owner: "ucloud"
+    spec:
+      serviceAccount: csi-udisk-controller
+      priorityClassName: system-node-critical
+      containers:
+      - name: csi-provisioner
+        image: uhub.service.ucloud.cn/uk8s/csi-provisioner:v1.5.0
+        args:
+        - "--csi-address=$(ADDRESS)"
+        - "--enable-leader-election"
+        - "--connection-timeout=30s"
+        - "--v=5"
+        - "--timeout=600s"
+        - "--feature-gates=Topology=true"
+        env:
+        - name: ADDRESS
+          value: /csi/csi.sock
+        imagePullPolicy: "Always"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        volumeMounts:
+        - name: socket-dir
+          mountPath: /csi
+      - name: csi-attacher
+        image: uhub.service.ucloud.cn/uk8s/csi-attacher:v1.2.1
+        args:
+        - "--csi-address=$(ADDRESS)"
+        - "--leader-election=true"
+        - "--leader-election-namespace=kube-system"
+        - "--timeout=30s"
+        - "--v=5"
+        env:
+        - name: ADDRESS
+          value: /csi/csi.sock
+        - name: MY_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        imagePullPolicy: "Always"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        volumeMounts:
+        - name: socket-dir
+          mountPath: /csi
+      - name: cluster-registrar
+        image:  uhub.service.ucloud.cn/uk8s/csi-cluster-driver-registrar:v1.0.1
+        args:
+        - "--csi-address=/csi/csi.sock"
+        - "--pod-info-mount-version=v1"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        volumeMounts:
+        - name: socket-dir
+          mountPath: /csi
+      - name: csi-resizer
+        image: uhub.service.ucloud.cn/uk8s/csi-resizer:v1.0.0-rc2
+        args:
+        - "--v=5"
+        - "--csi-address=$(ADDRESS)"
+        - "--leader-election=true"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        env:
+        - name: ADDRESS
+          value: /csi/csi.sock
+        imagePullPolicy: "Always"
+        volumeMounts:
+        - name: socket-dir
+          mountPath: /csi/
+      - name: csi-udisk
+        image: uhub.service.ucloud.cn/uk8s/csi-uk8s:21.11.3-lts
+        imagePullPolicy: "Always"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        args:
+        - "--drivername=udisk.csi.ucloud.cn"
+        - "--endpoint=$(CSI_ENDPOINT)"
+        - "--hostname=$(KUBE_NODE_NAME)"
+        - "--maxvolume=20"
+        - "--v=5"
+        envFrom:
+        - configMapRef:
+            name: uk8sconfig
+        env:
+        - name: KUBE_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: CSI_ENDPOINT
+          value: unix://csi/csi.sock
+        volumeMounts:
+        - name: socket-dir
+          mountPath: /csi
+      volumes:
+      - name: socket-dir
+        emptyDir:
