@@ -42,7 +42,7 @@ UK8S 提供了两种版本的 Calico 组件来实现网络隔离，分别兼容�
 | 1.26.7  | 3.25.2 |
 
 ```bash
-calico_version="3.25.0" && kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/networkpolicy/${calico_version}-calico-policy-only.yaml
+calico_version="3.25.2" && kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/networkpolicy/${calico_version}-calico-policy-only.yaml
 ```
 
 
