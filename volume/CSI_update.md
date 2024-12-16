@@ -26,8 +26,8 @@
 
 #### UDisk CSI升级
 ```bash
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/udisk.21.11.2/csi-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/udisk.21.11.2/csi-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/udisk.21.11.3-lts/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/udisk.21.11.3-lts/csi-node.yml
 ```
 
 ####  UFile CSI升级
@@ -40,6 +40,7 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/csi-node.ym
 
 | 版本        | 更新时间   | 更新内容                                                     |
 | ----------- | ---------- | ------------------------------------------------------------ |
+| **21.11.3-lts** | 2024.12.16 | 基于21.11.2版本，增加调用DetachUDisk后增加云盘状态查询 |
 | **24.10.08** | 2024.08.14 | 支持跨项目挂载us3 bucket |
 | **24.08.14** | 2024.08.14 | 修复裸金属机器挂载云盘时的校验错误的问题 |
 | **24.07.18** | 2024.07.18 | 挂载云盘时增加校验，防止在管理信息错误的情况下进行挂载 |
