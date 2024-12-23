@@ -3,7 +3,6 @@ kind: PrometheusRule
 metadata:
   labels:
     app: uk8s-prometheus
-    chart: uk8s-prometheus-1.0.10
     k8s-app: uk8s-monitor
     release: uk8s-monitor
   name: uk8s-dcgm
