@@ -293,7 +293,7 @@ UDisk/US3 CSI Daemonset 主要负责存储的Mount以及Umount操作
 在基础的存储管理以及挂载功能外，CSI还提供了多种其它能力。目前CSI UDisk 则实现了磁盘动态扩容（需要Controller与Daemonset）以及磁盘Metrics信息收集(需要CSI
 Daemonset)。
 
-## 11 CSI常见问题排查流程
+## 11 CSI常见问题排查
 
 本节会以UDisk-CSI为例，从创建pvc之后每一步可能出错的点进行分析，并给出处理建议。另外本节内容仅涉及Pod创建过程中的相关内容。并基于一个假设，即上一个使用该PVC的Pod已经销毁，并且中间的所有操作及资源已经清理干净。如果上一个Pod使用的资源没有清理干净，也可以依赖本文档反推确认清理方案。
 
@@ -342,10 +342,22 @@ Daemonset)。
 1. udisk根据csi标准实现了globalmount及pod mount路径，因此一个udisk正常情况下会看到两个挂载路径，一个以globalmount结尾，一个以mount结尾。
 1. us3仅实现了pod mount路径，因此仅能看到一个挂载路径，且us3也不需要确认盘符。
 
-#### fsGroup导致的磁盘mount缓慢
+### 11.4 fsGroup导致的磁盘mount缓慢/错误
 
-很多用户会遇到一个磁盘mount缓慢的问题。此时需要首先确认是否设置了fsGroup，且磁盘中的是否存在大量小文件，如果两个条件均满足，则很可能导致挂载缓慢，具体可以查看[k8s官方文档](https://kubernetes.io/zh/docs/tasks/configure-pod-container/security-context/#%E4%B8%BA-pod-%E9%85%8D%E7%BD%AE%E5%8D%B7%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90%E5%92%8C%E5%B1%9E%E4%B8%BB%E5%8F%98%E6%9B%B4%E7%AD%96%E7%95%A5)
+1. 很多用户会遇到一个磁盘mount缓慢的问题。此时需要首先确认是否设置了fsGroup，且磁盘中的是否存在大量小文件，如果两个条件均满足，则很可能导致挂载缓慢，具体可以查看[k8s官方文档](https://kubernetes.io/zh/docs/tasks/configure-pod-container/security-context/#%E4%B8%BA-pod-%E9%85%8D%E7%BD%AE%E5%8D%B7%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90%E5%92%8C%E5%B1%9E%E4%B8%BB%E5%8F%98%E6%9B%B4%E7%AD%96%E7%95%A5)。
+1. pod在设置了`securityContext.fsGroup`之后如果存储类中没有`fsType`(默认有)则会导致kubelet无法正确的设置权限，出现`permission denied`错误。
 
-### 11.3 挂载的目录权限拒绝
+### 11.5 updatedb导致的umount不成功
 
-1. pod在设置了`securityContext.fsGroup`之后如果存储类中没有`fsType`(默认有)则会导致kubelet无法正确的设置权限，出现`permission denied`错误
+Centos系统会每日定时执行`updatedb`命令, 该命令会遍历整个文件系统目录树。当挂载的udisk或us3数据量较大时，`updatedb`扫描耗时会较长，扫描期间的umount pvc操作都会失败。
+
+#### 解决方案
+将pod挂载pvc的目录加入到允许`updatedb`跳过的目录列表。
+
+编辑`/etc/updatedb.conf`, 修改`PRUNEPATHS`变量如下即可:
+
+```
+PRUNEPATHS = "/var/lib/kubelet /data/kubelet /afs /media /mnt /net /sfs /tmp /udev /var/cache/ccache /var/lib/yum/yumdb /var/spool/cups /var/spool/squid /var/tmp /var/lib/ceph"
+```
+
+
