@@ -196,4 +196,4 @@ rules:
 
 ## 3. 参考
 
-- [Kubernetes 官方文档 - 审计](https://kubernetes.io/zh/docs/tasks/debug-application-cluster/audit/)
+- [Kubernetes 官方文档 - 审计](https://kubernetes.io/zh-cn/docs/tasks/debug/debug-cluster/audit/)
