@@ -349,18 +349,12 @@ Daemonset)。
 
 ### 11.5 updatedb导致的umount不成功
 
-如果发现有的Pod长时间处于Terminating状态（通常是挂载了ufile pvc），且`kubectl describe pod`可以看到`unmount failed`报错，可以登录Pod所在节点，使用fuser命令查看占用挂载点的进程pid。
-```sh
-fuser -m /data/kubelet/pods/<pod-uuid>/volumes/kubernetes.io~csi/<pv-uuid>/mount
-```
-然后执行`ps -f -p <pid>`查看进程是否为`/usr/bin/updatedb`。
+Centos系统会每日定时执行`updatedb`命令, 该命令会遍历整个文件系统目录树。当挂载的udisk或us3数据量较大时，`updatedb`扫描耗时会较长，扫描期间的umount pvc操作都会失败。
 
-如果确认为`updatedb`进程占用挂载点，可以先通过杀死`updatedb`进程来释放挂载点。
+#### 解决方案
+将pod挂载pvc的目录加入到允许`updatedb`跳过的目录列表。
 
-说明: Centos默认在每天的凌晨执行updatedb命令, 该命令会遍历整个系统目录树。当挂载的us3数据量较大，updatedb扫描耗时较长时，会导致扫描期间无法执行umount。
-
-#### 长期解决方案
-编辑`/etc/updatedb.conf`, 修改`PRUNEPATHS`变量如下:
+编辑`/etc/updatedb.conf`, 修改`PRUNEPATHS`变量如下即可:
 
 ```
 PRUNEPATHS = "/var/lib/kubelet /data/kubelet /afs /media /mnt /net /sfs /tmp /udev /var/cache/ccache /var/lib/yum/yumdb /var/spool/cups /var/spool/squid /var/tmp /var/lib/ceph"
