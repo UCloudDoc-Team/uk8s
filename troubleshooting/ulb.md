@@ -30,12 +30,6 @@
 
 因该操作 EIP 和 ULB 资源将不再受 UK8S 管理，所以需要手动至 ULB 和 EIP 页面进行资源解绑和绑定。
 
-## 6. ULB配置迁移怎么操作？
-
-因配置迁移实际是的监听器迁移，故针对所有用到该ULB监听器的Service资源，需[新建一个ALBService](https://docs.ucloud.cn/uk8s/service/ulb_designation?id=%e4%bd%bf%e7%94%a8%e5%b7%b2%e6%9c%89alb)，
-
-其中`service.beta.kubernetes.io/ucloud-load-balancer-id`配置为迁移后的albid，如果监听器为https协议则`service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol`、`service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert`与`service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port`ssl配置也需同步下，创建Service资源后同时建议业务侧将原先Servive的服务流量进行切换到该新建Service上
-
 ## 6. 更改报文转发ULB的EIP之后在uk8s不生效
 
 如果uk8s中某个Service绑定了报文转发类型的ULB，而用户手动更改了ULB的EIP，会发现无法通过新的EIP来访问Service。
@@ -79,3 +73,8 @@ Error syncing load balancer: failed to ensure load balancer: vserver(s) have alr
 
 只有访问SVC的ExternalIP才能把流量导入后端Pod，访问其他EIP无效。删除SVC时，所有EIP都会被删除。
 
+## 12. ULB配置迁移怎么操作？
+
+因配置迁移实际是的监听器迁移，故针对所有用到该ULB监听器的Service资源，需[新建一个ALBService](https://docs.ucloud.cn/uk8s/service/ulb_designation?id=%e4%bd%bf%e7%94%a8%e5%b7%b2%e6%9c%89alb)，
+
+其中`service.beta.kubernetes.io/ucloud-load-balancer-id`配置为迁移后的albid，如果监听器为https协议则`service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol`、`service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert`与`service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port`ssl配置也需同步下，创建Service资源后同时建议业务侧将原先Servive的服务流量进行切换到该新建Service上
