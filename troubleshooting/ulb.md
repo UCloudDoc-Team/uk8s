@@ -75,6 +75,79 @@ Error syncing load balancer: failed to ensure load balancer: vserver(s) have alr
 
 ## 12. ULB配置迁移怎么操作？
 
-因配置迁移实际是的监听器迁移，故针对所有用到该ULB监听器的Service资源，需[新建一个ALBService](https://docs.ucloud.cn/uk8s/service/ulb_designation?id=%e4%bd%bf%e7%94%a8%e5%b7%b2%e6%9c%89alb)，
+因配置迁移实际为监听器迁移，故针对所有用到该ULB监听器的Service资源，需新建一个[使用已有ALB](https://docs.ucloud.cn/uk8s/service/ulb_designation?id=%e4%bd%bf%e7%94%a8%e5%b7%b2%e6%9c%89alb)的Service
 
-其中`service.beta.kubernetes.io/ucloud-load-balancer-id`配置为迁移后的albid，如果监听器为https协议则`service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol`、`service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert`与`service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port`ssl配置也需同步下，创建Service资源后同时建议业务侧将原先Servive的服务流量进行切换到该新建Service上
+将`service.beta.kubernetes.io/ucloud-load-balancer-id-provision`改为`service.beta.kubernetes.io/ucloud-load-balancer-id`值为迁移后的albid，新增`service.beta.kubernetes.io/ucloud-load-balancer-listentype`值为`application`
+
+* 如果监听器为https协议则需额外配置ssl参数`service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol`、`service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert`与`service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port`
+
+以下样例展示了ulb配置迁移了一个带有80，443，8443端口监听器的ulb，其中80为http，443以及8443为https，原有Service如下：
+
+```yaml
+# 迁移前的Service
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    # 迁移前的ulbid
+    service.beta.kubernetes.io/ucloud-load-balancer-id-provision: ulb-xxx 
+    service.beta.kubernetes.io/ucloud-load-balancer-paymode: month
+    service.beta.kubernetes.io/ucloud-load-balancer-type: inner
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: https
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert: ssl-xxx
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port: 443,8443
+  name: service1
+  namespace: default
+spec:
+  ports:
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 80
+  - name: ssl
+    port: 8443
+    protocol: TCP
+    targetPort: 80
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: service1
+  type: LoadBalancer
+```
+
+对80以及443端口进行ulb配置迁移后新建的Service如下：
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    # 迁移后的albid
+    service.beta.kubernetes.io/ucloud-load-balancer-id: alb-xxx
+    # “application”表示使用应用型负载均衡ALB
+    service.beta.kubernetes.io/ucloud-load-balancer-listentype: "application"
+    service.beta.kubernetes.io/ucloud-load-balancer-paymode: month
+    service.beta.kubernetes.io/ucloud-load-balancer-type: inner
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: https
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert: ssl-xxx
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port: 443
+  name: service2
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: service2
+  type: LoadBalancer
+```
+
+创建Service资源后同时建议业务侧将原先Servive的服务流量进行切换到该新建Service上。
