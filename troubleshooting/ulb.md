@@ -75,6 +75,10 @@ Error syncing load balancer: failed to ensure load balancer: vserver(s) have alr
 
 ## 12. ULB配置迁移怎么操作？
 
-因配置迁移实际为监听器迁移，故针对所有用到该ULB监听器的Service资源，需[新建一个ALBService](https://docs.ucloud.cn/uk8s/service/ulb_designation?id=%e4%bd%bf%e7%94%a8%e5%b7%b2%e6%9c%89alb)，
+因配置迁移实际为监听器迁移，故针对所有用到该ULB监听器的Service资源，需新建一个[使用已有ALB](https://docs.ucloud.cn/uk8s/service/ulb_designation?id=%e4%bd%bf%e7%94%a8%e5%b7%b2%e6%9c%89alb)的Service
 
-其中`service.beta.kubernetes.io/ucloud-load-balancer-id`配置为迁移后的albid，如果监听器为https协议则`service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol`、`service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert`与`service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port`ssl配置也需同步下，创建Service资源后同时建议业务侧将原先Servive的服务流量进行切换到该新建Service上。
+其中`service.beta.kubernetes.io/ucloud-load-balancer-id`配置为迁移后的albid
+
+* 如果监听器为https协议则需额外配置ssl参数`service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol`、`service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert`与`service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port`，具体可参考[使用外网7层ULB](https://docs.ucloud.cn/uk8s/service/ulb_designation?id=%e4%bd%bf%e7%94%a8%e5%b7%b2%e6%9c%89%e7%9a%84%e5%a4%96%e7%bd%91ulb%ef%bc%887%e5%b1%82%ef%bc%89)
+
+创建Service资源后同时建议业务侧将原先Servive的服务流量进行切换到该新建Service上。
