@@ -76,10 +76,16 @@ EOF
 
 ## 5. 监控规则
 
-我们默认配置了 `GPU掉卡` 的告警规则，如果有新增告警规则的需求，可以通过下面命令更改告警规则。
+我们新版本监控(`version >= 1.0.10`)默认配置了 `GPU掉卡` 的告警规则，针对老版本需进行手动部署
 
 ```sh
-kubectl -n uk8s-monitor edit prometheusrule uk8s-gpu
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/gpu-share/gpu-xid.yaml
+```
+
+如果有新增告警规则的需求，可以通过下面命令更改告警规则。
+
+```sh
+kubectl -n uk8s-monitor edit prometheusrule uk8s-dcgm
 ```
 
 ## 6. DCGM 常见指标
