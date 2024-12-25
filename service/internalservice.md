@@ -10,9 +10,9 @@
 
 如 ULB 为 UK8S 在创建 Service 时同步创建，删除 Service 时 ULB 会同步删除，请勿将 ULB 关联其他 Vserver，如需多个 Service 共用 ULB，可先创建 ULB，并在创建 Service 时关联已有 ULB，详情请见[使用已有 ULB](/uk8s/service/ulb_designation)。
 
-* ALB使用
+* ALB和NLB使用
 
-目前请求代理型 CLB 存在[一系列配额限制](/ulb/intro/limit)，可能会在使用过程造成服务问题，因此如有七层代理的需求，推荐您使用[应用型负载均衡ALB](/ulb/alb/intro/whatisalb)。如需使用 ALB 产品，请升级 cloudprovider 版本到 `24.08.13` 及以上，参考[CloudProvider 插件更新](/uk8s/service/cp_update)。
+目前请求代理型 CLB 存在[一系列配额限制](/ulb/intro/limit)，可能会在使用过程造成服务问题，因此如有七层代理的需求，推荐您使用[应用型负载均衡ALB](/ulb/alb/intro/whatisalb)；如有四层代理的需求，推荐您使用[网络负载均衡NLB](/ulb/NLB/intro/whatisnlb)。如需使用 ALB 或 NLB 产品，请升级 cloudprovider 版本到 `24.12.24` 及以上，参考[CloudProvider 插件更新](/uk8s/service/cp_update)。
 
 * 参数修改
 
@@ -120,7 +120,13 @@ spec:
 
 ### 4.2 通过ULB4对外暴露服务（TCP）
 
-对于TCP协议的服务，如果内网暴露只需要在metadata.annotations 指定 load-balancer-type为inner，外网load-balancer-type为outer，其他参数都有默认值，可不填写，具体如下：
+> ⚠️ 使用 NLB 时，推荐升级 [CloudProvider](/uk8s/service/cp_update) 版本到 >= 24.12.24。
+
+对于TCP协议的服务，如果内网暴露只需要在metadata.annotations 指定 load-balancer-type为inner，外网load-balancer-type为outer，其他参数都有默认值，可不填写。
+
+建议选择网络型负载均衡NLB；用户可以通过Service的"annotations"来配置ULB类型以及其他参数；更多参数信息可参考[ULB参数说明](/uk8s/service/annotations)。
+
+下面是内网NLB的使用例子：
 
 ```yaml
 apiVersion: v1
@@ -131,7 +137,9 @@ metadata:
     app: ucloud-nginx-out-tcp-new
   annotations:
      # ULB类型，默认为outer，支持outer、inner
-    "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"  
+    "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"
+    # 选择ULB类型，“network”表示使用网络型负载均衡NLB
+    "service.beta.kubernetes.io/ucloud-load-balancer-listentype": "network"
      # 用于声明ULB协议类型，并非应用协议，tcp和udp均代表ULB4，https和http均代表ULB7；
     "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "tcp"       
      # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。
@@ -164,6 +172,8 @@ spec:
 
 ### 4.3 通过ULB4对外暴露服务（UDP）
 
+> ⚠️ 使用 NLB 时，推荐升级 [CloudProvider](/uk8s/service/cp_update) 版本到 >= 24.12.24。
+
 如果你的应用是UDP协议，则务必显式声明健康检查的类型为port（端口检查），否则默认为ping，可能导致ULB误认为后端业务不正常。如果需要外网暴露请注意修改 ucloud-load-balancer-type 为 outer
 
 
@@ -176,7 +186,9 @@ metadata:
     app: ucloud-inner-udp-new
   annotations:
      # ULB类型，默认为outer，支持outer、inner
-    "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"  
+    "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"
+    # 选择ULB类型，“network”表示使用网络型负载均衡NLB
+    "service.beta.kubernetes.io/ucloud-load-balancer-listentype": "network"
      # 表示ULB协议类型，tcp和udp均代表ULB4，https和http均代表ULB7；
     "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "udp"       
      # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。
@@ -211,6 +223,8 @@ spec:
 
 ### 4.4 通过ULB4对外暴露服务（TCP和UDP协议混用）
 
+> ⚠️ 使用 NLB 时，推荐升级 [CloudProvider](/uk8s/service/cp_update) 版本到 >= 24.12.24。
+
 24.03.5以后的 CloudProvider 插件，当"service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol"为tcp/udp或省略时, ULB4同时支持TCP和UDP两种协议。下文示例中，对外暴露了两个端口，其中80端口使用TCP协议，53端口使用UDP协议。
 
 ```yaml
@@ -223,6 +237,8 @@ metadata:
   annotations:
     # 代表ULB网络类型，outer为外网，inner为内网；outer为默认值，此处可省略。
     "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"
+    # 选择ULB类型，“network”表示使用网络型负载均衡NLB
+    "service.beta.kubernetes.io/ucloud-load-balancer-listentype": "network"
     # 表示ULB协议类型，tcp、udp与tcp/udp等价，表示ULB4；使用tcp/udp或省略时时，同时支持TCP和UDP协议
     "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "tcp/udp"
     # 对于ULB4而言，不论容器端口类型是tcp还是udp，均建议显式声明为port。

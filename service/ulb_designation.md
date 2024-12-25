@@ -46,6 +46,38 @@ spec:
     app: https
 ```
 
+## 使用已有NLB
+
+> ⚠️ 使用 NLB 时，推荐升级 [CloudProvider](/uk8s/service/cp_update) 版本到 >= 24.12.24。
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: https
+  labels:
+    app: https
+  annotations:
+    "service.beta.kubernetes.io/ucloud-load-balancer-id": "nlb-rpfirtgx4l4" # 替换为自己的nlb id
+    # 申明使用nlb
+    "service.beta.kubernetes.io/ucloud-load-balancer-listentype": "network"
+    # 申明使用tcp协议
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol": "tcp"
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 8080
+      name: https
+    - protocol: TCP
+      name: http
+      port: 80
+      targetPort: 8080
+  selector:
+    app: https
+```
+
 ## 使用已有的内网ULB
 
 声明使用已有的内网ULB，需要声明至少两个annotations。
