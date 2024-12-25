@@ -15,6 +15,10 @@ UK8S 通过 CloudProvider 插件，实现集群中 LoadBalancer 类型服务（S
 
 从 `24.03.13` 版本开始支持了[应用型负载均衡ALB](/ulb/alb/intro/whatisalb)，后续版本修复了 ALB 使用中的一些问题，推荐升级到 `24.09.18` 版本来使用 ALB。
 
+- `24.12.24`版本
+
+从`24.12.24`版本开始支持了[网络型负载均衡NLB](/ulb/NLB/intro/whatisnlb)，推荐升级到该版本或以上来使用NLB。
+
 ## 1. 版本查看及插件升级
 
 ### 1.1 控制台操作
@@ -93,8 +97,15 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cloudprovider/22.07.1.yml
 kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 ```
 
-
 ## 2. 变更记录
+
+### 更新版本：24.12.24
+
+更新时间： 2024 年 12 月 24 日
+
+更新内容：
+
+- 支持NLB
 
 ### 更新版本：24.11.13
 
