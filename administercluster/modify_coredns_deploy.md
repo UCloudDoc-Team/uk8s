@@ -20,13 +20,13 @@ spec:
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-              labelSelector:
-              matchExpressions:
-              - key: k8s-app
-                operator: In
-                values:
-                - kube-dns
-            topologyKey: kubernetes.io/hostname
-            weight: 1
+          - weight: 100
+            podAffinityTerm:
+             topologyKey: kubernetes.io/hostname
+             labelSelector:
+               matchExpressions:
+                 - key: k8s-app
+                   operator: In
+                   values:
+                     - kube-dns
 ```
