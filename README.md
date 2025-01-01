@@ -12,6 +12,7 @@
 - 集群版本
   - [维护说明](/uk8s/version/maintain)
   - 版本跟踪
+    - [1.28 版本说明](/uk8s/version/1.28_release)
     - [1.26 版本说明](/uk8s/version/1.26_release)
 - 集群管理
   - [创建集群](/uk8s/userguide/createcluster)
