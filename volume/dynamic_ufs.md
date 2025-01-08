@@ -89,6 +89,8 @@ metadata:
   name: nfs-client-root
   namespace: kube-system
 spec:
+  volumeName: "nfs-client-root"
+  storageClassName: "" # 指定为空，不可省略，防止使用默认存储类
   accessModes:
     - ReadWriteMany
   resources:
@@ -107,8 +109,8 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    path: /
-    server: 10.9.x.x #这里直接写UFS的Server地址即可。
+    path: / # 和上面nfs-client-provisioner的NFS_PATH变量保持一致
+    server: 10.9.x.x #这里直接写UFS的Server地址即可。和上面nfs-client-provisioner的NFS_SERVER变量保持一致
   mountOptions:
     - nolock
     - nfsvers=4.0
@@ -120,12 +122,12 @@ spec:
 主要是新增了`mountOption`参数，这个值会传递给`nfs-client-provisioner`; 如果不加的话，挂载UFS的时候会失败。
 
 
-```
+```yaml
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: nfs-client
-provisioner: ucloud/ufs
+provisioner: ucloud/ufs # 和nfs-client-provisioner的PROVISIONER_NAME环境变量一致
 parameters:
   onDelete: "retain"
 mountOptions:
