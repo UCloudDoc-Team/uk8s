@@ -37,6 +37,7 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/csi-node.ym
 ```
 
 ## 4. 变更记录
+版本名称中带**se**的表明是我们自研的调度扩展组件版本，用于支持UDisk的调度,详情见[RSSD云盘挂载问题](/uk8s/troubleshooting/rssd_attachment)。其升级方式也是在 UK8S 集群控制台管理页面「插件-存储插件」页面点击「升级 CSI」按钮。
 
 | 版本        | 更新时间   | 更新内容                                                     |
 | ----------- | ---------- | ------------------------------------------------------------ |
@@ -59,5 +60,3 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/csi-node.ym
 | **21.03.1** | 2021.03.15 | 解决节点被删除后，volumeattachment 未被删除导致存储无法卸载的问题 |
 | **21.01.1** | 2021.01.13 | UDisk的起始大小变更为1GB                                     |
 | **20.10.1** | 2020.10.14 | 支持CSI限制节点最大可挂载卷的数量<br>避免UCloud API客户端可能产生的并发竞争行为 |
-
-> 注: se(scheduler extender)是我们自研的调度扩展组件，用于支持UDisk的调度,详情见[RSSD云盘挂载问题](/uk8s/troubleshooting/rssd_attachment)
