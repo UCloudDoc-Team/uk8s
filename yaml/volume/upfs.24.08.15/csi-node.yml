@@ -21,13 +21,23 @@ spec:
         owner: "ucloud"
     spec:
       serviceAccount: csi-upfs-node
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key:  node.uk8s.ucloud.cn/instance_type
+                    operator: In
+                    values:
+                      - uhost
+                      - bmhost
       tolerations:
         - key: CriticalAddonsOnly
           operator: Exists
         - key: dedicated
           operator: Exists
-        # - effect: NoSchedule
-        #   operator: Exists
+        - effect: NoSchedule
+          operator: Exists
       hostNetwork: true
       hostPID: true
       priorityClassName: system-node-critical
