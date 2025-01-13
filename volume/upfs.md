@@ -17,10 +17,10 @@
 > 因目前的UK8S版本均不封装UPFS CSI，需要自行部署
 
 ```
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs.24.08.15/csi-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs.24.08.15/csi-node.yml
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs.24.08.15/rbac-controller.yml
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs.24.08.15/rbac-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs.24.08.15/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs.24.08.15/csi-node.yml
 ```
 
 ## 创建存储类StorageClass
