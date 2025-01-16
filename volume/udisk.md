@@ -12,6 +12,8 @@ UK8S支持直接在集群中使用UDisk作为持久化存储卷。
 
 4. **RSSD云盘有额外的限制条件，请见[在UK8S中使用RSSD UDisk](/uk8s/volume/rssdudisk)。**
 
+5. UDisk以10g为计费单位，不满10g按10g计算，超过10g向上取整到10的整数倍;
+
 ## 1. 存储类 StorageClass
 
 在创建持久化存储卷（PersistentVolume）之前，你需要先创建 StorageClass，然后在 PVC 中使用 StorageClassName。
