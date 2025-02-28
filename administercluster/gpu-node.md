@@ -110,57 +110,16 @@
     3. 更改镜像为 `uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:v0.14.1`，随后保存。
 
 ## 裸金属云主机绑核
-想要让裸金属云主机绑核，需要在主机加入 uk8s 集群前进行一些配置。
+目前裸金属默认支持了绑核，在某些场景下绑核提高GPU效率；
 
-### 配置方法
-1. 选择好裸金属云主机后，在【添加已有主机】界面的最底下点击【更多设置】。
+裸金属节点`Kuberlet`默认会增加如下参数来支持绑核功能，相关官方文档可参考[Topology Manager Policy](https://kubernetes.io/docs/tasks/administer-cluster/topology-manager/)，[CPU Mangaer Policy](https://kubernetes.io/docs/tasks/administer-cluster/cpu-management-policies/)
 
-    ![](/images/gpu/image-4.png)
-2. 确保【禁用节点】已开启。
 
-    ![](/images/gpu/image-5.png)
-3. 在【初始化脚本】的输入框内加入绑核脚本：
-    ```bash
-    #!/bin/bash
-    if grep -q "topology-manager-policy" /etc/kubernetes/kubelet; then
-      exit
-    fi
+```
+  --cpu-manager-policy=static 
+  --topology-manager-policy=best-effort 
+```
 
-    cp /etc/kubernetes/kubelet /etc/kubernetes/kubelet.backup
-    sed -i 's/^"$/                --cpu-manager-policy=static \\\
-                    --topology-manager-policy=best-effort \\\
-    "/' /etc/kubernetes/kubelet
-    rm /var/lib/kubelet/cpu_manager_state
-    systemctl restart kubelet
-
-    sleep 1
-    KUBELET_STATUS=$(systemctl is-active kubelet)
-
-    if [[ "$KUBELET_STATUS" == "activating" ]]; then
-        for i in {1..10}; do
-            sleep 1
-            KUBELET_STATUS=$(systemctl is-active kubelet)
-            if [[ "$KUBELET_STATUS" == "active" ]]; then
-                rm /etc/kubernetes/kubelet.backup
-                break
-            fi
-        done
-    elif [[ "$KUBELET_STATUS" == "active" ]]; then
-        rm /etc/kubernetes/kubelet.backup
-    fi
-
-    if [[ "$KUBELET_STATUS" != "active" ]]; then
-        mv /etc/kubernetes/kubelet.backup /etc/kubernetes/kubelet
-        systemctl restart kubelet
-    fi
-    ```
-    点击确定后，等待节点添加完成。
-
-4. 现在我们可以看到节点状态为 `Ready,SchedulingDisabled`。
-
-    ![](/images/gpu/image-6.png)
-
-    输入指令：`kubectl uncordon <节点名称>` 来让节点处于 `Ready` 的状态。
 
 ### 验证绑核成功
 
@@ -184,9 +143,9 @@
         command: ["/usr/bin/dcgmproftester12"]
         args: ["--no-dcgm-validation", "-t 1004", "-d 3600"] # 这里 -d 为运行时间
         resources: # 这里的数值需要根据不同机器配置进行修改
-          limits:
+          limits: ## limit 与 request保持一致
               nvidia.com/gpu: 1
-              memory: 10Gi
+              memory: 10Gi 
               cpu: 10
           requests:
               nvidia.com/gpu: 1
@@ -258,4 +217,4 @@
 
     除了以上 GPU/CPU 配比，其他情况均无法达到 NUMA 亲和的效果。
 
-    具体可参考官方文档：https://kubernetes.io/zh-cn/docs/tasks/administer-cluster/topology-manager/
+    具体可参考[官方文档](https://kubernetes.io/zh-cn/docs/tasks/administer-cluster/topology-manager/)
