@@ -112,12 +112,17 @@
 ## 裸金属云主机绑核
 目前裸金属默认支持了绑核，在某些场景下绑核提高GPU效率；
 
-裸金属节点`Kuberlet`默认会增加如下参数来支持绑核功能，相关官方文档可参考[Topology Manager Policy](https://kubernetes.io/docs/tasks/administer-cluster/topology-manager/)，[CPU Mangaer Policy](https://kubernetes.io/docs/tasks/administer-cluster/cpu-management-policies/)
+通过删除裸金属节点文件"/var/lib/kubelet/cpu_manager_state"，且默认配置`Kubelet`如下参数来支持绑核功能；相关官方文档可参考[Topology Manager Policy](https://kubernetes.io/docs/tasks/administer-cluster/topology-manager/)，[CPU Mangaer Policy](https://kubernetes.io/docs/tasks/administer-cluster/cpu-management-policies/)
 
 
 ```
   --cpu-manager-policy=static 
   --topology-manager-policy=best-effort 
+```
+
+节点是否配置了支持绑核的参数，可登陆节点使用命令做参数检测：
+```
+ps -aux|grep kubelet|grep topology-manager-policy 
 ```
 
 
