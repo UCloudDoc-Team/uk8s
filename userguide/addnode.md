@@ -32,5 +32,7 @@
 
 #### 删除
 删除节点时，可以勾选同时删除云主机资源和云主机上的数据盘，如果不勾选则仅从集群内把节点删除；
+
+建议： 先驱逐节点上服务再做删除节点操作，确保服务可用性。
 ![](/images/userguide/addnode/node-delete.png)
 ![](/images/userguide/addnode/node-delete1.png)
