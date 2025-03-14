@@ -33,7 +33,7 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs.25.03.14/csi-node.
 
 * path：表示宿主上挂载upfs的目录结构，可自行命名，默认值为: `/`，一个UPFS实例可以对应多个不同path的StorageClass(同一个UPFS实例即文件系统url，使用相同的path即相同StorageClass的pvc可以实现共享数据，同理，使用不同的path的StorageClass即可实现数据分离)
 
-* autoProvisionSubdir: 该参数需要在upfs-csi版本大于等于upfs-25.03.14支持，默认不启用，开启该参数且配置值为true之后，该StorageClass创建出的pvc可以实现数据分离(针对之前创建pvc的不生效)
+* autoProvisionSubdir: 该参数需要在upfs-csi版本大于等于upfs-25.03.14支持，默认不启用，开启该参数且配置值为true之后，该StorageClass创建出的pvc可以实现数据分离(针对之前创建pvc的不生效)，在upfs上该pvc对应的目录类似: /example/pvc-ae961bc8-2c97-414e-9e7b-bde3e28efee9
 
 ```yaml
 apiVersion: storage.k8s.io/v1
