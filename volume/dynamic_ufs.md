@@ -16,7 +16,7 @@
 
 1、克隆项目   
 
-在`deploy/`目录下，我们需要关注三个文件，分别是`rbac.yaml`, `deployment.yaml`, `class.yaml`。
+克隆项目[nfs-subdir-external-provisioner](https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner), 在`deploy/`目录下，我们需要关注三个文件，分别是`rbac.yaml`, `deployment.yaml`, `class.yaml`。
 
 ```bash
 # git clone https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner.git
@@ -40,7 +40,7 @@ sed -i "s/namespace:.*/namespace: kube-system/g" ./rbac.yaml ./deployment.yaml
 
 UFS 文件系统在 mount 到云主机时需要指定额外的`mountOption`参数，但`spec.volume.nfs`不支持这个参数。而`PersistentVolume`的声明中可以支持这个参数，因此我们通过挂载静态 PV 的方式来完成首次挂载。
 
-`deployment.yaml`文件改动处较多，建议直接替换即可。
+`deployment.yaml`文件改动处较多，建议直接替换即可。注意将环境变量`NFS_SERVER`和`NFS_PATH`,以及`path`和`server`分别修改为UFS的Server地址和挂载路径。
 
 ```yaml
 apiVersion: apps/v1
@@ -74,9 +74,9 @@ spec:
             - name: PROVISIONER_NAME
               value: ucloud/ufs   # 修改为ucloud/ufs
             - name: NFS_SERVER
-              value: 10.9.x.x     # 这里需要修改为UFS的Server地址
+              value: 10.9.x.x     ## 这里需要修改为UFS的Server地址
             - name: NFS_PATH
-              value: /            # 这里改成UFS的挂载路径
+              value: /            ## 这里改成UFS的挂载路径
       volumes:
         - name: nfs-client-root
           persistentVolumeClaim:  #这里由 nfs 改为 persistentVolumeClaim
@@ -109,8 +109,8 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    path: / # 和上面nfs-client-provisioner的NFS_PATH变量保持一致
-    server: 10.9.x.x #这里直接写UFS的Server地址即可。和上面nfs-client-provisioner的NFS_SERVER变量保持一致
+    path: / ## 和上面nfs-client-provisioner的NFS_PATH变量保持一致
+    server: 10.9.x.x ## 这里直接写UFS的Server地址即可。和上面nfs-client-provisioner的NFS_SERVER变量保持一致
   mountOptions:
     - nolock
     - nfsvers=4.0
@@ -129,8 +129,8 @@ metadata:
   name: nfs-client
 provisioner: ucloud/ufs # 和nfs-client-provisioner的PROVISIONER_NAME环境变量一致
 parameters:
-  onDelete: "retain"
-mountOptions:
+  onDelete: "retain" # 配置 PV 的回收策略，详情见下文
+mountOptions: # 新增mountOption参数
   - nolock
   - nfsvers=4.0
 ```
