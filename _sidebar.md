@@ -144,4 +144,4 @@
   - [CVE-2019-5736](/uk8s/vulnerability/cve-2019-5736.md)
   - [CVE-2019-9512-9514](/uk8s/vulnerability/cve-2019-9512-9514.md)
   - [CVE-2021-30465](/uk8s/vulnerability/cve-2021-30465.md)
-  - [Ingress-Nginx Controller漏洞公告（CVE-2025-1974、CVE-2025-1097、CVE-2025-1098、CVE-2025-24513、CVE-2025-24514, CVE-2025-2787, CVE-2024-7646)](/uk8s/vulnerability/CVE-2025-1974.md)
+  - [CVE-2025-1974](/uk8s/vulnerability/CVE-2025-1974.md)
