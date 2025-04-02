@@ -146,3 +146,4 @@
   - [CVE-2019-5736](/uk8s/vulnerability/cve-2019-5736.md)
   - [CVE-2019-9512-9514](/uk8s/vulnerability/cve-2019-9512-9514.md)
   - [CVE-2021-30465](/uk8s/vulnerability/cve-2021-30465.md)
+  - [CVE-2025-1974](/uk8s/vulnerability/CVE-2025-1974.md)

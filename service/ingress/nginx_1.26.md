@@ -53,7 +53,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.10.5
+    app.kubernetes.io/version: 1.11.5
   name: ingress-nginx-controller
   namespace: ingress-nginx
 ```
@@ -82,7 +82,7 @@ metadata:
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-    app.kubernetes.io/version: 1.10.5
+    app.kubernetes.io/version: 1.11.5
   name: ingress-nginx-controller
   namespace: ingress-nginx
 spec:
@@ -186,7 +186,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: demo-app-2-svc
-  labels:
 spec:
   ports:
     - port: 80
