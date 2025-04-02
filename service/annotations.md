@@ -47,4 +47,4 @@ CloudProvider 版本查看及升级请参见：[CloudProvider 插件更新](/uk8
 | service.beta.kubernetes.io/ucloud-load-balancer-eip-bandwidth        | 2         | 外网带宽，单位为 Mbps。共享带宽模式下无需指定，或者配置为 0；流量计费模式下，该参数为流量计费 EIP 带宽上限。 |
 | service.beta.kubernetes.io/ucloud-load-balancer-eip-chargetype       | month     | 付费模式，支持 month（按月付费）、year（按年付费）、dynamic（按时付费）。                |
 | service.beta.kubernetes.io/ucloud-load-balancer-eip-quantity         | 1         | 付费时长，chargetype 为 dynamic 时无需填写。                             |
-| service.beta.kubernetes.io/ucloud-load-balancer-eip-operator-name        | BGP/International         | 弹性IP线路，国际线路：International；BGP线路：Bgp；精品BGP：BGPPro；电信：Telecom。 默认值根据所处地域决定（华北一、上海、广州、华北二为BGP，其他地域为International）<br>仅在 24.03.27 及以后 cloudprovider 版本中支持。                             |
+| service.beta.kubernetes.io/ucloud-load-balancer-eip-operator-name        | BGP/International         | 弹性IP线路，国际线路：International；BGP线路：Bgp；精品BGP：BGPPro；电信：Telecom。 默认值根据所处地域决定（华北一、上海、广州、华北二为BGP，其他地域为International）<br>仅在 24.04.02 及以后 cloudprovider 版本中支持。                             |
