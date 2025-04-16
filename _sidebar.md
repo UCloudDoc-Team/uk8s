@@ -29,6 +29,13 @@
   - [部署Dashboard](/uk8s/administercluster/dashboard)
   - [集群版本升级](/uk8s/administercluster/cluster_version_update)
   - [集群常见问题](/uk8s/troubleshooting/cluster_summary.md)
+- 权限管理
+  - [概述](/uk8s/auth/intro)
+  - [IAM 授权管理](/uk8s/auth/iam)
+  - [RBAC 授权管理](/uk8s/auth/rbac)
+  - [自定义 RBAC 权限](/uk8s/bestpractice/rbac_practice)
+  - [API Server 审计功能](/uk8s/bestpractice/console_audit)
+  - [手动开启 API Server 审计功能](/uk8s/bestpractice/apiserver_audit)
 - 节点管理
   - [集群节点配置推荐](/uk8s/introduction/node_requirements)
   - [节点池](/uk8s/administercluster/node_group)
@@ -133,10 +140,6 @@
   - Pod 管理
     - [Pod 容忍节点异常时间调整](/uk8s/bestpractice/taint_base_eviction)
     - [Pod 常见故障处理](/uk8s/troubleshooting/pod_debug_summary)
-  - 权限及审计
-    - [RBAC 权限管理实践](/uk8s/bestpractice/rbac_practice)
-    - [API Server 审计功能](/uk8s/bestpractice/console_audit)
-    - [手动开启 API Server 审计功能](/uk8s/bestpractice/apiserver_audit)
   - CI/CD 实践
     - [Docker & Jenkins](/uk8s/bestpractice/cicd)
     - [Kaniko & Jenkins](/uk8s/bestpractice/cicd_containerd)

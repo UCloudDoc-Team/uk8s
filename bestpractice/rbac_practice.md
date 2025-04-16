@@ -1,4 +1,4 @@
-# 权限管理实践
+# 自定义 RBAC 权限
 
 本文主要通过一个例子来介绍如何基于 Kubernetes 的 RBAC 实现授权决策，允许集群管理员通过 Kubernetes API 动态配置策略，让非集群管理员具有某个 namespace
 下的所有权限，并可通过 Dashboard 或者 kubectl 来管理该 ns 下的资源。
