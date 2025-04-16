@@ -35,7 +35,7 @@ spec:
 ```yaml
 metadata:
   annotations:
-    network.kubernetes.io/ucloud-pod-networking-disable: true
+    network.kubernetes.io/ucloud-pod-networking-disable: "true"
 ```
 
 ## Pod 使用指定子网
