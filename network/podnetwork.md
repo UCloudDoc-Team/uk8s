@@ -9,7 +9,34 @@
 
 Pod 独立子网模式下，集群内的节点必须开启「虚拟网卡 `UNI`」特性。节点本身使用 `主UNI`，我们将自动为节点上的 Pod 分配一张 `辅助UNI`，Pod IP 都会被分配到 `辅助UNI` 上，出入节点的 Pod 流量会全部走`辅助UNI`，以此达到 Node 和 Pod 分离子网的效果。
 
-如果同节点上需要给Pod分配来自多个子网`subnet1`、`subnet2`的IP，UK8S会自动为节点申请多个`辅助UNI`。
+如果同节点上需要给Pod分配来自多个子网 `subnet1`、`subnet2` 的 IP，UK8S 会自动为节点申请多个 `辅助UNI`。
+
+![](/images/network/podnetworking-arch.png)
+
+当开启了「Pod独立子网」模式后，UK8S会在集群中自动创建一个名为 `default` 的 `podnetworking` 自定义资源。
+```yaml
+apiVersion: network.ucloud.cn/v1beta1
+kind: PodNetworking
+metadata:
+  name: default
+spec:
+  securityGroupIds:
+  - secgroup-xxx
+  subnetIds:
+  - subnet-xxx
+```
+
+节点上的 CNI 插件会在 Pod 启动时，按照 `default podnetworking` 资源指定的子网和安全组来申请 VPC IP。
+
+> ⚠️ 请勿删除`default podnetworking`资源，否则 Pod 独立子网功能将不可用!
+
+如果您希望令 Pod 不使用独立子网，而使用节点所在子网分配的 IP，可以按以下方式创建 Pod:
+
+```yaml
+metadata:
+  annotations:
+    network.kubernetes.io/ucloud-pod-networking-disable: true
+```
 
 ## Pod 使用指定子网
 
@@ -23,7 +50,7 @@ metadata:
   name: my-pn-1
 spec:
   securityGroupIds: # 可以为空，不允许后续变更
-  - sg-xxx
+  - secgroup-xxx
   subnetIds: # 允许后续新增
   - subnet-xxx
 ```
