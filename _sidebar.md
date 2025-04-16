@@ -29,7 +29,7 @@
   - [部署Dashboard](/uk8s/administercluster/dashboard)
   - [集群版本升级](/uk8s/administercluster/cluster_version_update)
   - [集群常见问题](/uk8s/troubleshooting/cluster_summary.md)
-- 权限管理
+- 权限和审计
   - [概述](/uk8s/auth/intro)
   - [IAM 授权管理](/uk8s/auth/iam)
   - [RBAC 授权管理](/uk8s/auth/rbac)
