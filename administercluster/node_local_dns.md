@@ -1,10 +1,12 @@
 # NodeLocal DNSCache
 
-默认情况下dns的请求通过集群网络请求到coredns中，nodelocaldns是以ds的形式在每个节点上部署一个dns，每个node上的pod访问本地的dns从而降低延迟
+默认情况下 DNS 的请求通过集群网络请求到`CoreDNS`中，NodeLocal DNSCache 通过在集群节点上作为 DaemonSet 运行 DNS 缓存代理来提高集群 DNS 性能，并解决DNAT的[conntrack竞争问题](https://github.com/kubernetes/kubernetes/issues/56903)
 
-还可以解决DNAT的[conntrack竞争问题](https://github.com/kubernetes/kubernetes/issues/56903)
+启用 NodeLocal DNSCache 之后，DNS 查询所遵循的路径如下：
+![img](../images/administercluster/node_local_dns_arc.png)
 
-## 安装
+
+## 安装NodeLocalDNS
 
 ![img](../images/administercluster/node_local_dns1.png)
 
@@ -12,20 +14,18 @@
 
 ![img](../images/administercluster/node_local_dns3.png)
 
+
 ## 使用方式
 
-- 通过打上下面的标签来自动注入dns配置到pod中
+开启NodelocaDNS功能后，服务无法直接使用，需要通过注入标签来实现自动注Pod 配置来使用；
+
+目前支持在 `Namespace`上实现标签注入，`Namespace`开启注入后，同一个`Namespace`下的服务都会开启Nodeloca DNSCache：
 
 ```shell
 kubectl label namespace <namespace> node-local-dns-injection=enabled
 ```
 
-- 需要满足以下条件
-  - Pod不位于kube-system和kube-public命名空间。
-  - Pod所在命名空间的Labels`标签包含 node-local-dns-injection=enabled`。
-  - Pod没有被打上禁用DNS注入`node-local-dns-injection=disabled`标签。
-  - Pod的网络为hostNetwork且DNSPolicy为ClusterFirstWithHostNet，或Pod为非hostNetwork且DNSPolicy为ClusterFirst。
-- 开启自动注入后，您创建的Pod会被增加以下字段，为了最大程度上保证业务DNS请求高可用，nameservers中会额外加入kube-dns的ClusterIP地址作为备份的DNS服务器。
+当开启自动注入后，在Pod上会增加以下字段；为了最大程度上保证业务DNS请求高可用，`nameservers`字段中会额外加入 `kube-dns` 的ClusterIP地址作为备份的DNS服务器。
 
 ```yaml
 dnsConfig:
@@ -46,7 +46,9 @@ dnsConfig:
 dnsPolicy: None
 ```
 
-- 在命名空间DNSConfig自动注入开启的情况下，如需对部分Pod进行豁免（即不进行注入），可以修改其Pod Template中Labels标签字段，加上`node-local-dns-injection=disabled`标签。如下例子
+#### Pod禁用Nodelocal DNSCache
+
+如果Namespace开启了 DNSConfig 自动注入，需要对部分Pod进行豁免（即不进行注入），可以修改其Pod Template中Labels标签字段，加上`node-local-dns-injection=disabled`标签来试下：
 
 ```yaml
 apiVersion: apps/v1
@@ -71,6 +73,12 @@ spec:
         command: ["/bin/bash", "-c", "--"]
         args: ["while true; do echo hello; sleep 10;done"]
 ```
+
+#### 使用注意：
+
+- kube-system和kube-public命名空间不支持标签注入。
+- Pod的网络为hostNetwork时， DNSPolicy必须为ClusterFirstWithHostNet
+- Pod为网络为非hostNetwork时，DNSPolicy必须为ClusterFirst
 
 ## 问题排查
 
