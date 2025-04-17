@@ -121,7 +121,7 @@
   - CoreDNS
     - [配置自定义 DNS 服务](/uk8s/administercluster/custom_dns_service)
     - [改变 CoreDNS 部署方式](/uk8s/administercluster/modify_coredns_deploy)
-    - [使用 nodelocaldns](/uk8s/administercluster/node_local_dns.md)
+    - [使用 NodelocalDNS](/uk8s/administercluster/node_local_dns.md)
   - Containerd
     - [Docker VS Containerd](/uk8s/userguide/docker_vs_containerd)
     - [Containerd 常见问题](/uk8s/troubleshooting/containerd)
