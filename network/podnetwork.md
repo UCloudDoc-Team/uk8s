@@ -17,7 +17,7 @@ Pod 独立子网模式下，集群内的节点必须开启「虚拟网卡 `UNI`�
 
 当开启了「Pod独立子网」模式后，UK8S会在集群中自动创建一个名为 `default` 的 `podnetworking` 自定义资源。
 ```yaml
-apiVersion: network.ucloud.cn/v1beta1
+apiVersion: vpc.uk8s.ucloud.cn/v1beta1
 kind: PodNetworking
 metadata:
   name: default
@@ -48,7 +48,7 @@ metadata:
 
 1. 创建 `PodNetworking` 资源
 ```yaml
-apiVersion: network.ucloud.cn/v1beta1
+apiVersion: vpc.uk8s.ucloud.cn/v1beta1
 kind: PodNetworking
 metadata:
   name: my-pn-1
