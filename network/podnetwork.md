@@ -16,6 +16,7 @@ Pod 独立子网模式下，集群内的节点必须开启「虚拟网卡 `UNI`�
 ![](/images/network/podnetworking-arch.png)
 
 当开启了「Pod独立子网」模式后，UK8S会在集群中自动创建一个名为 `default` 的 `podnetworking` 自定义资源。
+
 ```yaml
 apiVersion: vpc.uk8s.ucloud.cn/v1beta1
 kind: PodNetworking
@@ -47,6 +48,7 @@ metadata:
 如果希望Pod使用来自非默认 Pod 子网的 IP , 请按以下方式进行配置。
 
 1. 创建 `PodNetworking` 资源
+
 ```yaml
 apiVersion: vpc.uk8s.ucloud.cn/v1beta1
 kind: PodNetworking
@@ -60,6 +62,7 @@ spec:
 ```
 
 2. 创建 Pod 资源
+
 ```yaml
 metadata:
   annotations:
