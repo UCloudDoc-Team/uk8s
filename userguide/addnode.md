@@ -38,7 +38,7 @@
 ![](/images/userguide/addnode/node-delete1.png)
 
 ## 节点标签
-您可以在节点列表页面，通过节点操按钮为 Worker 节点添加、修改或删除标签。节点标签是 Kubernetes 中用于标识节点特征的键值对，可用于 Pod 的调度策略。
+您可以在节点列表页面，通过`修改标签`按钮为 Worker 节点添加、修改或删除标签。节点标签是 Kubernetes 中用于标识节点特征的键值对，可用于 Pod 的调度策略。
 
 #### 标签的格式要求：
 - 标签以键值对（key=value）的形式表示
@@ -58,7 +58,7 @@
    ![](/images/userguide/addnode/update-label.png)
 
 ## 节点污点
-可以在节点列表页面，通过节点操按钮为 Worker 节点添加、修改或删除污点。节点污点（Taint）用于控制哪些 Pod 可以被调度到该节点上，需要配合 Pod 的容忍度（Toleration）使用。
+可以在节点列表页面，通过`修改污点`按钮为 Worker 节点添加、修改或删除污点。节点污点（Taint）用于控制哪些 Pod 可以被调度到该节点上，需要配合 Pod 的容忍度（Toleration）使用。
 
 #### 污点的格式要求：
 - 污点以 `key=value:effect` 的形式表示
