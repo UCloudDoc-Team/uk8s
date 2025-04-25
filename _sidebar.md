@@ -84,7 +84,7 @@
     - [在 UK8S 中使用 UDISK](/uk8s/volume/udisk)
     - [在 UK8S 中使用 RSSD UDisk](/uk8s/volume/rssdudisk)
     - [UDisk 动态扩容](/uk8s/volume/expandvolume)
-    - [Flexvolume 升级 CSI](/uk8s/volume/flexv_csi)
+    - [【已弃用】Flexvolume 升级 CSI](/uk8s/volume/flexv_csi)
     - [RSSD 云盘挂载问题](/uk8s/troubleshooting/rssd_attachment)
     - [在节点宕机时恢复挂载了云盘的 Pod](/uk8s/troubleshooting/recover_udisk_pod_when_node_crash.md)
   - 文件存储
