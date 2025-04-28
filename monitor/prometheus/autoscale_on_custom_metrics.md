@@ -9,147 +9,204 @@ Pod的横向自动伸缩，其本身也是Kubernetes中的一个API对象。通�
 需要注意的是，目前默认HPA只能支持根据CPU和内存的阈值检测扩缩容，但也可以通过custom metric api
 调用prometheus实现自定义metric，根据更加灵活的监控指标实现弹性伸缩。但HPA不能用于伸缩一些无法进行缩放的控制器如DaemonSet。
 
-### 启用custom.metrics.k8s.io服务
-
-在开始此步骤之前，请确认你已按照前述教程安装了Prometheus。
-
 这里简单介绍下HPA的工作原理，默认情况下，其通过metrics.k8s.io这个本地服务来获取Pod的CPU、Memory指标，CPU和Memory这两者属于核心指标，而metrics.k8s.io服务对应的后端服务一般是metrics
 server，这是UK8S默认安装的服务。
 
 而如果HPA要通过非CPU、内存的其他指标来伸缩容器，我们则需要部署一套监控系统如Prometheus，让prometheus采集各种指标，但是prometheus采集到的metrics并不能直接给k8s用，因为两者数据格式不兼容，因此另外一个组件prometheus-adapter，将prometheus的metrics数据格式转换成K8S
-API接口能识别的格式。另外我们还需要在K8S注册一个服务（即custom.metrics,k8s.io），以便HPA能通过/apis/访问。
 
-我们申明一个v1beta1.custom.metrics.k8s.io的APIService，并提交。
+### 安装prometheus-adapter
+在开始此步骤之前，请确认
+- 在uk8s控制台-详情-监控中心 已开启prometheus监控
+- helm3.x 已安装 
+- metrics-server 正在运行
 
+以下命令序列用于部署 `Prometheus Adapter`，该组件负责将 `Prometheus` 指标转换为 Kubernetes 自定义指标 API 格式：
+```shell
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install prometheus-adapter prometheus-community/prometheus-adapter \
+    -n uk8s-monitor \
+    --set prometheus.url=http://uk8s-prometheus.uk8s-monitor.svc 
 ```
+### 启用custom.metrics.k8s.io服务
+
+
+我们还需要将自定义指标 API 注册到 API 聚合器（Kubernetes 主 API 服务器的一部分）。为此，我们需要创建一个 APIService 资源，它的作用是让 Kubernetes 的控制器（比如 HPA 自动扩缩容）可以通过标准的 API 地址访问 `prometheus-adapter` 提供的自定义指标。
+
+我们申明一个custom.metrics.k8s.io的APIService，并提交。
+
+```shell
 apiVersion: apiregistration.k8s.io/v1
 kind: APIService
 metadata:
-  name: v1beta1.custom.metrics.k8s.io
+  name: v1beta2.custom.metrics.k8s.io
 spec:
   group: custom.metrics.k8s.io
   groupPriorityMinimum: 100
   insecureSkipTLSVerify: true
   service:
     name: prometheus-adapter
-    namespace: monitoring
-    port: 443
-  version: v1beta1
+    namespace: uk8s-monitor	
+  version: v1beta2
   versionPriority: 100
 ```
 
-上述示例中的spec.service.prometheus-adapter在之前文档中已经安装并部署完毕。 提交部署后，我们执行“kubectl get apiservice | grep
-v1beta1.custom.metrics.k8s.io”，确认该服务可用状态为True。
+## 演练
+本演练将介绍在集群上设置 Prometheus 适配器的基础知识，以及配置自动缩放器以使用来自适配器的应用程序指标。
 
-还可以通过下述方法来查看Prometheus采集了哪些指标。
+将您的应用程序部署到集群中，并通过服务公开，以便您可以向其发送流量并从中获取指标：
 
-```
-kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta1/ | jq .
-
-kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta1/namespace/default/pods/*/ | jq .
-
-curl 127.0.0.1:8080/apis/custom.metrics.k8s.io/v1beta1/namespaces/default/pods/*/http_requests
-```
-
-### 修改原有prometheus-adapater的配置文件
-
-为了让HPA能够用到Prometheus采集到的指标，prometheus-adapter通过使用promql来获取指标，然后修改数据格式，并把重新组装的指标和值通过自己的接口暴露。而HPA会通过/apis/custom.metrics.k8s.io/代理到prometheus-adapter的service上来获取这些指标。
-
-如果把Prometheus的所有指标到获取一遍并重新组装，那adapter的效率必然十分低下，因此adapter将需要读取的指标设计成可配置，让用户通过configmap来决定读取Prometheus的哪些监控指标。
-
-关于config的语法规则，详见[config-workthrough](https://github.com/kubernetes-sigs/prometheus-adapter/tree/master/docs)，这里不再赘述。
-
-由于我们前面已经安装了prometheus-adapter,因此我们现在只需要修改其配置文件并重启即可，原始的配置文件只包含cpu和memory两个Resource
-metrics，我们只需要在其前面追加需要给HPA用到的metrics即可。
-
-```yaml
+```shell
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-app
+  labels:
+    app: sample-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-app
+  template:
+    metadata:
+      labels:
+        app: sample-app
+    spec:
+      containers:
+      - image: luxas/autoscale-demo:v0.1.2
+        name: metrics-provider
+        ports:
+        - name: http
+          containerPort: 8080
+---
 apiVersion: v1
-data:
-  config.yaml: |
-    resourceRules:
-      cpu:
-        containerQuery: sum(rate(container_cpu_usage_seconds_total{<<.LabelMatchers>>,container_name!="POD",container_name!="",pod_name!=""}[1m])) by (<<.GroupBy>>)
-        nodeQuery: sum(1 - rate(node_cpu_seconds_total{mode="idle"}[1m]) * on(namespace, pod) group_left(node) node_namespace_pod:kube_pod_info:{<<.LabelMatchers>>}) by (<<.GroupBy>>)
-        resources:
-          overrides:
-            node:
-              resource: node
-            namespace:
-              resource: namespace
-            pod_name:
-              resource: pod
-        containerLabel: container_name
-      memory:
-        containerQuery: sum(container_memory_working_set_bytes{<<.LabelMatchers>>,container_name!="POD",container_name!="",pod_name!=""}) by (<<.GroupBy>>)
-        nodeQuery: sum(node_memory_MemTotal_bytes{job="node-exporter",<<.LabelMatchers>>} - node_memory_MemAvailable_bytes{job="node-exporter",<<.LabelMatchers>>}) by (<<.GroupBy>>)
-        resources:
-          overrides:
-            instance:
-              resource: node
-            namespace:
-              resource: namespace
-            pod_name:
-              resource: pod
-        containerLabel: container_name
-      window: 1m
+kind: Service
+metadata:
+  labels:
+    app: sample-app
+  name: sample-app
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: sample-app
+  type: ClusterIP
+```
+现在，检查您的应用程序，它会公开指标并通过 http_requests_total 指标计算对指标页面的访问次数：
+```shell
+curl http://$(kubectl get pod -l app=sample-app -o jsonpath='{.items[0].status.podIP}'):8080
+```
+请注意，每次访问该页面时，计数器都会增加。
+现在，您需要确保能够根据该指标自动扩缩应用程序，以便为发布做好准备。您可以使用如下所示的 Horizo​​ntalPodAutoscaler 来实现自动扩缩：
+```
+kind: HorizontalPodAutoscaler
+apiVersion: autoscaling/v2
+metadata:
+  name: sample-app
+spec:
+  scaleTargetRef:
+    # point the HPA at the sample application
+    # you created above
+    apiVersion: apps/v1
+    kind: Deployment
+    name: sample-app
+  # autoscale between 1 and 10 replicas
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  # use a "Pods" metric, which takes the average of the
+  # given metric across all pods controlled by the autoscaling target
+  - type: Pods
+    pods:
+      # use the metric that you used above: pods/http_requests
+      metric:
+        name: http_requests
+      # target 500 milli-requests per second,
+      # which is 1 request every two seconds
+      target:
+        type: Value
+        averageValue: 500m
+```
+### 监控测试用例</font>
+为了监控你的应用程序，你需要设置一个指向该应用程序的 ServiceMonitor。假设你已经设置了 Prometheus 实例，以便在以下 app: sample-app 标签，创建一个 ServiceMonitor 来通过 服务：
+
+```shell
+kind: ServiceMonitor
+apiVersion: monitoring.coreos.com/v1
+metadata:
+  name: sample-app
+  labels:
+    app: sample-app
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: sample-app
+  endpoints:
+  - port: http
+```
+
+现在，你应该可以看到你的指标（ http_requests_total ）出现在你的 Prometheus 实例中。通过仪表盘查找它们，并确保它们具有 namespace 和 pod 标签。如果不匹配，请检查服务监视器上的标签是否与 Prometheus CRD 上的标签匹配。
+
+
+### 显示测试用例自定义指标</font>
+现在您已经拥有一个正在运行的 Prometheus 副本来监控您的应用程序，您需要部署适配器，它知道如何与 Kubernetes 和 Prometheus 进行通信，充当两者之间的翻译器。
+
+但是，为了显示自定义指标，需要更新适配器配置。
+
+```shell
+apiVersion: v1
 kind: ConfigMap
 metadata:
   name: adapter-config
-  namespace: monitoring
-```
-
-我们以常见的请求数为例，追加一个指标，其名称为http_request,资源类型为Pod。
-
-```yaml
-apiVersion: v1
+  namespace: uk8s-monitor
 data:
-  config.yaml: |
-    rules:
-    - seriesQuery: '{__name__=~"^http_requests_.*",kubernetes_pod_name!="",kubernetes_namespace!=""}'
-      seriesFilters: []
-      resources:
-        overrides:
-          kubernetes_namespace:
-            resource: namespace
-          kubernetes_pod_name:
-            resource: pod
-      name:
-        matches: ^(.*)_(total)$
-        as: "${1}"
-      metricsQuery: sum(rate(<<.Series>>{<<.LabelMatchers>>}[1m])) by (<<.GroupBy>>)
-    resourceRules:
-      cpu:
-        containerQuery: sum(rate(container_cpu_usage_seconds_total{<<.LabelMatchers>>,container_name!="POD",container_name!="",pod_name!=""}[1m])) by (<<.GroupBy>>)
-        nodeQuery: sum(1 - rate(node_cpu_seconds_total{mode="idle"}[1m]) * on(namespace, pod) group_left(node) node_namespace_pod:kube_pod_info:{<<.LabelMatchers>>}) by (<<.GroupBy>>)
-        resources:
-          overrides:
-            node:
-              resource: node
-            namespace:
-              resource: namespace
-            pod_name:
-              resource: pod
-        containerLabel: container_name
-      memory:
-        containerQuery: sum(container_memory_working_set_bytes{<<.LabelMatchers>>,container_name!="POD",container_name!="",pod_name!=""}) by (<<.GroupBy>>)
-        nodeQuery: sum(node_memory_MemTotal_bytes{job="node-exporter",<<.LabelMatchers>>} - node_memory_MemAvailable_bytes{job="node-exporter",<<.LabelMatchers>>}) by (<<.GroupBy>>)
-        resources:
-          overrides:
-            instance:
-              resource: node
-            namespace:
-              resource: namespace
-            pod_name:
-              resource: pod
-        containerLabel: container_name
-      window: 1m
-kind: ConfigMap
-metadata:
-  name: adapter-config
-  namespace: monitoring
+  config.yaml: |-
+    "rules":
+    - "seriesQuery": |
+         {namespace!="",__name__!~"^container_.*"}
+      "resources":
+        "template": "<<.Resource>>"
+      "name":
+        "matches": "^(.*)_total"
+        "as": ""
+      "metricsQuery": |
+        sum by (<<.GroupBy>>) (
+          irate (
+            <<.Series>>{<<.LabelMatchers>>}[1m]
+          )
+        )
 ```
 
-修改完毕并提交后，如果为了立马生效，我们可以删除掉原有的prometheus-adapter的Pod，使得配置文件立马生效。
+重启prometheus-adapter以生效配置
 
-当然只有这些指标还是略微不够，社区提供了一个rules的示例：
-[adapater-config标准样例](https://github.com/kubernetes-sigs/prometheus-adapter/blob/master/docs/sample-config.yaml)
+```shell
+kubectl rollout restart deployment prometheus-adapter -n uk8s-monitor
+```
+完成所有设置后，您的自定义指标 API 应该会出现在发现中。
+尝试获取它的发现信息
+```
+kubectl get --raw /apis/custom.metrics.k8s.io/v1beta2
+```
+
+您可以使用 kubectl get --raw 检查指标的值，它会向 Kubernetes API 服务器发送原始 GET 请求，自动注入身份验证信息：
+
+```shell
+kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta2/namespaces/default/pods/*/http_requests?selector=app%3Dsample-app" 
+```
+由于适配器的配置，累积指标 http_requests_total 已转换为速率指标， pods/http_requests ，用于测量 1 分钟间隔内的每秒请求数。该值目前应该接近于零，因为除了 Prometheus 的常规指标收集外，您的应用没有任何流量。
+
+### 测试
+尝试使用 curl 生成一定流量：
+```shell
+while sleep 0.01
+do curl http://$(kubectl get pod -l app=sample-app -o jsonpath='{.items[0].status.podIP}'):8080
+done
+```
+如果您再次查看 HPA，您应该看到最后观察到的指标值大致对应于您的请求率，并且 HPA 最近扩展了您的应用程序。
+
+现在，您的应用已根据 HTTP 请求自动扩展，一切准备就绪，可以正式发布了！如果您暂时搁置该应用一段时间，HPA 应该会缩减其规模，这样您就可以为正式发布节省宝贵的预算。
