@@ -20,7 +20,7 @@ Pod的横向自动伸缩，其本身也是Kubernetes中的一个API对象。通�
 server，metrics
 server服务在UK8S会默认安装。
 
-如果HPA要通过非CPU、内存的其他指标来伸缩容器，则需要部署一套监控系统如Prometheus，让prometheus采集各种指标，但是prometheus采集到的metrics并不能直接给k8s用，因为两者数据格式不兼容，还另外一个组件prometheus-adapter，将prometheus的metrics数据格式转换成K8S。
+如果HPA要通过非CPU、内存的其他指标来伸缩容器，则需要部署一套监控系统如Prometheus，让prometheus采集各种指标，但是prometheus采集到的metrics并不能直接给k8s用，因为两者数据格式不兼容，还需要一个组件prometheus-adapter，将prometheus的metrics数据格式转换成K8S。
 
 ## 部署
 
@@ -31,13 +31,15 @@ server服务在UK8S会默认安装。
 
 #### 安装prometheus-adapter
 
- [Prometheus Adapter](https://github.com/kubernetes-sigs/prometheus-adapter)该组件负责将 `Prometheus` 指标转换为 Kubernetes 自定义指标 API 格式，可以使用如下命令进行部署；
+ [Prometheus Adapter](https://github.com/kubernetes-sigs/prometheus-adapter)该组件负责将 `Prometheus` 指标转换为 Kubernetes 自定义指标 API 格式，可以使用如下命令进行部署:
 ```shell
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 helm install prometheus-adapter prometheus-community/prometheus-adapter \
-    -n uk8s-monitor \
-    --set prometheus.url=http://uk8s-prometheus.uk8s-monitor.svc 
+  -n uk8s-monitor \
+  --set prometheus.url=http://uk8s-prometheus.uk8s-monitor.svc \
+  --set image.repository=uhub.service.ucloud.cn/uk8s/prometheus-adapter \
+  --set image.tag=v0.12.0
 ```
 #### 启用custom.metrics.k8s.io服务
 
@@ -87,7 +89,7 @@ spec:
         app: sample-app
     spec:
       containers:
-      - image: luxas/autoscale-demo:v0.1.2
+      - image: uhub.service.ucloud.cn/uk8s/autoscale-demo:v0.1.2
         name: metrics-provider
         ports:
         - name: http
