@@ -36,8 +36,10 @@ server服务在UK8S会默认安装。
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 helm install prometheus-adapter prometheus-community/prometheus-adapter \
-    -n uk8s-monitor \
-    --set prometheus.url=http://uk8s-prometheus.uk8s-monitor.svc 
+  -n uk8s-monitor \
+  --set prometheus.url=http://uk8s-prometheus.uk8s-monitor.svc \
+  --set image.repository=hub.ucloudadmin.com/public/prometheus-adapter \
+  --set image.tag=v0.12.0
 ```
 #### 启用custom.metrics.k8s.io服务
 
@@ -87,7 +89,7 @@ spec:
         app: sample-app
     spec:
       containers:
-      - image: luxas/autoscale-demo:v0.1.2
+      - image: uhub.service.ucloud.cn/uk8s/autoscale-demo:v0.1.2
         name: metrics-provider
         ports:
         - name: http
