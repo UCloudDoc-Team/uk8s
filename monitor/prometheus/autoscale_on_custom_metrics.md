@@ -31,7 +31,8 @@ server服务在UK8S会默认安装。
 
 #### 安装prometheus-adapter
 
- [Prometheus Adapter](https://github.com/kubernetes-sigs/prometheus-adapter)该组件负责将 `Prometheus` 指标转换为 Kubernetes 自定义指标 API 格式，你可以在已安装 Helm 3.x 且能够通过 kubectl 连接到集群的主机上，使用以下命令进行部署：
+ [Prometheus Adapter](https://github.com/kubernetes-sigs/prometheus-adapter)是一个 Kubernetes 组件，用于将 Prometheus 指标转换为 Kubernetes 自定义指标 API 格式。在已安装 Helm 3.x 且能通过 kubectl 访问集群的主机上，可以使用以下命令部署：
+
 ```shell
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
@@ -110,7 +111,7 @@ spec:
     app: sample-app
   type: ClusterIP
 ```
-现在，检查您的应用程序，确保它公开了指标，并通过 http_requests_total 指标计算访问指标页面的次数。您可以在能够访问 Pod 的主机（如 master 节点）上使用以下命令进行测试：
+现在，检查您的应用程序，确保它公开了指标，并确保 http_requests_total 指标能够正确反映请求访问的次数。您可以在能够访问 Pod 的主机（如 master 节点）上使用以下命令进行测试：
 ```shell
 curl http://$(kubectl get pod -l app=sample-app -o jsonpath='{.items[0].status.podIP}'):8080
 ```
@@ -149,7 +150,7 @@ spec:
 
 ```
 #### 监控配置
-为了监控你的应用程序，你需要设置一个指向该应用程序的 ServiceMonitor。假设你已经设置了 Prometheus 实例，以便在以下 app: sample-app 标签，创建一个 ServiceMonitor 来通过 服务：
+为了监控你的应用程序，需要创建一个指向该应用的 ServiceMonitor。假设你的 Prometheus 实例已配置为发现带有 app: sample-app 标签的服务，那么可以通过创建如下的 ServiceMonitor 来采集该服务的指标：
 
 前提条件：你的应用服务需要满足以下要求，才能被 Prometheus 成功采集指标：
 
@@ -223,7 +224,7 @@ kubectl rollout restart deployment prometheus-adapter -n uk8s-monitor
 # 该命令用于查询命名空间 default 下标签为 app=sample-app 的所有 Pod 的自定义指标 http_requests 的当前值。
 kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta2/namespaces/default/pods/*/http_requests?selector=app%3Dsample-app" | jq .
 ```
-由于适配器的配置，累积指标 http_requests_total 已转换为速率指标， pods/http_requests ，用于测量 1 分钟间隔内的每秒请求数。该值目前应该接近于零，因为除了 Prometheus 的常规指标收集外，您的应用没有任何流量。
+由于适配器的配置，累积指标 http_requests_total 被转换为速率型指标 pods/http_requests，用于衡量每个 Pod 在 1 分钟时间窗口内的每秒请求速率。目前该值应接近于零，因为除了 Prometheus 定期抓取外，应用暂无实际流量产生。
 
 如果一切正常，执行上述命令将返回类似以下内容的输出:
 
