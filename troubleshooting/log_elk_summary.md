@@ -121,3 +121,70 @@ curl -H "Content-Type: application/json" -XPUT http://${ES_CLUSTER_IP}:9200/_all
   这是防止节点耗尽存储空间的最后手段。一旦有足够的空间允许索引操作继续，则必须手动调整 index.blocks.read_only_allow_delete: false 取消索引只读属性。
 
 参考：[Elasticsearch 官方文档](https://github.com/elastic/elasticsearch/tree/master/docs)
+
+
+## 4. ES 内存扩容
+### 调整内存参考
+> **注意: 日志 ELK 默认部署在集群 default 命名空间,如果部署在自定义命名空间，请替换相应命名空间名称**
+#### 前置条件
+本参考适用于基于 UK8S 自建日志服务的场景。请确保以下条件已满足：
+
++ 已在 **“UK8S 控制台 > 详情 > 应用中心 > 日志 ELK”** 中开启服务，且安装类型为 **“新建”**。
++ 可通过以下命令确认服务状态是否正常
+
+```plain
+kubectl get sts multi-master -n default
+```
+
+若命令返回结果中未出现 `error`，则表示服务运行正常。
+
+#### 修改内存配置
+```plain
+kubectl patch sts multi-master -n default --patch '
+spec:
+  template:
+    spec:
+      containers:
+      - name: elasticsearch
+        env:
+        - name: ES_JAVA_OPTS
+          value: "-Xmx4g -Xms4g"
+        resources:
+          limits:
+            memory: "8Gi"
+'
+```
+
++ `-Xmx4g -Xms4g`：将堆内存的最大值和初始值都设置为 4GB，你可以根据实际情况将其替换为 2g、3g 等其他数值。请确保最大值和初始值相同,使 JVM 在启动时就一次性分配固定大小的堆内存，避免运行期间动态扩缩带来的 GC 抖动问题。
++ `limits.memory: "8Gi"`：调整后，无论 Elasticsearch 是否有实际负载，JVM 都会一次性申请并保留与配置相同大小的堆内存。因此，容器的最大可用内存应设置为堆内存大小的 2～3 倍，以确保操作系统、线程栈、缓存和 off-heap 内存有足够的可用空间，避免 OOM（内存溢出）问题。
++ 无需修改 `requests`，除非你也希望调整资源预留，以便更好地与调度策略匹配。
++ **注意：`ES_JAVA_OPTS` 中设置的堆内存大小必须小于 `limits.memory`，同时 `limits.memory` 必须小于节点（宿主机）总内存，否则可能导致 OOM 或调度失败。**
+
+#### 重启ElasticSearch
+```shell
+kubectl rollout restart sts multi-master -n default
+```
+
+#### 生效检测
+```shell
+kubectl exec -it multi-master-0 -n default -- curl -s http://multi-master:9200/_nodes/stats/jvm?pretty   | grep -E '"heap_used_in_bytes"|"heap_max_in_bytes"|"heap_used_percent"'
+```
+
+#### 示例输出
+```plain
+          "heap_used_in_bytes" : 1731749680,
+          "heap_used_percent" : 40,
+          "heap_max_in_bytes" : 4294967296,
+          "heap_used_in_bytes" : 1786740736,
+          "heap_used_percent" : 41,
+          "heap_max_in_bytes" : 4294967296,
+          "heap_used_in_bytes" : 2153311232,
+          "heap_used_percent" : 50,
+          "heap_max_in_bytes" : 4294967296,
+```
+
++ `heap_used_in_bytes`：当前堆内存使用量（字节数）。
++ `heap_max_in_bytes`：堆内存的最大可用内存（字节数）。`4294967296` → 4GB（`-Xmx4g`）
++ `heap_used_percent`：堆内存使用的百分比。
+
+至此，我们已经详细介绍了如何调整 Elasticsearch 集群的堆内存大小，涵盖了从修改内存配置到验证生效的各个步骤。通过合理的内存配置，可以显著提升 Elasticsearch 的性能和稳定性，确保其在大规模数据处理时依然高效运行。调整配置时要牢记内存大小的匹配规则，并注意集群资源的整体分配。
