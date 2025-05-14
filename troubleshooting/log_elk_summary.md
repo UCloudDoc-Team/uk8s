@@ -58,7 +58,7 @@ curl http://${ES_CLUSTER_IP}:9200/_all/_settings?pretty
 
 ## 3.1 ES PVC 扩容
 
-**日志 ELK 默认部署在集群 default 命名空间,如果部署在自定义命名空间，执行命令请替换 default 名称**
+**日志 ELK 默认部署在集群 default 命名空间，如果部署在自定义命名空间，执行命令请替换 default 名称**
 
 Step 1. 登录集群 Master 节点， 执行命令:`kubectl get pvc -n default` 查看 PVC，其中如下名字的 PVC 是 ES 使用的
 
