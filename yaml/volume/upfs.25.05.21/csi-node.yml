@@ -1,0 +1,197 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: csi-upfs
+  namespace: kube-system
+  labels:
+    app: "csi-upfs"
+    role: "node"
+    owner: "ucloud"
+spec:
+  selector:
+    matchLabels:
+      app: "csi-upfs"
+      role: "node"
+      owner: "ucloud"
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 100%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: "csi-upfs"
+        role: "node"
+        owner: "ucloud"
+    spec:
+      serviceAccount: csi-upfs-node
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key:  node.uk8s.ucloud.cn/instance_type
+                    operator: In
+                    values:
+                      - uhost
+                      - bmhost
+      tolerations:
+        - key: CriticalAddonsOnly
+          operator: Exists
+        - key: dedicated
+          operator: Exists
+        - effect: NoSchedule
+          operator: Exists
+      hostNetwork: true
+      hostPID: true
+      priorityClassName: system-node-critical
+      initContainers:
+        - name: upfslauncher-installer
+          image: uhub.service.ucloud.cn/cncfdev/csi-upfslauncher:1.0.2-alpha.1
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["SYS_ADMIN"]
+          volumeMounts:
+            - name: host-usr-local-bin
+              mountPath: /usr/local/bin/
+            - name: host-systemd-service
+              mountPath: /usr/lib/systemd/system/
+            - name: host-sys-fs-cgroup
+              mountPath: /sys/fs/cgroup/
+            - name: user-config
+              mountPath: /etc/uk8s/
+            - name: host-tmp
+              mountPath: /tmp
+      containers:
+        - name: node-registrar
+          image: uhub.service.ucloud.cn/uk8s/csi-node-driver-registrar:v2.4.0
+          imagePullPolicy: "Always"
+          args:
+            - "--v=5"
+            - "--csi-address=/csi/csi.sock"
+            - "--kubelet-registration-path=/var/lib/kubelet/csi-plugins/upfs.csi.ucloud.cn/csi.sock"
+          env:
+            - name: ADDRESS
+              value: unix://csi/csi.sock
+            - name: KUBE_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          livenessProbe:
+            exec:
+              command:
+              - /csi-node-driver-registrar
+              - --kubelet-registration-path=/var/lib/kubelet/csi-plugins/upfs.csi.ucloud.cn/csi.sock
+              - --mode=kubelet-registration-probe
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
+          volumeMounts:
+            - name: plugin-dir
+              mountPath: /csi
+            - name: registration-dir
+              mountPath: /registration
+        - name: csi-upfs
+          securityContext:
+            privileged: true
+            # CAP_SYS_ADMIN is required for mount() syscall.
+            capabilities:
+              add: ["SYS_ADMIN"]
+            allowPrivilegeEscalation: true
+          image: uhub.service.ucloud.cn/cncfdev/csi-uk8s:upfs-25.05.21
+          args :
+            - "--drivername=upfs.csi.ucloud.cn"
+            - "--hostname=$(KUBE_NODE_NAME)"
+            - "--endpoint=$(CSI_ENDPOINT)"
+            - "--v=7"
+            - "--alsologtostderr=true"
+            - "--plugin-dir=/var/lib/kubelet/csi-plugins/upfs.csi.ucloud.cn/"
+          imagePullPolicy: "Always"
+          envFrom:
+            - configMapRef:
+                name: uk8sconfig
+          env:
+            - name: KUBE_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: CSI_ENDPOINT
+              value: unix://var/lib/kubelet/csi-plugins/upfs.csi.ucloud.cn/csi.sock
+          livenessProbe:
+            exec:
+              command:
+              - csi-uk8s
+              - --probe
+              - --endpoint=$(CSI_ENDPOINT)
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
+          volumeMounts:
+            - name: plugin-dir
+              mountPath: /var/lib/kubelet/csi-plugins/upfs.csi.ucloud.cn
+            - name: user-config
+              mountPath: /etc/uk8s/
+            - name: pods-mount-dir
+              mountPath: /var/lib/kubelet/
+              mountPropagation: "Bidirectional"
+            - name: host-log
+              mountPath: /var/log/ucloud/
+            - name: host-run-csi
+              mountPath: /var/run/csi/
+            - name: host-dev
+              mountPath: /dev
+              mountPropagation: "HostToContainer"
+      volumes:
+        - name: plugin-dir
+          hostPath:
+            path: /var/lib/kubelet/csi-plugins/upfs.csi.ucloud.cn/
+            type: DirectoryOrCreate
+        - name: registration-dir
+          hostPath:
+            path: /var/lib/kubelet/plugins_registry/
+        - name: pods-mount-dir
+          hostPath:
+            path: /var/lib/kubelet/
+            type: Directory
+        - name: host-dev
+          hostPath:
+            path: /dev
+        - name: host-log
+          hostPath:
+            path: /var/log/ucloud/
+        - name: host-run-csi
+          hostPath:
+            path: /var/run/csi/
+        - name: user-config
+          configMap:
+            name: uk8sconfig
+        - name: host-usr-local-bin
+          hostPath:
+            path: /usr/local/bin/
+        - name: host-systemd-service
+          hostPath:
+            path: /usr/lib/systemd/system/
+        - name: host-sys-fs-cgroup
+          hostPath:
+            path: /sys/fs/cgroup/
+        - name: host-tmp
+          hostPath:
+            path: /tmp
