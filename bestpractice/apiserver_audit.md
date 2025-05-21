@@ -183,7 +183,7 @@ rules:
 
 ```
 # 指定用来写入审计事件的日志文件路径。不指定此标志会禁用日志后端
---audit-log-path=/var/log/audit.log
+--audit-log-path=/var/log/kubernetes/audit.log
 # 指定审计策略配置文件
 --audit-policy-file=/etc/kubernetes/audit-policy.yaml
 # 定义保留旧审计日志文件的最大天数
