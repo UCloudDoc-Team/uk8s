@@ -13,6 +13,11 @@ spec:
       app: "csi-upfs"
       role: "node"
       owner: "ucloud"
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 100%
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -74,6 +79,16 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
+          livenessProbe:
+            exec:
+              command:
+              - /csi-node-driver-registrar
+              - --kubelet-registration-path=/var/lib/kubelet/csi-plugins/upfs.csi.ucloud.cn/csi.sock
+              - --mode=kubelet-registration-probe
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           resources:
             requests:
               memory: "128Mi"
@@ -112,6 +127,16 @@ spec:
                   fieldPath: spec.nodeName
             - name: CSI_ENDPOINT
               value: unix://var/lib/kubelet/csi-plugins/upfs.csi.ucloud.cn/csi.sock
+          livenessProbe:
+            exec:
+              command:
+              - csi-uk8s
+              - --probe
+              - --endpoint=$(CSI_ENDPOINT)
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           resources:
             requests:
               memory: "128Mi"
