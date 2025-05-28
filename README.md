@@ -136,9 +136,9 @@
 - 镜像仓库
   - [概述](/uk8s/dockerhub/outline)
   - [在 UK8S 中使用 UHub](/uk8s/dockerhub/using_uhub_in_uk8s)
-  - [镜像及镜像仓库常见问题](/uk8s/troubleshooting/registry)
   - [容器镜像加速](/uk8s/dockerhub/image_accel)
   - [推理常用基础镜像](/uk8s/dockerhub/ai_base_image_list.md)
+  - [镜像及镜像仓库常见问题](/uk8s/troubleshooting/registry)
 - Kubernetes 实践
   - Pod 管理
     - [Pod 容忍节点异常时间调整](/uk8s/bestpractice/taint_base_eviction)
