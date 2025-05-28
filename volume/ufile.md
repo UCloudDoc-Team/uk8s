@@ -31,10 +31,10 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.21.11.2/rbac-node.y
 #### 集群版本 1.22及以上
 
 ```
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.24.10.08_v1.22/csi-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.24.10.08_v1.22/csi-node.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.24.10.08_v1.22/rbac-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.24.10.08_v1.22/rbac-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.25.03.31_v1.22/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.25.03.31_v1.22/csi-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.25.03.31_v1.22/rbac-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.25.03.31_v1.22/rbac-node.yml
 ```
 
 ## 已支持UK8S挂载US3的地域（持续更新）
