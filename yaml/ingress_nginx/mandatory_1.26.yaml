@@ -625,6 +625,8 @@ metadata:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/version: 1.11.5
+  annotations:
+    "ingressclass.kubernetes.io/is-default-class": "true"
   name: nginx
 spec:
   controller: k8s.io/ingress-nginx
