@@ -10,7 +10,7 @@ Ingress 是从 Kubernetes 集群外部访问集群内部服务的入口，同时
 类型的 Service 方法，借助于 Kubernetes 提供的扩展接口，UK8S 会创建一个与该 Service 对应的负载均衡服务即 ULB
 来承接外部流量，并路由到集群内部。但在诸如微服务等场景下，一个 Service 对应一个负载均衡器，管理成本明显过高，Ingress 因此应运而生。
 
-我们可以把 Ingress 理解为 Service 提供能力的 “Service”，为后端不同 Service 提供代理的负载均衡服务，我们可以在 Ingress 配置可供外部访问
+我们可以把 Ingress 理解为 Service 提供能力的 "Service"，为后端不同 Service 提供代理的负载均衡服务，我们可以在 Ingress 配置可供外部访问
 URL、负载均衡、SSL、基于名称的虚拟主机等。
 
 下面我们通过在 UK8S 中部署 Nginx Ingress Controller，来了解一下 Ingress 的使用过程。
@@ -239,6 +239,29 @@ spec:
 ```
 
 上述 yaml 文件定义了一个 Ingress 对象，其中 `ingress.spec.rules` 便是 ingress 的代理规则集合。
+
+#### ingressClassName 说明
+
+在上述 Ingress 配置中，我们设置了 `ingressClassName: nginx`，这个字段用于指定该 Ingress 对象应该由哪个 Ingress Controller 来处理。
+
+**默认行为：**
+
+如果不指定 `ingressClassName`，Kubernetes 会查找集群中是否存在默认的 IngressClass
+
+**设置默认 IngressClass：**
+
+可以通过为 IngressClass 添加注解来设置默认值，在`mandatory_1.26.yaml`中已经添加：
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: nginx
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+spec:
+  controller: k8s.io/ingress-nginx
+```
 
 我们先看 host 字段，他的值必须是一个标准的域名格式字符串，而不能是 IP 地址。而 host 字段定义的值，就是这个 Ingress
 的入口。这样就意味着，当用户访问`demo-app.example.com`的时候，实际访问到的就是这个 Ingress 对象。这样，Kubernetes 就能使用 IngressRule
