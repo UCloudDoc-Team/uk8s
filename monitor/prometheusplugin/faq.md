@@ -38,3 +38,76 @@ $ kubectl -n uk8s-monitor set resources daemonset uk8s-monitor-prometheus-node-e
 ```shell
 $ kubectl -n uk8s-monitor get daemonset uk8s-monitor-prometheus-node-exporter -o yaml 
 ```
+
+## 3. 监控存储扩容
+
+#### 扩容PVC
+通过控制台部署的prometheus使用的块存储，块存储支持在线扩容。使用如下命令查看是否使用块存储：
+```shell
+$ kubectl -n uk8s-monitor get pvc | grep "prometheus-uk8s-prometheus-0" |grep "csi-udisk"
+
+prometheus-uk8s-prometheus-db-prometheus-uk8s-prometheus-0           Bound    pvc-1584d2af-4f12-476d-abc1-0a4711feca2e   100Gi      RWO            ssd-csi-udisk   9m3s
+```
+
+使用如下命令编辑存储大小：
+```shell
+$ kubectl -n uk8s-monitor edit pvc prometheus-uk8s-prometheus-db-prometheus-uk8s-prometheus-0  
+```
+
+接着在 PVC 的配置里修改spec.resources.requests.storage字段，将其调整为更大的值，示例如下：
+```yaml
+spec:
+  resources:
+    requests:
+      storage: 200Gi  # 把这里改成你想要的大小，要比原来数据大
+```
+
+扩容操作完成后，可通过以下命令查看 PVC 的状态，查看status.capacity.storage字段，确认其已更新为新的容量大小。
+
+```shell
+$ kubectl -n uk8s-monitor get pvc prometheus-uk8s-prometheus-db-prometheus-uk8s-prometheus-0 -o yaml
+```
+
+#### 扩容保留数据大小
+
+如果扩容后想保留更多的数据，请调整prometheus的CR： `uk8s-prometheus` 的参数`retentionSize`。这个参数是Prometheus服务保留数据大小的参数。
+
+执行命令编辑CR：`uk8s-prometheus`
+```
+kubectl -n uk8s-monitor edit prometheus uk8s-prometheus
+```
+
+接着在配置里修改spec.retentionSize字段，将其调整为更大的值，示例如下：
+```yaml
+spec:
+  retentionSize: 150GB
+```
+
+#### 检查
+
+⚠️ 检查监控日志，如果监控日志在扩容前已经存在 `no space left on device` 错误，请重启所有promethues的Pod，确保数据恢复。
+
+删除Pod重启，如果有多个，逐一执行命令，等待第一个Pod恢复后，再删除下一个。
+```
+$ kubectl -n uk8s-monitor delete po prometheus-uk8s-prometheus-0
+
+# 查看监控日志，监控是否启动成功
+$ kubectl -n uk8s-monitor logs -f prometheus-uk8s-prometheus-0 
+
+...
+msg="Starting Prometheus" version="(version=2.18.2, branch=HEAD, revision=a6600f564e3c483cc820bae6c7a551db701a22b3)"
+...
+msg="Starting TSDB ..."
+....
+msg="TSDB started"
+...
+msg="Loading configuration file" filename=/etc/prometheus/config_out/prometheus.env.yaml
+...
+msg="Completed loading of configuration file" filename=/etc/prometheus/config_out/prometheus.env.yaml
+...
+msg="Server is ready to receive web requests."
+...
+```
+
+最后在监控页面查看监控数据是否正常。
+
