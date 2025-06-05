@@ -111,3 +111,32 @@ msg="Server is ready to receive web requests."
 
 最后在监控页面查看监控数据是否正常。
 
+## 3. Prometheus CPU、内存扩容
+
+如果在使用Prometheus过程中，遇到资源受限问题，可以通过如下方式调整资源。
+
+使用命令编辑Prometheus对象`uk8s-prometheus`：
+
+```shell
+$ kubectl -n uk8s-monitor edit prometheus uk8s-prometheus
+```
+
+接着在配置里修改spec.resources字段，将其调整为更大的值，示例如下：
+```yaml
+spec:
+  resources:
+    limits:
+      cpu: 1000m      # 调整为自己需要的CPU
+      memory: 2048Mi  # 调整为自己需要的内存
+    requests:
+      cpu: 1000m      # 调整为自己需要的CPU
+      memory: 2048Mi  # 调整为自己需要的内存
+```
+
+修改后，Prometheus对应Pod会重新启动。启动后查看Pod的资源是否被设置为修改后数据。
+
+```shell
+## 其中<pod-name> 换成自己查询到的pod名称； 例如：prometheus-uk8s-prometheus-0
+$ kubectl -n uk8s-monitor get po <pod-name> -o yaml 
+```
+
