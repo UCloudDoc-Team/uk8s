@@ -1,6 +1,6 @@
-## Cluster Autoscaler
+# Cluster Autoscaler
 
-### 前言
+## 前言
 
 Cluster Autoscaler（CA）用于自动调整集群中Node节点的数量，以满足业务需求。
 
@@ -12,7 +12,7 @@ CA组件同样也会缩容集群，缩容的触发条件为某个Node节点的Re
 
 和HPA不同，CA不是内置的，而是以Deployment的形式运行在Kubernetes集群中，UK8S已支持CA，你可以在UK8S的管理界面中配置CA。
 
-### 工作原理
+## 工作原理
 
 CA的扩容触发条件为**存在因为集群资源不足导致无法成功创建的Pod**，这里的资源包括**CPU、内存和GPU**。以GPU为例，当Pod申请了GPU资源`nvidia.com/gpu`（参考[GPU节点使用文档](/uk8s/administercluster/gpu-node)），但因集群中无GPU节点而处于pending状态时，CA就会在配置了GPU机型模版的伸缩组中自动扩容节点。
 
@@ -20,7 +20,7 @@ CA的缩容触发条件为**node节点在一定时间内（默认10分钟）资�
 
 值得注意的是**节点上的所有Pod都能被调度到其他节点**这个条件，很多配置了CA的同学会疑问某节点资源申请量低于阈值却没有触发缩容，原因其实很简单，如果这个节点上运行了一个独立的Pod（没有被任何控制器管理），因为Pod无法被重新调度，为了保证业务正常运行，则节点的缩容不会进行。
 
-### 在UK8S中使用集群伸缩
+## 在UK8S中使用集群伸缩
 
 #### 1、创建伸缩配置
 
@@ -30,9 +30,11 @@ CA的缩容触发条件为**node节点在一定时间内（默认10分钟）资�
 
 一般默认值即可 ![](/images/administercluster/autoscaling/2.png)
 
+
 #### 3、创建伸缩组
 
-**重要**，即触发集群扩容时，Node节点的配置，伸缩区间主要用于防范因为DDos等导致的无限制扩容。
+伸缩组中配置了触发集群扩容时，Node节点的配置；其中伸缩区间指节点最大与最小的扩容机器数。最大值主要用于防范因为DDos等导致的无限制扩容。
+
 
 ![](/images/administercluster/autoscaling/3.png)
 
@@ -42,7 +44,7 @@ CA的缩容触发条件为**node节点在一定时间内（默认10分钟）资�
 
 ![](/images/administercluster/autoscaling/4.png)
 
-### CA参数说明
+## CA参数说明
 
 CA本身有很多命令参数，可以调整伸缩的一些行为。可以通过更改CA deployment的`args`参数来调整。
 
