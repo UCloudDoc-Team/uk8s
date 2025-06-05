@@ -1,8 +1,10 @@
 # 添加接收人
 
-监控中心支持添加接收人邮箱、企业微信及钉钉三种告警形式，请在 UK8S 控制台「监控中心」→「收发设置」进行配置。
+监控中心支持添加接收人邮箱、企业微信及钉钉等多种告警形式，请在 UK8S 控制台「监控中心」→「收发设置」进行配置。
 
-## 1. 配置发件服务器
+## 1. 配置邮件收发
+
+#### 1.1 配置发件服务器
 
 配置接收人前，需要先设置发件人邮箱信息。目前发送信息是通过邮箱发送。
 
@@ -13,7 +15,7 @@
 
 ![](/images/monitor/prometheus/编辑发件服务器.png)
 
-## 2. 配置邮件接收人
+#### 1.2 配置邮件接收人
 
 支持添加多个邮件接收人
 
@@ -22,7 +24,7 @@
 - 名称： 收件人名称
 - 邮箱地址： 收件的邮箱地址
 
-## 3. 配置企业微信接收人
+## 2. 配置企业微信接收人
 
 > 注：企业微信机器人类型请参考 '配置webhook接收人(钉钉/企业微信机器人方式)' 方式
 
@@ -48,15 +50,15 @@
 
 ![](/images/prometheus/weixinerrcode.png)
 
-## 4. 配置webhook接收人(钉钉/企业微信机器人方式)
+## 3. 配置webhook接收人(钉钉/企业微信/飞书机器人方式)
 
-#### 4.1 创建钉钉/企业微信/飞书机器人，获取 Webhook 地址
+#### 3.1 创建钉钉/企业微信/飞书机器人，获取 Webhook 地址
 
 在使用webhook接收人(钉钉/企业微信/飞书机器人方式)之前，我们必须在钉钉/企业微信/飞书管理后台创建自定义机器人，并获取其 Webhook 地址，详情参考钉钉/企业微信/飞书相关文档。
 
-#### 4.2 部署配置文件
+#### 3.2 部署配置文件
 
-AlertManager 不支持直接接入钉钉/企业微信/飞书告警，需要进行适配转换，以下是参考社区的示例部署 yaml 文件。
+AlertManager 不支持直接接入钉钉/企业微信/飞书告警，需要一个Hook服务进行适配转换，以下是参考社区的示例部署 yaml 文件。请按实际情况填写配置后，进行部署。
 
 > 请根据yaml中的提示，结合自身场景来替换yaml中的webhook地址以及image
 
@@ -108,10 +110,14 @@ spec:
       containers:
         - name: alertmanager-webhook
           # 替换image值:
-          # 企业微信机器人: uhub.service.ucloud.cn/uk8s/prometheus-webhook-wechat:v2.0.1
+          # 企业微信机器人: uhub.service.ucloud.cn/uk8s/prometheus-webhook-wechat:v2.0.4
           # 钉钉机器人: uhub.service.ucloud.cn/uk8s/prometheus-webhook-dingtalk:v2.0.0
           # 飞书机器人: uhub.service.ucloud.cn/uk8s/prometheus-webhook-feishu:v2.0.0
           image: xxx:xxx
+          # 只有在企业微信机器人时，支持告警中配置集群ID
+          # env:
+          # - name: CLUSTER_ID
+          #   value: "uk8x-xxxx"
           args:
             - --web.listen-address=:8060
             - --config.file=/config/config.yaml
@@ -127,7 +133,8 @@ spec:
               containerPort: 8060
 ```
 
-#### 4.3 添加接收人
+
+#### 3.3 添加接收人
 
 在控制台「收发设置」页面「接收人」版面点击「添加」，根据类型在 Webhook 地址栏中填写
 
@@ -137,9 +144,9 @@ spec:
 
 飞书机器人: http://alertmanager-webhook.uk8s-monitor.svc/feishu/webhook1/send
 
-## 5. 配置webhook接收人(微信公众号方式)
+## 4. 配置微信公众号接收人
 
-#### 5.1 创建公众号以及模板，获取公众号的 appid、secret 以及模板的 templateid
+#### 4.1 在使用微信公众号作为接收人时，需要先创建公众号以及模板，获取公众号的 appid、secret 以及模板的 templateid
 
 该告警方式基于微信公众号的模板消息实现，使用时请遵守[微信公众号模板消息运营规范](https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Template_Message_Operation_Specifications.html)
 
@@ -153,9 +160,9 @@ spec:
 告警时间: {{ startsat.DATA }}
 ```
 
-#### 5.2 部署配置文件
+#### 4.2 部署配置文件
 
-AlertManager 同样不支持直接接入微信公众号告警，需要进行适配转换
+AlertManager 同样不支持直接接入微信公众号告警，需要部署Hook服务进行适配转换，以下是参考社区的示例部署 yaml 文件。请按实际情况填写配置后，进行部署。
 
 > 请根据yaml中的提示，结合自身场景来替换yaml中的配置
 
@@ -234,9 +241,9 @@ spec:
 
 ```
 
-#### 5.3 添加接收人
+#### 4.3 添加接收人
 
-在控制台「收发设置」页面「接收人」版面点击「添加」，在 Webhook 地址栏中填写
+在控制台「收发设置」页面「接收人」版面点击「添加」，在「Webhook」地址栏中填写
 
 http://alertmanager-webhook.uk8s-monitor.svc/wechat/{groupname}/send
 
