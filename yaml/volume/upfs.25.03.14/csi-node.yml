@@ -43,7 +43,7 @@ spec:
       priorityClassName: system-node-critical
       initContainers:
         - name: upfslauncher-installer
-          image: uhub.service.ucloud.cn/cncfdev/csi-upfslauncher:1.0.2-alpha.1
+          image: uhub.service.ucloud.cn/uk8s/csi-upfslauncher:upfs-25.03.14
           securityContext:
             privileged: true
             capabilities:
@@ -93,7 +93,7 @@ spec:
             capabilities:
               add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
-          image: uhub.service.ucloud.cn/cncfdev/csi-uk8s:upfs-25.03.14
+          image: uhub.service.ucloud.cn/uk8s/csi-uk8s:upfs-25.03.14
           args :
             - "--drivername=upfs.csi.ucloud.cn"
             - "--hostname=$(KUBE_NODE_NAME)"
