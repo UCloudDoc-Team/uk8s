@@ -48,7 +48,7 @@ spec:
       priorityClassName: system-node-critical
       initContainers:
         - name: upfslauncher-installer
-          image: uhub.service.ucloud.cn/cncfdev/csi-upfslauncher:1.0.2-alpha.1
+          image: uhub.service.ucloud.cn/uk8s/csi-upfslauncher:upfs-25.05.26
           securityContext:
             privileged: true
             capabilities:
@@ -108,7 +108,7 @@ spec:
             capabilities:
               add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
-          image: uhub.service.ucloud.cn/cncfdev/csi-uk8s:upfs-25.05.21
+          image: uhub.service.ucloud.cn/uk8s/csi-uk8s:upfs-25.05.26
           args :
             - "--drivername=upfs.csi.ucloud.cn"
             - "--hostname=$(KUBE_NODE_NAME)"
@@ -127,16 +127,6 @@ spec:
                   fieldPath: spec.nodeName
             - name: CSI_ENDPOINT
               value: unix://var/lib/kubelet/csi-plugins/upfs.csi.ucloud.cn/csi.sock
-          livenessProbe:
-            exec:
-              command:
-              - csi-uk8s
-              - --probe
-              - --endpoint=$(CSI_ENDPOINT)
-            failureThreshold: 3
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
           resources:
             requests:
               memory: "128Mi"
