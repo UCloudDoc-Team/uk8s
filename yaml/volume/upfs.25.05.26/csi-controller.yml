@@ -85,7 +85,7 @@ spec:
             - name: socket-dir
               mountPath: /csi
         - name: csi-upfs
-          image: uhub.service.ucloud.cn/cncfdev/csi-uk8s:upfs-25.05.21
+          image: uhub.service.ucloud.cn/uk8s/csi-uk8s:upfs-25.05.26
           imagePullPolicy: "Always"
           args:
             - "--drivername=upfs.csi.ucloud.cn"
