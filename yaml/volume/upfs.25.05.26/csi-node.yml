@@ -48,7 +48,10 @@ spec:
       priorityClassName: system-node-critical
       initContainers:
         - name: upfslauncher-installer
-          image: uhub.service.ucloud.cn/cncfdev/csi-upfslauncher:ce25c5ca7eabb939564feeb470a3a386c7053d50
+          image: uhub.service.ucloud.cn/cncfdev/csi-upfslauncher:c820a551f407c52d0cdb4eafd097263e11e639bb
+          # env:
+          #   - name: UPFS_CLIENT_DOWNLOAD_URL
+          #     value: https://upfs.cn-sh2.ufileos.com/upfs_client-xxx.tar.gz
           securityContext:
             privileged: true
             capabilities:
@@ -108,7 +111,7 @@ spec:
             capabilities:
               add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
-          image: uhub.service.ucloud.cn/cncfdev/csi-uk8s:ce25c5ca7eabb939564feeb470a3a386c7053d50
+          image: uhub.service.ucloud.cn/cncfdev/csi-uk8s:c820a551f407c52d0cdb4eafd097263e11e639bb
           args :
             - "--drivername=upfs.csi.ucloud.cn"
             - "--hostname=$(KUBE_NODE_NAME)"
