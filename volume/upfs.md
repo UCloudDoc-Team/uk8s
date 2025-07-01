@@ -17,23 +17,28 @@
 > 因目前的UK8S版本均不封装UPFS CSI，需要自行部署
 
 ```
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs.25.05.26/rbac-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs.25.05.26/rbac-node.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs.25.05.26/csi-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs.25.05.26/csi-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.0/rbac-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.0/rbac-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.0/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.0/csi-node.yml
 ```
 
 ## 创建存储类StorageClass
 
 接下来进行创建StorageClass操作
 
-创建StorageClass时需要注意以下两个参数:
+创建StorageClass时需要注意参数:
 
 * uri：文件系统URL（URL详细规则请见[UPFS主要概念](https://docs.ucloud.cn/upfs/upfs_manual_instruction/concept)中的文件系统URL部分）
 
-* path：表示宿主上挂载upfs的目录结构，可自行命名，默认值为: `/`，一个UPFS实例可以对应多个不同path的StorageClass(同一个UPFS实例即文件系统url，使用相同的path即相同StorageClass的pvc可以实现共享数据，同理，使用不同的path的StorageClass即可实现数据分离)
+* path：表示需要挂载的upfs子目录，默认值为`/`。如果指定的子目录在upfs实例中尚不存在，则会被自动创建。
 
-* autoProvisionSubdir: 该参数需要在upfs-csi版本大于等于upfs-25.03.14支持，默认不启用，开启该参数且配置值为true之后，该StorageClass创建出的pvc可以实现数据分离(针对之前创建pvc的不生效)，在upfs上该pvc对应的目录类似: /example/pvc-ae961bc8-2c97-414e-9e7b-bde3e28efee9
+* autoProvisionSubdir: upfs-csi版本大于等于upfs-25.03.14时支持。默认不启用。 开启该参数且配置值为true之后，该StorageClass创建出的pvc可以实现数据分离。每个pvc会按如下规则在upfs上创建对应的子目录: `<path>/<pvc-namespace>-<pvc-name>-<pv-name>`
+
+如当path配置为'example'，且在`default` namespace中创建名为`logupfs-claim`的pvc时，upfs实例中自动创建的目录名为
+```
+/example/default-logupfs-claim-pvc-ae961bc8-2c97-414e-9e7b-bde3e28efee9
+```
 
 ```yaml
 apiVersion: storage.k8s.io/v1
@@ -44,8 +49,7 @@ provisioner: upfs.csi.ucloud.cn
 parameters:
   uri: 101.66.127.139:10109,101.66.127.140:10109/upfs-xxxx
   path: /example
-  # autoProvisionSubdir: "true"  # upfs-csi版本大于等于upfs-25.03.14支持
-
+  # autoProvisionSubdir: "true"
 ```
 
 ## 创建PVC
@@ -69,7 +73,7 @@ spec:
 kubectl创建pvc:
 
 ```
-# kubectl apply -f upfspvc.yml 
+# kubectl apply -f upfspvc.yml
 persistentvolumeclaim/logupfs-claim created
 ```
 
@@ -80,7 +84,7 @@ persistentvolumeclaim/logupfs-claim created
 # kubectl get pv
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                   STORAGECLASS   REASON   AGE
 pvc-ae961bc8-2c97-414e-9e7b-bde3e28efee9   256Ti      RWX            Delete           Bound    default/logupfs-claim   csi-upfs                12s
-# 
+#
 # kubectl get pvc
 NAME            STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 logupfs-claim   Bound    pvc-ae961bc8-2c97-414e-9e7b-bde3e28efee9   256Ti      RWX            csi-upfs       12s
@@ -96,7 +100,7 @@ metadata:
 spec:
   containers:
   - name: nginx
-    image: uhub.service.ucloud.cn/ucloud/nginx:latest 
+    image: uhub.service.ucloud.cn/ucloud/nginx:latest
     ports:
     - containerPort: 80
     volumeMounts:
@@ -134,8 +138,4 @@ UPFS:upfs-xxxx          5.9T  8.5K  5.9T   1% /data
 Filesystem              Size  Used Avail Use% Mounted on
 ...
 UPFS:upfs-xxxx          5.9T  8.5K  5.9T   1% /data/kubelet/plugins/kubernetes.io/csi/upfs.csi.ucloud.cn/uri/101.66.127.139:10109,101.66.127.140:10109/upfs-xxxx
-
-## 卸载UPFS操作
-# umount /data/kubelet/plugins/kubernetes.io/csi/upfs.csi.ucloud.cn/uri/101.66.127.139:10109,101.66.127.140:10109/upfs-xxxx
-
 ```
