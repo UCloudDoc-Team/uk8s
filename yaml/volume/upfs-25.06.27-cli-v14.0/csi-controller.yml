@@ -43,6 +43,7 @@ spec:
           image: uhub.service.ucloud.cn/uk8s/csi-provisioner:v3.0.0
           args:
             - "--csi-address=$(ADDRESS)"
+            - "--extra-create-metadata"
             - "--v=5"
           env:
             - name: ADDRESS
@@ -85,7 +86,13 @@ spec:
             - name: socket-dir
               mountPath: /csi
         - name: csi-upfs
-          image: uhub.service.ucloud.cn/uk8s/csi-uk8s:upfs-25.05.26
+          securityContext:
+            privileged: true
+            # CAP_SYS_ADMIN is required for mount() syscall.
+            capabilities:
+              add: ["SYS_ADMIN"]
+            allowPrivilegeEscalation: true
+          image: uhub.service.ucloud.cn/uk8s/csi-uk8s:upfs-25.06.27-cli-v14.0
           imagePullPolicy: "Always"
           args:
             - "--drivername=upfs.csi.ucloud.cn"
@@ -113,6 +120,18 @@ spec:
           volumeMounts:
             - name: socket-dir
               mountPath: /csi
+            - name: host-run-csi
+              mountPath: /var/run/csi/
+            - name: pods-mount-dir
+              mountPath: /var/lib/kubelet/
+              mountPropagation: "Bidirectional"
       volumes:
         - name: socket-dir
           emptyDir:
+        - name: host-run-csi
+          hostPath:
+            path: /var/run/csi/
+        - name: pods-mount-dir
+          hostPath:
+            path: /var/lib/kubelet/
+            type: Directory

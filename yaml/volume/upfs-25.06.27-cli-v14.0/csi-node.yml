@@ -13,6 +13,11 @@ spec:
       app: "csi-upfs"
       role: "node"
       owner: "ucloud"
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 100%
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -43,7 +48,10 @@ spec:
       priorityClassName: system-node-critical
       initContainers:
         - name: upfslauncher-installer
-          image: uhub.service.ucloud.cn/uk8s/csi-upfslauncher:upfs-25.03.14
+          image: uhub.service.ucloud.cn/uk8s/csi-upfslauncher:upfs-25.06.27-cli-v14.0
+          # env:
+          #   - name: UPFS_CLIENT_DOWNLOAD_URL
+          #     value: https://upfs.cn-sh2.ufileos.com/upfs_client-xxx.tar.gz
           securityContext:
             privileged: true
             capabilities:
@@ -74,6 +82,16 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
+          livenessProbe:
+            exec:
+              command:
+              - /csi-node-driver-registrar
+              - --kubelet-registration-path=/var/lib/kubelet/csi-plugins/upfs.csi.ucloud.cn/csi.sock
+              - --mode=kubelet-registration-probe
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           resources:
             requests:
               memory: "128Mi"
@@ -93,7 +111,7 @@ spec:
             capabilities:
               add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
-          image: uhub.service.ucloud.cn/uk8s/csi-uk8s:upfs-25.03.14
+          image: uhub.service.ucloud.cn/uk8s/csi-uk8s:upfs-25.06.27-cli-v14.0
           args :
             - "--drivername=upfs.csi.ucloud.cn"
             - "--hostname=$(KUBE_NODE_NAME)"
