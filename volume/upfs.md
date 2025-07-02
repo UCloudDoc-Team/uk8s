@@ -115,7 +115,7 @@ spec:
       claimName: logupfs-claim
 ```
 
-创建完Pod之后，我们可以通过''kubectl exec''命令进入容器，执行df命令查看pod是否挂载到UPFS
+创建完Pod之后，我们可以通过`kubectl exec`命令进入容器，执行df命令查看pod是否挂载到UPFS
 
 ```
 # df -h
@@ -127,17 +127,11 @@ UPFS:upfs-xxxx          5.9T  8.5K  5.9T   1% /data
 
 ## 删除UPFS实例
 
-由于UPFS资源删除需要该UPFS处于未挂载状态，而目前仅删除所有用到该UPFS实例的POD，并不能使UPFS文件系统从云主机侧卸载。
+由于UPFS资源删除需要该UPFS处于未挂载状态，请先删除所有使用到UPFS PVC的Pod后再执行UPFS资源删除操作。
 
-当您不需要使用到UPFS实例想要删除该UPFS实例时，需要从云主机卸载UPFS文件系统。
-
-**K8s集群上卸载UPFS文件系统属高危操作，请确认该文件系统不再被pod或其他服务使用后再执行**
-
-登录到所有使用过该UPFS的pod所在的node(云主机)上执行命令：
-
+执行以下命令来确认节点上是否还存在特定UPFS实例的挂载点:
 ```
-## 查看是否有该UPFS的挂载点
-# df -h |grep upfs-xxxx
+# mount |grep upfs-xxxx
 Filesystem              Size  Used Avail Use% Mounted on
 ...
 UPFS:upfs-xxxx          5.9T  8.5K  5.9T   1% /data/kubelet/plugins/kubernetes.io/csi/upfs.csi.ucloud.cn/uri/101.66.127.139:10109,101.66.127.140:10109/upfs-xxxx
