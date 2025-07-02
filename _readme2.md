@@ -154,7 +154,6 @@ Prometheus是一套开源的系统监控报警框架。UK8S支持使用以下方
 
 UK8S提供了关于CICD的建立、K8S的权限管理、K8S的亲和性、弹性伸缩等实践操作文档。
 
-- [基于Jenkins的CI/CD实践](/uk8s/bestpractice/cicd)
 - [权限管理](/uk8s/bestpractice/authorization/README)
 - [亲和性实践](/uk8s/bestpractice/affinity)
 - [Kubernetes弹性伸缩](/uk8s/administercluster/autoscaling/README)

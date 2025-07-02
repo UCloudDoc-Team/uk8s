@@ -143,9 +143,6 @@
   - Pod 管理
     - [Pod 容忍节点异常时间调整](/uk8s/bestpractice/taint_base_eviction)
     - [Pod 常见故障处理](/uk8s/troubleshooting/pod_debug_summary)
-  - CI/CD 实践
-    - [Docker & Jenkins](/uk8s/bestpractice/cicd)
-    - [Kaniko & Jenkins](/uk8s/bestpractice/cicd_containerd)
   - [亲和性实践](/uk8s/bestpractice/affinity)
 - 漏洞跟踪
   - [CVE-2019-5736](/uk8s/vulnerability/cve-2019-5736.md)
