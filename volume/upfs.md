@@ -15,6 +15,7 @@
 ## 手动部署CSI
 
 > 因目前的UK8S版本均不封装UPFS CSI，需要自行部署
+> ⚠️ 如果您目前已经在使用旧版本(低于25.06.27)的UPFS CSI，请联系我们了解CSI升级方案，切勿直接升级！
 
 ```
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.0/rbac-controller.yml
