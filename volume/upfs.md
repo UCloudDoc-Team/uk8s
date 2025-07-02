@@ -34,9 +34,9 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.0
 
 * path：表示需要挂载的upfs子目录，默认值为`/`。如果指定的子目录在upfs实例中尚不存在，则会被自动创建。
 
-* autoProvisionSubdir: upfs-csi版本大于等于upfs-25.03.14时支持。默认不启用。 开启该参数且配置值为true之后，该StorageClass创建出的pvc可以实现数据分离。每个pvc会按如下规则在upfs上创建对应的子目录: `<path>/<pvc-namespace>-<pvc-name>-<pv-name>`
+* autoProvisionSubdir: upfs-csi版本大于等于`upfs-25.06.27-cli-v14.0`时支持。默认不启用。 开启该参数且配置值为true之后，该StorageClass创建出的pvc可以实现数据分离。每个pvc会按如下规则在upfs上创建对应的子目录: `<path>/<pvc-namespace>-<pvc-name>-<pv-name>`
 
-如当path配置为'example'，且在`default` namespace中创建名为`logupfs-claim`的pvc时，upfs实例中自动创建的目录名为
+如当path配置为`/example`，且在`default` namespace中创建名为`logupfs-claim`的pvc时，upfs实例中自动创建的目录名为
 ```
 /example/default-logupfs-claim-pvc-ae961bc8-2c97-414e-9e7b-bde3e28efee9
 ```
@@ -52,6 +52,8 @@ parameters:
   path: /example
   # autoProvisionSubdir: "true"
 ```
+
+> ⚠️ StorageClass中的 `uri`、`path`、`autoProvisionSubdir` 参数均不建议在使用中修改，否则会影响pv对应的数据路径。
 
 ## 创建PVC
 
@@ -140,3 +142,8 @@ Filesystem              Size  Used Avail Use% Mounted on
 ...
 UPFS:upfs-xxxx          5.9T  8.5K  5.9T   1% /data/kubelet/plugins/kubernetes.io/csi/upfs.csi.ucloud.cn/uri/101.66.127.139:10109,101.66.127.140:10109/upfs-xxxx
 ```
+
+## 版本更新记录
+| 版本                    | 说明                                                       |
+|-------------------------|--------------------------------------------------------------|
+| upfs-25.06.27-cli-v14.0 | 自动安装upfs v14.0客户端;<br>支持挂载UPFS的子目录;<br>支持自动以pvc名称在UPFS上创建子目录实现数据分离；<br>支持单Pod挂载多PVC、多Pod挂载同PVC、多Pod挂载多PVC。|
