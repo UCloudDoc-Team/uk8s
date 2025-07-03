@@ -20,7 +20,7 @@
 > ⚠️ 如果您目前已经在使用旧版本(低于25.06.27)的UPFS CSI，请联系我们了解CSI升级方案，切勿直接升级！直接升级可能导致数据访问异常。
 
 
-因目前的UK8S版本均不默认安装UPFS CSI，需要自行部署。请按顺序注意执行如下命令即可。
+因目前的UK8S版本均不默认安装UPFS CSI，需要自行部署。请按顺序执行如下命令即可。
 
 ```
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.0/rbac-controller.yml
@@ -33,13 +33,13 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.0
 
 接下来进行创建StorageClass操作；创建StorageClass时需要注意参数:
 
-* uri：UPFS文件系统URL（URL详细规则请见[UPFS主要概念](https://docs.ucloud.cn/upfs/upfs_manual_instruction/concept)中的文件系统URL部分）
+* uri：UPFS文件系统URL。URL详细规则请见[UPFS主要概念](https://docs.ucloud.cn/upfs/upfs_manual_instruction/concept?id=%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9furl)
 
 * path：表示需要挂载的UPFS子目录，默认值为`/`。如果指定的子目录在UPFS实例中尚不存在，则会被自动创建。
 
-* autoProvisionSubdir: upfs-csi版本大于等于 >= `upfs-25.06.27-cli-v14.0`时支持。默认不启用。 开启该参数且配置值为true之后，该StorageClass创建出的pvc可以实现数据分离。每个pvc会按如下规则在upfs上创建对应的子目录: `<path>/<pvc-namespace>-<pvc-name>-<pv-name>`
+* autoProvisionSubdir：upfs-csi版本 >= `upfs-25.06.27-cli-v14.0`时支持。默认不启用。 开启该参数且配置值为`true`之后，该StorageClass创建出的PVC可以实现数据分离。每个PVC会按如下规则在UPFS上创建对应的子目录: `<path>/<pvc-namespace>-<pvc-name>-<pv-name>`
 
-如当path配置为`/example`，且在`default` namespace中创建名为`logupfs-claim`的pvc时，upfs实例中自动创建的目录名为
+如当path配置为`/example`，且在`default` namespace中创建名为`logupfs-claim`的PVC时，UPFS实例中自动创建的目录名为
 
 ```
 /example/default-logupfs-claim-pvc-ae961bc8-2c97-414e-9e7b-bde3e28efee9
@@ -135,7 +135,7 @@ UPFS:upfs-xxxx          5.9T  8.5K  5.9T   1% /data
 
 由于UPFS资源删除需要该UPFS处于未挂载状态，请先删除所有使用到UPFS PVC的Pod后再执行UPFS资源删除操作。
 
-执行以下命令来确认节点上是否还存在特定UPFS实例的挂载点:
+执行以下命令来确认节点上是否还存在特定UPFS实例的挂载点：
 ```
 # mount |grep upfs-xxxx
 Filesystem              Size  Used Avail Use% Mounted on
