@@ -10,12 +10,17 @@
 
 ## 前置条件
 
-- 在[UFS产品页面](https://console.ucloud.cn/upfs/)购买UFS实例并设置好挂载点，操作完毕后，您会得到两个UPFS挂载地址，类似101.66.127.139:10109,101.66.127.140:10109
+设置UPFS挂载点：在[UFS产品页面](https://console.ucloud.cn/upfs/)购买UPFS实例并设置好挂载点，操作完毕后，您会得到两个UPFS挂载地址，类似：
+```
+101.66.127.139:10109,101.66.127.140:10109
+```
 
 ## 手动部署CSI
 
-> 因目前的UK8S版本均不封装UPFS CSI，需要自行部署
-> ⚠️ 如果您目前已经在使用旧版本(低于25.06.27)的UPFS CSI，请联系我们了解CSI升级方案，切勿直接升级！
+> ⚠️ 如果您目前已经在使用旧版本(低于25.06.27)的UPFS CSI，请联系我们了解CSI升级方案，切勿直接升级！直接升级可能导致数据访问异常。
+
+
+因目前的UK8S版本均不默认安装UPFS CSI，需要自行部署。请按顺序注意执行如下命令即可。
 
 ```
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.0/rbac-controller.yml
@@ -26,17 +31,16 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.0
 
 ## 创建存储类StorageClass
 
-接下来进行创建StorageClass操作
+接下来进行创建StorageClass操作；创建StorageClass时需要注意参数:
 
-创建StorageClass时需要注意参数:
+* uri：UPFS文件系统URL（URL详细规则请见[UPFS主要概念](https://docs.ucloud.cn/upfs/upfs_manual_instruction/concept)中的文件系统URL部分）
 
-* uri：文件系统URL（URL详细规则请见[UPFS主要概念](https://docs.ucloud.cn/upfs/upfs_manual_instruction/concept)中的文件系统URL部分）
+* path：表示需要挂载的UPFS子目录，默认值为`/`。如果指定的子目录在UPFS实例中尚不存在，则会被自动创建。
 
-* path：表示需要挂载的upfs子目录，默认值为`/`。如果指定的子目录在upfs实例中尚不存在，则会被自动创建。
-
-* autoProvisionSubdir: upfs-csi版本大于等于`upfs-25.06.27-cli-v14.0`时支持。默认不启用。 开启该参数且配置值为true之后，该StorageClass创建出的pvc可以实现数据分离。每个pvc会按如下规则在upfs上创建对应的子目录: `<path>/<pvc-namespace>-<pvc-name>-<pv-name>`
+* autoProvisionSubdir: upfs-csi版本大于等于 >= `upfs-25.06.27-cli-v14.0`时支持。默认不启用。 开启该参数且配置值为true之后，该StorageClass创建出的pvc可以实现数据分离。每个pvc会按如下规则在upfs上创建对应的子目录: `<path>/<pvc-namespace>-<pvc-name>-<pv-name>`
 
 如当path配置为`/example`，且在`default` namespace中创建名为`logupfs-claim`的pvc时，upfs实例中自动创建的目录名为
+
 ```
 /example/default-logupfs-claim-pvc-ae961bc8-2c97-414e-9e7b-bde3e28efee9
 ```
@@ -53,12 +57,11 @@ parameters:
   # autoProvisionSubdir: "true"
 ```
 
-> ⚠️ StorageClass中的 `uri`、`path`、`autoProvisionSubdir` 参数均不建议在使用中修改，否则会影响pv对应的数据路径。
+> ⚠️ StorageClass中的 `uri`、`path`、`autoProvisionSubdir` 参数均不建议在使用中修改，否则会影响pv对应的数据路径，导致业务读取不到对应的数据；
 
 ## 创建PVC
 
-yaml示例如下：
-
+将如下内容保存到文件： `upfspvc.yml`
 ```yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -73,15 +76,15 @@ spec:
       storage: 10Gi # 因实际会将整个UPFS挂载到节点上，故此处的storage可任意配置并不做限制
 ```
 
-kubectl创建pvc:
+然后执行如下kubectl命令创建PVC：
 
-```
+```shell
 # kubectl apply -f upfspvc.yml
 persistentvolumeclaim/logupfs-claim created
 ```
 
 创建完PVC后，可以发现PV与PVC已经绑定。
-* 可以看到此处PVC的容量为最大256T不做限制 **(但实际容量务必以对应UPFS实例的容量为准)**
+
 
 ```
 # kubectl get pv
@@ -92,6 +95,9 @@ pvc-ae961bc8-2c97-414e-9e7b-bde3e28efee9   256Ti      RWX            Delete     
 NAME            STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 logupfs-claim   Bound    pvc-ae961bc8-2c97-414e-9e7b-bde3e28efee9   256Ti      RWX            csi-upfs       12s
 ```
+
+> ⚠️ PVC中显示的容量，不做实际容量参考；PVC的真实容量务必以对应UPFS实例的容量为准；
+
 
 ## 在Pod中挂载UPFS
 
@@ -115,7 +121,7 @@ spec:
       claimName: logupfs-claim
 ```
 
-创建完Pod之后，我们可以通过`kubectl exec`命令进入容器，执行df命令查看pod是否挂载到UPFS
+创建完Pod之后，我们可以通过`kubectl exec`命令进入容器，执行df命令查看Pod是否挂载到UPFS
 
 ```
 # df -h
