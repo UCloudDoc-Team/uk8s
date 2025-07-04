@@ -347,7 +347,7 @@ metadata:
   name: ingress-nginx-controller
   namespace: ingress-nginx
 spec:
-  externalTrafficPolicy: Cluster
+  externalTrafficPolicy: Local  # 如果希望在集群内通过ULB访问，需要改为Cluster
   ports:
   - appProtocol: http
     name: http

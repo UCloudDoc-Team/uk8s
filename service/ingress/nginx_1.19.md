@@ -28,6 +28,13 @@ Controller 供选择，分别如下：
 
 这里我们选择 Nginx 作为 Ingress Controller，部署 Nginx Ingress Controller 非常简单，执行以下指定即可。
 
+#### 注意
+
+* 样例中的 Ingress Controller 创建的 ULB 为内网模式， 如果创建外网 ULB，需要将下载yaml文件，把 Service 的`metadata.annotations."service.beta.kubernetes.io/ucloud-load-balancer-type"`改为 "outer"。更多参数请官方文档
+[ULB 参数说明](https://docs.ucloud.cn/uk8s/service/annotations)。
+* 容器默认使用 UTC 时间，如果要使用宿主机时区，参见 [Pod 时区问题](https://docs.ucloud.cn/uk8s/troubleshooting/pod_debug_summary?id=_10-pod%e7%9a%84%e6%97%b6%e5%8c%ba%e9%97%ae%e9%a2%98)
+* 如果有集群内通过ULB地址访问 Service 的需求，需要把 Ingress Controller Service 的 externalTrafficPolicy 改为`Cluster`，否则 Pod 如个跟 Ingress Controller 不在同一个节点，将无法进行访问。**修改该参数之后，将无法获取真实客户端源IP。**
+
 ```bash
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/ingress_nginx/mandatory_1.19.yaml
 ```

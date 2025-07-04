@@ -266,7 +266,7 @@ metadata:
   namespace: ingress-nginx
 spec:
   type: LoadBalancer
-  externalTrafficPolicy: Cluster
+  externalTrafficPolicy: Local  # 如果希望在集群内通过ULB访问，需要改为Cluster
   ports:
     - name: http
       port: 80
