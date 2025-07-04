@@ -347,7 +347,7 @@ metadata:
   name: ingress-nginx-controller
   namespace: ingress-nginx
 spec:
-  externalTrafficPolicy: Local
+  externalTrafficPolicy: Cluster
   ports:
   - appProtocol: http
     name: http

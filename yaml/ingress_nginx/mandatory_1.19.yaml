@@ -266,7 +266,7 @@ metadata:
   namespace: ingress-nginx
 spec:
   type: LoadBalancer
-  externalTrafficPolicy: Local
+  externalTrafficPolicy: Cluster
   ports:
     - name: http
       port: 80
@@ -316,7 +316,7 @@ spec:
         - name: controller
           image: "uhub.service.ucloud.cn/uk8s/ingress-nginx-controller:v1.2.1"
           imagePullPolicy: IfNotPresent
-          lifecycle: 
+          lifecycle:
             preStop:
               exec:
                 command:
@@ -331,7 +331,7 @@ spec:
             - --validating-webhook=:8443
             - --validating-webhook-certificate=/usr/local/certificates/cert
             - --validating-webhook-key=/usr/local/certificates/key
-          securityContext: 
+          securityContext:
             capabilities:
               drop:
               - ALL
@@ -350,7 +350,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: LD_PRELOAD
               value: /usr/local/lib/libmimalloc.so
-          livenessProbe: 
+          livenessProbe:
             failureThreshold: 5
             httpGet:
               path: /healthz
@@ -360,7 +360,7 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 1
-          readinessProbe: 
+          readinessProbe:
             failureThreshold: 3
             httpGet:
               path: /healthz
@@ -384,11 +384,11 @@ spec:
             - name: webhook-cert
               mountPath: /usr/local/certificates/
               readOnly: true
-          resources: 
+          resources:
             requests:
               cpu: 100m
               memory: 90Mi
-      nodeSelector: 
+      nodeSelector:
         kubernetes.io/os: linux
       serviceAccountName: ingress-nginx
       terminationGracePeriodSeconds: 300
@@ -588,7 +588,7 @@ spec:
             allowPrivilegeEscalation: false
       restartPolicy: OnFailure
       serviceAccountName: ingress-nginx-admission
-      nodeSelector: 
+      nodeSelector:
         kubernetes.io/os: linux
       securityContext:
         runAsNonRoot: true
@@ -638,7 +638,7 @@ spec:
             allowPrivilegeEscalation: false
       restartPolicy: OnFailure
       serviceAccountName: ingress-nginx-admission
-      nodeSelector: 
+      nodeSelector:
         kubernetes.io/os: linux
       securityContext:
         runAsNonRoot: true
