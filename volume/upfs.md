@@ -23,10 +23,10 @@
 因目前的UK8S版本均不默认安装UPFS CSI，需要自行部署。请按顺序执行如下命令即可。
 
 ```
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.0/rbac-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.0/rbac-node.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.0/csi-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.0/csi-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.1/rbac-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.1/rbac-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.1/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.06.27-cli-v14.1/csi-node.yml
 ```
 
 ## 创建存储类StorageClass
@@ -146,4 +146,5 @@ UPFS:upfs-xxxx          5.9T  8.5K  5.9T   1% /data/kubelet/plugins/kubernetes.i
 ## 版本更新记录
 | 版本                    | 说明                                                       |
 |-------------------------|--------------------------------------------------------------|
+| upfs-25.06.27-cli-v14.1 | 修复upfs后端锁服务异常下调用锁请求导致客户端挂掉的问题 |
 | upfs-25.06.27-cli-v14.0 | 自动安装upfs v14.0客户端;<br>支持挂载UPFS的子目录;<br>支持自动以pvc名称在UPFS上创建子目录实现数据分离；<br>支持单Pod挂载多PVC、多Pod挂载同PVC、多Pod挂载多PVC。|
