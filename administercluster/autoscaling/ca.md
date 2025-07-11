@@ -24,7 +24,7 @@ CA的缩容触发条件为**node节点在一定时间内（默认10分钟）资�
 
 #### 1、创建伸缩配置
 
-![](/images/administercluster/autoscaling/wechatworkscreenshot_120eae74-0e91-463b-8c78-20c513f2c0a9.png)
+![](/images/administercluster/autoscaling/CA1.png)
 
 #### 2、填写配置参数
 
@@ -42,7 +42,7 @@ CA的缩容触发条件为**node节点在一定时间内（默认10分钟）资�
 
 创建完伸缩组后，我们之后还需要开启伸缩组，点击开启操作后，你的UK8S集群会出现一个Cluster-Autoscaler的Deployment，如果手动删除该Deployment，会导致集群伸缩无法正常工作，您需要在集群伸缩页面先关闭，再开启以触发重新创建。
 
-![](/images/administercluster/autoscaling/4.png)
+![](/images/administercluster/autoscaling/CA4.png)
 
 ## CA参数说明
 
