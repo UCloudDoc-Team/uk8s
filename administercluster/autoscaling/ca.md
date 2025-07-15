@@ -36,7 +36,7 @@ CA的缩容触发条件为**node节点在一定时间内（默认10分钟）资�
 伸缩组中配置了触发集群扩容时，Node节点的配置；其中伸缩区间指节点最大与最小的扩容机器数。最大值主要用于防范因为DDos等导致的无限制扩容。
 
 
-![](/images/administercluster/autoscaling/3.png)
+![](/images/administercluster/autoscaling/CA3.png)
 
 #### 4、开启集群伸缩
 
