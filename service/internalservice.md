@@ -278,5 +278,98 @@ spec:
       protocol: UDP
 ```
 
+### LB后端直接使用POD IP（direct endpoint）
 
+> ⚠️ 使用 drect-endpoint 时，需要升级 [CloudProvider](/uk8s/service/cp_update) 版本到 >= 25.07.23。
+> 且支持alb/nlb,因为直接到pod ip上，因此k8s的Service extenalTrafficPolicy 为 local [流量策略](/uk8s/service/svc_trafficpolicy)失效
 
+- ALB开启direct endpoint
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: alb-direct-ep
+  labels:
+    app: alb-direct-ep
+  annotations:
+    "service.beta.kubernetes.io/ucloud-load-balancer-listentype": "application"
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-enable-direct-endpoint": "true" # 开启direct-endpoint
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 80
+      name: https
+    - protocol: TCP
+      port: 8443
+      targetPort: 80
+      name: ssl
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      name: http
+  selector:
+    app: alb-direct-ep
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alb-direct-ep
+spec:
+  selector:
+    matchLabels:
+      app: alb-direct-ep
+  template:
+    metadata:
+      labels:
+        app: alb-direct-ep
+    spec:
+      containers:
+      - name: alb-direct-ep
+        image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
+        ports:
+        - containerPort: 80
+```
+
+- NLB开启direct endpoint
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nlb-direct-ep-demo
+  labels:
+    app: nlb-direct-ep-demo
+  annotations:
+    "service.beta.kubernetes.io/ucloud-load-balancer-listentype": "network"
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-enable-direct-endpoint": "true"
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  selector:
+    app: nlb-direct-ep-demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nlb-direct-ep-demo
+spec:
+  selector:
+    matchLabels:
+      app: nlb-direct-ep-demo
+  template:
+    metadata:
+      labels:
+        app: nlb-direct-ep-demo
+    spec:
+      containers:
+      - name: nlb-direct-ep-demo
+        image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
+        ports:
+        - containerPort: 80
+```
