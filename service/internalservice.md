@@ -278,12 +278,12 @@ spec:
       protocol: UDP
 ```
 
-### LB后端直接使用POD IP（direct endpoint）
+### LB后端直接使用Endpoint（direct endpoint）
 
 > ⚠️ 使用 drect-endpoint 时，需要升级 [CloudProvider](/uk8s/service/cp_update) 版本到 >= 25.07.23。
-> 且支持alb/nlb,因为直接到pod ip上，因此k8s的Service extenalTrafficPolicy 为 local [流量策略](/uk8s/service/svc_trafficpolicy)失效
+> ⚠️ 仅在alb/nlb下支持direct endpoint，且在这种情况下Service extenalTrafficPolicy [流量策略](/uk8s/service/svc_trafficpolicy)失效
 
-- ALB开启direct endpoint
+#### ALB开启direct endpoint
 
 ```yaml
 apiVersion: v1
@@ -333,7 +333,7 @@ spec:
         - containerPort: 80
 ```
 
-- NLB开启direct endpoint
+#### NLB开启direct endpoint
 
 ```yaml
 apiVersion: v1
@@ -373,3 +373,9 @@ spec:
         ports:
         - containerPort: 80
 ```
+
+#### 验证是否开启
+
+> 在对应的lb监听管理器界面查看，可以发现资源类型为`内网IP`,IP地址是对应service的endpoint
+
+![alt text](../images/service/direct_endpoint.png)

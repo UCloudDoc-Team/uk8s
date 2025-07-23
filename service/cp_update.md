@@ -105,7 +105,7 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 更新内容：
 
-- ALB/NLB支持Direct Endpoint
+- ALB/NLB支持Direct Endpoint (仅在vpc-cni下支持)
 
 ### 更新版本：24.12.24
 
