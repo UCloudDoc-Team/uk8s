@@ -32,7 +32,7 @@ spec:
 节点上的 CNI 插件会在 Pod 启动时，按照 `default podnetworking` 资源指定的子网和安全组来申请 VPC IP。
 
 > ⚠️ 如果您打算为 Pod 配置安全组，那么节点也应开启安全组模式。
-
+>
 > ⚠️ **请勿删除`default podnetworking`资源，否则 Pod 独立子网功能将不可用!**
 
 如果您希望令 Pod 不使用独立子网，而使用节点所在子网分配的 IP，可以按以下方式创建 Pod:
