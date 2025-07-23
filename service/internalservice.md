@@ -278,5 +278,104 @@ spec:
       protocol: UDP
 ```
 
+### LB后端直接使用Endpoint（direct endpoint）
 
+> ⚠️ 使用 drect-endpoint 时，需要升级 [CloudProvider](/uk8s/service/cp_update) 版本到 >= 25.07.23。
+> ⚠️ 仅在alb/nlb下支持direct endpoint，且在这种情况下Service extenalTrafficPolicy [流量策略](/uk8s/service/svc_trafficpolicy)失效
 
+#### ALB开启direct endpoint
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: alb-direct-ep
+  labels:
+    app: alb-direct-ep
+  annotations:
+    "service.beta.kubernetes.io/ucloud-load-balancer-listentype": "application"
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-enable-direct-endpoint": "true" # 开启direct-endpoint
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 80
+      name: https
+    - protocol: TCP
+      port: 8443
+      targetPort: 80
+      name: ssl
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      name: http
+  selector:
+    app: alb-direct-ep
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alb-direct-ep
+spec:
+  selector:
+    matchLabels:
+      app: alb-direct-ep
+  template:
+    metadata:
+      labels:
+        app: alb-direct-ep
+    spec:
+      containers:
+      - name: alb-direct-ep
+        image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
+        ports:
+        - containerPort: 80
+```
+
+#### NLB开启direct endpoint
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nlb-direct-ep-demo
+  labels:
+    app: nlb-direct-ep-demo
+  annotations:
+    "service.beta.kubernetes.io/ucloud-load-balancer-listentype": "network"
+    "service.beta.kubernetes.io/ucloud-load-balancer-vserver-enable-direct-endpoint": "true"
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  selector:
+    app: nlb-direct-ep-demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nlb-direct-ep-demo
+spec:
+  selector:
+    matchLabels:
+      app: nlb-direct-ep-demo
+  template:
+    metadata:
+      labels:
+        app: nlb-direct-ep-demo
+    spec:
+      containers:
+      - name: nlb-direct-ep-demo
+        image: uhub.service.ucloud.cn/ucloud/nginx:1.9.2
+        ports:
+        - containerPort: 80
+```
+
+#### 验证是否开启
+
+> 在对应的lb监听管理器界面查看，可以发现资源类型为`内网IP`,IP地址是对应service的endpoint
+
+![alt text](../images/service/direct_endpoint.png)

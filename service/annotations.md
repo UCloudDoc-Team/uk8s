@@ -33,6 +33,7 @@
 |service.beta.kubernetes.io/ucloud-load-balancer-paymode | month | alb和nlb付费模式，支持 month（按月付费）、year（按年付费）、dynamic（按时付费）。 关于ALB付费相关参见:[ALB 产品定价](/ulb/alb/buy/charge)。关于NLB付费相关参见：[NLB产品定价](https://docs.ucloud.cn/ulb/NLB/buy/charge)。 |
 |service.beta.kubernetes.io/ucloud-load-balancer-quantity | 1 | alb和nlb付费时长，chargetype 为 dynamic 时无需填写 |
 |service.beta.kubernetes.io/ucloud-load-balancer-firewall-id | / | 在创建CLB时，绑定防火墙。默认不进行绑定 |
+|service.beta.kubernetes.io/ucloud-load-balancer-vserver-enable-direct-endpoint" | false| 开启后alb/nlb后端直接使用pod ip，仅 25.07.23 版本之后支持,仅vpc-cni支持）|
 
 CloudProvider 版本查看及升级请参见：[CloudProvider 插件更新](/uk8s/service/cp_update)
 

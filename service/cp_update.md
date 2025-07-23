@@ -99,6 +99,14 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 ## 2. 变更记录
 
+### 更新版本：25.07.23
+
+更新时间： 2025 年 07 月 23 日
+
+更新内容：
+
+- ALB/NLB支持Direct Endpoint (仅在vpc-cni下支持)
+
 ### 更新版本：24.12.24
 
 更新时间： 2024 年 12 月 24 日
