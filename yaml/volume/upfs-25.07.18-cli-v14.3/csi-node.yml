@@ -51,7 +51,7 @@ spec:
           image: uhub.service.ucloud.cn/uk8s/csi-upfslauncher:upfs-25.07.18-cli-v14.3
           # env:
           #   - name: UPFS_CLIENT_DOWNLOAD_URL
-          #     value: https://upfs.cn-sh2.ufileos.com/upfs_client-xxx.tar.gz
+          #     value: https://upfs-public.cn-bj.ufileos.com/upfs_client-public-v14.3.tar.gz
           securityContext:
             privileged: true
             capabilities:
