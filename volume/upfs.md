@@ -29,9 +29,9 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.07.18-cli-v14.3
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.07.18-cli-v14.3/csi-node.yml
 ```
 > ⚠️ 提示：非 UK8S 集群需执行以下额外配置：
-> 1. 为节点添加标签：kubectl label node <node-name> node.uk8s.ucloud.cn/instance_type=uhost
-> 2. 创建配置映射：kubectl create cm uk8sconfig -n kube-system
-> 3. 若为非 UHost 自建集群，需额外操作：下载并编辑 csi-node.yml，去掉 .spec.template.spec.initContainers.env 中的注释后再部署。
+> 1. 为节点添加标签：`kubectl label node <node-name> node.uk8s.ucloud.cn/instance_type=uhost`
+> 2. 创建配置映射：`kubectl create cm uk8sconfig -n kube-system`
+> 3. 若为非 UHost 自建集群，需额外操作：下载并编辑 csi-node.yml，去掉 .spec.template.spec.initContainers.env 中的注释后重新部署。
 
 ## 创建存储类StorageClass
 
