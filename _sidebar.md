@@ -44,6 +44,7 @@
   - [虚拟节点](/uk8s/administercluster/virtual_kubelet)
   - [添加已有云主机节点](/uk8s/userguide/addUHostNode)
   - [添加已有裸金属节点](/uk8s/userguide/addUPHostNode)
+  - [添加已有算力云巢节点](/uk8s/userguide/addUCNestHostNode)
   - [安全组支持](/uk8s/userguide/SupportSecurityGroup.md)
   - [制作自定义节点镜像](/uk8s/administercluster/custom_image)
   - [自定义节点数据及初始化脚本](/uk8s/administercluster/cloud_init)
