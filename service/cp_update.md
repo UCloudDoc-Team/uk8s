@@ -99,6 +99,14 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 ## 2. 变更记录
 
+### 更新版本：25.08.21
+
+更新时间： 2025 年 08 月 21 日
+
+更新内容：
+
+- 修复添加vserver超过20个可能失败的问题，该问题自上个版本引入
+
 ### 更新版本：25.07.23
 
 更新时间： 2025 年 07 月 23 日
@@ -106,6 +114,14 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 更新内容：
 
 - ALB/NLB支持Direct Endpoint (仅在vpc-cni下支持)
+
+### 更新版本：25.04.02
+
+更新时间： 2025 年 04 月 02 日
+
+更新内容：
+
+- eip支持线路选择
 
 ### 更新版本：24.12.24
 
