@@ -16,6 +16,7 @@
   - [创建集群](/uk8s/userguide/createcluster)
   - [查看集群](/uk8s/userguide/describecluster)
   - [删除集群](/uk8s/userguide/deletecluster)
+  - [资源标签](/uk8s/userguide/resource_label)
   - 通过 Kubectl 管理集群
     - [kubectl 命令行简介](/uk8s/manageviakubectl/intro_of_kubectl)
     - [安装及配置 kubectl](/uk8s/manageviakubectl/connectviakubectl)
