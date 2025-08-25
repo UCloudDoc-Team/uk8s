@@ -465,3 +465,42 @@ spec:
                 port:
                   number: 80
 ```
+
+### 七、ALB/CLB7 类型 Ingress 获取客户端源 IP
+
+当 Ingress Controller 前端有七层负载均衡（ALB/CLB7）时，后端服务 Pod 获取到的源 IP 是负载均衡的代理 IP，而非真实的客户端 IP。为了让后端服务 Pod 能获取到客户端的真实 IP，需要修改 `ingress-nginx-controller` 的 ConfigMap。
+
+当设置 `use-forwarded-headers: "true"` 时，如果客户端自定义了 `X-Forwarded-For` 参数，可能无法获取到真实的客户端 IP。通过添加 `compute-full-forwarded-for` 参数，可以获取到完整的转发链路中的所有 IP 地址，从而获得真实的客户端 IP。
+
+此外，还需要配置 `proxy-real-ip-cidr`，用于指定允许信任的负载均衡器代理 IP 地址段。只有来自这些 IP 的 `X-Forwarded-For` 头才会被信任，防止伪造。
+
+1.  执行以下命令编辑 ConfigMap：
+  ```shell
+  kubectl edit configmap ingress-nginx-controller -n ingress-nginx
+  ```
+
+2.  在 `data` 字段中添加或修改以下配置：
+
+  ```yaml
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: ingress-nginx-controller
+    namespace: ingress-nginx
+  # ...
+  data:
+    # ...
+    compute-full-forwarded-for: "true"
+    forwarded-for-header: X-Forwarded-For
+    use-forwarded-headers: "true"
+    proxy-real-ip-cidr: 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+  ```
+  
+  **参数说明:**
+  *   `compute-full-forwarded-for`: 在 `X-Forwarded-For` 头中追加客户端 IP，而不是替换。
+  *   `use-forwarded-headers`: 保留 `X-Forwarded-*` 系列请求头。
+  *   `forwarded-for-header`: 设置获取客户端真实 IP 的请求头，这里使用 `X-Forwarded-For`。
+  *   `proxy-real-ip-cidr`: 允许信任的负载均衡器代理 IP 段，多个网段用逗号分隔。只有来自这些 IP 的 `X-Forwarded-For` 头才会被信任，防止伪造。
+
+配置完成后，后端服务 Pod 即可正确获取到客户端真实 IP。
+
