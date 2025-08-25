@@ -466,7 +466,7 @@ spec:
                   number: 80
 ```
 
-### 七、ALB/CLB7 类型 Ingress 获取客户端源 IP
+## 七、ALB/CLB7 类型 Ingress 获取客户端源 IP
 
 当 Ingress Controller 前端有七层负载均衡（ALB/CLB7）时，后端服务 Pod 获取到的源 IP 是负载均衡的代理 IP，而非真实的客户端 IP。为了让后端服务 Pod 能获取到客户端的真实 IP，需要修改 `ingress-nginx-controller` 的 ConfigMap。
 
