@@ -64,3 +64,23 @@ Mem:    100M       2.4M        97M         4K         0B        72K
 
 $ kubectl exec -it <your-pod> -- top
 ```
+
+## 问题排查
+
+### 长时间处于安装中
+
+> 一般出现此问题是由于资源不足
+
+- 执行以下命令检查这2个资源是否正常
+
+```shell
+kubectl -n kube-system get deployment uk8s-lxcfs
+kubectl -n kube-system get deployment uk8s-lxcfs-admission-webhook
+```
+
+- 如资源不正常则可以使用下面的命令来进一步诊断
+
+```shell
+kubectl -n kube-system describe deployment uk8s-lxcfs
+kubectl -n kube-system get describe uk8s-lxcfs-admission-webhook
+```
