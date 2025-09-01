@@ -1,0 +1,137 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: csi-upfs-controller
+  namespace: kube-system
+  labels:
+    app: "csi-upfs"
+    role: "controller"
+    owner: "ucloud"
+spec:
+  selector:
+    app: "csi-upfs"
+    role: "controller"
+    owner: "ucloud"
+  ports:
+    - name: dummy
+      port: 12345
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: csi-upfs-controller
+  namespace: kube-system
+spec:
+  serviceName: "csi-upfs-controller"
+  replicas: 1
+  selector:
+    matchLabels:
+      app:  "csi-upfs"
+      role: "controller"
+      owner: "ucloud"
+  template:
+    metadata:
+      labels:
+        app:  "csi-upfs"
+        role: "controller"
+        owner: "ucloud"
+    spec:
+      serviceAccount: csi-upfs-controller
+      priorityClassName: system-node-critical
+      containers:
+        - name: csi-provisioner
+          image: uhub.service.ucloud.cn/uk8s/csi-provisioner:v3.0.0
+          args:
+            - "--csi-address=$(ADDRESS)"
+            - "--extra-create-metadata"
+            - "--v=5"
+          env:
+            - name: ADDRESS
+              value: /csi/csi.sock
+          imagePullPolicy: "Always"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+        - name: csi-attacher
+          image: uhub.service.ucloud.cn/uk8s/csi-attacher:v3.4.0
+          args:
+            - "--csi-address=$(ADDRESS)"
+            - "--leader-election=true"
+            - "--leader-election-namespace=kube-system"
+            - "--timeout=30s"
+            - "--v=5"
+          env:
+            - name: ADDRESS
+              value: /csi/csi.sock
+            - name: MY_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          imagePullPolicy: "Always"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+        - name: csi-upfs
+          securityContext:
+            privileged: true
+            # CAP_SYS_ADMIN is required for mount() syscall.
+            capabilities:
+              add: ["SYS_ADMIN"]
+            allowPrivilegeEscalation: true
+          image: uhub.service.ucloud.cn/uk8s/csi-uk8s:upfs-25.09.01-cli-v14.7
+          imagePullPolicy: "Always"
+          args:
+            - "--drivername=upfs.csi.ucloud.cn"
+            - "--endpoint=$(CSI_ENDPOINT)"
+            - "--hostname=$(KUBE_NODE_NAME)"
+            - "--maxvolume=100"
+            - "--v=5"
+          envFrom:
+            - configMapRef:
+                name: uk8sconfig
+          env:
+            - name: KUBE_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: CSI_ENDPOINT
+              value: unix://csi/csi.sock
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+            - name: host-run-csi
+              mountPath: /var/run/csi/
+            - name: pods-mount-dir
+              mountPath: /var/lib/kubelet/
+              mountPropagation: "Bidirectional"
+      volumes:
+        - name: socket-dir
+          emptyDir: {}
+        - name: host-run-csi
+          hostPath:
+            path: /var/run/csi/
+        - name: pods-mount-dir
+          hostPath:
+            path: /var/lib/kubelet/
+            type: Directory
