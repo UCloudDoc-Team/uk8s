@@ -23,10 +23,10 @@
 因目前的UK8S版本均不默认安装UPFS CSI，需要自行部署。请按顺序执行如下命令即可。
 
 ```
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.07.18-cli-v14.3/rbac-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.07.18-cli-v14.3/rbac-node.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.07.18-cli-v14.3/csi-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.07.18-cli-v14.3/csi-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.09.01-cli-v14.7/rbac-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.09.01-cli-v14.7/rbac-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.09.01-cli-v14.7/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.09.01-cli-v14.7/csi-node.yml
 ```
 
 ## 创建存储类StorageClass
@@ -37,7 +37,7 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.07.18-cli-v14.3
 
 * path：表示需要挂载的UPFS子目录，默认值为`/`。如果指定的子目录在UPFS实例中尚不存在，则会被自动创建。
 
-* autoProvisionSubdir：upfs-csi版本 >= `upfs-25.06.27-cli-v14.0`时支持。默认不启用。 开启该参数且配置值为`true`之后，该StorageClass创建出的PVC可以实现数据分离。每个PVC会按如下规则在UPFS上创建对应的子目录: `<path>/<pvc-namespace>-<pvc-name>-<pv-name>`
+* autoProvisionSubdir：upfs-csi版本 >= `upfs-25.06.27-cli-v14.0`时支持。默认不启用。开启该参数且配置值为`true`之后，该StorageClass创建出的PVC可以实现数据分离。每个PVC会按如下规则在UPFS上创建对应的子目录: `<path>/<pvc-namespace>-<pvc-name>-<pv-name>`
 
 如当path配置为`/example`，且在`default` namespace中创建名为`logupfs-claim`的PVC时，UPFS实例中自动创建的目录名为
 
@@ -131,6 +131,72 @@ UPFS:upfs-xxxx          5.9T  8.5K  5.9T   1% /data
 ...
 ```
 
+## 通过静态PV指定远程UPFS目录挂载
+
+如果您希望指定挂载UPFS上的特定目录，可以通过声明静态PV的方式实现。请参考以下示例：
+
+> ⚠️ UPFS CSI**不会**帮您创建远程子目录。您指定的远程目录必须已经在UPFS上存在。如果指定了挂载不存在的远程目录，Pod将无法正常启动。
+
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: static-upfs-pvc-1
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 256Ti
+  csi:
+    driver: upfs.csi.ucloud.cn
+    # 请将 `volumeHandle` 字段修改为 `<您的upfs挂载uri>/<远程目录路径>` 的形式
+    volumeHandle: 100.65.128.139:10109,100.65.128.140:10109/upfs-1dcuqwz0e58u/path/to/my-data
+  storageClassName: ""
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: static-upfs-pvc-1
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: ""
+  volumeMode: Filesystem
+  volumeName: static-upfs-pvc-1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-static-upfs-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-static-upfs-1
+  template:
+    metadata:
+      labels:
+        app: nginx-static-upfs-1
+    spec:
+      containers:
+      - name: nginx
+        image: uhub.service.ucloud.cn/ucloud/nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: static-upfs
+          mountPath: /data
+      volumes:
+      - name: static-upfs
+        persistentVolumeClaim:
+          claimName: static-upfs-pvc-1
+```
+
+
 ## 删除UPFS实例
 
 由于UPFS资源删除需要该UPFS处于未挂载状态，请先删除所有使用到UPFS PVC的Pod后再执行UPFS资源删除操作。
@@ -146,6 +212,7 @@ UPFS:upfs-xxxx          5.9T  8.5K  5.9T   1% /data/kubelet/plugins/kubernetes.i
 ## 版本更新记录
 | 版本                    | 说明                                                       |
 |-------------------------|--------------------------------------------------------------|
+| upfs-25.09.01-cli-v14.7 | 支持通过静态PV挂载指定远程UPFS目录 |
 | upfs-25.07.18-cli-v14.3 | 修复同时创建多个pvc时，在upfs上创建子目录冲突的问题 |
 | upfs-25.06.27-cli-v14.3 | 修复upfs客户端从小于v12.0版本升级上来时的兼容性问题 |
 | upfs-25.06.27-cli-v14.1 | 修复upfs后端锁服务异常下调用锁请求导致客户端挂掉的问题 |

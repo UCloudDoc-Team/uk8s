@@ -92,7 +92,7 @@ spec:
             capabilities:
               add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
-          image: uhub.service.ucloud.cn/cncfdev/csi-uk8s:8aa2b75e4e69c736b0094f6ef946fe370dfd0232
+          image: uhub.service.ucloud.cn/uk8s/csi-uk8s:upfs-25.09.01-cli-v14.7
           imagePullPolicy: "Always"
           args:
             - "--drivername=upfs.csi.ucloud.cn"
