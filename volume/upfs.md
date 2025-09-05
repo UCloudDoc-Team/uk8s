@@ -23,10 +23,10 @@
 因目前的UK8S版本均不默认安装UPFS CSI，需要自行部署。请按顺序执行如下命令即可。
 
 ```
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.09.01-cli-v14.7/rbac-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.09.01-cli-v14.7/rbac-node.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.09.01-cli-v14.7/csi-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.09.01-cli-v14.7/csi-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.09.08-cli-v14.7/rbac-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.09.08-cli-v14.7/rbac-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.09.08-cli-v14.7/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.09.08-cli-v14.7/csi-node.yml
 ```
 
 ## 创建存储类StorageClass
@@ -196,6 +196,63 @@ spec:
           claimName: static-upfs-pvc-1
 ```
 
+## 使用UPFS挂载参数
+
+UPFS实例挂载时支持`forbidden_delete`、`forbidden_overwrite`、`forbidden_rename`、`forbidden_truncate`等[挂载参数](https://docs.ucloud.cn/upfs/upfs_guide/linux_mount?id=%e6%ad%a5%e9%aa%a4%e4%ba%8c%e3%80%81%e6%8c%82%e8%bd%bd%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f)。如果您希望在使用PVC挂载时也应用挂载参数，请参考以下示例进行配置。
+
+> ⚠️ 使用挂载参数前，确认您的UPFS CSI版本不低于 `upfs-25.09.08-cli-v14.7`
+
+#### 动态PV使用挂载参数
+
+在存储类中增加`mountOptions`参数，如下所示:
+
+```yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: upfs-example-forbidden-delete
+provisioner: upfs.csi.ucloud.cn
+parameters:
+  uri: 100.65.128.139:10109,100.65.128.140:10109/upfs-xxxx
+  path: /example
+  # autoProvisionSubdir: "true"
+mountOptions:
+  - forbidden_delete
+  - forbidden_rename
+  - forbidden_overwrite
+  - forbidden_truncate
+```
+
+指定`storageClassName`为`upfs-example-forbidden-delete`创建的PVC在挂载时，都会自动应用存储类中的挂载参数。
+
+#### 静态PV使用挂载参数
+
+1. 在PV定义中增加`mountOptions`参数;
+2. 将PV Name标记到`volumeHandle`上，格式为`<挂载uri>#<pv-name>`
+
+> 将PV Name标记到`volumeHandle`上, 保证了每个PV的`volumeHandle`都是不同的，从而触发独立的挂载行为。否则，如果您已经在节点上使用同远程路径的静态PV，挂载将不会重新执行，新的挂载参数也不会被应用。如果您的挂载路径本身包含`#`字符，请转义为`\#`后提供。
+
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: static-upfs-pvc-mountopt-1
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 256Ti
+  csi:
+    driver: upfs.csi.ucloud.cn
+    volumeHandle: 100.65.128.139:10109,100.65.128.140:10109/upfs-1dcuqwz0e58u/example#static-upfs-pvc-mountopt-1
+  mountOptions:
+    - forbidden_delete
+    - forbidden_overwrite
+    - forbidden_rename
+    - forbidden_truncate
+  storageClassName: ""
+  volumeMode: Filesystem
+```
 
 ## 删除UPFS实例
 
@@ -212,6 +269,7 @@ UPFS:upfs-xxxx          5.9T  8.5K  5.9T   1% /data/kubelet/plugins/kubernetes.i
 ## 版本更新记录
 | 版本                    | 说明                                                       |
 |-------------------------|--------------------------------------------------------------|
+| upfs-25.09.08-cli-v14.7 | 支持通过mountOptions提供UPFS挂载参数 |
 | upfs-25.09.01-cli-v14.7 | 支持通过静态PV挂载指定远程UPFS目录 |
 | upfs-25.07.18-cli-v14.3 | 修复同时创建多个pvc时，在upfs上创建子目录冲突的问题 |
 | upfs-25.06.27-cli-v14.3 | 修复upfs客户端从小于v12.0版本升级上来时的兼容性问题 |
