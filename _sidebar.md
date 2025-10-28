@@ -48,6 +48,7 @@
   - [安全组支持](/uk8s/userguide/SupportSecurityGroup.md)
   - [制作自定义节点镜像](/uk8s/administercluster/custom_image)
   - [自定义节点数据及初始化脚本](/uk8s/administercluster/cloud_init)
+  - [自定义节点kubelet参数](/uk8s/administercluster/kubelet_conf)
   - [节点常见问题](/uk8s/troubleshooting/node_debug_summary)
 - 集群弹性伸缩
   - [概述](/uk8s/administercluster/autoscaling/intro)
