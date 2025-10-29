@@ -55,7 +55,7 @@
 
 * 为了防止滥用导致Pod过多，子账号的命令行Pod最多只能运行2小时，也就是说子账号使用`kubectl`或者Pod的`终端`有时长限制，超过时间需要重新打开。这个限制对主账号不生效。
 
-* 如果不希望子账号使用`kubectl` 或者Pod的`终端`功能，可以在[UK8S IAM 授权管理](/uk8s/auth/IAM)中禁用`GetUK8STerminalToken`这个权限。
+* 如果不希望子账号使用`kubectl` 或者Pod的`终端`功能，可以在[UK8S IAM 授权管理](/uk8s/auth/iam)中禁用`GetUK8STerminalToken`这个权限。
 
 ## 开启授权
 
