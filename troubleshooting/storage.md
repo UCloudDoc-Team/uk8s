@@ -217,7 +217,7 @@ UDisk不支持多点读写，如需要多点读写请使用UFS。
 
 ### 8.4 upfs的pvc挂载pod失败
 
-先确认upfs的csi部署文件是否与[在UK8S中部署UPFS CSI]((/uk8s/volume/upfs#手动部署csi))中一致，如不一致，需要使用该文档中的部署文件部署
+先确认upfs的csi部署文件是否与[在UK8S中部署UPFS CSI]((/uk8s/volume/upfs#手动部署CSI))中一致，如不一致，需要使用该文档中的部署文件部署
 
 因同一个upfs文件系统在一个机器上只能mount一次，所以先检查对应节点上是否存在该upfs实例的挂载点，如果存在，则需要umount后，csi才会执行挂载pvc
 
