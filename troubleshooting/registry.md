@@ -1,9 +1,5 @@
 # 镜像及镜像仓库常见问题
 
-## 如何在 UK8S 中 Build 镜像？
-
-UK8S节点Docker配置文件经过修改，且1.19及以上集群默认安装containerd，因此不推荐在UK8S中直接Build镜像。可以通过[部署CI/CD](https://docs.ucloud.cn/uk8s/bestpractice/cicd_containerd)，或者在集群外
-UHost 中安装docker进行Build镜像。
 
 ## 怎么在UK8S集群中拉取Uhub以外的镜像？
 
