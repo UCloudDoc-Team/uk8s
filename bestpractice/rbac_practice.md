@@ -218,5 +218,5 @@ echo "kubeconfig written to file \"$KUBECONFIG\""
 直接在master节点执行`sh kubeconfig.sh pre mingpianwang`，即可自动生成一个kubeconfig文件，将这个kubeconfig文件分发给使用者，让其复制到~/.kube/config下即可，而且默认NS就是pre，get
 nodes等操作都是不被允许的。
 
-自动生成kubeconfig的源代码在这里，[generator kubeconfig](https://gist.github.com/ericchiang/d2a838ddad3f44436ae001a342e1001e)，我们只是加了一个默认NS，这样不需要在执行kubectl命令的时候追加-n
+自动生成kubeconfig是基于generator kubeconfig，我们只是加了一个默认NS，这样不需要在执行kubectl命令的时候追加-n
 pre。
