@@ -36,7 +36,7 @@
 
 建议： 先驱逐节点上服务再做删除节点操作，确保服务可用性。
 ![](/images/userguide/addnode/node-delete.png)
-![](/images/userguide/addnode/node-delete1.png)
+![](/images/userguide/addnode/node-delete-1.png)
 
 ## 节点标签
 您可以在节点列表页面，通过`修改标签`按钮为 Worker 节点添加、修改或删除标签。节点标签是 Kubernetes 中用于标识节点特征的键值对，可用于 Pod 的调度策略。
