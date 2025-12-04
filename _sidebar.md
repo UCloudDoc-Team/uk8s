@@ -1,4 +1,5 @@
 
+
 - 产品简介
   - [产品概念](/uk8s/introduction/whatisuk8s)
   - [使用须知](/uk8s/introduction/restriction)
@@ -9,6 +10,7 @@
 - 集群版本
   - [维护说明](/uk8s/version/maintain)
   - 版本跟踪
+    - [1.32 版本说明](/uk8s/version/1.32_release)
     - [1.30 版本说明](/uk8s/version/1.30_release)
     - [1.28 版本说明](/uk8s/version/1.28_release)
     - [1.26 版本说明](/uk8s/version/1.26_release)

@@ -12,6 +12,7 @@
 - 集群版本
   - [维护说明](/uk8s/version/maintain)
   - 版本跟踪
+    - [1.32 版本说明](/uk8s/version/1.32_release)
     - [1.30 版本说明](/uk8s/version/1.30_release)
     - [1.28 版本说明](/uk8s/version/1.28_release)
     - [1.26 版本说明](/uk8s/version/1.26_release)
@@ -51,6 +52,7 @@
   - [安全组支持](/uk8s/userguide/SupportSecurityGroup.md)
   - [制作自定义节点镜像](/uk8s/administercluster/custom_image)
   - [自定义节点数据及初始化脚本](/uk8s/administercluster/cloud_init)
+  - [自定义节点kubelet参数](/uk8s/administercluster/kubelet_conf)
   - [节点常见问题](/uk8s/troubleshooting/node_debug_summary)
 - 集群弹性伸缩
   - [概述](/uk8s/administercluster/autoscaling/intro)
