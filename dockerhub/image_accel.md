@@ -105,7 +105,7 @@ spec:
       requiredDuringSchedulingIgnoredDuringExecution:
         nodeSelectorTerms:
         - matchExpressions:
-          - key: node.uk8s.ucloud.cn/uimgacc
+          - key: node.uk8s.ucloud.cn/image_accel
             operator: In
             values:
             - "true"
