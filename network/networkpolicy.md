@@ -9,16 +9,17 @@
 > ⚠️ 在安装 Calico 网络隔离插件之前，请务必确认 CNI 版本大于等于 19.12.1，否则会删除Node上原有的网络配置，导致 Pod 网络不通。CNI
 > 版本查询及升级请参考：[CNI 网络插件升级](/uk8s/network/cni_update)。
 
-检查kubernetes版本 <=1.26.7，且>= 1.16.4，并且集群需要通外网[拉取Uhub以外的镜像](/uk8s/troubleshooting/registry)。 
+检查kubernetes版本 >= 1.16.4，并且集群需要通外网[拉取Uhub以外的镜像](/uk8s/troubleshooting/registry)。
 
 确认集群中是否使用组件ipamd：
 ```
 kubectl -n kube-system get ds cni-vpc-ipamd
 ```
 
-如果没有使用，可以忽略下面检查； 
-如果已经使用ipamd，确认ipamd是否开启Calico网络策略支持；
-使用如下命令查看参数`--calicoPolicyFlag`是否为`true`：
+如果没有使用，可以忽略下面检查；
+
+如果已经使用ipamd，确认ipamd是否开启Calico网络策略支持。使用如下命令查看参数`--calicoPolicyFlag`是否为`true`：
+
 ```
 kubectl -n kube-system get ds cni-vpc-ipamd -o=jsonpath='{.spec.template.spec.containers[0].args}{"\t"}{"\n"}'
 ```
@@ -39,7 +40,7 @@ UK8S 提供了两种版本的 Calico 组件来实现网络隔离，分别兼容�
 |  UK8S version   | Calico version  |
 | :----: | :----: |
 | <=1.24.12 | 3.10.0 |
-| 1.26.7  | 3.25.2 |
+| >=1.26.7  | 3.25.2 |
 
 ```bash
 calico_version="3.25.2" && kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/networkpolicy/${calico_version}-calico-policy-only.yaml
