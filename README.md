@@ -66,8 +66,9 @@
     - [集群网络](/uk8s/network/uk8s_network)
     - [网络隔离](/uk8s/network/networkpolicy)
     - [固定 IP 使用方法](/uk8s/network/static_ip)
-    - [CNI 网络插件升级](/uk8s/network/cni_update)
     - [IPAMD](/uk8s/network/ipamd)
+    - [Pod 使用独立子网](/uk8s/network/podnetwork)
+    - [CNI 网络插件升级](/uk8s/network/cni_update)
     - [CNI 常见问题](/uk8s/troubleshooting/cni)
 - 服务发现
   - Service 管理
