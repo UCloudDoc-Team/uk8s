@@ -1,10 +1,15 @@
+# 统一监控
+
+UK8S的统一监控功能是基于cloudwatch产品实现的，可分别在多个集群内开启后，统一在cloudwatch平台查看
+
 ## cloudwatch 云监控
 
 cloudwatch 是云平台中产品及资源进行监控的服务，详情[参考](https://docs.ucloud.cn/cloudwatch/README)，uk8s支持cloudwatch。
 
 ## 开启 cloudwatch
 
-- 在开启监控界面选择cloudwatch开启，如果没有则需要联系技术支持开通。
+- 在开启监控界面选择`统一监控`开启
+> 该功能当前处于公测阶段，如需体验请联系技术支持申请权限
 
 ![alt text](../images/monitor/cloudwatch/cloudwatch-1.png)
 
