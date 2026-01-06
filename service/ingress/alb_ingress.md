@@ -307,7 +307,7 @@ metadata:
     # alb.ingress.kubernetes.io/eip-quantity: '1'
     # eip弹性IP线路 默认:BGP/International
     # 国际线路:International;BGP线路:Bgp;精品BGP:BGPPro;电信:Telecom
-    # 默认值根据所处地域决定（华北一、上海、广州、华北二为BGP，其他地域为International）
+    # 默认值根据所处地域决定（华北（北京2）、上海、华南（广州）、华北（乌兰察布）为BGP，其他地域为International）
     # alb.ingress.kubernetes.io/eip-operator-name: 'BGP'
 
     # 外网带宽计费，以下是10Mbps包月的配置示例
@@ -501,5 +501,5 @@ type: kubernetes.io/tls
   * sharebandwidth: 共享带宽
 
 * EIP 默认线路:
-  * BGP: 华北一、上海、广州、华北二
+  * BGP: 华北（北京2）、上海、华南（广州）、华北（乌兰察布）
   * International: 其他地域
