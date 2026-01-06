@@ -151,3 +151,12 @@ spec:
 ```
 
 创建Service资源后同时建议业务侧将原先Servive的服务流量进行切换到该新建Service上。
+
+## 13. 节点上无法ping通ulb的ip
+
+* ipvs模式下，svc ip绑在本地kube-ipvs0网卡上，在老的k8s版本上是可以ping通的，在
+1.26及以后无法ping通, 因为有了以下规则导致ip无法ping通,官方PR: <https://github.com/kubernetes/kubernetes/pull/108460>
+
+```shell
+-A KUBE-IPVS-FILTER -m conntrack --ctstate NEW -m set --match-set KUBE-IPVS-IPS dst -j REJECT --reject-with icmp-port-unreachable
+```

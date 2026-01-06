@@ -78,3 +78,8 @@ metadata:
 单个节点存在可绑定的虚拟网卡数量主要由节点vCPU核数决定，参考 https://docs.ucloud.cn/vpc/guide/uni 。
 
 如 8 vCPU 的节点，可绑定4张虚拟网卡，则该节点可以使用的pod独立子网数量最大为3个。
+
+## 使用 ULB 注意事项
+
+> ⚠️ 开启了Pod独立子网后，如果您的集群kube-proxy为**iptables**模式，LoadBalancer型svc无法使用CLB4，建议您[使用NLB或ALB](/uk8s/service/internalservice)。
+

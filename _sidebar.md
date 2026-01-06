@@ -109,6 +109,7 @@
     - [添加监控目标](/uk8s/monitor/prometheusplugin/addmonitortarget.md)
     - [添加接收人](/uk8s/monitor/prometheusplugin/addreceiver.md)
     - [监控相关常见问题](/uk8s/monitor/prometheusplugin/faq.md)
+  - [Cloudwatch 统一监控](/uk8s/monitor/cloudwatch.md)
 - 集群日志
   - [使用 ELK 自建 UK8S 日志解决方案](/uk8s/log/elastic_filebeat_kibana_solution)
   - [使用 UK8S 日志插件功能](/uk8s/log/ELKplugin)
