@@ -112,7 +112,7 @@ spec:
           # 替换image值:
           # 企业微信机器人: uhub.service.ucloud.cn/uk8s/prometheus-webhook-wechat:v2.0.4
           # 钉钉机器人: uhub.service.ucloud.cn/uk8s/prometheus-webhook-dingtalk:v2.0.0
-          # 飞书机器人: uhub.service.ucloud.cn/uk8s/prometheus-webhook-feishu:v2.0.0
+          # 飞书机器人: uhub.service.ucloud.cn/uk8s/prometheus-webhook-feishu:v2.1.0
           image: xxx:xxx
           # 只有在企业微信机器人时，支持告警中配置集群ID
           # env:
