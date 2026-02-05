@@ -188,7 +188,7 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: adapter-config
+  name: prometheus-adapter
   namespace: uk8s-monitor
 data:
   config.yaml: |-
