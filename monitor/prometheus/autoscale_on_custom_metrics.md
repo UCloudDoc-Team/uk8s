@@ -182,7 +182,7 @@ spec:
 #### 配置适配器Prometheus Adapter
 现在您已经拥有一个正在运行的 Prometheus 副本来监控您的应用程序，您需要部署适配器，它知道如何与 Kubernetes 和 Prometheus 进行通信，充当两者之间的翻译器。
 
-不过，为了使自定义指标能够在 Kubernetes 中展示，还需要配置适配器的规则，告诉它如何从 Prometheus 中提取指标并转换为 Kubernetes 支持的格式：
+不过，为了使自定义指标能够在 Kubernetes 中展示，还需要配置适配器的规则，告诉它如何从 Prometheus 中提取指标并转换为 Kubernetes 支持的格式，以下为配置参考：
 
 ```yaml
 apiVersion: v1
@@ -209,6 +209,8 @@ data:
         )
 
 ```
+由于helm install 的时候，会创建一个名称为prometheus-adapter的cm , 默认使用的是这个cm，您可以按照以上参考修改默认的cm，或者修改服务配置，使用自定义的cm
+
 > 📘 参考文档：官方 Prometheus Adapter 配置说明请见 [Metrics Discovery and Presentation Configuration](https://github.com/kubernetes-sigs/prometheus-adapter/blob/master/docs/config.md)
 
 重启prometheus-adapter以生效配置
