@@ -212,6 +212,7 @@ data:
 > 📘 参考文档：官方 Prometheus Adapter 配置说明请见 [Metrics Discovery and Presentation Configuration](https://github.com/kubernetes-sigs/prometheus-adapter/blob/master/docs/config.md)
 
 修改完 configmap 后，重启prometheus-adapter以生效配置
+
 ```shell
 kubectl rollout restart deployment prometheus-adapter -n uk8s-monitor
 ```
