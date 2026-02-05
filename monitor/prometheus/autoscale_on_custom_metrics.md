@@ -160,7 +160,7 @@ spec:
 
 - 应用在该端口上暴露了标准的 Prometheus 指标，默认抓取路径为 /metrics，也可以通过 endpoints.path 字段自定义指标路径。
 
-```shell
+```yaml
 kind: ServiceMonitor
 apiVersion: monitoring.coreos.com/v1
 metadata:
@@ -180,9 +180,9 @@ spec:
 
 
 #### 配置适配器Prometheus Adapter
-现在您已经拥有一个正在运行的 Prometheus 副本来监控您的应用程序，您需要部署适配器，它知道如何与 Kubernetes 和 Prometheus 进行通信，充当两者之间的翻译器。
+现在您已经拥有一个正在运行的 Prometheus 副本来监控您的应用程序，并且有了一个适配器 prometheus-adapter，它知道如何与 Kubernetes 和 Prometheus 进行通信，充当两者之间的翻译器。
 
-不过，为了使自定义指标能够在 Kubernetes 中展示，还需要配置适配器的规则，告诉它如何从 Prometheus 中提取指标并转换为 Kubernetes 支持的格式，以下为配置参考：
+适配器会从名为`prometheus-adapter`的 configmap 中读取指标转化的规则。如果您需要定制指标转换的规则，可以参考以下说明修改`prometheus-adapter` configmap。
 
 ```yaml
 apiVersion: v1
@@ -207,14 +207,11 @@ data:
             <<.Series>>{<<.LabelMatchers>>}[1m]  # 使用 irate 函数计算每秒速率，时间窗口为 1 分钟
           )
         )
-
 ```
-由于helm install 的时候，会创建一个名称为prometheus-adapter的cm , 默认使用的是这个cm，您可以按照以上参考修改默认的cm，或者修改服务配置，使用自定义的cm
 
 > 📘 参考文档：官方 Prometheus Adapter 配置说明请见 [Metrics Discovery and Presentation Configuration](https://github.com/kubernetes-sigs/prometheus-adapter/blob/master/docs/config.md)
 
-重启prometheus-adapter以生效配置
-
+修改完 configmap 后，重启prometheus-adapter以生效配置
 ```shell
 kubectl rollout restart deployment prometheus-adapter -n uk8s-monitor
 ```
