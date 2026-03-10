@@ -331,6 +331,8 @@ metadata:
     # alb.ingress.kubernetes.io/monitor-domain: "example.com"
     # http的方式做健康检查的的路径 默认: ""
     # alb.ingress.kubernetes.io/monitor-path: "/healthz"
+    # http的方式做健康检查的请求方法 默认: "HEAD" 可以选择 "GET" 或 "HEAD"
+    # alb.ingress.kubernetes.io/monitor-method: "GET"
 
     # 安全组配置,多个使用逗号隔开
     # 优先级为顺序
@@ -478,6 +480,7 @@ type: kubernetes.io/tls
 | alb.ingress.kubernetes.io/load-balancer-quantity   | LB 付费时长                                             | 1                           | 否               |
 | alb.ingress.kubernetes.io/monitor-domain           | http 的方式做健康检查的域名                             | ""                          | 是               |
 | alb.ingress.kubernetes.io/monitor-path             | http 的方式做健康检查的路径                             | ""                          | 是               |
+| alb.ingress.kubernetes.io/monitor-Method           | http 的方式做健康检查的请求方式(HEAD/GET)               | "HEAD"                      | 是               |
 | alb.ingress.kubernetes.io/security-groups          | 安全组配置，多个使用逗号隔开，优先级为顺序              | ""                          | 是               |
 | alb.ingress.kubernetes.io/eip-paymode              | EIP 计费模式 (traffic/bandwidth/sharebandwidth)         | "bandwidth"                 | 否               |
 | alb.ingress.kubernetes.io/eip-sharebandwidthid     | EIP 共享带宽 ID                                         | ""                          | 否               |
