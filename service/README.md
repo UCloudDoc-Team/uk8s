@@ -2,8 +2,7 @@
 
 - [Service 介绍](/uk8s/service/README)
 - [集群内访问 Service](/uk8s/service/cluster_service)
-- [通过内网ULB访问Service](/uk8s/service/internalservice)
-- [通过外网ULB访问Service](/uk8s/service/externalservice)
+- [通过ULB访问Service](/uk8s/service/internalservice)
 - [使用已有的ULB](/uk8s/service/ulb_designation)
 - [ULB参数说明](/uk8s/service/annotations)
 - [ULB属性修改的处理方法](/uk8s/service/change_ulb_name)

@@ -4,9 +4,8 @@
 
 ## 参数注意项
 
-1. 目前除了外网 ULB 绑定的 EIP 的带宽值以外，其他参数暂时不支持修改，请谨慎配置。
-2. 外网 ULB 绑定的 EIP 的带宽值，必须通过 Annotations 修改，Annotations 将会覆盖控制台修改的配置。
-
+1. 目前除了 ULB 绑定的 EIP 的带宽值以外，其他参数暂时不支持修改，请谨慎配置。
+2. ULB 绑定的 EIP 的带宽值，必须通过 Annotations 修改，Annotations 将会覆盖控制台修改的配置。
 
 ## 1. ULB 相关参数说明
 
@@ -16,9 +15,9 @@
 | -------------------------------------------------------------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | service.beta.kubernetes.io/ucloud-load-balancer-type                             | outer      | 负载均衡网络类型，枚举值为 inner / outer。                                                                                                                                                                                                                                                                                                                             |
 | service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol                 | tcp        | VServer 协议类型，枚举值为 tcp / udp / http / https。                                                                                                                                                                                                                                                                                                                 |
-| service.beta.kubernetes.io/ucloud-load-balancer-listentype                       | /          | 负载均衡类型，枚举值为 packetstransmit / requestproxy / application / network。<br>1. ULB 类型为请求代理，VServer 协议为 tcp：该参数配置为 requestproxy，vserver-protocol 配置为 tcp；<br>2. ULB 类型为请求代理，VServer 协议为 http / https：无需配置该参数，自动按照 vserver-protocol 配置；<br>3. ULB 类型为报文转发，VServer 协议为 tcp / udp：无需配置该参数，自动按照 vserver-protocol 配置。<br> 4. ULB类型为ALB，该参数配置为 application（仅24.03.13版本之后支持），vserver-protocol 可选 http / https；<br>5. ULB类型为NLB，该参数配置为network（仅24.12.24版本之后支持），vserver-protocol可选tcp / udp； <br />负载均衡类型及 VServer 协议类型详情说明请参见：[负载均衡类型](/ulb/fast/createulb/networktype) |
+| service.beta.kubernetes.io/ucloud-load-balancer-listentype                       | /          | 负载均衡类型，枚举值为 application / network / packetstransmit / requestproxy。<br>1. ULB类型为ALB，该参数配置为 application（仅24.03.13版本之后支持），vserver-protocol 可选 http / https；<br>2. ULB类型为NLB，该参数配置为network（仅24.12.24版本之后支持），vserver-protocol可选tcp / udp； <br />3. ULB 类型为CLB7，VServer 协议为 tcp：该参数配置为 requestproxy，vserver-protocol 配置为 tcp；<br>4. ULB 类型为CLB7，VServer 协议为 http / https：无需配置该参数，自动按照 vserver-protocol 配置；<br>5. ULB 类型为CLB4，VServer 协议为 tcp / udp：无需配置该参数，自动按照 vserver-protocol 配置。<br>负载均衡类型及 VServer 协议类型详情说明请参见：[负载均衡类型](/ulb/fast/createulb/networktype) |
 | service.beta.kubernetes.io/ucloud-load-balancer-vserver-method                   | roundrobin | VServer的负载均衡模式，枚举值为 roundrobin（轮询）、source（源地址）、consistenthash（一致性哈希）、sourceport（源地址计算端口）、consistenthashport（端口一致性哈希）、leastconn(最小连接数,clb4不支持)、backup(主备,alb独占)、sourcehash（源地址哈希，nlb独占）、weightleastconn（加权最小连接，nlb独占）。                                                                                                                                                                  |
-| service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout           | 0/60       | 使用 ULB4 时，表示连接保持时间，单位为秒，取值 [60, 900]，0 表示禁用连接保持，默认为 0（不需要指定参数）。<br>使用 ULB7 时，表示空闲连接的回收时间，单位为秒，取值为 (0, 86400]，0 表示禁用连接保持，默认为 60。<br>指定参数后，persistence-type 不能为 none。                                                                                                                                                                                         |
+| service.beta.kubernetes.io/ucloud-load-balancer-vserver-client-timeout           | 0/60       | 使用 CLB4 时，表示连接保持时间，单位为秒，取值 [60, 900]，0 表示禁用连接保持，默认为 0（不需要指定参数）。<br>使用 CLB7 时，表示空闲连接的回收时间，单位为秒，取值为 (0, 86400]，0 表示禁用连接保持，默认为 60。<br>指定参数后，persistence-type 不能为 none。                                                                                                                                                                                         |
 | service.beta.kubernetes.io/ucloud-load-balancer-vserver-session-persistence-type | none       | 会话保持方式，枚举值为 none（关闭）、serverinsert（自动生成 KEY）、userdefined（用户自定义 KEY）。                                                                                                                                                                                                                                                                                         |
 | service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-port                 | /          | 开启 ssl 协议的端口，多个用 "," 分隔开，必须和 ssl-cert 同时指定。                                                                                                                                                                                                                                                                                                                 |
 | service.beta.kubernetes.io/ucloud-load-balancer-vserver-ssl-cert                 | /          | ssl 证书 ID，必须和 ssl-port 同时指定，需要先将证书上传至 UCloud。<br>负载均衡所使用的 SSL 证书的管理，请参见 ULB 文档：[添加证书](/ulb/guide/certificate/addcertificate)                                                                                                                                                                                                                                |
@@ -37,7 +36,7 @@
 
 CloudProvider 版本查看及升级请参见：[CloudProvider 插件更新](/uk8s/service/cp_update)
 
-## 2. 外网 ULB 绑定 EIP 相关参数说明
+## 2. ULB 绑定 EIP 相关参数说明
 
 **注意：Service创建之后，以下参数仅`service.beta.kubernetes.io/ucloud-load-balancer-eip-bandwidth`可以修改，其它参数不允许修改！！！**
 

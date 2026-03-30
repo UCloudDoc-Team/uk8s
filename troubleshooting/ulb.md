@@ -1,25 +1,25 @@
 # ULB 相关常见问题处理
 
-## 1. 如何区别使用ULB4还是ULB7？
+## 1. 如何区别使用CLB4还是CLB7？
 
-通过service.metadata.annotations中的service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol值来声明使用ULB4还是ULB7。
+通过service.metadata.annotations中的service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol值来声明使用CLB4还是CLB7。
 
-如果值为tcp或者udp则使用ULB4。
+如果值为tcp或者udp则使用CLB4。
 
-如果是http或者https，则使用ULB7。
+如果是http或者https，则使用CLB7。
 
-## 2. 如何区别ULB7是不是ALB
+## 2. 如何区别使用CLB7还是ALB
 
 通过查看service.metadata.annotations中service.beta.kubernetes.io/ucloud-load-balancer-listentype是否为application来确定是alb，或者在service上找到对应LB对应的ID，查看是否在控制台上LB产品页面的应用型负载均衡页面内。
 
-## 3. 使用 ULB4 时 Vserver 为什么会有健康检查失效
+## 3. 使用 CLB4 时 Vserver 为什么会有健康检查失效
 
 1. 如果 svc 的 externalTrafficPolicy 为 Local 时，这种情况是正常的，失败的节点表示没有运行对应的 pod
 2. 需要在节点上抓包 `tcpdump -i eth0 host <ulb-ip>` 查看是否正常, ulb-ip 替换为 svc 对应的实际 ip
 3. 查看节点上 kube-proxy 服务是否正常 `systemctl status kube-proxy`
 4. 执行`iptables -L -n -t nat |grep KUBE-SVC` 及 `ipvsadm -L -n`查看转发规则是否下发正常
 
-## 4. ULB4 对应的端口为什么不是 NodePort 的端口
+## 4. CLB4 对应的端口为什么不是 NodePort 的端口
 
 1. K8S 节点上对 ulb_ip+serviceport 的端口组合进行了 iptables 转发，所以不走 nodeport
 2. 如果有兴趣，可以通过在节点上执行`iptables -L -n -t nat` 或者`ipvsadm -L -n` 查看对应规则 

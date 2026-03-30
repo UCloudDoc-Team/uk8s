@@ -2,19 +2,19 @@
 
 ## 网络编程中如何获得对端IP
 
-1. 如果是HTTP1.1协议，一般的反向代理或者负载均衡设备（如ULB7）支持X-Forwarded-For头部字段，会在用户的请求报文中加入类似**X-Forwarded-For:114.248.238.236**的头部。Web应用程序只需要解析该头部即可获得用户真实IP。
+1. 如果是HTTP1.1协议，一般的反向代理或者负载均衡设备（如CLB7）支持X-Forwarded-For头部字段，会在用户的请求报文中加入类似**X-Forwarded-For:114.248.238.236**的头部。Web应用程序只需要解析该头部即可获得用户真实IP。
 
 2. 如果是TCP或UDP自定义协议，可以客户端在协议字段里定义一个大端unsigned字段来保存自身IP，服务端把该字段解析出来然后调用inet_ntoa(3)等函数获得ipv4点分字符串。
 
 3. 如果2中协议不支持填写自身IP，则服务端可以通过socket系统调用getpeername(2)来获取对端地址。下文讨论此方式。
 
-## Kubernetes Loadbalancer ULB4碰到的问题
+## Kubernetes Loadbalancer CLB4碰到的问题
 
-UK8S使用ULB4和ULB7来支持Loadbalancer类型的Service。对于ULB7，由于只支持HTTP协议且默认支持X-Forwarded-For头部，所以Web服务可以很容易获取客户端的真实IP。但对于使用ULB4接入的纯四层协议的服务来说，可能需要使用getpeername(2)来获取客户端真实IP。然而由于目前kube-proxy采用Iptables模式，后端pod内的应用程序的网络库调用getpeername(2)会无法获得正确的IP地址。以下例子可以说明问题。
+UK8S使用CLB4和CLB7来支持Loadbalancer类型的Service。对于CLB7，由于只支持HTTP协议且默认支持X-Forwarded-For头部，所以Web服务可以很容易获取客户端的真实IP。但对于使用CLB4接入的纯四层协议的服务来说，可能需要使用getpeername(2)来获取客户端真实IP。然而由于目前kube-proxy采用Iptables模式，后端pod内的应用程序的网络库调用getpeername(2)会无法获得正确的IP地址。以下例子可以说明问题。
 
-部署一个简单的webserver，通过Loadbalancer ULB4外网模式接入。
+部署一个简单的webserver，通过Loadbalancer CLB4外网模式接入。
 
-```
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -23,7 +23,7 @@ metadata:
     app: ucloud-nginx
   annotations:
     service.beta.kubernetes.io/ucloud-load-balancer-type: "outer"
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-method: "source" 
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-method: "source"
 spec:
   type: LoadBalancer
   ports:
@@ -91,11 +91,11 @@ func AppRouter(w http.ResponseWriter, r *http.Request) {
 
 ## 原因解释
 
-Loadbalancer创建成功后，ULB4的VServer将UK8S集群中的每个Node云主机节点作为自身的RS节点，RS端口为Service申明的Port值（注意不是NodePort）。ULB4将访问流量转发到其中一个RS后，RS根据本机上kube-proxy生成的iptables规则将流量DNAT到后端Pod中，如下所示。
+Loadbalancer创建成功后，CLB4的VServer将UK8S集群中的每个Node云主机节点作为自身的RS节点，RS端口为Service申明的Port值（注意不是NodePort）。CLB4将访问流量转发到其中一个RS后，RS根据本机上kube-proxy生成的iptables规则将流量DNAT到后端Pod中，如下所示。
 
 ![](/images/service/ulb4.jpg)
 
-图中ULB4先将流量转发到Node1中，Node1中根据iptables DNAT规则，将流量转发给Node2中的Pod。
+图中CLB4先将流量转发到Node1中，Node1中根据iptables DNAT规则，将流量转发给Node2中的Pod。
 需要注意的是，Node1将IP包转发到Node2前，对这个包有一次SNAT操作。准确地说，是一次MASQUERADE操作，规则如下。
 
 ```

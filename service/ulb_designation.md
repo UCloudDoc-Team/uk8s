@@ -12,8 +12,6 @@ UK8S支持在创建 LoadBalancer 类型的 Service 时，指定使用已有的 U
 
 4. 通过UK8S创建的Vserver命名规范为`Protocol-ServicePort-ServiceUUID`，请勿随意修改，否则可能导致脏数据。
 
-下面我们来看下如何使用已有的ULB实例。
-
 ## 使用已有ALB
 
 > ⚠️ 使用 ALB 时，推荐升级 [CloudProvider](/uk8s/service/cp_update) 版本到 >= 24.08.13。
@@ -78,9 +76,7 @@ spec:
     app: https
 ```
 
-## 使用已有的内网ULB
-
-声明使用已有的内网ULB，需要声明至少两个annotations。
+## 使用已有的内网CLB4
 
 ```yaml
 apiVersion: v1
@@ -92,6 +88,7 @@ metadata:
   annotations:
     service.beta.kubernetes.io/ucloud-load-balancer-id: "ulb-ofvmd1o4" #替换成自己的ULB Id
     service.beta.kubernetes.io/ucloud-load-balancer-type: "inner"
+    service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: "tcp"
 spec:
   type: LoadBalancer
   ports:
@@ -102,7 +99,7 @@ spec:
     app: https
 ```
 
-## 使用已有的外网ULB（7层）
+## 使用已有的外网CLB7
 
 ```yaml
 apiVersion: v1
@@ -129,30 +126,4 @@ spec:
       targetPort: 8080
   selector:
     app: https
-```
-
-## 使用已有的外网ULB（4层）
-
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: https
-  labels:
-    app: https
-  annotations:
-    service.beta.kubernetes.io/ucloud-load-balancer-id: "ulb-ofvmd1o4"
-    service.beta.kubernetes.io/ucloud-load-balancer-vserver-protocol: "tcp"
-    # 表示使用4层负载均衡
-spec:
-  type: LoadBalancer
-  ports:
-    - protocol: TCP
-      port: 443
-      targetPort: 8080
-    - protocol: TCP
-      port: 80
-      targetPort: 8080
-  selector:
-    app: tcp
 ```
