@@ -105,7 +105,7 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 更新内容：
 
-- 修复添加vserver超过20个可能失败的问题，该问题自上个版本引入
+- 修复添加vserver超过20个可能失败的问题，该问题自`25.07.23`版本引入
 
 ### 更新版本：25.07.23
 
@@ -193,7 +193,7 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 更新内容：
 
-- 支持ULB4的tcp和udp协议混用
+- 支持CLB4的tcp和udp协议混用
 
 ### 更新版本：23.04.2
 
@@ -309,8 +309,8 @@ annotations:
 
 更新内容：
 
-- 支持内网 ULB7
-- 支持 ULB7 的 TCP 模式
+- 支持内网 CLB7
+- 支持 CLB7 的 TCP 模式
 
 ### 更新版本：20.10.2
 
@@ -318,7 +318,7 @@ annotations:
 
 更新内容：
 
-- 更新支持创建指定子网的ULB，详细设置请查看[通过内网ULB访问Service](/uk8s/service/internalservice)。
+- 更新支持创建指定子网的ULB，详细设置请查看[通过 ULB 访问 Service](/uk8s/service/internalservice)。
 
 ### 更新版本：20.10.1
 
