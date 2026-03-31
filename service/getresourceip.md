@@ -58,7 +58,7 @@ ucloud-nginx   LoadBalancer   172.17.179.247   117.50.3.206   80:43832/TCP   112
 
 服务本身的源码非常简单，只返回客户端地址，如下所示。
 
-```
+```go
 package main
 
 import (
@@ -131,7 +131,7 @@ endpoint
 
 对于Pod需要明确知道客户端来源地址的情况，我们需要显示地将Service的spec.externalTrafficPolicy设置成Local,如下修改。
 
-```
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
