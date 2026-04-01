@@ -93,7 +93,7 @@ Done
      - 若不存在请咨询技术支持，将提供您该文件，拷贝文件保存至GPU node的 `/var/run/nvidia-topologyd/virtualTopology.xml`后执行第2步
    2. gpu-pod.yaml添加以下内容
 
-   ```yaml
+```yaml
     containers:
     volumeMounts:
     - mountPath: /var/run/nvidia-topologyd
@@ -104,7 +104,7 @@ Done
       hostPath:
         path: /var/run/nvidia-topologyd
         type: Directory
-    ```
+```
 
 ## 插件升级
 
@@ -141,8 +141,8 @@ Done
 通过删除裸金属节点文件"/var/lib/kubelet/cpu_manager_state"，且默认配置`Kubelet`如下参数来支持绑核功能；相关官方文档可参考[Topology Manager Policy](https://kubernetes.io/docs/tasks/administer-cluster/topology-manager/)，[CPU Mangaer Policy](https://kubernetes.io/docs/tasks/administer-cluster/cpu-management-policies/)
 
 ```
-  --cpu-manager-policy=static 
-  --topology-manager-policy=best-effort 
+  --cpu-manager-policy=static \
+  --topology-manager-policy=best-effort \
 ```
 
 节点是否配置了支持绑核的参数，可登陆节点使用命令做参数检测：
@@ -159,7 +159,7 @@ ps -aux|grep kubelet|grep topology-manager-policy
 
     现在我们来创建 Pod：
 
-```YAML
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -172,8 +172,8 @@ spec:
     image: uhub.service.ucloud.cn/uk8s/dcgm:3.3.0
     command: ["/usr/bin/dcgmproftester12"]
     args: ["--no-dcgm-validation", "-t 1004", "-d 3600"] # 这里 -d 为运行时间
-    resources: # 这里的数值需要根据不同机器配置进行修改
-      limits: ## limit 与 request保持一致
+    resources: # 根据机器配置修改数值
+      limits:  # limits与requests保持一致
           nvidia.com/gpu: 1
           memory: 10Gi 
           cpu: 10
