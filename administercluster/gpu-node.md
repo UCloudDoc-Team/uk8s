@@ -43,8 +43,9 @@
     1. 查看节点是否具有`nvidia.com/gpu`的资源。
 ![](/images/gpu/image-3.png)
     2. 运行如下示例使用`nvidia.com/gpu`资源类型请求 NVIDIA GPU，并查看日志结果是否正确。
+
     ```bash
-    $ cat <<EOF | kubectl apply -f -
+    cat <<EOF | kubectl apply -f -
     apiVersion: v1
     kind: Pod
     metadata:
@@ -63,6 +64,7 @@
         effect: NoSchedule
     EOF
     ```
+
     ```bash
     $ kubectl logs gpu-pod
     [Vector addition of 50000 elements]
@@ -72,6 +74,7 @@
     Test PASSED
     Done
     ```
+
 5. GPU云主机NCCL TOPO文件透传pod
 
    如果在GPU pod内NCCL性能测试没有达到理想值，考虑从虚机上把topology.xml文件透传到pod内；具体操作如下：
