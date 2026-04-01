@@ -95,10 +95,10 @@ Done
 
 ```yaml
     containers:
-    volumeMounts:
-    - mountPath: /var/run/nvidia-topologyd
-      name: topologyd
-      readOnly: true
+      volumeMounts:
+      - mountPath: /var/run/nvidia-topologyd
+        name: topologyd
+        readOnly: true
     volumes:
     - name: topologyd
       hostPath:
