@@ -40,7 +40,7 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/us3.25.03.31_v1.22/rbac
 ## 已支持UK8S挂载US3的地域（持续更新）
 
 UK8S已经支持挂载US3，具体支持地域请查看
-[US3接入域名](https://docs.ucloud.cn/ufile/s3/s3_introduction?id=%E6%8E%A5%E5%85%A5%E5%9F%9F%E5%90%8D%EF%BC%88endpoint%EF%BC%89)
+[US3地域和域名](https://docs.ucloud.cn/ufile/introduction/region)
 
 ## 一、创建US3授权Secret
 
