@@ -160,3 +160,9 @@ spec:
 ```shell
 -A KUBE-IPVS-FILTER -m conntrack --ctstate NEW -m set --match-set KUBE-IPVS-IPS dst -j REJECT --reject-with icmp-port-unreachable
 ```
+
+## 14. ALB/NLB 与 Service NodePort 配置检查
+
+* 在使用 ALB/NLB 时，需要确认 Kubernetes Service 已支持 NodePort，并确保 `allocateLoadBalancerNodePorts` 字段处于开启状态（默认开启）。
+
+* 如因安全策略等原因无法开启该字段，建议评估并改用 direct endpoint 功能。
