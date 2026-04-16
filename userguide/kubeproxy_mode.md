@@ -15,7 +15,7 @@ userspace模式由于性能问题已经不推荐使用。这里主要介绍iptab
 
 > 备注：在使用IPVS模式的kubernetes集群中进行滚动更新，期间如果有一个客户端在短时间内（两分钟）内发送大量短链接，客户端端口会被复用，导致node收到的来自于该客户端的请求报文网络五元组相同，触发IPVS复用Connection，有可能导致报文被转发到了一个已经销毁的Pod上，导致业务异常。
 
-官方issue：https://github.com/kubernetes/kubernetes/issues/81775
+官方issue：<https://github.com/kubernetes/kubernetes/issues/81775>
 
 ### 如何切换
 
@@ -26,9 +26,15 @@ userspace模式由于性能问题已经不推荐使用。这里主要介绍iptab
 iptables是一个Linux内核功能，是一个高效的防火墙，并提供了数据包处理和过滤方面的能力。它可以在核心数据包处理管线上用Hook挂接一系列的规则。iptables模式中kube-proxy在NAT
 pre-routing Hook中实现它的NAT和负载均衡功能。这种方法简单有效，依赖于成熟的内核功能，并且能够和其它跟 iptables 协作的应用融洽相处。
 
-### IPVS模式
+### IPVS模式(1.35以上废弃)
 
 IPVS是一个用于负载均衡的Linux内核功能。IPVS模式下，kube-proxy使用IPVS负载均衡代替了iptables。IPVS的设计思路就是用来为大量服务进行负载均衡的，它有一套优化过的API，使用优化的查找算法，而不是从列表中查找规则，在大规模场景下相对IPVS性能更好。
+
+### nftables模式
+
+nftables是旨在替代 iptables 的新一代高性能网元处理机制。其优势在于大幅提升大规模集群下的网络规则更新速度、更低的 CPU 消耗，以及比拟 IPVS 的转发性能。缺点则是技术较新，可能存在兼容性限制。
+
+官方相关说明 <https://kubernetes.io/blog/2025/02/28/nftables-kube-proxy/>
 
 ### 模式对比
 
