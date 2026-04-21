@@ -22,7 +22,8 @@ curl --resolve apiserver-loopback-client:6443:127.0.0.1 -k -v https://apiserver-
 ### 如何解决
 
 逐一登录master节点，重启`kube-apiserver`服务(`systemctl restart kube-apiserver`)，重启不会影响线上业务，需注意点：
-1. 重启期间不能有业务发布变更等操作
+1. 重启期间不能有业务发布变更等操作。
 2. 逐一执行重启，不可两台及以上master同时重启。
+3. 重启之后可能需要等待12个小时控制台上提示才会消失。
 
 > 托管版UK8S用户无法自行重启apiserver, 请联系UK8S团队
