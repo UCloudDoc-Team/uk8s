@@ -292,7 +292,7 @@ spec:
         envFrom:
         - configMapRef:
             name: uk8sconfig
-        image: uhub.service.ucloud.cn/uk8s/ucloud-load-balancer-controller:2025.11.24
+        image: uhub.service.ucloud.cn/uk8s/ucloud-load-balancer-controller:2026.03.06
         livenessProbe:
           httpGet:
             path: /healthz

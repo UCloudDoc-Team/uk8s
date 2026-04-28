@@ -34,7 +34,7 @@ helm install \
 ### 安装ucloud alb ingress
 
 ```shell
-kubctl apply -f https://docs.ucloud.cn/uk8s/yaml/ingress_alb/20251124.yaml
+kubctl apply -f https://docs.ucloud.cn/uk8s/yaml/ingress_alb/20260306.yaml
 ```
 
 ## 使用
