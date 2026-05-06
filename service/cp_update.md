@@ -99,6 +99,15 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 ## 2. 变更记录
 
+
+### 更新版本：26.04.14
+
+更新时间： 2026 年 04 月 14 日
+
+更新内容：
+
+- 添加检查非ulb4的lb情况下 nodeport 是否开启
+
 ### 更新版本：25.08.21
 
 更新时间： 2025 年 08 月 21 日
