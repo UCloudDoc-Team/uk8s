@@ -95,7 +95,8 @@
     - [动态PV 使用UFS](/uk8s/volume/dynamic_ufs)
     - [在 UK8S 中使用 UPFS](/uk8s/volume/upfs)
   - 对象存储
-    - [在 UK8S 中使用 US3](/uk8s/volume/ufile)
+    - [在 UK8S 中使用 US3 ](/uk8s/volume/ufile)
+    - [使用 us3fs 挂载 US3](/uk8s/volume/ufile_us3fs)
   - [CSI 存储插件升级](/uk8s/volume/CSI_update)
   - [存储常见问题](/uk8s/troubleshooting/storage)
 - 集群监控
