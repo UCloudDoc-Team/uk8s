@@ -78,7 +78,7 @@ us3fs 默认挂载选项为 `-o allow_other`，日志目录默认为 `/var/log/u
 
 与 s3fs 挂载方式一致，在 US3 控制台创建对象存储目录并生成授权令牌（Token），然后在 Kubernetes 中创建 Secret：
 
-```
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -174,9 +174,14 @@ pgrep -x us3fs
 mount | grep us3fs
 ```
 
-## 切换回 s3fs
+## 从 s3fs 挂载切换到 us3fs 挂载
 
-如果需要从 us3fs 切回 s3fs，只需将 csi-ufile DaemonSet 中的 `--mounter=us3fs` 修改为 `--mounter=s3fs`（或删除该参数使用默认值 `s3fs`），然后滚动更新 DaemonSet 即可。
+> ⚠️ 您只能在集群中选择使用 s3fs 或 us3fs 其中一种挂载方式, 如果当前集群已经存在 s3fs 挂载的 PVC，我们不推荐您切换到 us3fs。
 
-> ⚠️ **切换 mounter 类型不会影响已有 PV/PVC**：切换后已挂载的卷不会自动卸载，但新创建的挂载将使用新的 mounter 类型。如果希望统一 mounter 类型，请逐个驱逐节点上的业务 Pod 并等待 PVC 卸载完成后再滚动更新。
+如果您希望换到 us3fs 挂载, 需要的步骤为:
+
+1. 按以上文档完成 csi-ufile DaemonSet 部署调整和新的存储类(使用 us3 endpoint)创建
+2. 将现有的使用了 s3fs 挂载的 Pod 数量缩容到 0
+3. 删除所有使用旧的 ufile 存储类(使用 s3 endpoint)创建的 PVC, 并使用新的存储类(使用 us3 endpoint)重建同名 PVC
+4. 恢复 Pod 副本数
 
