@@ -78,6 +78,7 @@ kind: Service
 metadata:
   annotations:
     "service.beta.kubernetes.io/ucloud-load-balancer-type": "inner"
+    "service.beta.kubernetes.io/ucloud-load-balancer-listentype": "network"
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: ingress-nginx
