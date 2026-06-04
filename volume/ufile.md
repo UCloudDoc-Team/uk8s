@@ -137,3 +137,33 @@ spec:
     persistentVolumeClaim:
       claimName: logs3-claim
 ```
+
+## 五、问题解决
+
+由于 s3 协议挂载依赖 [s3fs工具](https://github.com/s3fs-fuse/s3fs-fuse) , s3fs 存在偶发的 segfault 错误导致进程崩溃、挂载点失效的问题, 官方至今未能完全解决：
+
+- https://github.com/s3fs-fuse/s3fs-fuse/issues/2321
+- https://github.com/s3fs-fuse/s3fs-fuse/issues/2457
+- https://github.com/s3fs-fuse/s3fs-fuse/issues/2887
+
+
+csi-ufile 从 **26.06.03** 版本开始支持自动拉起因 segfault 错误退出的 s3fs 进程, 恢复宿主上的挂载点。
+
+为了使容器内能正常访问挂载目录, 您仍需要为容器配置以下健康检查规则, 以实现在s3fs重启后自动重启容器。
+
+```yaml
+    livenessProbe:
+      exec:
+        command:
+        - /bin/sh
+        - -ec
+        - |
+          MNT=/data
+          timeout 5s stat "$MNT" >/dev/null 2>&1 || exit 1
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 8
+      failureThreshold: 2
+```
+
+请将 `MNT=/data` 替换为实际的挂载路径。
