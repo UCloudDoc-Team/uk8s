@@ -5,6 +5,19 @@
 自定义数据是指主机初次启动或每次启动时，系统自动运行的配置脚本，该脚本可由控制台/API等传入元
 数据服务器，并由主机内的cloud-init程序获取，脚本遵循标准CloudInit语法。该脚本会阻塞UK8S的安装脚本，即只有该脚本执行完毕后，才会开始K8S相关组件的安装，如Kubelet、Scheduler等。
 
+### UBoltAgent监控代理安装
+
+以下示例展示如何在自定义数据中安装[UBoltAgent监控代理组件](https://docs.ucloud.cn/cloudwatch/uboltagent/UboltAgent_Linux_Installation_Guide)：
+
+```yaml
+#cloud-config
+packages:
+  - curl
+runcmd:
+  - 'curl -O http://umon.api.service.ucloud.cn/static/cloudwatch/install_uboltagent.sh && sudo sh install_uboltagent.sh'
+```
+
+
 ## 初始化脚本
 
 该脚本只在UK8S启动后执行一次，且是在K8S相关组件安装成功后执行。遵循标准shell语法， 执行结果会存入到/var/log/message/目录下。
