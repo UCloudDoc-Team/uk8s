@@ -16,7 +16,7 @@
 ![](/images/userguide/resource_label5.png)
 
 ## 关联标签继承能力 
-> 如有需要，请联系我们的技术支持找资源系统来开通。
+> 如有需要，可前往[关联标签继承](https://docs.ucloud.cn/label/TagInheritance)开启
 
 开通关联标签继承能力后，您设置的UK8S的用户标签会同步到该集群下的子资源，如UHost、UDisk、EIP等，如图所示。
 ![](/images/userguide/resource_label6.png)
