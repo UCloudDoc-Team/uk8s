@@ -1,45 +1,45 @@
 # ALB Ingress
 
-> alb ingress 是使用 ucloud alb 实现 [k8s ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)，得益于 ucloud alb 超高的性能，让你的服务具备大规模应用层流量处理能力。
+> ALB Ingress 是使用 UCloud ALB 实现 [k8s ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)，得益于 UCloud ALB 超高的性能，让你的服务具备大规模应用层流量处理能力。
 
 ## 原理
 
-alb ingress 模型不同于 nginx ingress 模型所有的 ingress 都使用 nginx controller 的 svc 作为ingress的外网入口 IP ,即多个 ingerss 对象使用同一个 svc 的 IP 在7层路由流量到对应的后端。
+在 Nginx Ingress 模型中，所有的 Ingress 都使用 Nginx Controller svc 绑定的 LB 作为流量入口，再通过 Nginx 的7层路由发送到对应的后端。
 
-alb ingress 是一个 ingress 对象就是一个ALB，因此流量不会像 nginx 那样过一次 nodePort 和一次 nginx 他是直接从 alb 通过alb的规则直接路由路由到对应的 pod ip。
+与 Nginx Ingress 不同，在 ALB Ingress 模型中，一个 Ingress 对象对应一个 ALB，流量从 ALB 通过转发规则直接路由到对应的后端 Pod IP。
 
-![alb](../../images/ingress/alb.png)
+![ALB](../../images/ingress/alb.png)
 
 ## 安装
 
-> uk8s 1.19以上版本支持，建议1.30以上
+> UK8S 1.19 以上版本支持，建议 1.30 以上
 
-* 控制台-->插件-->ALB Ingress插件
+* 控制台 --> 插件 --> ALB Ingress 插件
 
 ![enable_loadbalancer_controller](../../images/ingress/enable_loadbalancer_controller.png)
 
-默认安装没有设置 alb ingress 为默认 alb 关于设置默认 ingressclass 参考[Ingress 概述](README.md#设置默认-ingressclass)
+关于设置默认 IngressClass，参考 [Ingress 概述](README.md#设置默认-ingressclass)
 
 ## 使用
 
 ### 控制台表单
 
-* 在服务下的ingress中点击表单添加
+* 在 服务 --> Ingress 页面中点击表单添加
 
 ![alt text](../../images/ingress/add_alb_ingress-1.png)
 
-* 在 ingressclass中选择alb
+* 在 IngressClass 中选择ALB
 
 ![alt text](../../images/ingress/add_alb_ingress-2.png)
 
-* 选择 alb 之后会出现 alb 专属配置表单，根据实际的义务情况配置即可，部分分配置创建之后无法修改，即不支持动态配置。
+* 选择 ALB 之后会出现 ALB 专属配置表单，根据实际的业务情况配置即可，部分配置创建之后无法修改，即不支持动态配置。
 
 ![alt text](../../images/ingress/add_alb_ingress-3.png)
 
 ### 使用yaml
 
-* 下面的例子是一个使用ucloud ssl证书部署2个服务，端口为http 80和 https 443
-* alb ingress 大部分配置是通过注解完成的，详情可以查看[注解参数说明](#注解参数说明)和[所有功能完整的例子](#所有功能完整的例子)
+* 下面的例子是一个使用 ucloud ssl 证书部署2个服务，端口为 http 80 和 https 443
+* ALB Ingress 大部分配置是通过注解完成的，详情可以查看[注解参数说明](#注解参数说明)和[所有功能完整的例子](#所有功能完整的例子)
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -154,9 +154,9 @@ spec:
     app: demo-app-2
 ```
 
-### 使用configmap配置tls证书
+### 使用secret配置tls证书
 
-1. 首先需要创建一个`kubernetes.io/tls`类型的configmap,如下
+1. 首先需要创建一个`kubernetes.io/tls`类型的secret
 
    ```shell
    apiVersion: v1
@@ -169,7 +169,7 @@ spec:
    type: kubernetes.io/tls
    ```
 
-2. ingress中引入configmap,控制器会自动在alb的证书管理中创建对应的证书并绑定到alb中
+2. 在 Ingress 中引用 secret, 控制器会自动在 ALB 的证书管理中创建对应的证书并绑定到 ALB 中
 
 ```yaml
 ---
@@ -210,19 +210,19 @@ metadata:
                 port:
                   number: 80
   tls:
-    - hosts: 
+    - hosts:
       - test.com
       secretName: demo-app-ingress
-    - hosts: 
+    - hosts:
       - example.com
       secretName: demo-app-ingress2
 ```
 
 ### Pod Readines Gate
 
-ucloud Load Balancer controller 支持[pod-readiness-gate](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-readiness-gate)，用于告诉pod已经注册到alb中并可以正常接受流量
+UCloud ALB Ingress Controller 支持 [pod-readiness-gate](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-readiness-gate)，用于通知 pod 已经注册到ALB中并可以正常接受流量。
 
-> 每个listener一个readiness gate
+> 每个 Listener 一个 ReadinessGate
 
 * 在需要开启的ns上加上下面的标签
 
@@ -242,7 +242,7 @@ demo-app-2-d98469768-mpln4    1/1     Running   0          5s      10.60.41.90  
 demo-app-2-d98469768-t2tpp    1/1     Running   0          5s      10.60.64.103    10.60.57.16     <none>           0/2
 ```
 
-* 稍等片刻 alb 监控检测都通过之后则全部满足
+* 稍等片刻 ALB 监控检测都通过之后则全部满足
 
 ```shell
 ❯ kubectl get po -o wide
@@ -254,7 +254,7 @@ demo-app-2-d98469768-mpln4    1/1     Running   0          51s     10.60.41.90  
 demo-app-2-d98469768-t2tpp    1/1     Running   0          51s     10.60.64.103    10.60.57.16     <none>           2/2
 ```
 
-* 如果ns开启了readiness gate 但是某个工作负载不想开启则使用下面的标签
+* 如果 ns 开启了readiness gate，但是某个工作负载不想开启则使用下面的标签
 
 ```shell
 kubectl label deployment alb.k8s.ucloud/pod-readiness-gate-inject=disabled
@@ -322,7 +322,7 @@ metadata:
     # 外网共享带宽，以下是使用共享带宽计费的配置示例
     # alb.ingress.kubernetes.io/eip-paymode: 'sharebandwidth'
     # alb.ingress.kubernetes.io/eip-sharebandwidthid: 'bwshare-xxx'
-    
+
     # 以下参数设置任何一个则使用http方式的健康检查,另一个则是默认，默认为Port
     # http的方式做健康检查的域名 默认: ""
     # alb.ingress.kubernetes.io/monitor-domain: "example.com"
@@ -360,10 +360,10 @@ spec:
                 port:
                   number: 80
   #tls:
-  #  - hosts: 
+  #  - hosts:
   #    - test.com
   #    secretName: demo-app-ingress
-  #  - hosts: 
+  #  - hosts:
   #    - example.com
   #    secretName: demo-app-ingress2
 ---
