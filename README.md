@@ -1,6 +1,4 @@
-
 # 概览
-
 
 - 产品简介
   - [产品概念](/uk8s/introduction/whatisuk8s)
@@ -81,8 +79,10 @@
     - [ULB 常见问题](/uk8s/troubleshooting/ulb)
   - Ingress 管理
     - [概述](/uk8s/service/ingress/README)
-    - [Nginx Ingress](/uk8s/service/ingress/nginx_1.26)
-    - [Ingress 高级用法](/uk8s/service/ingress/multiple_ingress)
+    - [ALB Ingress](/uk8s/service/ingress/alb_ingress.md)
+    - [【已弃用】Nginx Ingress](/uk8s/service/ingress/nginx_1.26)
+    - [【已弃用】Ingress 高级用法](/uk8s/service/ingress/multiple_ingress)
+    - [loadbalancercontroller变更记录](/uk8s/service/ingress/loadbalancercontroller_release)
   - [CloudProvider 插件升级](/uk8s/service/cp_update)
 - 集群存储
   - [Volume 介绍](/uk8s/volume/intro)
@@ -96,7 +96,7 @@
   - 文件存储
     - [在 UK8S 中使用 UFS](/uk8s/volume/ufs)
     - [动态PV使用UFS](/uk8s/volume/dynamic_ufs)
-    - [在 UK8S 中使用 UPFS](/uk8s/volume/upfs) 
+    - [在 UK8S 中使用 UPFS](/uk8s/volume/upfs)
   - 对象存储
     - [在 UK8S 中使用 US3](/uk8s/volume/ufile)
   - [CSI 存储插件升级](/uk8s/volume/CSI_update)
