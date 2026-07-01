@@ -169,10 +169,10 @@ spec:
     app: uk8s
 ```
 
-我们将上述yaml保存为uk8s-ingrss-test-nginx.yaml，并执行如下命令创建应用。
+我们将上述yaml保存为uk8s-ingress-test-nginx.yaml，并执行如下命令创建应用。
 
-```
-kubectl apply -f uk8s-ingrss-test-nginx.yaml
+```shell
+kubectl apply -f uk8s-ingress-test-nginx.yaml
 ```
 
 ### 四、定义Ingress对象
@@ -297,7 +297,7 @@ spec:
 
 部分场景下，我们的业务只允许制定的IP地址访问，这可以通过添加annotations来实现，即nginx.ingress.kubernetes.io/whitelist-source-range，值则是一段CIDR，多个网段用","分开。示例如下：
 
-```
+```yaml
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:

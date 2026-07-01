@@ -1,48 +1,45 @@
 # ALB Ingress
 
-> alb ingress 是使用 ucloud alb 实现 [k8s ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)，得益于 ucloud alb 超高的性能，让你的服务具备大规模应用层流量处理能力
+> alb ingress 是使用 ucloud alb 实现 [k8s ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)，得益于 ucloud alb 超高的性能，让你的服务具备大规模应用层流量处理能力。
 
-## 部署
+## 原理
 
-### 先决条件
+alb ingress 模型不同于 nginx ingress 模型所有的 ingress 都使用 nginx controller 的 svc 作为ingress的外网入口 IP ,即多个 ingerss 对象使用同一个 svc 的 IP 在7层路由流量到对应的后端。
 
-* cni必须为vpc cni
-* 该地域支持alb（可以在控制台查看是否支持alb）
+alb ingress 是一个 ingress 对象就是一个ALB，因此流量不会像 nginx 那样过一次 nodePort 和一次 nginx 他是直接从 alb 通过alb的规则直接路由路由到对应的 pod ip。
 
-### 安装cert-manager
+![alb](../../images/ingress/alb.png)
 
-> alb ingress 需要使用cert-manager来签署webhook证书
-> 下面是使用helm安装，关于其他安装方式参考<https://cert-manager.io/docs/installation/>
+## 安装
 
-* 如果helm中没有repo需要先添加helm repo
+> uk8s 1.19以上版本支持，建议1.30以上
 
-```shell
-helm repo add jetstack https://charts.jetstack.io --force-update
-```
+* 控制台-->插件-->ALB Ingress插件
 
-* 安装helm
+![enable_loadbalancer_controller](../../images/ingress/enable_loadbalancer_controller.png)
 
-```shell
-helm install \
-  cert-manager jetstack/cert-manager \
-  --namespace cert-manager \
-  --create-namespace \
-  --version v1.19.1 \
-  --set crds.enabled=true
-```
-
-### 安装ucloud alb ingress
-
-```shell
-kubctl apply -f https://docs.ucloud.cn/uk8s/yaml/ingress_alb/20260306.yaml
-```
+默认安装没有设置 alb ingress 为默认 alb 关于设置默认 ingressclass 参考[Ingress 概述](README.md#设置默认-ingressclass)
 
 ## 使用
 
-### 基本使用
+### 控制台表单
+
+* 在服务下的ingress中点击表单添加
+
+![alt text](../../images/ingress/add_alb_ingress-1.png)
+
+* 在 ingressclass中选择alb
+
+![alt text](../../images/ingress/add_alb_ingress-2.png)
+
+* 选择 alb 之后会出现 alb 专属配置表单，根据实际的义务情况配置即可，部分分配置创建之后无法修改，即不支持动态配置。
+
+![alt text](../../images/ingress/add_alb_ingress-3.png)
+
+### 使用yaml
 
 * 下面的例子是一个使用ucloud ssl证书部署2个服务，端口为http 80和 https 443
-* alb ingrss 大部分配置是通过注解完成的，详情可以查看[注解参数说明](#注解参数说明)和[所有功能完整的例子](#所有功能完整的例子)
+* alb ingress 大部分配置是通过注解完成的，详情可以查看[注解参数说明](#注解参数说明)和[所有功能完整的例子](#所有功能完整的例子)
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -469,11 +466,11 @@ type: kubernetes.io/tls
 
 > 动态配置是指创建完成之后仍然可以修改的配置
 
-| 注解名称                                           | 说明                                                    | 默认值                      | 是否支持动态配置 |
+| 注解名称                                           | 说明                                                    | 默认值                      | 创建后是否可修改 |
 |----------------------------------------------------|---------------------------------------------------------|-----------------------------|------------------|
 | alb.ingress.kubernetes.io/load-balancer-id         | 绑定的LB的ID                                            | ""                          | 否               |
 | alb.ingress.kubernetes.io/load-balancer-type       | LB 的类型 (outer/inner)                                 | outer                       | 是               |
-| alb.ingress.kubernetes.io/http-listen-ports        | LB 监听端口，默认 HTTP 80 和 HTTPS 443 json数组格式     | [{"HTTP":80},{"HTTPS":443}] | 否               |
+| alb.ingress.kubernetes.io/listen-ports             | LB 监听端口，默认 HTTP 80 和 HTTPS 443 json数组格式     | [{"HTTP":80},{"HTTPS":443}] | 否               |
 | alb.ingress.kubernetes.io/certificates             | 指定 ucloud ssl 证书 id，数组逗号隔开，第一个为默认证书 | ""                          | 是               |
 | alb.ingress.kubernetes.io/subnet-id                | 子网 ID                                                 | 集群的子网                  | 否               |
 | alb.ingress.kubernetes.io/load-balancer-chargetype | LB 付费模式 (month/year/dynamic)                        | "month"                     | 否               |
