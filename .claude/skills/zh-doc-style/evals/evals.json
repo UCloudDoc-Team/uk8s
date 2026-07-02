@@ -1,0 +1,23 @@
+{
+  "skill_name": "zh-doc-style",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我规范化这份 UK8S 文档的排版,按中文技术文档的风格要求检查中英空格、标点、大小写等",
+      "expected_output": "应修复:coredns→CoreDNS、kubernetes→Kubernetes、dns→DNS、pod→Pod、uk8s→UK8S、networkpolicy→NetworkPolicy、configmap→ConfigMap、apiserver→API Server;中英文之间加空格;数字与中文间去空格(2个、50个、128个、1个、53端口等,但10ms/1ms/P99保留为英文词元);标点改全角;代码块内注释规范化但键值不动。工作流:①先跑fix_style.py处理数字空格+全角标点 ②手动改大小写+中英空格 ③check_style.py验证干净",
+      "files": ["evals/files/01_prose.md"]
+    },
+    {
+      "id": 2,
+      "prompt": "这个文档里有些术语大小写不规范,还有标点和空格问题,帮我按 UCloud 文档规范整理一下",
+      "expected_output": "ulb→ULB、nginx→Nginx、service→Service、yaml→YAML、lb→LB、eip→EIP、outer/inner/month等配置值保持小写不动(它们是代码枚举值);YAML块内中文注释规范化(LB大写、全角逗号);正文outer/inner作为术语首字母大写但代码里不动;默认2不加空格;全角标点(逗号、冒号、句号);工作流:①fix_style.py前置 ②手动大小写+中英空格 ③check验证",
+      "files": ["evals/files/02_yaml.md"]
+    },
+    {
+      "id": 3,
+      "prompt": "审核并优化这份关于集群规格的文档,重点检查数字与中文、英文词的空格是否规范",
+      "expected_output": "uk8s→UK8S、kubernetes→Kubernetes、1.19到→1.19到(数字与'到'间不加空格)、1.30以上→1.30以上、nginx→Nginx、ingress→Ingress、2026年3月→2026年3月(去空格)、1000个→1000个、110个→110个、kubelet→kubelet(保持小写)、max-pods→max-pods(保持)、256个→256个、tls→TLS、secret→Secret、base64编码→base64 编码(base64是英文词)、10Mbps包月→10Mbps 包月、300Mbps按时→300Mbps 按时、2000Mbps→2000Mbps保持、EIP→EIP已大写、p95→p95保持、80%时→80%时(无空格);错字修复:带宽上线→带宽上限;全角标点(逗号、冒号改全角);工作流:①fix_style.py自动处理数字空格+全角标点 ②手动大小写 ③check干净",
+      "files": ["evals/files/03_numbers.md"]
+    }
+  ]
+}

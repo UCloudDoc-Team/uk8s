@@ -10,15 +10,15 @@
 - 集群版本
   - [维护说明](/uk8s/version/maintain)
   - 版本跟踪
-    - [1.34 版本说明](/uk8s/version/1.34_release)
-    - [1.32 版本说明](/uk8s/version/1.32_release)
-    - [1.30 版本说明](/uk8s/version/1.30_release)
+    - [1.34版本说明](/uk8s/version/1.34_release)
+    - [1.32版本说明](/uk8s/version/1.32_release)
+    - [1.30版本说明](/uk8s/version/1.30_release)
 - 集群管理
   - [创建集群](/uk8s/userguide/createcluster)
   - [查看集群](/uk8s/userguide/describecluster)
   - [删除集群](/uk8s/userguide/deletecluster)
   - [资源标签](/uk8s/userguide/resource_label)
-  - 通过 Kubectl 管理集群
+  - 通过 kubectl 管理集群
     - [kubectl 命令行简介](/uk8s/manageviakubectl/intro_of_kubectl)
     - [安装及配置 kubectl](/uk8s/manageviakubectl/connectviakubectl)
     - [使用 web kubectl](/uk8s/manageviakubectl/webterminal)
@@ -26,10 +26,10 @@
     - [创建 PVC](/uk8s/manageviakubectl/createpvc)
     - [创建 Service](/uk8s/manageviakubectl/createservice)
     - [StatefulSet 示例](/uk8s/manageviakubectl/sts_example)
-    - [打散pod](/uk8s/manageviakubectl/pod_affinity.md)
+    - [打散 Pod](/uk8s/manageviakubectl/pod_affinity.md)
     - [kubectl 常见问题](/uk8s/troubleshooting/kubectl)
   - [手动增加外网凭证](/uk8s/administercluster/add-external-certificate)
-  - [部署Dashboard](/uk8s/administercluster/dashboard)
+  - [部署 Dashboard](/uk8s/administercluster/dashboard)
   - [集群版本升级](/uk8s/administercluster/cluster_version_update)
   - [集群常见问题](/uk8s/troubleshooting/cluster_summary.md)
 - 权限和审计
