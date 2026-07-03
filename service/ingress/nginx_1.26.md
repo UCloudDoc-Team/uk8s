@@ -33,7 +33,7 @@ Controller 供选择，分别如下：
 * 容器默认使用 UTC 时间，如果要使用宿主机时区，参见 [Pod 时区问题](https://docs.ucloud.cn/uk8s/troubleshooting/pod_debug_summary?id=_10-pod%e7%9a%84%e6%97%b6%e5%8c%ba%e9%97%ae%e9%a2%98)
 * 如果有集群内通过ULB地址访问 Service 的需求，需要把 Ingress Controller Service 的 externalTrafficPolicy 改为`Cluster`，否则 Pod 如果跟 Ingress Controller 不在同一个节点，将无法进行访问。**修改该参数之后，将无法获取真实客户端源IP。**
 
-> ⚠️ 以下操作会按最新的 Ingress Controller 推荐部署方式：关联 NLB 来执行。如果您之前已经安装了基于 CLB 的 Ingress Controller，重新安装会解绑 CLB 并关联新的 NLB，流量入口将发生变更。
+> ⚠️ 以下操作会按最新的 Ingress Controller 推荐部署方式：关联 NLB 来执行。如果您之前已经安装了基于 CLB 的 Ingress Controller，更新部署会解绑 CLB 并关联新的 NLB，流量入口将发生变更。
 
 ```bash
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/ingress_nginx/mandatory_1.26.yaml
