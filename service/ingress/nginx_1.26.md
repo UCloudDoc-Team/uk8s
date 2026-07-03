@@ -33,6 +33,8 @@ Controller 供选择，分别如下：
 * 容器默认使用 UTC 时间，如果要使用宿主机时区，参见 [Pod 时区问题](https://docs.ucloud.cn/uk8s/troubleshooting/pod_debug_summary?id=_10-pod%e7%9a%84%e6%97%b6%e5%8c%ba%e9%97%ae%e9%a2%98)
 * 如果有集群内通过ULB地址访问 Service 的需求，需要把 Ingress Controller Service 的 externalTrafficPolicy 改为`Cluster`，否则 Pod 如果跟 Ingress Controller 不在同一个节点，将无法进行访问。**修改该参数之后，将无法获取真实客户端源IP。**
 
+> ⚠️ 以下操作会按最新的 Ingress Controller 推荐部署方式：关联 NLB 来执行。如果您之前已经安装了基于 CLB 的 Ingress Controller，重新安装会解绑 CLB 并关联新的 NLB，流量入口将发生变更。
+
 ```bash
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/ingress_nginx/mandatory_1.26.yaml
 ```
@@ -496,7 +498,7 @@ spec:
     use-forwarded-headers: "true"
     proxy-real-ip-cidr: 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
   ```
-  
+
   **参数说明:**
   *   `compute-full-forwarded-for`: 在 `X-Forwarded-For` 头中追加客户端 IP，而不是替换。
   *   `use-forwarded-headers`: 保留 `X-Forwarded-*` 系列请求头。
@@ -504,4 +506,3 @@ spec:
   *   `proxy-real-ip-cidr`: 允许信任的负载均衡器代理 IP 段，多个网段用逗号分隔。只有来自这些 IP 的 `X-Forwarded-For` 头才会被信任，防止伪造。
 
 配置完成后，后端服务 Pod 即可正确获取到客户端真实 IP。
-
