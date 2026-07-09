@@ -9,8 +9,6 @@ Uk8s 使用开源组件 [Dcgm-Exporter](https://github.com/NVIDIA/dcgm-exporter)
 
 ## 2. 部署
 
-### 2.1. 未开启监控中心
-
 开启 [监控中心](/uk8s/monitor/prometheusplugin/startmonitor) 即可在 Grafana 页面查看 Dashboard `NVIDIA/DCGM/Exporter/Node`、`NVIDIA/DCGM/Exporter/Container`。
 
 
