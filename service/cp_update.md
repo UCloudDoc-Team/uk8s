@@ -99,6 +99,13 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 ## 2. 变更记录
 
+### 更新版本：26.07.13
+
+更新时间： 2026 年 07 月 13 日
+
+更新内容：
+
+- 增加 LB 的后端 RS 添加失败场景下的日志和重试
 
 ### 更新版本：26.04.14
 
@@ -106,7 +113,7 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 更新内容：
 
-- 添加检查非ulb4的lb情况下 nodeport 是否开启
+- 依赖 RS 的 nodeport 做转发的场景中 (ALB/NLB/CLB7)，检查 svc 是否开启 nodeport
 
 ### 更新版本：25.08.21
 
