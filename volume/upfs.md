@@ -22,11 +22,11 @@
 
 因目前的UK8S版本均不默认安装UPFS CSI，需要自行部署。请按顺序执行如下命令即可。
 
-```
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.12.04-cli-v14.12/rbac-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.12.04-cli-v14.12/rbac-node.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.12.04-cli-v14.12/csi-controller.yml
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.12.04-cli-v14.12/csi-node.yml
+```shell
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.12.04-cli-v14.17/rbac-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.12.04-cli-v14.17/rbac-node.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.12.04-cli-v14.17/csi-controller.yml
+kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.12.04-cli-v14.17/csi-node.yml
 ```
 
 ## 创建存储类StorageClass
@@ -41,7 +41,7 @@ kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/volume/upfs-25.12.04-cli-v14.1
 
 如当path配置为`/example`，且在`default` namespace中创建名为`logupfs-claim`的PVC时，UPFS实例中自动创建的目录名为
 
-```
+```shell
 /example/default-logupfs-claim-pvc-ae961bc8-2c97-414e-9e7b-bde3e28efee9
 ```
 
@@ -62,6 +62,7 @@ parameters:
 ## 创建PVC
 
 将如下内容保存到文件： `upfspvc.yml`
+
 ```yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -85,8 +86,7 @@ persistentvolumeclaim/logupfs-claim created
 
 创建完PVC后，可以发现PV与PVC已经绑定。
 
-
-```
+```shell
 # kubectl get pv
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                   STORAGECLASS   REASON   AGE
 pvc-ae961bc8-2c97-414e-9e7b-bde3e28efee9   256Ti      RWX            Delete           Bound    default/logupfs-claim   csi-upfs                12s
@@ -97,7 +97,6 @@ logupfs-claim   Bound    pvc-ae961bc8-2c97-414e-9e7b-bde3e28efee9   256Ti      R
 ```
 
 > ⚠️ PVC中显示的容量，不做实际容量参考；PVC的真实容量务必以对应UPFS实例的容量为准；
-
 
 ## 在Pod中挂载UPFS
 
@@ -259,7 +258,8 @@ spec:
 由于UPFS资源删除需要该UPFS处于未挂载状态，请先删除所有使用到UPFS PVC的Pod后再执行UPFS资源删除操作。
 
 执行以下命令来确认节点上是否还存在特定UPFS实例的挂载点：
-```
+
+```shell
 # mount |grep upfs-xxxx
 Filesystem              Size  Used Avail Use% Mounted on
 ...
@@ -267,8 +267,10 @@ UPFS:upfs-xxxx          5.9T  8.5K  5.9T   1% /data/kubelet/plugins/kubernetes.i
 ```
 
 ## 版本更新记录
-| 版本                    | 说明                                                       |
-|-------------------------|--------------------------------------------------------------|
+
+| 版本                     | 说明                                                       |
+|--------------------------|------------------------------------------------------------|
+| upfs-25.12.04-cli-v14.17 | 升级upfs客户端到v14.17，提升稳定性，发行说明参考<https://docs.ucloud.cn/upfs/changelog> |
 | upfs-25.12.04-cli-v14.12 | upfs客户端: 修复Prometheus采集的数据一致性问题 |
 | upfs-25.12.04-cli-v14.10 | 支持贵阳地域 |
 | upfs-25.09.08-cli-v14.10 | upfs客户端: 修复目录缓存不一致问题，缓存readlink，减少重复readlink调用 |
