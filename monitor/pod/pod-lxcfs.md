@@ -45,11 +45,11 @@ spec:
           image: uhub.service.ucloud.cn/library/nginx:1.9.7
           resources:
             requests:
-              cpu: "50"
+              cpu: "50m"
               memory: "50Mi"
             limits:
-              cpu: "100"
-              memory: "100Mi"
+              cpu: "1"
+              memory: "1000Mi"
           ports:
             - containerPort: 80
               name: http
