@@ -69,6 +69,12 @@ metadata:
     network.kubernetes.io/ucloud-pod-networking-name: my-pn-1
 ```
 
+> ⚠️ **一个子网只能被一个 `PodNetworking` 使用，请勿在多个 `PodNetworking` 的 `subnetIds` 中填写同一个子网。**
+>
+> 在每个节点上，一个子网只会对应一张 `辅助UNI`，而 `辅助UNI` 的安全组在网卡创建时确定，此后不会再变更。因此当多个 `PodNetworking` 引用了同一个子网、却声明了不同的 `securityGroupIds` 时，该节点上实际生效的是最先在这个节点创建出 `辅助UNI` 的那份配置，其余 `PodNetworking` 的安全组声明会被忽略。
+>
+> 如果需要让两类业务 Pod 应用不同的安全组，请为每类 Pod 分配各自独立的子网，以及绑定对应的 `PodNetworking` 资源。
+
 ## 独立子网数量限制
 
 由于每个独立子网需要使用一张虚拟网卡，节点可用虚拟网卡的数量会限制该节点上可使用Pod独立子网数量。计算公式为:
@@ -82,4 +88,3 @@ metadata:
 ## 使用 ULB 注意事项
 
 > ⚠️ 开启了Pod独立子网后，如果您的集群kube-proxy为**iptables**模式，LoadBalancer型svc无法使用CLB4，建议您[使用NLB或ALB](/uk8s/service/internalservice)。
-
