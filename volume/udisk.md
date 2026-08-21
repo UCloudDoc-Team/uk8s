@@ -42,6 +42,27 @@ mountOptions:
 
 备注：1.15之前的Kubernetes版本，mountOptions无法正常使用，请勿填写，详见[Issue80191](https://github.com/kubernetes/kubernetes/pull/80191)
 
+### 创建加密磁盘
+
+> 先决条件 csi 版本在 26.08.19 及以上，可以创建主机加密磁盘，仅 rssd 磁盘支持
+
+- 根据下面的模板创建一个支持加密盘的存储类，创建对应资源使用此存储类即可创建出加密PVC
+
+```yaml
+allowVolumeExpansion: true
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: csi-udisk-rssd-kms
+parameters:
+  cmkId: <key-id>  # 填写在 ukms 中创建的 key id
+  fsType: ext4
+  type: rssd
+provisioner: udisk.csi.ucloud.cn
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+```
+
 ## 2. 创建持久化存储卷声明 PVC
 
 ### 2.1 新建 UDisk
