@@ -44,9 +44,9 @@ mountOptions:
 
 ### 创建加密磁盘
 
-> 先决条件 csi 版本在 26.08.19 及以上，可以创建主机加密磁盘，仅 rssd 磁盘支持
+> 先决条件 CSI 版本在 26.08.19 及以上，可以创建主机加密磁盘，仅 RSSD 磁盘支持
 
-- 根据下面的模板创建一个支持加密盘的存储类，创建对应资源使用此存储类即可创建出加密PVC
+- 根据下面的模板创建一个支持加密盘的存储类，创建对应资源使用此存储类即可创建出加密 PVC
 
 ```yaml
 allowVolumeExpansion: true
@@ -55,7 +55,7 @@ kind: StorageClass
 metadata:
   name: csi-udisk-rssd-kms
 parameters:
-  cmkId: <key-id>  # 填写在 ukms 中创建的 key id
+  cmkId: <key-id>  # 填写在 UKMS 中创建的 key ID
   fsType: ext4
   type: rssd
 provisioner: udisk.csi.ucloud.cn

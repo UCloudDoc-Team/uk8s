@@ -52,7 +52,7 @@ UK8S已经支持挂载US3，具体支持地域请查看
 
 Token创建管理教程可以[参考文档](ufile/guide/token)。
 
-> ⚠️加密 bucket 使用 ucloud 账号控制台 api 公私钥，参考 us3 文档。
+> ⚠️加密 Bucket 使用 UCloud 账号控制台 API 公私钥，参考 US3 文档。
 
 在Kubernetes中为此令牌创建Secret，如下所示：
 
@@ -63,8 +63,8 @@ metadata:
   name: us3-secret
   namespace: kube-system
 stringData:
-  accessKeyID: TOKEN_9a6ec9fd-9cb7-4510-8ded-xxxxxxxx # 非账号公钥，为US3的令牌公钥,加密bucket则使用ucloud账号公钥。
-  secretAccessKey: c429c8e5-e4e6-4366-bf93-xxxxxx # 非账号私钥，为US3的令牌私钥，加密bucket则使用ucloud账号私钥。
+  accessKeyID: TOKEN_9a6ec9fd-9cb7-4510-8ded-xxxxxxxx # 普通 Bucket 填 US3 令牌公钥（非账号公钥）；加密 Bucket 填 UCloud 账号公钥。
+  secretAccessKey: c429c8e5-e4e6-4366-bf93-xxxxxx # 普通 Bucket 填 US3 令牌私钥（非账号私钥）；加密 Bucket 填 UCloud 账号私钥。
   endpoint: http://internal.s3-cn-bj.ufileos.com
 ```
 
