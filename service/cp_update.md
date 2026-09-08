@@ -99,6 +99,14 @@ kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
 
 ## 2. 变更记录
 
+### 更新版本：26.08.31
+
+更新时间： 2026 年 08 月 31 日
+
+更新内容：
+
+- 修复 CLB4/7 从内网（inner）改为外网（outer）类型时会重复创建 EIP 的问题
+
 ### 更新版本：26.07.13
 
 更新时间： 2026 年 07 月 13 日
