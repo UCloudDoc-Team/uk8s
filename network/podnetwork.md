@@ -75,6 +75,25 @@ metadata:
 >
 > 如果需要让两类业务 Pod 应用不同的安全组，请为每类 Pod 分配各自独立的子网，以及绑定对应的 `PodNetworking` 资源。
 
+## 使用 NAT 网关出网
+
+CNI 2.0.6 及以上版本可以通过 `natGWOutgoingEnabled` 配置独立子网下 Pod 访问公网的方式。
+
+`natGWOutgoingEnabled` 默认值为 `false`，此配置下 Pod 访问公网的源 IP 会 SNAT 为节点主网卡的 IP，从主网卡发出。设置为 `true` 时，Pod 流量不经节点 SNAT，直接从 Pod IP 所在的独立弹性网卡发出，按照独立子网的 VPC 路由通过已经配置好的 NAT 网关发出。
+
+**注意：如果您为 Pod 子网配置了独立的 NAT 网关出口，则必须启用 `natGWOutgoingEnabled` 配置，否则 NAT 网关无法正确识别 Pod 源 IP。**
+
+```yaml
+apiVersion: vpc.uk8s.ucloud.cn/v1beta1
+kind: PodNetworking
+metadata:
+  name: default
+spec:
+  subnetIds:
+  - subnet-xxx
+  natGWOutgoingEnabled: true
+```
+
 ## 独立子网数量限制
 
 由于每个独立子网需要使用一张虚拟网卡，节点可用虚拟网卡的数量会限制该节点上可使用Pod独立子网数量。计算公式为:
@@ -88,21 +107,3 @@ metadata:
 ## 使用 ULB 注意事项
 
 > ⚠️ 开启了Pod独立子网后，如果您的集群kube-proxy为**iptables**模式，LoadBalancer型svc无法使用CLB4，建议您[使用NLB或ALB](/uk8s/service/internalservice)。
-
-## 使用 NAT 网关出网
-
-CNI 2.0.6 及以上版本可以通过 `natGWOutgoingEnabled` 配置 Pod 独立子网的出网方式，默认值为 `false`：
-
-```yaml
-apiVersion: vpc.uk8s.ucloud.cn/v1beta1
-kind: PodNetworking
-metadata:
-  name: default
-spec:
-  subnetIds:
-  - subnet-xxx
-  natGWOutgoingEnabled: true
-```
-
-设置为 `false` 时，Pod 访问 VPC 外地址的流量会 SNAT 为节点主网卡的 IP。设置为 `true` 时，Pod 流量跳过节点 SNAT，并按照 Pod
-子网的 VPC 路由通过已经配置好的 NAT 网关出口。
