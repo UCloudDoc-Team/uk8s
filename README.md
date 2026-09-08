@@ -60,10 +60,10 @@
   - [基于自定义指标伸缩 Pod](/uk8s/monitor/prometheus/autoscale_on_custom_metrics.md)
 - 集群网络
   - 基于 UVPC 的 underlay 网络
-    - [集群网络](/uk8s/network/uk8s_network)
+    - [容量规划与扩容](/uk8s/network/ip_capacity)
     - [网络隔离](/uk8s/network/networkpolicy)
     - [固定 IP 使用方法](/uk8s/network/static_ip)
-    - [IPAMD](/uk8s/network/ipamd)
+    - [IPAMD 缓存机制与参数](/uk8s/network/ipamd)
     - [Pod 使用独立子网](/uk8s/network/podnetwork)
     - [CNI 网络插件升级](/uk8s/network/cni_update)
     - [CNI 常见问题](/uk8s/troubleshooting/cni)

@@ -88,3 +88,21 @@ metadata:
 ## 使用 ULB 注意事项
 
 > ⚠️ 开启了Pod独立子网后，如果您的集群kube-proxy为**iptables**模式，LoadBalancer型svc无法使用CLB4，建议您[使用NLB或ALB](/uk8s/service/internalservice)。
+
+## 使用 NAT 网关出网
+
+CNI 2.0.6 及以上版本可以通过 `natGWOutgoingEnabled` 配置 Pod 独立子网的出网方式，默认值为 `false`：
+
+```yaml
+apiVersion: vpc.uk8s.ucloud.cn/v1beta1
+kind: PodNetworking
+metadata:
+  name: default
+spec:
+  subnetIds:
+  - subnet-xxx
+  natGWOutgoingEnabled: true
+```
+
+设置为 `false` 时，Pod 访问 VPC 外地址的流量会 SNAT 为节点主网卡的 IP。设置为 `true` 时，Pod 流量跳过节点 SNAT，并按照 Pod
+子网的 VPC 路由通过已经配置好的 NAT 网关出口。
