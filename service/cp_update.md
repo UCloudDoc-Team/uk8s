@@ -41,62 +41,6 @@ CloudProvider 插件升级功能会在集群中执⾏ CloudProvider 插件查询
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cloudprovider/24.08.13.yml
 ```
 
-### 1.3 老版本升级
-
-如果 Kubernetes 版本在 1.14 以前，或者在控制台无法查看到 CloudProvider 版本信息，则需要通过命令行进行升级。
-
-> 登录您集群的 Master 节点，如执行`systemctl status ucloudcp`是运行状态的话，请务必在**3 个 Master 节点**关闭二进制程序ucloudcp并更新。
-
-#### 1. 关闭老版本 CloudProvider
-
-请分别登陆3台master节点，执行以下命令
-
-```
-systemctl stop ucloudcp
-systemctl disable ucloudcp
-```
-
-#### 2. 需要配置前置ConfigMap
-
-请填写如下相关信息并保存文件为`userdata.yaml`。
-
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: uk8sconfig
-  namespace: kube-system
-data:
-  UCLOUD_ACCESS_PRIKEY: xxxxxxxxxxxxxxx  #API PRIKEY
-  UCLOUD_ACCESS_PUBKEY: xxxxxxxxxxxxxxx  #API_PUBKEY
-  UCLOUD_API_ENDPOINT: http://api.service.ucloud.cn
-  UCLOUD_PROJECT_ID: org-xxxxxx   #集群所在的项目ID
-  UCLOUD_REGION_ID: cn-bj2  #集群所在的地域，参考：https://docs.ucloud.cn/api/summary/regionlist
-  UCLOUD_SUBNET_ID: subnet-xxxxxx  #集群所在的子网ID
-  UCLOUD_UK8S_CLUSTER_ID: uk8s-xxxxxx  #UK8S集群名称
-  UCLOUD_VPC_ID: uvnet-xxxxxx   #集群所在的VPC ID
-```
-
-#### 3. 请执行创建ConfigMap
-
-```
-kubectl apply -f userdata.yaml
-```
-
-#### 4. 请执行部署 CloudProvider
-
-```
-kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/cloudprovider/22.07.1.yml
-```
-
-#### 5. 检查是否部署成功
-
-如 Pod 处于非 running 状态，请您及时与我们技术支持联系，更新成功后，即可在控制台查看版本信息并进行后续升级。
-
-```
-kubectl get pod -n kube-system -l app=cloudprovider-ucloud -o wide
-```
-
 ## 2. 变更记录
 
 ### 更新版本：26.08.31
