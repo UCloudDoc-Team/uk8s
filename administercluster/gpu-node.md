@@ -8,28 +8,17 @@
 
 ## 镜像说明
 
-在UK8s集群中使用**高性价比显卡**的云主机机型（如高性价比显卡3、高性价比显卡4、高性价比显卡5、高性价比显卡6）作为节点时，需使用支持高性价比标准镜像`xxxx-高性价比`。
+在UK8s集群中使用GPU云主机作为节点时，可选择以下标准镜像。
 
-- 高性价比显卡支持可用区
-  - 华北（乌兰察布）A
-  - 华东（上海2）B
-  - 北京二B
-
-| 标准镜像名            | 适用显卡                                | Nvidia驱动版本 | CUDA版本 |
-|-----------------------|-----------------------------------------|----------------|--------------|
-| Ubuntu 20.04-高性价比 | 高性价比显卡（如高性价比显卡3/4/5/6等） | 550.120        | 12.4         |
-| Ubuntu 22.04-高性价比 | 高性价比显卡（如高性价比显卡3/4/5/6等） | 550.120        | 12.4         |
-| Ubuntu 24.04-高性价比 | 高性价比显卡（如高性价比显卡3/4/5/6等） | 570.153.02     | 12.8         |
-| Ubuntu 20.04          | 非高性价比显卡（如T4、V100S、P40等）    | 550.90.12      | 12.4         |
-| Ubuntu 22.04          | 非高性价比显卡（如T4、V100S、P40等）    | 550.90.12      | 12.4         |
-| Ubuntu 24.04          | 非高性价比显卡（如T4、V100S、P40等）    | 570.158.01     | 12.8         |
-| Centos 7.6            | 非高性价比显卡（如T4、V100S、P40等）    | 450.80.02      | 11.0         |
+| 标准镜像名   | Nvidia驱动版本 | CUDA版本 |
+|--------------|----------------|----------|
+| Ubuntu 24.04 | 595.71.05      | 13.2     |
+| Ubuntu 22.04 | 595.71.05      | 13.2     |
+| Rocky 9.7    | 595.71.05      | 13.2     |
 
 ## 创建集群
 
 创建集群时，在Node节点配置中，选择机型为“GPU型G”，然后选择具体的GPU卡型及配置。
-  ![](/images/gpu/image.png)
-注：如果选择了高性价比显卡，需要在节点镜像中使用标准镜像`Ubuntu 20.04-高性价比`。
   ![](/images/gpu/image-0.png)
 
 ## 新增Node节点
@@ -44,14 +33,13 @@
 
 ## 使用说明
 
-1. 默认情况下，容器之间不共享 GPU，每个容器可以请求一个或多个 GPU。无法请求 GPU 的一小部分。
-2. 集群的 Master 节点暂不支持 GPU 机型。
-3. UK8S提供的标准镜像中，已安装nvidia驱动，并且，集群中默认安装了`nvidia-device-plugin`组件，GPU资源添加到集群后可以被自动识别和注册。
+1. 默认情况下，GPU 资源以整卡为单位分配给容器，每个容器可以申请一个或多个 GPU，不支持申请部分 GPU 资源。
+2. UK8S 集群的 Master 节点暂不支持 GPU 机型。
+3. UK8S 提供的标准 GPU 节点镜像已预装 NVIDIA 驱动，并且，集群默认部署 nvidia-device-plugin 组件，GPU 节点加入集群后可以被自动识别和注册。
 4. 如何验证GPU节点的正常使用：
-    1. 查看节点是否具有`nvidia.com/gpu`的资源。
-![](/images/gpu/image-3.png)
-    2. 运行如下示例使用`nvidia.com/gpu`资源类型请求 NVIDIA GPU，并查看日志结果是否正确。
-
+    - 查看节点是否具有`nvidia.com/gpu`的资源。
+    ![](/images/gpu/image-3.png)
+    - 运行如下示例使用`nvidia.com/gpu`资源类型请求 NVIDIA GPU，并查看日志结果是否正确。
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -62,7 +50,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: cuda-container
-      image: uhub.service.ucloud.cn/uk8s/cuda-sample:vectoradd-cuda10.2
+      image: uhub.service.ucloud.cn/uk8s/cuda-sample:vectoradd-cuda12.5.0-ubi8
       resources:
         limits:
           nvidia.com/gpu: 1 # requesting 1 GPU
@@ -112,10 +100,10 @@ Done
 
 ### 升级方法
 
-- 方法一：使用 `kubectl set image` 将 `nvidia-device-plugin-daemonset` 的镜像版本更改为 `v0.14.1`：
+- 方法一：使用 `kubectl set image` 将 `nvidia-device-plugin-daemonset` 的镜像版本更改为 `v0.20.1`：
 
     ```bash
-    $ kubectl set image daemonset nvidia-device-plugin-daemonset -n kube-system nvidia-device-plugin-ctr=uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:v0.14.1
+    $ kubectl set image daemonset nvidia-device-plugin-daemonset -n kube-system nvidia-device-plugin-ctr=uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:v0.20.1
     daemonset.apps/nvidia-device-plugin-daemonset image updated
     ```
 
@@ -129,14 +117,14 @@ Done
     2. 此时会得到 `nvidia-device-plugin-daemonset` 的配置，找到 `spec.template.spec.containers.image` 后，可以看到目前镜像信息：
 
         ```yaml
-        - image: uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:1.0.0-beta4
+        - image: uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:v0.14.1
         ```
 
-    3. 更改镜像为 `uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:v0.14.1`，随后保存。
+    3. 更改镜像为 `uhub.service.ucloud.cn/uk8s/nvidia-k8s-device-plugin:v0.20.1`，随后保存。
 
 ## 裸金属云主机绑核
 
-目前裸金属默认支持了绑核，在某些场景下绑核提高GPU效率；
+目前裸金属云主机默认支持绑核，在某些场景下绑核提高GPU效率。
 
 通过删除裸金属节点文件"/var/lib/kubelet/cpu_manager_state"，且默认配置`Kubelet`如下参数来支持绑核功能；相关官方文档可参考[Topology Manager Policy](https://kubernetes.io/docs/tasks/administer-cluster/topology-manager/)，[CPU Mangaer Policy](https://kubernetes.io/docs/tasks/administer-cluster/cpu-management-policies/)
 
@@ -145,7 +133,7 @@ Done
   --topology-manager-policy=best-effort \
 ```
 
-节点是否配置了支持绑核的参数，可登陆节点使用命令做参数检测：
+节点是否配置了支持绑核的参数，可登录节点，通过以下命令检查相关参数：
 
 ```
 ps -aux|grep kubelet|grep topology-manager-policy 
@@ -153,11 +141,13 @@ ps -aux|grep kubelet|grep topology-manager-policy
 
 ### 验证绑核成功
 
-1. 创建测试 Pod 前，需要注意以下几点：
-    - 确保 `limits` 和 `requests` 中的 CPU、Memory、GPU 数量是一致的，并且 CPU 需要是整数。
-    - 可以将 `spec.nodeName` 设置为裸金属云主机的 ip 地址，确保 Pod 被调度到该节点上。
+1. 创建测试 Pod
 
-    现在我们来创建 Pod：
+    创建前，请根据目标裸金属节点调整以下配置：
+    - 将 CPU、内存和 GPU 的 `requests` 与对应的 `limits` 设置为相同值，且 CPU 数量必须为整数，以满足 CPU 独占分配的条件。
+    - 将 `spec.nodeName` 设置为目标节点的名称，可通过 `kubectl get nodes` 查看；如果节点以 IP 地址命名，则填写该 IP 地址。
+
+    以下示例申请 10 个逻辑 CPU、10 GiB 内存和 1 张 GPU，运行 3600 秒的测试：
 
 ```yaml
 apiVersion: v1
@@ -168,83 +158,166 @@ spec:
   nodeName: "10.60.159.170" # 这里替换为裸金属节点的ip
   restartPolicy: OnFailure
   containers:
-  - name: dcgmproftester12-1
+  - name: dcgmproftester
     image: uhub.service.ucloud.cn/uk8s/dcgm:3.3.0
     command: ["/usr/bin/dcgmproftester12"]
     args: ["--no-dcgm-validation", "-t 1004", "-d 3600"] # 这里 -d 为运行时间
     resources: # 根据机器配置修改数值
       limits:  # limits与requests保持一致
-          nvidia.com/gpu: 1
-          memory: 10Gi 
-          cpu: 10
+        nvidia.com/gpu: 1
+        memory: 10Gi
+        cpu: 10
       requests:
-          nvidia.com/gpu: 1
-          memory: 10Gi
-          cpu: 10
+        nvidia.com/gpu: 1
+        memory: 10Gi
+        cpu: 10
     securityContext:
       capabilities:
-          add: ["SYS_ADMIN"]
+        add: ["SYS_ADMIN"]
 ```
 
-2. 等待 Pod 状态为 `Running` 之后，通过 ssh 进入裸金属节点内。
+2. 等待 Pod 状态为 `Running` 之后，通过 SSH 登录裸金属节点。
 
-3. 输入指令 `crictl ps` 来获取当前节点内容器列表。根据创建时间或者容器名称找到我们刚刚创建的容器的 ID。 然后输入指令 `crictl inspect <容器ID> | grep pid`，获取进程的 pid。
+3. 获取容器主进程 PID
 
-4. 输入指令 `taskset -c -p <pid>` 来获取 CPU 亲和性信息：
+    在目标裸金属节点上查看容器列表：
 
-    ![](/images/gpu/image-9.png)
+    ```bash
+    crictl ps
+    ```
 
-    我们看到 Pod 亲和的 CPU 范围为 `1-5,65-69` 而不是完整的 CPU 列表，证明绑 CPU 成功。
+    找到名称为 `dcgmproftester` 的容器，记录其容器 ID，然后获取容器主进程的 PID：
 
-5. 现在输入指令 `nvidia-smi` 来获取 gpu 信息，检查 GPU 亲和性：
+    ```bash
+    crictl inspect <容器ID> | jq -r '.info.pid'
+    ```
 
-    ![](/images/gpu/image-7.png)
+4. 检查容器 CPU 亲和性
 
-    上图中的 Process 框中记录了哪一个 GPU 在运行，图中为 GPU2 在运行。证明绑 GPU 成功。
+    使用上一步获取的 PID，查看容器主进程允许运行的 CPU 列表：
 
-6. 通过指令 `nvidia-smi topo -m` 来检查 GPU 和 CPU 是否在同一个 NUMA 节点上：
+    ```bash
+    taskset -c -p <PID>
+    ```
 
-    ![](/images/gpu/image-8.png)
+    示例输出：
 
-    我们可以看出 GPU3 的 CPU Affinity 为 `0-7,64-71`。在第 4 步中我们得到进程的 CPU Affinity list 为 `1-5,65-69`。这证明了 GPU 和 CPU 对应了同一个 NUMA 节点。
+    ```text
+    pid 75441's current affinity list: 1-5,49-53
+    ```
+    
+    该进程允许运行在逻辑 CPU `1-5,49-53` 上，共 10 个，与 Pod 申请的 CPU 数量一致，表明进程的 CPU 运行范围已按预期受到限制。
 
-7. Best-effort 策略补充说明:
+5. 确认测试进程使用的 GPU
+
+    在目标裸金属节点上执行以下命令，查看 GPU 设备及进程信息：
+
+    ```bash
+    nvidia-smi
+    ```
+
+    输出如下：
+
+    ```bash
+    +-----------------------------------------------------------------------------------------+
+    | NVIDIA-SMI 570.153.02             Driver Version: 570.153.02     CUDA Version: 12.8     |
+    +-----------------------------------------+------------------------+----------------------+
+    | GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+    |=========================================+========================+======================|
+    |   0  NVIDIA GeForce RTX 4090        On  |   00000000:01:00.0 Off |                  Off |
+    |   1  NVIDIA GeForce RTX 4090        On  |   00000000:21:00.0 Off |                  Off |
+    |   2  NVIDIA GeForce RTX 4090        On  |   00000000:41:00.0 Off |                  Off |
+    |   3  NVIDIA GeForce RTX 4090        On  |   00000000:61:00.0 Off |                  Off |
+    |   4  NVIDIA GeForce RTX 4090        On  |   00000000:81:00.0 Off |                  Off |
+    |   5  NVIDIA GeForce RTX 4090        On  |   00000000:A1:00.0 Off |                  Off |
+    |   6  NVIDIA GeForce RTX 4090        On  |   00000000:C1:00.0 Off |                  Off |
+    |   7  NVIDIA GeForce RTX 4090        On  |   00000000:E1:00.0 Off |                  Off |
+    +-----------------------------------------------------------------------------------------+
+    | Processes:                                                                              |
+    |  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+    |=========================================================================================|
+    |    2   N/A  N/A           75479      C   /usr/bin/dcgmproftester12               782MiB |
+    +-----------------------------------------------------------------------------------------+
+    ```
+
+    在输出的 Processes 区域，可以查看各 GPU 上运行的进程及其显存使用情况。
+
+    从示例中可以看到，dcgmproftester12 进程正在使用 GPU2，说明测试工作负载已成功使用该 GPU 设备。
+
+6. 验证 CPU 与 GPU 的 NUMA 亲和性
+
+   检查 GPU 和 CPU 是否在同一个 NUMA 节点上：
+
+   ```bash
+   nvidia-smi topo -m
+   ```
+
+   输出如下：
+
+    ```
+            GPU0 GPU1 GPU2 GPU3 GPU4 GPU5 GPU6 GPU7 NIC0 NIC1 CPU Affinity  NUMA Affinity GPU NUMA ID
+    GPU0     X   SYS  SYS  SYS  SYS  SYS  SYS  SYS  SYS  SYS  18-23,66-71  3-7           N/A
+    GPU1    SYS   X   SYS  SYS  SYS  SYS  SYS  SYS  SYS  SYS  12-17,60-65  2,4-7         N/A
+    GPU2    SYS  SYS   X   SYS  SYS  SYS  SYS  SYS  SYS  SYS  0-5,48-53    0,4-7         N/A
+    GPU3    SYS  SYS  SYS   X   SYS  SYS  SYS  SYS  SYS  SYS  6-11,54-59   1,4-7         N/A
+    GPU4    SYS  SYS  SYS  SYS   X   SYS  SYS  SYS  SYS  SYS  42-47,90-95  4-7           N/A
+    GPU5    SYS  SYS  SYS  SYS  SYS   X   SYS  SYS  SYS  SYS  36-41,84-89  4-7           N/A
+    GPU6    SYS  SYS  SYS  SYS  SYS  SYS   X   SYS  PHB  PHB  24-29,72-77  4-7           N/A
+    GPU7    SYS  SYS  SYS  SYS  SYS  SYS  SYS   X   SYS  SYS  30-35,78-83  4-7           N/A
+    ```
+
+   从输出结果可以看到，GPU2 对应的 CPU 亲和性范围为 `0-5,48-53`，而第 4 步中获取的容器主进程 CPU 亲和性范围为 `1-5,49-53`。
+
+   容器主进程允许使用的 CPU 均位于 GPU2 对应的 CPU 亲和性范围内，说明 CPU 与 GPU 的 NUMA 亲和性配置符合预期。
+
+7. Best-effort 策略补充说明
   
-    使用 `best-effort` 策略时，需要提前了解使用的裸金属配置以决定 Pod 申请 CPU 和 GPU 的参数设置。例如现在有一台裸金属云主机配置如下：
+    使用 `best-effort` 策略时，需要提前了解使用的裸金属配置以决定 Pod 申请 CPU 和 GPU 的参数设置。
+    
+    例如现在有一台裸金属云主机配置如下：
 
     | CPU | GPU | 内存 (不影响绑核) | NUMA 节点数量 |
     | --- | --- | --- | --- |
-    | 128 | 8 | 1024 | 8 |
+    | 96 | 8 | 1024 | 8 |
 
     > CPU 和 NUMA 参数可以通过指令 `lscpu` 获取。GPU 参数可以通过指令 `nvidia-smi topo -m` 获取。
 
     通过指令 `lscpu` 我们可以得知 NUMA 节点和 CPU 核心的关系：
-
     ```bash
     ...
-    NUMA node0 CPU(s):               0-7,64-71
-    NUMA node1 CPU(s):               8-15,72-79
-    NUMA node2 CPU(s):               16-23,80-87
-    NUMA node3 CPU(s):               24-31,88-95
-    NUMA node4 CPU(s):               32-39,96-103
-    NUMA node5 CPU(s):               40-47,104-111
-    NUMA node6 CPU(s):               48-55,112-119
-    NUMA node7 CPU(s):               56-63,120-127
+    NUMA node0 CPU(s):      0-5,48-53
+    NUMA node1 CPU(s):      6-11,54-59
+    NUMA node2 CPU(s):      12-17,60-65
+    NUMA node3 CPU(s):      18-23,66-71
+    NUMA node4 CPU(s):      24-29,72-77
+    NUMA node5 CPU(s):      30-35,78-83
+    NUMA node6 CPU(s):      36-41,84-89
+    NUMA node7 CPU(s):      42-47,90-95
     ...
     ```
 
-    通过指令 `nvidia-smi topo -m` 我们可以得知 NUMA 节点和 GPU 的关系：
+    通过指令 `nvidia-smi topo -m` 可以得知 NUMA 节点和 GPU 的关系：
 
-    ![](/images/gpu/image-8.png)
+    ```bash
+            GPU0 GPU1 GPU2 GPU3 GPU4 GPU5 GPU6 GPU7 NIC0 NIC1 CPU Affinity  NUMA Affinity GPU NUMA ID
+    GPU0     X   SYS  SYS  SYS  SYS  SYS  SYS  SYS  SYS  SYS  18-23,66-71  3-7           N/A
+    GPU1    SYS   X   SYS  SYS  SYS  SYS  SYS  SYS  SYS  SYS  12-17,60-65  2,4-7         N/A
+    GPU2    SYS  SYS   X   SYS  SYS  SYS  SYS  SYS  SYS  SYS  0-5,48-53    0,4-7         N/A
+    GPU3    SYS  SYS  SYS   X   SYS  SYS  SYS  SYS  SYS  SYS  6-11,54-59   1,4-7         N/A
+    GPU4    SYS  SYS  SYS  SYS   X   SYS  SYS  SYS  SYS  SYS  42-47,90-95  4-7           N/A
+    GPU5    SYS  SYS  SYS  SYS  SYS   X   SYS  SYS  SYS  SYS  36-41,84-89  4-7           N/A
+    GPU6    SYS  SYS  SYS  SYS  SYS  SYS   X   SYS  PHB  PHB  24-29,72-77  4-7           N/A
+    GPU7    SYS  SYS  SYS  SYS  SYS  SYS  SYS   X   SYS  SYS  30-35,78-83  4-7           N/A
+    ```
 
-    可以看出每个 NUMA 节点包含了 16 核 CPU 和 1 个 GPU。为了可以确保 CPU 和 GPU 都亲和相同的 NUMA 节点，我们的配置需要保证 **GPU 亲和的 NUMA 节点数量等于 CPU 亲和的 NUMA 节点数量，否则可能导致亲和节点不一致**。下面是能够实现亲和的情况：
+    可以看出每个 NUMA 节点包含了 12 核 CPU 和 1 个 GPU。为了可以确保 CPU 和 GPU 都亲和相同的 NUMA 节点，我们的配置需要保证 **GPU 亲和的 NUMA 节点数量等于 CPU 亲和的 NUMA 节点数量，否则可能导致亲和节点不一致**。下面是能够实现亲和的情况：
 
     | GPU | CPU |
     | --- | --- |
-    | 1 | 1 ~ 16 |
-    | n | > 16 * (n-1), 且 ≤ 16 * n |
+    | 1 | 1 ~ 12 |
+    | n | > 12 * (n-1), 且 ≤ 12 * n |
 
-    > 这里的 16 和 1 是根据上文的方法查看配置得到的。不同机器的配置是不一样的，需要自行查看。
+    > 这里的 12 和 1 是根据上文的方法查看配置得到的。不同机器的配置是不一样的，需要自行查看。
 
     除了以上 GPU/CPU 配比，其他情况均无法达到 NUMA 亲和的效果。
 
