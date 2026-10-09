@@ -203,10 +203,10 @@ spec:
     示例输出：
 
     ```text
-    pid 75441's current affinity list: 1-5,49-53
+    pid 9070's current affinity list: 1-5,65-69
     ```
     
-    该进程允许运行在逻辑 CPU `1-5,49-53` 上，共 10 个，与 Pod 申请的 CPU 数量一致，表明进程的 CPU 运行范围已按预期受到限制。
+    该进程允许运行在逻辑 CPU `1-5,65-69` 上，共 10 个，与 Pod 申请的 CPU 数量一致，表明进程的 CPU 运行范围已按预期受到限制。
 
 5. 确认测试进程使用的 GPU
 
@@ -224,13 +224,13 @@ spec:
     | Processes:                                                                              |
     |  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
     |=========================================================================================|
-    |    2   N/A  N/A           75479      C   /usr/bin/dcgmproftester12               782MiB |
+    |    3   N/A  N/A           9110      C   /usr/bin/dcgmproftester12               782MiB |
     +-----------------------------------------------------------------------------------------+
     ```
 
     在输出的 Processes 区域，可以查看各 GPU 上运行的进程及其显存使用情况。
 
-    从示例中可以看到，dcgmproftester12 进程正在使用 GPU2，说明测试工作负载已成功使用该 GPU 设备。
+    从示例中可以看到，dcgmproftester12 进程正在使用 GPU3，说明测试工作负载已成功使用该 GPU 设备。
 
 6. 验证 CPU 与 GPU 的 NUMA 亲和性
 
@@ -243,20 +243,20 @@ spec:
    输出如下：
 
     ```
-            GPU0 GPU1 GPU2 GPU3 GPU4 GPU5 GPU6 GPU7 NIC0 NIC1 CPU Affinity  NUMA Affinity GPU NUMA ID
-    GPU0     X   SYS  SYS  SYS  SYS  SYS  SYS  SYS  SYS  SYS  18-23,66-71  3-7           N/A
-    GPU1    SYS   X   SYS  SYS  SYS  SYS  SYS  SYS  SYS  SYS  12-17,60-65  2,4-7         N/A
-    GPU2    SYS  SYS   X   SYS  SYS  SYS  SYS  SYS  SYS  SYS  0-5,48-53    0,4-7         N/A
-    GPU3    SYS  SYS  SYS   X   SYS  SYS  SYS  SYS  SYS  SYS  6-11,54-59   1,4-7         N/A
-    GPU4    SYS  SYS  SYS  SYS   X   SYS  SYS  SYS  SYS  SYS  42-47,90-95  4-7           N/A
-    GPU5    SYS  SYS  SYS  SYS  SYS   X   SYS  SYS  SYS  SYS  36-41,84-89  4-7           N/A
-    GPU6    SYS  SYS  SYS  SYS  SYS  SYS   X   SYS  PHB  PHB  24-29,72-77  4-7           N/A
-    GPU7    SYS  SYS  SYS  SYS  SYS  SYS  SYS   X   SYS  SYS  30-35,78-83  4-7           N/A
+            GPU0  GPU1  GPU2  GPU3  GPU4  GPU5  GPU6  GPU7  CPU Affinity    NUMA Affinity  GPU NUMA ID
+    GPU0     X    SYS   SYS   SYS   SYS   SYS   SYS   SYS   24-31,88-95     3              N/A
+    GPU1    SYS    X    SYS   SYS   SYS   SYS   SYS   SYS   16-23,80-87     2              N/A
+    GPU2    SYS   SYS    X    SYS   SYS   SYS   SYS   SYS   8-15,72-79      1              N/A
+    GPU3    SYS   SYS   SYS    X    SYS   SYS   SYS   SYS   0-7,64-71       0              N/A
+    GPU4    SYS   SYS   SYS   SYS    X    SYS   SYS   SYS   56-63,120-127   7              N/A
+    GPU5    SYS   SYS   SYS   SYS   SYS    X    SYS   SYS   48-55,112-119   6              N/A
+    GPU6    SYS   SYS   SYS   SYS   SYS   SYS    X    SYS   40-47,104-111   5              N/A
+    GPU7    SYS   SYS   SYS   SYS   SYS   SYS   SYS    X    32-39,96-103    4              N/A
     ```
 
-   从输出结果可以看到，GPU2 对应的 CPU 亲和性范围为 `0-5,48-53`，而第 4 步中获取的容器主进程 CPU 亲和性范围为 `1-5,49-53`。
+   从输出结果可以看到，GPU3 对应的 CPU 亲和性范围为 `0-7,64-71`，而第 4 步中获取的容器主进程 CPU 亲和性范围为 `1-5,65-69`。
 
-   容器主进程允许使用的 CPU 均位于 GPU2 对应的 CPU 亲和性范围内，说明 CPU 与 GPU 的 NUMA 亲和性配置符合预期。
+   容器主进程允许使用的 CPU 均位于 GPU3 对应的 CPU 亲和性范围内，说明 CPU 与 GPU 的 NUMA 亲和性配置符合预期。
 
 7. Best-effort 策略补充说明
   
@@ -286,7 +286,17 @@ spec:
 
     通过指令 `nvidia-smi topo -m` 可以得知 NUMA 节点和 GPU 的关系：
 
-    ![](/images/gpu/image-4.png)
+    ```
+            GPU0  GPU1  GPU2  GPU3  GPU4  GPU5  GPU6  GPU7  CPU Affinity    NUMA Affinity  GPU NUMA ID
+    GPU0     X    SYS   SYS   SYS   SYS   SYS   SYS   SYS   24-31,88-95     3              N/A
+    GPU1    SYS    X    SYS   SYS   SYS   SYS   SYS   SYS   16-23,80-87     2              N/A
+    GPU2    SYS   SYS    X    SYS   SYS   SYS   SYS   SYS   8-15,72-79      1              N/A
+    GPU3    SYS   SYS   SYS    X    SYS   SYS   SYS   SYS   0-7,64-71       0              N/A
+    GPU4    SYS   SYS   SYS   SYS    X    SYS   SYS   SYS   56-63,120-127   7              N/A
+    GPU5    SYS   SYS   SYS   SYS   SYS    X    SYS   SYS   48-55,112-119   6              N/A
+    GPU6    SYS   SYS   SYS   SYS   SYS   SYS    X    SYS   40-47,104-111   5              N/A
+    GPU7    SYS   SYS   SYS   SYS   SYS   SYS   SYS    X    32-39,96-103    4              N/A
+    ```
 
     可以看出每个 NUMA 节点包含了 16 核 CPU 和 1 个 GPU。为了可以确保 CPU 和 GPU 都亲和相同的 NUMA 节点，我们的配置需要保证 **GPU 亲和的 NUMA 节点数量等于 CPU 亲和的 NUMA 节点数量，否则可能导致亲和节点不一致**。下面是能够实现亲和的情况：
 
