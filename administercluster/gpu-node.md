@@ -40,6 +40,7 @@
     - 查看节点是否具有`nvidia.com/gpu`的资源。
     ![](/images/gpu/image-3.png)
     - 运行如下示例使用`nvidia.com/gpu`资源类型请求 NVIDIA GPU，并查看日志结果是否正确。
+    
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -271,6 +272,7 @@ spec:
     > CPU 和 NUMA 参数可以通过指令 `lscpu` 获取。GPU 参数可以通过指令 `nvidia-smi topo -m` 获取。
 
     通过指令 `lscpu` 我们可以得知 NUMA 节点和 CPU 核心的关系：
+    
     ```bash
     ...
     NUMA node0 CPU(s):               0-7,64-71
