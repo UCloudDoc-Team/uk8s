@@ -219,19 +219,7 @@ spec:
     输出如下：
 
     ```bash
-    +-----------------------------------------------------------------------------------------+
-    | NVIDIA-SMI 570.153.02             Driver Version: 570.153.02     CUDA Version: 12.8     |
-    +-----------------------------------------+------------------------+----------------------+
-    | GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
-    |=========================================+========================+======================|
-    |   0  NVIDIA GeForce RTX 4090        On  |   00000000:01:00.0 Off |                  Off |
-    |   1  NVIDIA GeForce RTX 4090        On  |   00000000:21:00.0 Off |                  Off |
-    |   2  NVIDIA GeForce RTX 4090        On  |   00000000:41:00.0 Off |                  Off |
-    |   3  NVIDIA GeForce RTX 4090        On  |   00000000:61:00.0 Off |                  Off |
-    |   4  NVIDIA GeForce RTX 4090        On  |   00000000:81:00.0 Off |                  Off |
-    |   5  NVIDIA GeForce RTX 4090        On  |   00000000:A1:00.0 Off |                  Off |
-    |   6  NVIDIA GeForce RTX 4090        On  |   00000000:C1:00.0 Off |                  Off |
-    |   7  NVIDIA GeForce RTX 4090        On  |   00000000:E1:00.0 Off |                  Off |
+    ...
     +-----------------------------------------------------------------------------------------+
     | Processes:                                                                              |
     |  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
@@ -278,46 +266,36 @@ spec:
 
     | CPU | GPU | 内存 (不影响绑核) | NUMA 节点数量 |
     | --- | --- | --- | --- |
-    | 96 | 8 | 1024 | 8 |
+    | 128 | 8 | 1024 | 8 |
 
     > CPU 和 NUMA 参数可以通过指令 `lscpu` 获取。GPU 参数可以通过指令 `nvidia-smi topo -m` 获取。
 
     通过指令 `lscpu` 我们可以得知 NUMA 节点和 CPU 核心的关系：
     ```bash
     ...
-    NUMA node0 CPU(s):      0-5,48-53
-    NUMA node1 CPU(s):      6-11,54-59
-    NUMA node2 CPU(s):      12-17,60-65
-    NUMA node3 CPU(s):      18-23,66-71
-    NUMA node4 CPU(s):      24-29,72-77
-    NUMA node5 CPU(s):      30-35,78-83
-    NUMA node6 CPU(s):      36-41,84-89
-    NUMA node7 CPU(s):      42-47,90-95
+    NUMA node0 CPU(s):               0-7,64-71
+    NUMA node1 CPU(s):               8-15,72-79
+    NUMA node2 CPU(s):               16-23,80-87
+    NUMA node3 CPU(s):               24-31,88-95
+    NUMA node4 CPU(s):               32-39,96-103
+    NUMA node5 CPU(s):               40-47,104-111
+    NUMA node6 CPU(s):               48-55,112-119
+    NUMA node7 CPU(s):               56-63,120-127
     ...
     ```
 
     通过指令 `nvidia-smi topo -m` 可以得知 NUMA 节点和 GPU 的关系：
 
-    ```bash
-            GPU0 GPU1 GPU2 GPU3 GPU4 GPU5 GPU6 GPU7 NIC0 NIC1 CPU Affinity  NUMA Affinity GPU NUMA ID
-    GPU0     X   SYS  SYS  SYS  SYS  SYS  SYS  SYS  SYS  SYS  18-23,66-71  3-7           N/A
-    GPU1    SYS   X   SYS  SYS  SYS  SYS  SYS  SYS  SYS  SYS  12-17,60-65  2,4-7         N/A
-    GPU2    SYS  SYS   X   SYS  SYS  SYS  SYS  SYS  SYS  SYS  0-5,48-53    0,4-7         N/A
-    GPU3    SYS  SYS  SYS   X   SYS  SYS  SYS  SYS  SYS  SYS  6-11,54-59   1,4-7         N/A
-    GPU4    SYS  SYS  SYS  SYS   X   SYS  SYS  SYS  SYS  SYS  42-47,90-95  4-7           N/A
-    GPU5    SYS  SYS  SYS  SYS  SYS   X   SYS  SYS  SYS  SYS  36-41,84-89  4-7           N/A
-    GPU6    SYS  SYS  SYS  SYS  SYS  SYS   X   SYS  PHB  PHB  24-29,72-77  4-7           N/A
-    GPU7    SYS  SYS  SYS  SYS  SYS  SYS  SYS   X   SYS  SYS  30-35,78-83  4-7           N/A
-    ```
+    ![](/images/gpu/image-4.png)
 
-    可以看出每个 NUMA 节点包含了 12 核 CPU 和 1 个 GPU。为了可以确保 CPU 和 GPU 都亲和相同的 NUMA 节点，我们的配置需要保证 **GPU 亲和的 NUMA 节点数量等于 CPU 亲和的 NUMA 节点数量，否则可能导致亲和节点不一致**。下面是能够实现亲和的情况：
+    可以看出每个 NUMA 节点包含了 16 核 CPU 和 1 个 GPU。为了可以确保 CPU 和 GPU 都亲和相同的 NUMA 节点，我们的配置需要保证 **GPU 亲和的 NUMA 节点数量等于 CPU 亲和的 NUMA 节点数量，否则可能导致亲和节点不一致**。下面是能够实现亲和的情况：
 
     | GPU | CPU |
     | --- | --- |
-    | 1 | 1 ~ 12 |
-    | n | > 12 * (n-1), 且 ≤ 12 * n |
+    | 1 | 1 ~ 16 |
+    | n | > 16 * (n-1), 且 ≤ 16 * n |
 
-    > 这里的 12 和 1 是根据上文的方法查看配置得到的。不同机器的配置是不一样的，需要自行查看。
+    > 这里的 16 和 1 是根据上文的方法查看配置得到的。不同机器的配置是不一样的，需要自行查看。
 
     除了以上 GPU/CPU 配比，其他情况均无法达到 NUMA 亲和的效果。
 
