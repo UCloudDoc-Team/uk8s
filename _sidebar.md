@@ -10,9 +10,9 @@
 - 集群版本
   - [维护说明](/uk8s/version/maintain)
   - 版本跟踪
+    - [1.36版本说明](/uk8s/version/1.36_release)
     - [1.34版本说明](/uk8s/version/1.34_release)
     - [1.32版本说明](/uk8s/version/1.32_release)
-    - [1.30版本说明](/uk8s/version/1.30_release)
 - 集群管理
   - [创建集群](/uk8s/userguide/createcluster)
   - [查看集群](/uk8s/userguide/describecluster)
