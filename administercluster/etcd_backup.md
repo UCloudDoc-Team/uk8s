@@ -10,7 +10,7 @@ ETCD 备份插件是 UK8S 提供的 ETCD 数据库备份功能，ETCD 备份可�
 
 如您是首次安装插件提示您需要保存密钥操作，请在任一 Master 节点上执行以下命令，执行完成后刷新页面即可。
 
-```
+```shell
 kubectl create secret generic uk8s-etcd-backup-cert -n kube-system --from-file /etc/kubernetes/ssl/etcd.pem --from-file /etc/kubernetes/ssl/etcd-key.pem
 ```
 
@@ -24,9 +24,13 @@ kubectl create secret generic uk8s-etcd-backup-cert -n kube-system --from-file /
 2. 添加定时备份时间，这里使用的时间表语法可以参考本篇 **4. 针对计划表语法说明**。
 3. 备份介质我们提供了 UFile 和 SSHServer 两种介质。
 4. 选择 UFile 需要创建对应的 UFile 令牌和存储空间，**UFile令牌需要赋予上传、下载、删除、文件列表**。
-5. 如使用 SSHServer 需要填写具体的可以执行SSH的主机，并确保填写的账号拥有该主机目录的读写权限。
 
-![](/images/administercluster/etcd_backup1.png)
+![](/images/administercluster/etcd_backup2.png)
+
+5. 如使用 SSHServer 需要填写具体的可以执行SSH的主机，并确保填写的账号拥有该主机目录的读写权限。
+6. 加密密码（可选），填写后备份文件会使用 OpenPGP 对称加密，加密后的文件名以 `.enc` 结尾（如 `xxx.db.tar.gz.enc`）；不填写则不加密。
+
+> ⚠️ 请妥善保管加密密码，恢复时必须使用相同的密码解密，密码丢失将无法恢复备份数据。ETCD 集群不可用时无法从 Secret 中读取密码，建议另行备份。
 
 ## 3. 恢复操作
 
@@ -254,7 +258,22 @@ rm -rf /var/lib/etcd
 mkdir /var/lib/etcd
 ```
 
-5. 从 UFile 或备份服务器获取 ETCD 备份文件并上传至所有 ETCD 节点，分别在各节点上执行以下命令从备份文件恢复 ETCD 数据（注意参数要匹配节点信息）；
+5. 恢复数据到etcd
+
+从 UFile 或备份服务器获取 ETCD 备份文件并上传至所有 ETCD 节点，分别在各节点上执行以下命令从备份文件恢复 ETCD 数据（注意参数要匹配节点信息）；
+
+- 5.1 加密备份文件解密（如果备份文件未加密，可以跳过此步骤直接执行5.2)
+
+如备份时设置了加密密码，备份文件以 `.enc` 结尾，恢复前需先使用 gpg 解密，解密后得到 `.tar.gz` 文件。
+
+```bash
+# 交互方式解密，会提示输入加密密码
+gpg --output uk8s-f1wymalx-backup-etcd-3.3.17-2020-02-11T03-56-12.db.tar.gz --decrypt uk8s-f1wymalx-backup-etcd-3.3.17-2020-02-11T03-56-12.db.tar.gz.enc
+# 也可以非交互方式解密，将 <encrypt-pass> 替换为加密密码
+gpg --batch --pinentry-mode loopback --passphrase '<encrypt-pass>' --output uk8s-f1wymalx-backup-etcd-3.3.17-2020-02-11T03-56-12.db.tar.gz --decrypt uk8s-f1wymalx-backup-etcd-3.3.17-2020-02-11T03-56-12.db.tar.gz.enc
+```
+
+- 5.2 恢复数据到etcd
 
 ```bash
 # 本例备份文件已经保存到 /root/uk8s-f1wymalx-backup-etcd-3.3.17-2020-02-11T03-56-12.db.tar.gz 路径
@@ -290,33 +309,6 @@ export ETCDCTL_ENDPOINTS=10.23.95.6:2379,10.23.172.172:2379,10.23.166.234:2379
 etcdctl endpoint health
 ```
 
-<!--
-8. 如需继续在故障节点上恢复运行 kube-apiserver、kube-controller-manager 、kube-scheduler 服务，可分别登录修复完成的故障节点进行如下操作：
-
-```bash
-    # 从保留节点拷贝 hyperkube
-    scp 10.23.166.234:/usr/local/bin/hyperkube /usr/local/bin/hyperkube
-    # 拷贝 kube-apiserver、kube-controller-manager 、kube-scheduler 服务文件
-    scp 10.23.166.234:/usr/lib/systemd/system/kube-* /usr/lib/systemd/system
-    # 拷贝 kubectl
-    scp 10.23.166.234:/usr/local/bin/kubectl /usr/local/bin/kubectl
-    # 拷贝 kubeconfig
-    scp -r 10.23.166.234:~/.kube ~
-
-    # 替换为故障节点的 IP
-    export FAILURE_ETCD_NODE_IP=10.23.172.172
-    sed -i 's/\(advertise-address=\).*\( \)/\1'$FAILURE_ETCD_NODE_IP'\2/' /etc/kubernetes/apiserver
-
-    # 启用服务
-    systemctl enable --now kube-apiserver kube-controller-manager kube-scheduler
-
-    # 配置负载均衡器的内网和外网弹性 IP
-    scp 10.23.166.234:/etc/sysconfig/network-scripts/ifcfg-lo:internal /etc/sysconfig/network-scripts/ifcfg-lo:internal
-    scp 10.23.166.234:/etc/sysconfig/network-scripts/ifcfg-lo:external /etc/sysconfig/network-scripts/ifcfg-lo:external
-    systemctl restart network
-  ```
--->
-
 ### 3.2 误删除etcd节点
 
 #### 3.2.1 etcd 集群仍然可用
@@ -343,25 +335,25 @@ etcd 集群不可用即有一半及以上的 etcd 节点被删除。极端情况
 
 Crontab格式（前5位为时间选项，这里我们只用到了前5位）
 
-```
+```cron
 <分钟> <小时> <日> <月份> <星期> <命令>
 ```
 
 每天一次，0点0分执行
 
-```
+```cron
 0 0 * * *
 ```
 
 每周一次，0点0分执行
 
-```
+```cron
 0 0 * * 0
 ```
 
 每月一次，0点0分执行
 
-```
+```cron
 0 0 1 * *
 ```
 
