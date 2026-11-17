@@ -16,8 +16,8 @@
 3. 注意，如果您之前已经使用了自定义HPA指标，且处于线上环境，建议您仅确认prometheus service可用即可。回退到普通metrics
    server可能导致之前的自定义HPA指标失效，请谨慎操作。
 
-```
-apiVersion: apiregistration.k8s.io/v1beta1
+```yaml
+apiVersion: apiregistration.k8s.io/v1
 kind: APIService
 metadata:
   name: v1beta1.metrics.k8s.io
