@@ -1,8 +1,9 @@
 # Pod 使用独立子网
 
 > ⚠️ 使用前必读
+>
 > 由于 Pod 独立子网的实现依赖在云主机上插入多张网卡, 而云主机在多网卡模式下不能支持网络增强，开启 Pod 独立子网后节点的网络转发性能会受限。
-> 具体的性能指标可以在 [云主机文档](https://docs.ucloud.cn/uhost/introduction/feature/feature) 中「无网络增强」部分查阅。
+> 具体的性能指标可以在 [云主机文档](/uhost/introduction/feature/feature) 中「无网络增强」部分查阅。
 
 
 默认情况下，UK8S 中的 Pod 会向其所在节点的子网里请求分配 IP。如果希望 Pod 使用来自独立子网的 IP，请按以下方式进行配置。
