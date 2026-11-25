@@ -55,48 +55,6 @@ metadata:
 data:
   # You must set a non-zero value for Typha replicas below.
   typha_service_name: "calico-typha"
-
-  # Configure the MTU to use for workload interfaces and tunnels.
-  # By default, MTU is auto-detected, and explicitly setting this field should not be required.
-  # You can override auto-detection by providing a non-zero value.
-  veth_mtu: "0"
-
-  # The CNI network configuration to install on each node. The special
-  # values in this config will be automatically populated.
-  cni_network_config: |-
-    {
-      "name": "k8s-pod-network",
-      "cniVersion": "0.3.1",
-      "plugins": [
-        {
-          "type": "calico",
-          "log_level": "info",
-          "log_file_path": "/var/log/calico/cni/cni.log",
-          "datastore_type": "kubernetes",
-          "nodename": "__KUBERNETES_NODE_NAME__",
-          "mtu": 1500,
-          "ipam": {
-              "type": "host-local",
-              "subnet": "usePodCidr"
-          },
-          "policy": {
-              "type": "k8s"
-          },
-          "kubernetes": {
-              "kubeconfig": "__KUBECONFIG_FILEPATH__"
-          }
-        },
-        {
-          "type": "portmap",
-          "snat": true,
-          "capabilities": {"portMappings": true}
-        },
-        {
-          "type": "bandwidth",
-          "capabilities": {"bandwidth": true}
-        }
-      ]
-    }
 ---
 # Source: calico/templates/calico-typha.yaml
 # This manifest creates a Service, which will be backed by Calico's Typha daemon.
@@ -160,42 +118,7 @@ spec:
       terminationGracePeriodSeconds: 0
       priorityClassName: system-node-critical
       initContainers:
-        # This container installs the CNI binaries
-        # and CNI network config file on each node.
-        - name: install-cni
-          image: uhub.service.ucloud.cn/calico/cni:v3.25.2
-          imagePullPolicy: IfNotPresent
-          command: ["/opt/cni/bin/install"]
-          envFrom:
-          - configMapRef:
-              # Allow KUBERNETES_SERVICE_HOST and KUBERNETES_SERVICE_PORT to be overridden for eBPF mode.
-              name: kubernetes-services-endpoint
-              optional: true
-          env:
-            # Name of the CNI config file to create.
-            - name: CNI_CONF_NAME
-              value: "10-calico.conflist"
-            # The CNI network config to install on each node.
-            - name: CNI_NETWORK_CONFIG
-              valueFrom:
-                configMapKeyRef:
-                  name: calico-config
-                  key: cni_network_config
-            # Set the hostname based on the k8s node name.
-            - name: KUBERNETES_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.nodeName
-            # Prevents the container from sleeping forever.
-            - name: SLEEP
-              value: "false"
-          volumeMounts:
-            - mountPath: /host/opt/cni/bin
-              name: cni-bin-dir
-            - mountPath: /host/etc/cni/net.d
-              name: cni-net-dir
-          securityContext:
-            privileged: true
+        # CNI is provided by UK8S cnivpc, so Calico's install-cni is intentionally omitted.
         # This init container mounts the necessary filesystems needed by the BPF data plane
         # i.e. bpf at /sys/fs/bpf and cgroup2 at /run/calico/cgroup. Calico-node initialisation is executed
         # in best effort fashion, i.e. no failure for errors, to not disrupt pod creation in iptable mode.
@@ -310,10 +233,6 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 10
           volumeMounts:
-            # For maintaining CNI plugin API credentials.
-            - mountPath: /host/etc/cni/net.d
-              name: cni-net-dir
-              readOnly: false
             - mountPath: /lib/modules
               name: lib-modules
               readOnly: true
@@ -332,9 +251,6 @@ spec:
             # parent directory.
             - name: bpffs
               mountPath: /sys/fs/bpf
-            - name: cni-log-dir
-              mountPath: /var/log/calico/cni
-              readOnly: true
       volumes:
         # Used by calico-node.
         - name: lib-modules
@@ -362,17 +278,6 @@ spec:
         - name: nodeproc
           hostPath:
             path: /proc
-        # Used to install CNI.
-        - name: cni-bin-dir
-          hostPath:
-            path: /opt/cni/bin
-        - name: cni-net-dir
-          hostPath:
-            path: /etc/cni/net.d
-        # Used to access CNI logs.
-        - name: cni-log-dir
-          hostPath:
-            path: /var/log/calico/cni
         # Used to create per-pod Unix Domain Sockets
         - name: policysync
           hostPath:
