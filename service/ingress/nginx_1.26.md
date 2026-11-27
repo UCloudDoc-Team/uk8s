@@ -1,6 +1,6 @@
 ## Nginx Ingress
 
-**本文适用于的 K8S 版本为 1.26+，对于不同版本，请参考：[Ingress 支持](/uk8s/service/ingress/README)**
+**本文适用于的 K8S 版本为 1.26 ~ 1.30，对于不同版本，请参考：[Ingress 支持](/uk8s/service/ingress/README)**
 
 ## 什么是 Ingress
 
@@ -33,7 +33,7 @@ Controller 供选择，分别如下：
 * 容器默认使用 UTC 时间，如果要使用宿主机时区，参见 [Pod 时区问题](https://docs.ucloud.cn/uk8s/troubleshooting/pod_debug_summary?id=_10-pod%e7%9a%84%e6%97%b6%e5%8c%ba%e9%97%ae%e9%a2%98)
 * 如果有集群内通过ULB地址访问 Service 的需求，需要把 Ingress Controller Service 的 externalTrafficPolicy 改为`Cluster`，否则 Pod 如果跟 Ingress Controller 不在同一个节点，将无法进行访问。**修改该参数之后，将无法获取真实客户端源IP。**
 
-> ⚠️ 以下操作会按最新的 Ingress Controller 推荐部署方式：关联 NLB 来执行。如果您之前已经安装了基于 CLB 的 Ingress Controller，更新部署会解绑 CLB 并关联新的 NLB，流量入口将发生变更。
+> ⚠️ 以下操作会按最新的 Ingress Controller 推荐部署方式：关联 NLB 来执行。如果您之前已经安装了基于 CLB4 的 Ingress Controller，更新部署会解绑 CLB4 并关联新的 NLB，流量入口将发生变更。
 
 ```bash
 kubectl apply -f https://docs.ucloud.cn/uk8s/yaml/ingress_nginx/mandatory_1.26.yaml
@@ -109,7 +109,7 @@ spec:
   type: LoadBalancer
 ```
 
-这个 Service 的唯一工作，就是将所有携带 ingress-nginx 标签的 Pod 的 80 和 433 端口暴露出去，我们可以通过以下方式获取到这个 Service 的外部访问入口。
+这个 Service 的唯一工作，就是将所有携带 ingress-nginx 标签的 Pod 的 80 和 443 端口暴露出去，我们可以通过以下方式获取到这个 Service 的外部访问入口。
 
 ```bash
 $ kubectl get svc -n ingress-nginx
@@ -268,9 +268,6 @@ spec:
 的流量转发至 defaultBackend 处理。
 
 #### rules 说明
-
-我们先看 host 字段，他的值必须是一个标准的域名格式字符串，而不能是 IP 地址。而 host 字段定义的值，就是这个 Ingress
-的入口。这样就意味着，当用户访问`demo-app.example.com`的时候，实际访问到的就是这个 Ingress 对象。这样，Kubernetes 就能使用 IngressRule
 
 * host：他的值必须是一个标准的域名格式字符串，而不能是 IP 地址。而 host 字段定义的值，就是这个 Ingress
 的入口。当用户访问`demo-app.example.com`的时候，实际访问到的就是这个 Ingress 对象。这样，Kubernetes 就能使用 IngressRule来对你的请求进行下一步转发。

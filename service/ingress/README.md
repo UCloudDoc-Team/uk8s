@@ -10,9 +10,11 @@ ALB Ingress 是使用 UCloud ALB 实现的一个 Ingress 控制器，请参考 [
 
 > 注意：官方已在2026年3月[停止维护](https://kubernetes.io/zh-cn/blog/2025/11/11/ingress-nginx-retirement/)。
 
-> Nginx Ingress 较低版本存在一些安全漏洞，详见 [Ingress-Nginx Controller 漏洞公告](/uk8s/vulnerability/CVE-2025-1974.md)，如果您的 Kubernetes 版本在1.13 - 1.25并且需要安装 Nginx Ingress，建议以最小权限管理 Nginx Ingress。
+> Nginx Ingress 较低版本存在一些安全漏洞，建议您升级集群到1.32或以上并安装对应的 ingress-nginx 版本，此版本合入了较新的 CVE 修复。
 
-如果您的 Kubernetes 版本为1.26及以上，请参考 [Kubernetes Nginx Ingress 安装配置说明 (1.26 ~ latest)](/uk8s/service/ingress/nginx_1.26)。
+如果您的 Kubernetes 版本为1.32及以上，请参考 [Kubernetes Nginx Ingress 安装配置说明 (1.32 ~ latest)](/uk8s/service/ingress/nginx_1.32)。
+
+如果您的 Kubernetes 版本为1.26 ~ 1.30，请参考 [Kubernetes Nginx Ingress 安装配置说明 (1.26 ~ 1.30)](/uk8s/service/ingress/nginx_1.26)。
 
 如果您的 Kubernetes 版本为1.19 ~ 1.25，请参考 [Kubernetes Nginx Ingress 安装配置说明 (1.19 ~ 1.25)](/uk8s/service/ingress/nginx_1.19)。
 
